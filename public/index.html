@@ -289,12 +289,6 @@
         <div class="page-header">
             <h1 class="text-center mb-0">3D Ethics Visualization</h1>
         </div>
-        <div class="upload-section mb-4">
-            <div class="form-group">
-                <label for="fileInput" class="font-weight-bold">Upload JSON File:</label>
-                <input type="file" id="fileInput" accept=".json,.txt" class="form-control-file">
-            </div>
-        </div>
         <div class="filter-section">
             <div class="filter-group category-filter-group">
                 <label for="categoryFilter">Filter by Category Type:</label>
@@ -388,18 +382,29 @@
             return category.toLowerCase().replace(/\s+/g, '_');
         }
 
-        // Process the new JSON structure
         function fetchScenarios() {
-            fetch('http://localhost:5000/api/scenarios')
-                .then(response => response.json())
-                .then(data => {
-                // Process the data from the API.
-                // Since your existing processJsonData function expects an array or an object with a "scenarios" key,
-                // adjust accordingly if necessary. For example, if your API returns an array:
-                processJsonData(data);
+            // Get the current domain dynamically from Render
+            const baseUrl = window.location.origin;
+            fetch(`${baseUrl}/api/scenarios`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
                 })
-                .catch(err => console.error('Error fetching scenarios from API:', err));
-            }
+                .then(data => {
+                    console.log("Received data:", data); // Debug log
+                    // Extract the scenarios array from the returned object if needed.
+                    const scenarios = data.scenarios || data;
+                    processJsonData(scenarios);
+                })
+                .catch(err => {
+                    console.error('Error fetching scenarios from API:', err);
+                    document.getElementById('overview').innerHTML = 
+                        '<div class="alert alert-danger">Error loading scenarios. Please check the console for details.</div>';
+                });
+        }
+
 
 
         function processJsonData(scenarios) {
