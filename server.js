@@ -7,7 +7,8 @@ app.use(cors());
 app.use(express.json());
 
 // Use the environment variable if available, otherwise fallback to the hard-coded connection string.
-const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://MoralCube:Smartass1@moralcube.a1vhe.mongodb.net/';
+const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://MoralCube:Smartass1@moralcube.a1vhe.mongodb.net/myDatabase?retryWrites=true&w=majority';
+
 
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
