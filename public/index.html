@@ -383,7 +383,7 @@
         }
 
         function fetchScenarios() {
-            fetch('/.netlify/functions/fetchScenarios')
+            fetch('/.netlify/functions/fetchscenarios')
                 .then(response => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -401,6 +401,7 @@
                     '<div class="alert alert-danger">Error loading scenarios. Please check the console for details.</div>';
                 });
             }
+
 
 
 
