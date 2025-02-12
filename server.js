@@ -1,14 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path'); // Import the path module
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Use the environment variable if available, otherwise fallback to the hard-coded connection string.
-const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://MoralCube:Smartass1@moralcube.a1vhe.mongodb.net/myDatabase?retryWrites=true&w=majority';
+// Serve static files from the public folder
+app.use(express.static(path.join(__dirname, 'public')));
 
+// Use the environment variable if available, otherwise fallback to your connection string
+const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://MoralCube:Smartass1@moralcube.a1vhe.mongodb.net/myDatabase?retryWrites=true&w=majority';
 
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
@@ -17,6 +20,7 @@ mongoose.connect(mongoURI, {
 .then(() => console.log('Connected to MongoDB Atlas'))
 .catch(err => console.error('MongoDB connection error:', err));
 
+// Define your Mongoose schema and API route (unchanged)
 const scenarioSchema = new mongoose.Schema({
   id: String,
   type: String,
@@ -47,6 +51,11 @@ app.get('/api/scenarios', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// Fallback route: send index.html for any GET request that doesn't match above routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;

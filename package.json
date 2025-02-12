@@ -4,9 +4,10 @@
   "license": "GNU Affero General Public License",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
-  },
+  "build": "copyfiles \"public/**/*\" build",
+  "start": "node server.js",
+  "dev": "nodemon server.js"
+},
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -15,6 +16,7 @@
     "mongoose": "^8.10.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "copyfiles": "^2.4.1"
   }
 }
