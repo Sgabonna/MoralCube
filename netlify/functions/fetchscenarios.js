@@ -25,8 +25,8 @@ exports.handler = async (event, context) => {
     }
     
     const client = await connectToDatabase(uri);
-    const database = client.db("moralcube");      // Verify that this is your correct database name
-    const collection = database.collection("scenarios"); // And that "scenarios" is the correct collection
+    const database = client.db("MoralCube");      // Verify that this is your correct database name
+    const collection = database.collection("Scenarios"); // And that "scenarios" is the correct collection
 
     const scenarios = await collection.find({}).toArray();
 
