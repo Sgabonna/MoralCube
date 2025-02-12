@@ -1,15 +1,14 @@
 {
-  "name": "moral_cube_app---local-automated-update",
+  "name": "moral-cube-app",
   "version": "1.0.0",
+  "description": "Moral Cube App for ethical scenarios",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "echo 'No build step needed'"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "mongodb": "^6.13.0"
-  }
+    "mongodb": "^4.10.0"
+  },
+  "author": "Scott Young",
+  "license": "MIT"
 }
