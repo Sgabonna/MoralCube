@@ -23,7 +23,6 @@ exports.handler = async (event, context) => {
   try {
     // Get the MongoDB connection string from your environment variable.
     // Make sure that on Netlify you have set MONGODB_URI to:
-    // mongodb+srv://Scott:UIImufFMNtKJ9j6o@moralcube.a1vhe.mongodb.net/
     const uri = process.env.MONGODB_URI;
     if (!uri) {
       throw new Error("Missing MONGODB_URI environment variable");
