@@ -383,27 +383,26 @@
         }
 
         function fetchScenarios() {
-            // Get the current domain dynamically from Render
-            const baseUrl = window.location.origin;
-            fetch(`${baseUrl}/api/scenarios`)
+            fetch('/.netlify/functions/fetchScenarios')
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
                 })
                 .then(data => {
-                    console.log("Received data:", data); // Debug log
-                    // Extract the scenarios array from the returned object if needed.
-                    const scenarios = data.scenarios || data;
-                    processJsonData(scenarios);
+                console.log("Received data:", data);
+                const scenarios = data.scenarios || data;
+                processJsonData(scenarios);
                 })
                 .catch(err => {
-                    console.error('Error fetching scenarios from API:', err);
-                    document.getElementById('overview').innerHTML = 
-                        '<div class="alert alert-danger">Error loading scenarios. Please check the console for details.</div>';
+                console.error('Error fetching scenarios from API:', err);
+                document.getElementById('overview').innerHTML = 
+                    '<div class="alert alert-danger">Error loading scenarios. Please check the console for details.</div>';
                 });
-        }
+            }
+
+
 
 
 
