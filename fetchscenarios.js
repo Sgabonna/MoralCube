@@ -3,13 +3,10 @@ const { MongoClient } = require("mongodb");
 
 let cachedClient = null;
 
-// Helper function to connect to MongoDB
 async function connectToDatabase(uri) {
-  // Check if we already have a connected client
   if (cachedClient && cachedClient.topology && cachedClient.topology.isConnected()) {
     return cachedClient;
   }
-  // Create a new MongoClient and connect
   const client = new MongoClient(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -21,25 +18,18 @@ async function connectToDatabase(uri) {
 
 exports.handler = async (event, context) => {
   try {
-    // Get the MongoDB connection string from your environment variable.
-    // Make sure that on Netlify you have set MONGODB_URI to:
+    // Retrieve the MongoDB connection string from your environment variable.
     const uri = process.env.MONGODB_URI;
     if (!uri) {
       throw new Error("Missing MONGODB_URI environment variable");
     }
-
-    // Connect to MongoDB using the connection string from the environment variable
+    
     const client = await connectToDatabase(uri);
+    const database = client.db("moralcube");      // Verify that this is your correct database name
+    const collection = database.collection("scenarios"); // And that "scenarios" is the correct collection
 
-    // Specify your database name. For example, if you want to use the "moralcube" database:
-    const database = client.db("moralcube");
-    // Specify your collection name; here we assume "scenarios"
-    const collection = database.collection("scenarios");
-
-    // Query the collection to retrieve all scenarios
     const scenarios = await collection.find({}).toArray();
 
-    // Return the data as a JSON response
     return {
       statusCode: 200,
       body: JSON.stringify({ scenarios }),
