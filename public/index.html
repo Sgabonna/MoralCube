@@ -494,15 +494,23 @@
                     dataPoints = [];
                     let displayPoints = [];  // For parent scenarios
 
-                    // Flatten the nested structure
+                    // In processJsonData function, modify the flattening step:
                     let flattenedScenarios = [];
+                    // Remove duplicates by using a Set of IDs
+                    const processedIds = new Set();
+
                     data.forEach(doc => {
                         if (doc.scenarios && Array.isArray(doc.scenarios)) {
-                            flattenedScenarios = flattenedScenarios.concat(doc.scenarios);
+                            doc.scenarios.forEach(scenario => {
+                                if (!processedIds.has(scenario.id)) {
+                                    processedIds.add(scenario.id);
+                                    flattenedScenarios.push(scenario);
+                                }
+                            });
                         }
                     });
 
-                    console.log("Flattened scenarios:", flattenedScenarios);
+                    console.log("Flattened scenarios (unique):", flattenedScenarios);
 
                     flattenedScenarios.forEach((scenario, index) => {
                         console.log(`\n--- Processing scenario at index ${index} ---`);
@@ -752,62 +760,117 @@
             
             // Clear highlights
             document.querySelectorAll('.relevant-option').forEach(el => el.classList.remove('relevant-option'));
-            document.querySelectorAll('.filter-badge').forEach(badge => badge.classList.remove('relevant-badge'));
-
-            if (isCategoryFiltering) {
-                filteredPoints = dataPoints.filter(point => activeCategories.has(normalizeCategory(point.overallCategory)));
-            } else {
-                filteredPoints = dataPoints.filter(point => {
-                    const matchesModel = selectedModels.length === 0 || selectedModels.includes(point.llmName);
-                    // Only consider parent scenarios for the scenario filter
-                    const matchesScenario = selectedScenarios.length === 0 || (point.isParent && selectedScenarios.includes(point.scenarioTitle));
-                    const matchesCategory = activeCategories.has(normalizeCategory(point.overallCategory));
-                    const matchesCategoryType = selectedCategories.length === 0 || selectedCategories.includes(point.category);
-                    return matchesModel && matchesScenario && matchesCategory && matchesCategoryType;
-                });
-            }
-
-            // Highlight options based on selected models/scenarios
-            if (selectedModels.length > 0) {
-                const relevantScenarios = new Set(filteredPoints.map(point => point.scenarioTitle));
-                const relevantCategories = new Set(filteredPoints.map(point => normalizeCategory(point.overallCategory)));
-                document.querySelectorAll('#scenarioFilter option').forEach(option => {
-                    if (relevantScenarios.has(option.value)) option.classList.add('relevant-option');
-                });
-                document.querySelectorAll('.filter-badge').forEach(badge => {
-                    if (relevantCategories.has(badge.dataset.category)) badge.classList.add('relevant-badge');
-                });
-            }
-            if (selectedScenarios.length > 0) {
-                const relevantModels = new Set(filteredPoints.map(point => point.llmName));
-                const relevantCategories = new Set(filteredPoints.map(point => normalizeCategory(point.overallCategory)));
-                document.querySelectorAll('#modelFilter option').forEach(option => {
-                    if (relevantModels.has(option.value)) option.classList.add('relevant-option');
-                });
-                document.querySelectorAll('.filter-badge').forEach(badge => {
-                    if (relevantCategories.has(badge.dataset.category)) badge.classList.add('relevant-badge');
-                });
-            }
-
-            // Update category badges active state
             document.querySelectorAll('.filter-badge').forEach(badge => {
-                const normalizedCategory = normalizeCategory(badge.dataset.category);
-                badge.style.display = dataPoints.some(point => normalizeCategory(point.overallCategory) === normalizedCategory) ? 'inline-block' : 'none';
-                badge.classList.toggle('active', activeCategories.has(normalizedCategory));
+                badge.classList.remove('relevant-badge');
+                // Keep all badges visible but adjust opacity based on selection
+                badge.style.display = 'inline-block';
             });
+
+            // Apply filters in sequence
+            // 1. Category Type Filter
+            if (selectedCategories.length > 0) {
+                filteredPoints = filteredPoints.filter(point => selectedCategories.includes(point.category));
+            }
+
+            // 2. Moral Category Filter (from badges)
+            if (activeCategories.size !== 6) { // Not all categories are selected
+                filteredPoints = filteredPoints.filter(point => 
+                    activeCategories.has(normalizeCategory(point.overallCategory))
+                );
+            }
+
+            // 3. Scenario Filter
+            if (selectedScenarios.length > 0) {
+                filteredPoints = filteredPoints.filter(point => 
+                    selectedScenarios.includes(point.scenarioTitle)
+                );
+                
+                // Update available models based on selected scenarios
+                const relevantModels = new Set(filteredPoints.map(p => p.llmName));
+                document.querySelectorAll('#modelFilter option').forEach(option => {
+                    option.style.opacity = relevantModels.has(option.value) ? '1' : '0.3';
+                    if (!relevantModels.has(option.value)) {
+                        option.selected = false;
+                    }
+                });
+            }
+
+            // 4. Model Filter
+            if (selectedModels.length > 0) {
+                filteredPoints = filteredPoints.filter(point => 
+                    selectedModels.includes(point.llmName)
+                );
+                
+                // Update available scenarios based on selected models
+                const relevantScenarios = new Set(filteredPoints.map(p => p.scenarioTitle));
+                document.querySelectorAll('#scenarioFilter option').forEach(option => {
+                    option.style.opacity = relevantScenarios.has(option.value) ? '1' : '0.3';
+                    if (!relevantScenarios.has(option.value)) {
+                        option.selected = false;
+                    }
+                });
+            }
+
+            // Update category badges visibility and highlighting
+            const relevantCategories = new Set(filteredPoints.map(point => 
+                normalizeCategory(point.overallCategory)
+            ));
+            
+            document.querySelectorAll('.filter-badge').forEach(badge => {
+                const category = badge.dataset.category;
+                if (selectedScenarios.length > 0 || selectedModels.length > 0) {
+                    // If filters are applied, adjust badge visibility based on relevant categories
+                    badge.style.opacity = relevantCategories.has(category) ? '1' : '0.3';
+                    if (relevantCategories.has(category)) {
+                        badge.classList.add('relevant-badge');
+                    }
+                } else {
+                    // If no filters are applied, show all badges with normal opacity
+                    badge.style.opacity = activeCategories.has(category) ? '1' : '0.3';
+                }
+            });
+
+            // Update alternate outcomes dropdown
+            const alternateOutcomes = document.getElementById('alternateOutcomes');
+            if (selectedScenarios.length === 1 && selectedModels.length === 1) {
+                const parentScenario = selectedScenarios[0];
+                const selectedModel = selectedModels[0];
+                
+                if (scenarioRelationships.has(parentScenario)) {
+                    const alternatives = scenarioRelationships.get(parentScenario)
+                        .filter(child => child.model === selectedModel);
+                    
+                    if (alternatives.length > 0) {
+                        alternateOutcomes.innerHTML = alternatives
+                            .map(alt => `<option value="${alt.childId}">${alt.childId} (${alt.relationshipType || 'alternative'})</option>`)
+                            .join('');
+                        alternateOutcomes.disabled = false;
+                    } else {
+                        alternateOutcomes.innerHTML = '<option disabled>No alternate outcomes available</option>';
+                        alternateOutcomes.disabled = true;
+                    }
+                }
+            } else {
+                alternateOutcomes.innerHTML = '<option disabled>Select a scenario and model first</option>';
+                alternateOutcomes.disabled = true;
+            }
 
             if (filteredPoints.length === 0) {
                 alert('No data points match the current filters.');
                 return;
             }
 
-            // Comparison: if parent scenarios are selected via the scenario filter, compare all selected parent scenarios.
+            // Update visualization based on filtered points
             if (selectedScenarios.length > 0) {
-                const comparisonData = filteredPoints.filter(point => selectedScenarios.includes(point.scenarioTitle));
+                const comparisonData = filteredPoints.filter(point => 
+                    selectedScenarios.includes(point.scenarioTitle)
+                );
                 populateOverview(comparisonData);
                 populateScenarioDetails(comparisonData);
             } else if (selectedModels.length === 2) {
-                const comparisonData = selectedModels.map(model => filteredPoints.find(point => point.llmName === model));
+                const comparisonData = selectedModels.map(model => 
+                    filteredPoints.find(point => point.llmName === model)
+                ).filter(Boolean); // Remove any undefined values
                 populateOverview(comparisonData);
                 populateScenarioDetails(comparisonData);
             } else {
@@ -841,14 +904,19 @@
                     z: zValues,
                     mode: 'markers',
                     marker: {
-                        size: 5,
+                        size: filteredPoints.map(p => p.isParent ? 8 : 6),
                         color: filteredPoints.map(point => getColorByCategory(point.overallCategory)),
-                        opacity: 0.8
+                        opacity: 0.8,
+                        line: {
+                            color: filteredPoints.map(p => p.isParent ? '#000' : '#666'),
+                            width: filteredPoints.map(p => p.isParent ? 2 : 1)
+                        }
                     },
                     text: filteredPoints.map(point => `
                         <b>${point.scenarioTitle}</b><br>
                         <b>Category:</b> ${point.overallCategory}<br>
-                        <b>Model:</b> ${point.llmName}
+                        <b>Model:</b> ${point.llmName}<br>
+                        ${point.isParent ? '<b>Type:</b> Parent' : '<b>Type:</b> Alternative'}
                     `),
                     hoverinfo: 'text',
                     showlegend: false
