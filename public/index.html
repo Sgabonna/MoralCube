@@ -159,6 +159,16 @@
             cursor: help;
         }
 
+        .intro-section {
+            max-width: 800px;
+            margin: 0 auto;
+            color: #666;
+        }
+
+        .intro-section p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
         .tooltip {
             position: relative;
             display: inline-block;
@@ -285,10 +295,15 @@
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="page-header">
-            <h1 class="text-center mb-0">3D Ethics Visualization</h1>
+    <div class="page-header mb-4">
+        <h1 class="text-center mb-3">The Moral Cube</h1>
+        <div class="intro-section text-center mb-3">
+            <p class="mb-2">Navigate ethical scenarios in 3D space: Select categories to explore scenarios, choose AI models to compare responses, and discover alternate outcomes. Clear filters anytime to reset.</p>
+            <a href="mailto:themoralcube@gmail.com?subject=Moral%20Cube%20Feedback" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-envelope mr-1"></i> Provide Feedback
+            </a>
         </div>
+    </div>
         <div class="filter-section">
             <div class="filter-group category-filter-group">
                 <label for="categoryFilter">Filter by Category Type:</label>
@@ -755,6 +770,49 @@
             });
         }
 
+        // Add these helper functions
+        function updateCategoryTypeOptions(scenarios) {
+            const availableCategories = new Set(scenarios.map(s => s.category));
+            const categoryFilter = document.getElementById('categoryFilter');
+            Array.from(categoryFilter.options).forEach(option => {
+                if (availableCategories.has(option.value)) {
+                    option.style.display = 'block';
+                    option.classList.add('relevant-option');
+                } else {
+                    option.style.display = 'none';
+                    option.selected = false;
+                }
+            });
+        }
+
+        function updateModelOptions(scenarios) {
+            const availableModels = new Set(scenarios.map(s => s.llmName));
+            const modelFilter = document.getElementById('modelFilter');
+            Array.from(modelFilter.options).forEach(option => {
+                if (availableModels.has(option.value)) {
+                    option.style.display = 'block';
+                    option.classList.add('relevant-option');
+                } else {
+                    option.style.display = 'none';
+                    option.selected = false;
+                }
+            });
+        }
+
+        function updateScenarioOptions(scenarios) {
+            const availableScenarios = new Set(scenarios.map(s => s.scenarioTitle));
+            const scenarioFilter = document.getElementById('scenarioFilter');
+            Array.from(scenarioFilter.options).forEach(option => {
+                if (availableScenarios.has(option.value)) {
+                    option.style.display = 'block';
+                    option.classList.add('relevant-option');
+                } else {
+                    option.style.display = 'none';
+                    option.selected = false;
+                }
+            });
+        }
+
         function updateVisualization() {
             let filteredPoints = dataPoints;
             
@@ -1157,45 +1215,70 @@
         document.getElementById('scenarioFilter').addEventListener('change', function(e) {
             if (isUpdatingFilters || isCategoryFiltering) return;
             selectedScenarios = Array.from(e.target.selectedOptions).map(option => option.value);
+            
+            // Maintain the 4-scenario limit
             if (selectedScenarios.length > 4) {
                 alert('Please select a maximum of 4 scenarios for comparison');
                 selectedScenarios = selectedScenarios.slice(0, 4);
-                Array.from(this.options).forEach(option => { option.selected = selectedScenarios.includes(option.value); });
+                Array.from(this.options).forEach(option => {
+                    option.selected = selectedScenarios.includes(option.value);
+                });
             }
-            // Clear previous model selections and alternate outcomes
-            document.getElementById('modelFilter').selectedIndex = -1;
-            document.getElementById('alternateOutcomes').innerHTML = '<option disabled>Select a model to see alternate outcomes</option>';
-            selectedModels = [];
-            const selectedParentScenarios = dataPoints.filter(point => point.isParent && selectedScenarios.includes(point.scenarioTitle));
-            createPlot(selectedParentScenarios);
-            populateOverview(selectedParentScenarios);
-            populateScenarioDetails(selectedParentScenarios);
+
+            if (selectedScenarios.length > 0) {
+                // Find the scenarios and their related data
+                const scenarioPoints = dataPoints.filter(point => 
+                    selectedScenarios.includes(point.scenarioTitle)
+                );
+                
+                // Update category type options to show only relevant categories
+                updateCategoryTypeOptions(scenarioPoints);
+                
+                // Update model options to show only models that have these scenarios
+                updateModelOptions(scenarioPoints);
+                
+                // Reset model selection
+                selectedModels = [];
+                document.getElementById('modelFilter').selectedIndex = -1;
+                document.getElementById('alternateOutcomes').innerHTML = '<option>Select a model</option>';
+
+                // Update visualization with parent scenarios
+                const selectedParentScenarios = scenarioPoints.filter(point => point.isParent);
+                createPlot(selectedParentScenarios);
+                populateOverview(selectedParentScenarios);
+                populateScenarioDetails(selectedParentScenarios);
+            } else {
+                // If no scenarios selected, show all options again
+                updateCategoryTypeOptions(dataPoints);
+                updateModelOptions(dataPoints);
+            }
+            
+            updateVisualization();
         });
 
         document.getElementById('alternateOutcomes').addEventListener('change', function(e) {
             if (isUpdatingFilters) return;
             
-            const selectedAlternates = Array.from(e.target.selectedOptions).map(opt => opt.value);
+            const selectedAlternates = Array.from(this.selectedOptions).map(opt => opt.value);
             const parentScenario = selectedScenarios[0];
             const selectedModel = selectedModels[0];
             
             if (!parentScenario || !selectedModel) return;
             
-            // Find the parent point
+            // Find the parent point and its alternates
             const parentPoint = dataPoints.find(p => 
                 p.scenarioTitle === parentScenario && 
-                p.llmName === selectedModel
+                p.llmName === selectedModel &&
+                p.isParent
             );
             
-            // Find all selected child points
             const selectedChildPoints = selectedAlternates
                 .map(childId => dataPoints.find(p => 
                     p.scenarioTitle === childId && 
                     p.llmName === selectedModel
                 ))
-                .filter(p => p); // Remove any undefined points
+                .filter(Boolean);
             
-            // Combine parent and children for visualization
             const pointsToShow = [parentPoint, ...selectedChildPoints].filter(Boolean);
             
             if (pointsToShow.length > 0) {
@@ -1206,21 +1289,24 @@
         });
 
         document.getElementById('categoryFilter').addEventListener('change', function(e) {
-            if (isUpdatingFilters || isCategoryFiltering) return;
+            if (isUpdatingFilters) return;
             selectedCategories = Array.from(e.target.selectedOptions).map(option => option.value);
-            updateVisualization();
-        });
-
-        document.addEventListener('DOMContentLoaded', fetchScenarios);
-
-        document.getElementById('scenarioFilter').addEventListener('change', function(e) {
-            if (isUpdatingFilters || isCategoryFiltering) return;
-            selectedScenarios = Array.from(e.target.selectedOptions).map(option => option.value);
-            if (selectedScenarios.length > 4) {
-                alert('Please select a maximum of 4 scenarios for comparison');
-                selectedScenarios = selectedScenarios.slice(0, 4);
-                Array.from(this.options).forEach(option => { option.selected = selectedScenarios.includes(option.value); });
-            }
+            
+            // Filter scenarios by selected category
+            const relevantScenarios = dataPoints.filter(point => 
+                selectedCategories.includes(point.category)
+            );
+            
+            updateScenarioOptions(relevantScenarios);
+            updateModelOptions(relevantScenarios);
+            
+            // Reset other selections
+            selectedScenarios = [];
+            selectedModels = [];
+            document.getElementById('scenarioFilter').selectedIndex = -1;
+            document.getElementById('modelFilter').selectedIndex = -1;
+            document.getElementById('alternateOutcomes').innerHTML = '<option>Select a scenario and model first</option>';
+            
             updateVisualization();
         });
 
@@ -1243,21 +1329,40 @@
                         b.classList.add('active');
                         b.style.opacity = '1';
                     });
+                    
+                    // Reset all filters
+                    selectedCategories = [];
+                    selectedScenarios = [];
+                    selectedModels = [];
+                    document.getElementById('categoryFilter').selectedIndex = -1;
+                    document.getElementById('scenarioFilter').selectedIndex = -1;
+                    document.getElementById('modelFilter').selectedIndex = -1;
+                    document.getElementById('alternateOutcomes').innerHTML = '<option>Select a scenario and model first</option>';
                 } else {
                     // Set only this category as active
                     activeCategories = new Set([category]);
                     this.classList.add('active');
                     this.style.opacity = '1';
+                    
+                    // Filter scenarios by moral category
+                    const relevantScenarios = dataPoints.filter(point => 
+                        normalizeCategory(point.overallCategory) === category
+                    );
+                    
+                    // Update available options
+                    updateCategoryTypeOptions(relevantScenarios);
+                    updateScenarioOptions(relevantScenarios);
+                    updateModelOptions(relevantScenarios);
+                    
+                    // Reset selections
+                    selectedCategories = [];
+                    selectedScenarios = [];
+                    selectedModels = [];
+                    document.getElementById('categoryFilter').selectedIndex = -1;
+                    document.getElementById('scenarioFilter').selectedIndex = -1;
+                    document.getElementById('modelFilter').selectedIndex = -1;
+                    document.getElementById('alternateOutcomes').innerHTML = '<option>Select a scenario and model first</option>';
                 }
-                
-                // Reset other filters
-                selectedModels = [];
-                selectedScenarios = [];
-                selectedCategories = [];
-                document.getElementById('modelFilter').selectedIndex = -1;
-                document.getElementById('scenarioFilter').selectedIndex = -1;
-                document.getElementById('categoryFilter').selectedIndex = -1;
-                document.getElementById('alternateOutcomes').innerHTML = '<option>Select a scenario and model first</option>';
                 
                 updateVisualization();
             });
