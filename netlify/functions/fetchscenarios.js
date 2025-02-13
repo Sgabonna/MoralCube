@@ -18,27 +18,47 @@ async function connectToDatabase(uri) {
 
 exports.handler = async (event, context) => {
   try {
-    // Retrieve the MongoDB connection string from your environment variable.
     const uri = process.env.MONGODB_URI;
     if (!uri) {
-      throw new Error("Missing MONGODB_URI environment variable");
+      console.error("Missing MONGODB_URI");
+      return {
+        statusCode: 500,
+        body: JSON.stringify({ error: "Missing database configuration" })
+      };
     }
     
+    console.log("Attempting database connection...");
     const client = await connectToDatabase(uri);
-    const database = client.db("MoralCube");      // Verify that this is your correct database name
-    const collection = database.collection("Scenarios"); // And that "scenarios" is the correct collection
-
+    console.log("Connected to database");
+    
+    const database = client.db("MoralCube");
+    const collection = database.collection("Scenarios");
+    
+    console.log("Fetching scenarios...");
     const scenarios = await collection.find({}).toArray();
-
+    console.log(`Found ${scenarios.length} scenarios`);
+    
     return {
       statusCode: 200,
-      body: JSON.stringify({ scenarios }),
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
+      body: JSON.stringify({ 
+        scenarios,
+        timestamp: new Date().toISOString(),
+        count: scenarios.length
+      })
     };
   } catch (error) {
-    console.error("Error fetching scenarios:", error);
+    console.error("Function error:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message }),
+      body: JSON.stringify({ 
+        error: error.message,
+        stack: error.stack,
+        timestamp: new Date().toISOString()
+      })
     };
   }
 };
