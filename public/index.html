@@ -424,6 +424,9 @@
                     scenarios.forEach((scenario, index) => {
                         console.log(`Processing scenario at index ${index}:`, scenario);
 
+                        // Use MongoDB _id if id is not available
+                        const documentId = scenario.id || scenario._id?.toString();
+
                         // Check if metadata exists
                         if (!scenario.metadata) {
                         console.warn(`Scenario at index ${index} is missing metadata.`);
@@ -437,7 +440,7 @@
                         const metadata = scenario.metadata || {};
                         const survey = scenario.survey || {};
                         const point = {
-                        id: scenario.id,
+                        id: documentId,
                         scenarioTitle: metadata.title || "Untitled Scenario",
                         scenarioDescription: metadata.description || "",
                         llmName: metadata.llmSource ? metadata.llmSource.model : "Unknown Model",
