@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>3D Ethics Visualization</title>
+    <title>The Moral Cube</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -766,20 +766,43 @@
                 badge.style.display = 'inline-block';
             });
 
-            // Apply filters in sequence
-            // 1. Category Type Filter
+            // Apply moral category filter first (if not showing all categories)
+            if (activeCategories.size !== 6) {
+                filteredPoints = filteredPoints.filter(point => 
+                    activeCategories.has(normalizeCategory(point.overallCategory))
+                );
+                
+                // Update available scenarios based on moral category
+                const availableScenarios = new Set(filteredPoints.map(p => p.scenarioTitle));
+                const scenarioFilter = document.getElementById('scenarioFilter');
+                Array.from(scenarioFilter.options).forEach(option => {
+                    if (availableScenarios.has(option.value)) {
+                        option.style.display = 'block';
+                        option.classList.add('relevant-option');
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+                
+                // Update available models based on moral category
+                const availableModels = new Set(filteredPoints.map(p => p.llmName));
+                const modelFilter = document.getElementById('modelFilter');
+                Array.from(modelFilter.options).forEach(option => {
+                    if (availableModels.has(option.value)) {
+                        option.style.display = 'block';
+                        option.classList.add('relevant-option');
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+            }
+
+            // Apply Category Type Filter
             if (selectedCategories.length > 0) {
                 filteredPoints = filteredPoints.filter(point => selectedCategories.includes(point.category));
             }
 
-            // 2. Moral Category Filter (from badges)
-            if (activeCategories.size !== 6) { // Not all categories are selected
-                filteredPoints = filteredPoints.filter(point => 
-                    activeCategories.has(normalizeCategory(point.overallCategory))
-                );
-            }
-
-            // 3. Scenario Filter
+            // Apply Scenario Filter
             if (selectedScenarios.length > 0) {
                 filteredPoints = filteredPoints.filter(point => 
                     selectedScenarios.includes(point.scenarioTitle)
@@ -788,14 +811,17 @@
                 // Update available models based on selected scenarios
                 const relevantModels = new Set(filteredPoints.map(p => p.llmName));
                 document.querySelectorAll('#modelFilter option').forEach(option => {
-                    option.style.opacity = relevantModels.has(option.value) ? '1' : '0.3';
-                    if (!relevantModels.has(option.value)) {
+                    if (relevantModels.has(option.value)) {
+                        option.style.display = 'block';
+                        option.classList.add('relevant-option');
+                    } else {
+                        option.style.display = 'none';
                         option.selected = false;
                     }
                 });
             }
 
-            // 4. Model Filter
+            // Apply Model Filter
             if (selectedModels.length > 0) {
                 filteredPoints = filteredPoints.filter(point => 
                     selectedModels.includes(point.llmName)
@@ -804,8 +830,11 @@
                 // Update available scenarios based on selected models
                 const relevantScenarios = new Set(filteredPoints.map(p => p.scenarioTitle));
                 document.querySelectorAll('#scenarioFilter option').forEach(option => {
-                    option.style.opacity = relevantScenarios.has(option.value) ? '1' : '0.3';
-                    if (!relevantScenarios.has(option.value)) {
+                    if (relevantScenarios.has(option.value)) {
+                        option.style.display = 'block';
+                        option.classList.add('relevant-option');
+                    } else {
+                        option.style.display = 'none';
                         option.selected = false;
                     }
                 });
@@ -818,15 +847,12 @@
             
             document.querySelectorAll('.filter-badge').forEach(badge => {
                 const category = badge.dataset.category;
-                if (selectedScenarios.length > 0 || selectedModels.length > 0) {
-                    // If filters are applied, adjust badge visibility based on relevant categories
+                // If any filter is applied, adjust badge visibility based on relevant categories
+                if (selectedScenarios.length > 0 || selectedModels.length > 0 || activeCategories.size !== 6) {
                     badge.style.opacity = relevantCategories.has(category) ? '1' : '0.3';
                     if (relevantCategories.has(category)) {
                         badge.classList.add('relevant-badge');
                     }
-                } else {
-                    // If no filters are applied, show all badges with normal opacity
-                    badge.style.opacity = activeCategories.has(category) ? '1' : '0.3';
                 }
             });
 
@@ -836,23 +862,35 @@
                 const parentScenario = selectedScenarios[0];
                 const selectedModel = selectedModels[0];
                 
-                if (scenarioRelationships.has(parentScenario)) {
-                    const alternatives = scenarioRelationships.get(parentScenario)
-                        .filter(child => child.model === selectedModel);
-                    
-                    if (alternatives.length > 0) {
-                        alternateOutcomes.innerHTML = alternatives
-                            .map(alt => `<option value="${alt.childId}">${alt.childId} (${alt.relationshipType || 'alternative'})</option>`)
-                            .join('');
-                        alternateOutcomes.disabled = false;
-                    } else {
-                        alternateOutcomes.innerHTML = '<option disabled>No alternate outcomes available</option>';
-                        alternateOutcomes.disabled = true;
-                    }
+                // Find all relationships for this scenario
+                const relationships = scenarioRelationships.get(parentScenario) || [];
+                console.log("Found relationships:", relationships);
+                
+                // Filter alternatives for the selected model
+                const alternatives = relationships.filter(child => child.model === selectedModel);
+                console.log("Filtered alternatives for model:", alternatives);
+                
+                if (alternatives && alternatives.length > 0) {
+                    // Clear and populate the dropdown
+                    alternateOutcomes.innerHTML = alternatives
+                        .map(alt => `
+                            <option value="${alt.childId}">
+                                ${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}
+                            </option>
+                        `).join('');
+                    alternateOutcomes.disabled = false;
+                    alternateOutcomes.style.opacity = '1';
+                    // Enable multiple selection
+                    alternateOutcomes.multiple = true;
+                } else {
+                    alternateOutcomes.innerHTML = '<option>No alternate outcomes available</option>';
+                    alternateOutcomes.disabled = true;
+                    alternateOutcomes.style.opacity = '0.5';
                 }
             } else {
-                alternateOutcomes.innerHTML = '<option disabled>Select a scenario and model first</option>';
+                alternateOutcomes.innerHTML = '<option>Select a scenario and model first</option>';
                 alternateOutcomes.disabled = true;
+                alternateOutcomes.style.opacity = '0.5';
             }
 
             if (filteredPoints.length === 0) {
@@ -870,7 +908,7 @@
             } else if (selectedModels.length === 2) {
                 const comparisonData = selectedModels.map(model => 
                     filteredPoints.find(point => point.llmName === model)
-                ).filter(Boolean); // Remove any undefined values
+                ).filter(Boolean);
                 populateOverview(comparisonData);
                 populateScenarioDetails(comparisonData);
             } else {
@@ -1136,18 +1174,35 @@
 
         document.getElementById('alternateOutcomes').addEventListener('change', function(e) {
             if (isUpdatingFilters) return;
+            
             const selectedAlternates = Array.from(e.target.selectedOptions).map(opt => opt.value);
             const parentScenario = selectedScenarios[0];
             const selectedModel = selectedModels[0];
+            
             if (!parentScenario || !selectedModel) return;
-            const parentPoint = dataPoints.find(p => p.scenarioTitle === parentScenario && p.llmName === selectedModel);
-            const selectedChildPoints = selectedAlternates.map(childId => 
-                dataPoints.find(p => p.scenarioTitle === childId && p.llmName === selectedModel)
-            ).filter(p => p);
-            const pointsToShow = [parentPoint, ...selectedChildPoints];
-            createPlot(pointsToShow);
-            populateOverview(pointsToShow);
-            populateScenarioDetails(pointsToShow);
+            
+            // Find the parent point
+            const parentPoint = dataPoints.find(p => 
+                p.scenarioTitle === parentScenario && 
+                p.llmName === selectedModel
+            );
+            
+            // Find all selected child points
+            const selectedChildPoints = selectedAlternates
+                .map(childId => dataPoints.find(p => 
+                    p.scenarioTitle === childId && 
+                    p.llmName === selectedModel
+                ))
+                .filter(p => p); // Remove any undefined points
+            
+            // Combine parent and children for visualization
+            const pointsToShow = [parentPoint, ...selectedChildPoints].filter(Boolean);
+            
+            if (pointsToShow.length > 0) {
+                createPlot(pointsToShow);
+                populateOverview(pointsToShow);
+                populateScenarioDetails(pointsToShow);
+            }
         });
 
         document.getElementById('categoryFilter').addEventListener('change', function(e) {
@@ -1172,19 +1227,38 @@
         document.querySelectorAll('.filter-badge').forEach(badge => {
             badge.addEventListener('click', function() {
                 if (isUpdatingFilters) return;
+                
                 const category = this.dataset.category;
-                if (this.classList.contains('active')) {
-                    this.classList.remove('active');
-                    activeCategories.delete(category);
-                    if (activeCategories.size === 0) {
-                        document.querySelectorAll('.filter-badge').forEach(b => b.classList.add('active'));
-                        activeCategories = new Set(['evil', 'virtue', 'vice', 'sin', 'morally_grey', 'world_building']);
-                    }
+                
+                // Reset all badges to inactive
+                document.querySelectorAll('.filter-badge').forEach(b => {
+                    b.classList.remove('active');
+                    b.style.opacity = '0.3';
+                });
+                
+                // If clicking an already active sole category, reset all
+                if (activeCategories.size === 1 && activeCategories.has(category)) {
+                    activeCategories = new Set(['evil', 'virtue', 'vice', 'sin', 'morally_grey', 'world_building']);
+                    document.querySelectorAll('.filter-badge').forEach(b => {
+                        b.classList.add('active');
+                        b.style.opacity = '1';
+                    });
                 } else {
+                    // Set only this category as active
+                    activeCategories = new Set([category]);
                     this.classList.add('active');
-                    activeCategories.add(category);
+                    this.style.opacity = '1';
                 }
-                isCategoryFiltering = activeCategories.size !== 6;
+                
+                // Reset other filters
+                selectedModels = [];
+                selectedScenarios = [];
+                selectedCategories = [];
+                document.getElementById('modelFilter').selectedIndex = -1;
+                document.getElementById('scenarioFilter').selectedIndex = -1;
+                document.getElementById('categoryFilter').selectedIndex = -1;
+                document.getElementById('alternateOutcomes').innerHTML = '<option>Select a scenario and model first</option>';
+                
                 updateVisualization();
             });
         });
