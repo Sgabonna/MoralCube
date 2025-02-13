@@ -485,29 +485,34 @@
 
 
 
-                function processJsonData(scenarios) {
-                    // Enhanced logging of the input
-                    console.log("API response data:", scenarios);
-                    console.log("Response type:", typeof scenarios);
-                    if (scenarios && scenarios.length > 0) {
-                        console.log("First scenario raw data:", JSON.stringify(scenarios[0], null, 2));
-                    }
+                function processJsonData(data) {
+                    console.log("API response data:", data);
+                    console.log("Response type:", typeof data);
 
                     // Clear existing relationships
                     scenarioRelationships.clear();
                     dataPoints = [];
                     let displayPoints = [];  // For parent scenarios
 
-                    scenarios.forEach((scenario, index) => {
+                    // Flatten the nested structure
+                    let flattenedScenarios = [];
+                    data.forEach(doc => {
+                        if (doc.scenarios && Array.isArray(doc.scenarios)) {
+                            flattenedScenarios = flattenedScenarios.concat(doc.scenarios);
+                        }
+                    });
+
+                    console.log("Flattened scenarios:", flattenedScenarios);
+
+                    flattenedScenarios.forEach((scenario, index) => {
                         console.log(`\n--- Processing scenario at index ${index} ---`);
                         console.log("Full scenario data:", scenario);
-                        console.log("Available fields:", Object.keys(scenario));
 
-                        // Enhanced ID handling and logging
-                        const documentId = scenario.id || scenario._id?.toString();
+                        // Use scenario.id as it's already in the correct format
+                        const documentId = scenario.id;
                         console.log("Document ID:", documentId);
 
-                        // Detailed metadata logging
+                        // These should now be defined since we're using the correct nesting level
                         console.log("Metadata:", scenario.metadata);
                         console.log("Survey data:", scenario.survey);
 
@@ -620,7 +625,7 @@
                     console.log("Display points for plot:", displayPoints);
                     createPlot(displayPoints);
                 }
-        }
+            }
 
 
         // Visualization functions
