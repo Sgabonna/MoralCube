@@ -385,22 +385,26 @@
         function fetchScenarios() {
             fetch('/.netlify/functions/fetchscenarios')
                 .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
+                    if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                    }
+                    return response.json();
                 })
                 .then(data => {
-                console.log("Received data:", data);
-                const scenarios = data.scenarios || data;
-                processJsonData(scenarios);
+                    // Log the whole data to see its structure.
+                    console.log("Full API response:", data);
+
+                    // If your API returns an object with a 'scenarios' property:
+                    if (data && Array.isArray(data.scenarios)) {
+                    processJsonData(data.scenarios);
+                    } else if (Array.isArray(data)) {
+                    // If the response is directly an array.
+                    processJsonData(data);
+                    } else {
+                    console.error("Unexpected data format:", data);
+                    }
                 })
-                .catch(err => {
-                console.error('Error fetching scenarios from API:', err);
-                document.getElementById('overview').innerHTML =
-                    '<div class="alert alert-danger">Error loading scenarios. Please check the console for details.</div>';
-                });
-            }
+                .catch(error => console.error('Error fetching scenarios:', error));
 
 
 
@@ -408,85 +412,104 @@
 
 
 
-        function processJsonData(scenarios) {
-            // Clear existing relationships
-            scenarioRelationships.clear();
-            dataPoints = [];
-            let displayPoints = [];  // For parent scenarios
+                function processJsonData(scenarios) {
+                    // Log the entire API response to inspect its structure.
+                    console.log("API response data:", scenarios);
 
-            scenarios.forEach(scenario => {
-                // Each scenario is now self-contained (new format)
-                const metadata = scenario.metadata;
-                const survey = scenario.survey;
-                const point = {
-                    id: scenario.id,
-                    scenarioTitle: metadata.title,
-                    scenarioDescription: metadata.description,
-                    llmName: metadata.llmSource.model,
-                    category: metadata.category,
-                    overallCategory: normalizeCategory(metadata.classification.type),
-                    categoryJustification: metadata.classification.justification,
-                    url: metadata.url,
-                    dimensions: survey.dimensions,
-                    x: survey.finalPosition.x,
-                    y: survey.finalPosition.y,
-                    z: survey.finalPosition.z,
-                    isParent: scenario.type === 'base',
-                    parentId: scenario.parentId || null,
-                    relationToBase: metadata.relationToBase || null
-                };
-                dataPoints.push(point);
-                if (point.isParent) {
-                    displayPoints.push(point);
-                } else if (point.parentId) {
-                    // Find the matching parent (using the parent's id)
-                    const parent = dataPoints.find(p => p.id === point.parentId);
-                    if (parent) {
-                        if (!scenarioRelationships.has(parent.scenarioTitle)) {
-                            scenarioRelationships.set(parent.scenarioTitle, []);
+                    // Clear existing relationships
+                    scenarioRelationships.clear();
+                    dataPoints = [];
+                    let displayPoints = [];  // For parent scenarios
+
+                    scenarios.forEach((scenario, index) => {
+                        console.log(`Processing scenario at index ${index}:`, scenario);
+
+                        // Check if metadata exists
+                        if (!scenario.metadata) {
+                        console.warn(`Scenario at index ${index} is missing metadata.`);
                         }
-                        scenarioRelationships.get(parent.scenarioTitle).push({
+                        // Check if metadata.title exists
+                        if (!scenario.metadata || !scenario.metadata.title) {
+                        console.warn(`Scenario at index ${index} is missing a title.`);
+                        }
+
+                        // Use defaults if properties are missing
+                        const metadata = scenario.metadata || {};
+                        const survey = scenario.survey || {};
+                        const point = {
+                        id: scenario.id,
+                        scenarioTitle: metadata.title || "Untitled Scenario",
+                        scenarioDescription: metadata.description || "",
+                        llmName: metadata.llmSource ? metadata.llmSource.model : "Unknown Model",
+                        category: metadata.category || "Uncategorized",
+                        overallCategory: metadata.classification ? normalizeCategory(metadata.classification.type) : "unknown",
+                        categoryJustification: metadata.classification ? metadata.classification.justification : "",
+                        url: metadata.url || "",
+                        dimensions: survey.dimensions || [],
+                        x: survey.finalPosition ? survey.finalPosition.x : 0,
+                        y: survey.finalPosition ? survey.finalPosition.y : 0,
+                        z: survey.finalPosition ? survey.finalPosition.z : 0,
+                        isParent: scenario.type === 'base',
+                        parentId: scenario.parentId || null,
+                        relationToBase: metadata.relationToBase || null
+                        };
+
+                        console.log(`Extracted title for scenario at index ${index}:`, point.scenarioTitle);
+
+                        dataPoints.push(point);
+                        if (point.isParent) {
+                        displayPoints.push(point);
+                        } else if (point.parentId) {
+                        // Find the matching parent (using the parent's id)
+                        const parent = dataPoints.find(p => p.id === point.parentId);
+                        if (parent) {
+                            if (!scenarioRelationships.has(parent.scenarioTitle)) {
+                            scenarioRelationships.set(parent.scenarioTitle, []);
+                            }
+                            scenarioRelationships.get(parent.scenarioTitle).push({
                             childId: point.scenarioTitle,
                             relationshipType: point.relationToBase,
                             model: point.llmName,
                             data: point
-                        });
+                            });
+                        }
+                        }
+                    });
+
+                    // Update filters using parent scenarios only
+                    const uniqueScenarios = [...new Set(displayPoints.map(p => p.scenarioTitle))];
+                    const uniqueModels = [...new Set(displayPoints.map(p => p.llmName))];
+                    const uniqueCategories = [...new Set(displayPoints.map(p => p.category))];
+
+                    document.getElementById('modelFilter').innerHTML = uniqueModels.map(model =>
+                        `<option value="${model}">${model}</option>`
+                    ).join('');
+
+                    document.getElementById('scenarioFilter').innerHTML = uniqueScenarios.map(scenario =>
+                        `<option value="${scenario}">${scenario}</option>`
+                    ).join('');
+
+                    document.getElementById('categoryFilter').innerHTML = uniqueCategories.map(category =>
+                        `<option value="${category}">${category}</option>`
+                    ).join('');
+
+                    document.getElementById('alternateOutcomes').innerHTML =
+                        '<option disabled>Select a scenario and model to see alternates</option>';
+
+                    activeCategories = new Set([...new Set(displayPoints.map(point => normalizeCategory(point.overallCategory)))]);
+
+                    document.querySelectorAll('.filter-badge').forEach(badge => {
+                        const category = badge.dataset.category.toLowerCase();
+                        const exists = displayPoints.some(point => normalizeCategory(point.overallCategory) === category);
+                        badge.style.display = exists ? 'inline-block' : 'none';
+                        badge.classList.toggle('active', activeCategories.has(category));
+                    });
+
+                    // Initial visualization: show parent scenarios only
+                    createPlot(displayPoints);
                     }
                 }
-            });
 
-            // Update filters using parent scenarios only
-            const uniqueScenarios = [...new Set(displayPoints.map(p => p.scenarioTitle))];
-            const uniqueModels = [...new Set(displayPoints.map(p => p.llmName))];
-            const uniqueCategories = [...new Set(displayPoints.map(p => p.category))];
-
-            document.getElementById('modelFilter').innerHTML = uniqueModels.map(model => 
-                `<option value="${model}">${model}</option>`
-            ).join('');
-
-            document.getElementById('scenarioFilter').innerHTML = uniqueScenarios.map(scenario => 
-                `<option value="${scenario}">${scenario}</option>`
-            ).join('');
-
-            document.getElementById('categoryFilter').innerHTML = uniqueCategories.map(category => 
-                `<option value="${category}">${category}</option>`
-            ).join('');
-
-            document.getElementById('alternateOutcomes').innerHTML =
-                '<option disabled>Select a scenario and model to see alternates</option>';
-
-            activeCategories = new Set([...new Set(displayPoints.map(point => normalizeCategory(point.overallCategory)))]);
-
-            document.querySelectorAll('.filter-badge').forEach(badge => {
-                const category = badge.dataset.category.toLowerCase();
-                const exists = displayPoints.some(point => normalizeCategory(point.overallCategory) === category);
-                badge.style.display = exists ? 'inline-block' : 'none';
-                badge.classList.toggle('active', activeCategories.has(category));
-            });
-
-            // Initial visualization: show parent scenarios only
-            createPlot(displayPoints);
-        }
 
         // Visualization functions
         function getColorByCategory(category) {
