@@ -180,6 +180,39 @@
             margin-left: 0.5rem;
             cursor: help;
         }
+        /* Container for the three columns */
+        #overview-section {
+            display: flex;
+            width: 100%;
+            box-sizing: border-box;
+            }
+
+        /* Left Column (Cube) – 40% width remains */
+        #cube-column {
+            width: 40%;
+            }
+
+        /* Middle Column (Placeholder Overview) – 45% width */
+        #placeholder-overview-column {
+            width: 45%;
+            }
+
+        /* Right Column (Stacked Overview Cards) – 15% width */
+        #stacked-cards-column {
+            width: 15%;
+            }
+
+        /* The container for the stacked overview cards:
+        Fixed height for 5 cards (e.g., 500px total) */
+        #overview {
+            height: 500px;            /* Adjust as needed */
+            overflow: hidden;         /* Hide overflow if fewer than 5 cards */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            }
+
+
 
         .tooltip {
             position: relative;
@@ -232,14 +265,6 @@
             gap: 10px;  /* Reduced gap for a more compact layout */
         }
 
-        .comparison-card {
-            background-color: #f8f9fa;
-            border-radius: 6px;
-            padding: 10px;  /* Reduced padding */
-            font-size: 0.9rem;  /* Slightly smaller text */
-            margin-bottom: 10px;
-        }
-
         .scenario-section {
             margin-top: 20px;
             padding: 20px;
@@ -250,27 +275,39 @@
             margin-bottom: 10px;
         }
 
-        /* Read More Functionality */
+        /* Each overview card (stacked vertically) */
+        .comparison-card {
+            height: calc(500px / 5);  /* Fixed height per card (e.g., 100px each if 500px total) */
+            box-sizing: border-box;
+            padding: 5px 8px;         /* Reduced padding */
+            margin-bottom: 5px;       /* Optional gap between cards */
+            overflow: hidden;
+            font-size: 0.75rem;       /* Reduced font size */
+            }
+
+        /* Remove bottom margin from the last card */
+        .comparison-card:last-child {
+            margin-bottom: 0;
+            }
+
+        /* Read More Functionality (for overview card descriptions) */
         .scenario-description .description-text {
             display: -webkit-box;
-            -webkit-line-clamp: 3;  /* Clamp to 3 lines */
+            -webkit-line-clamp: 2;  /* Clamp to 2 lines (adjust as needed for card size) */
             -webkit-box-orient: vertical;
             overflow: hidden;
             transition: all 0.3s ease;
-        }
-
-        /* When the parent .scenario-description has the expanded class, remove clamping */
+            }
         .scenario-description.expanded .description-text {
             -webkit-line-clamp: unset;
-        }
-
+            }
         .read-more {
             display: block;
             color: #007bff;
             cursor: pointer;
-            margin-top: 5px;
-            font-size: 0.9rem;
-        }
+            font-size: 0.7rem;
+            margin-top: 3px;
+            }
 
         .table {
             margin-bottom: 0;
@@ -383,20 +420,28 @@
             </div>
         </div>
         
-        <div class="row">
-            <div class="col-lg-5">
-                <div class="plot-container">
-                    <div id="cube-plot"></div>
-                </div>
+        <!-- New three-column layout for cube, placeholder overview, and stacked overview cards -->
+        <div id="overview-section" style="display: flex; width: 100%;">
+            <!-- Left Column: Cube Plot (40% width) -->
+            <div id="cube-column" style="width: 40%;">
+            <div class="plot-container">
+                <div id="cube-plot"></div>
             </div>
-            <div class="col-lg-7">
-                <!-- Add a heading for the Overview section -->
-                <h3 class="text-center mb-3">Overview</h3>
-                <div id="overview">
-                    <!-- Overview content will be populated dynamically -->
-                </div>
+            </div>
+            
+            <!-- Middle Column: Placeholder Overview (45% width) -->
+            <div id="placeholder-overview-column" style="width: 45%; padding: 0 10px;">
+            <h3 class="text-center">Overview Placeholder</h3>
+            <p class="text-center">(This section is reserved for additional summary info.)</p>
+            </div>
+            
+            <!-- Right Column: Stacked Overview Cards (15% width) -->
+            <div id="stacked-cards-column" style="width: 15%; padding: 0 10px;">
+            <!-- This element will hold the overview cards -->
+            <div id="overview"></div>
             </div>
         </div>
+  
 
         <div id="scenarioSection" class="scenario-section">
             <h4 class="mb-3">Scenario Details</h4>
@@ -1066,24 +1111,24 @@
 
 
         function populateOverview(data) {
-            const overviewDiv = document.getElementById('overview');
+            const overviewDiv = document.getElementById('overview'); // This is now inside #stacked-cards-column
             if (!Array.isArray(data)) { 
                 data = [data]; 
             }
-            // Sort so that parent scenarios come first
+            // Sort so that parent scenarios come first (if needed)
             data.sort((a, b) => (b.isParent ? 1 : 0) - (a.isParent ? 1 : 0));
-            const gridTemplateColumns = data.length > 2 
-                ? 'grid-template-columns: repeat(2, 1fr);' 
-                : `grid-template-columns: repeat(${data.length}, 1fr);`;
-
-            // Build each overview card with the Title, Model, and Category Badge together.
+            // Limit to 5 cards (if more are selected, take only the first 5)
+            data = data.slice(0, 5);
+            
+            // Build each overview card.
+            // Note: We remove any "Position" display here.
             const cards = data.map(item => `
                 <div class="comparison-card">
-                    <h3 class="mb-3">
-                        ${getScenarioTitle(item)} 
+                    <h4 style="margin: 0; padding: 0;">
+                        ${getScenarioTitle(item)}
                         <small>(${item.llmName} ${getCategoryBadge(item.overallCategory)})</small>
-                    </h3>
-                    <p class="scenario-description">
+                    </h4>
+                    <p class="scenario-description" style="margin: 0;">
                         <span class="description-text">
                             ${item.scenarioDescription || 'No description available'}
                         </span>
@@ -1091,16 +1136,11 @@
                     </p>
                 </div>
             `).join('');
-
-            overviewDiv.innerHTML = `
-                <div class="comparison-container" style="${gridTemplateColumns}">
-                    ${cards}
-                </div>
-            `;
-
-            // After rendering the cards, check each description to see if "read more" is needed.
-            checkDescriptions();
+            
+            overviewDiv.innerHTML = cards;
+            checkDescriptions(); // Check if "read more" is needed
         }
+
 
 
 
@@ -1118,9 +1158,10 @@
             if (normalizedCategory === 'morally_grey' || normalizedCategory === 'morally-grey') {
                 normalizedCategory = 'morally-grey';
             }
-            const categoryClass = `category-${normalizedCategory}`;
-            return `<span class="category-badge ${categoryClass}">${category}</span>`;
+            const categoryClass = `category-badge category-${normalizedCategory}`;
+            return `<span class="${categoryClass}">${category}</span>`;
         }
+
 
         function populateScenarioDetails(scenarioData) {
             if (!Array.isArray(scenarioData)) {
