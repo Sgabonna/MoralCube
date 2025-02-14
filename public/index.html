@@ -86,16 +86,30 @@
         .child-marker {
             border: 1px dashed #666;
         }
-        /* Reduce table cell padding for a more compact layout and reduce font size */
+        /* Adjust the scenario details table: reduce font size, padding, and add a gap below the table */
         .compact-table {
-            font-size: 0.85rem; /* Adjust this value as needed */
+            font-size: 0.75rem;  /* Reduced by about 2 points */
+            margin-bottom: 10px; /* Adds a slight gap after the table */
         }
-        /* Reduce table cell padding for a more compact layout */
+
         .compact-table th,
         .compact-table td {
-            padding: 4px 6px;  /* Further reduce vertical and horizontal padding */
+            padding: 4px 6px;
             vertical-align: middle;
         }
+
+
+        /* (Optional) Adjust header font sizes if needed */
+        .compact-table th {
+            font-weight: bold;
+        }
+
+        /* The colgroup in the table will apply the following widths:
+        - First column (Question): 22.5%
+        - Second column (Score): 25%
+        - Third column (Range): 27.5%
+        - Fourth column (Justification): 25%
+        */
         .relationship-line {
             stroke-dasharray: 5,5;
             opacity: 0.6;
@@ -232,6 +246,9 @@
             padding: 20px;
             background-color: #f8f9fa;
             border-radius: 6px;
+        }
+        .scenario-table-container {
+            margin-bottom: 10px;
         }
 
         /* Read More Functionality */
@@ -1143,7 +1160,7 @@
                         ? ` (${dimension.id} Score: ${dimensionScore})`
                         : '';
 
-                    // Build table rows with hard-coded ranges based on dimension and question index.
+                    // Build table rows with fixed ranges based on dimension and question index.
                     const questionRows = currentDimension.questions.map((q, qIndex) => {
                         let range = "N/A";
                         if (dimension.id === 'Ends') {
@@ -1192,9 +1209,15 @@
                     }).join('');
 
                     return `
-                        <div class="col-md-${scenarioData.length === 1 ? '12' : '6'}">
+                        <div class="col-md-${scenarioData.length === 1 ? '12' : '6'} scenario-table-container">
                             <h5 class="mb-3">${scenario.scenarioTitle} (${scenario.llmName})${scoreDisplay}</h5>
                             <table class="table table-bordered compact-table">
+                                <colgroup>
+                                    <col style="width:22.5%;"> <!-- Question column reduced by 10% -->
+                                    <col style="width:25%;">   <!-- Score column -->
+                                    <col style="width:27.5%;"> <!-- Range column increased by 10% -->
+                                    <col style="width:25%;">   <!-- Justification column -->
+                                </colgroup>
                                 <thead>
                                     <tr>
                                         <th>Question</th>
@@ -1238,6 +1261,7 @@
 
             scenarioAccordion.innerHTML = dimensionContent;
         }
+
 
 
 
