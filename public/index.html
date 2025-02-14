@@ -226,16 +226,16 @@
         }
 
         /* Read More Functionality */
-        .scenario-description {
+        .scenario-description .description-text {
             display: -webkit-box;
             -webkit-line-clamp: 3;  /* Clamp to 3 lines */
             -webkit-box-orient: vertical;
             overflow: hidden;
-            position: relative;
             transition: all 0.3s ease;
         }
 
-        .scenario-description.expanded {
+        /* When the parent .scenario-description has the expanded class, remove clamping */
+        .scenario-description.expanded .description-text {
             -webkit-line-clamp: unset;
         }
 
@@ -1023,18 +1023,39 @@
             });
         }
 
+        function checkDescriptions() {
+            document.querySelectorAll('.scenario-description').forEach(function(desc) {
+                const textEl = desc.querySelector('.description-text');
+                const readMoreLink = desc.querySelector('.read-more');
+                // Compare scrollHeight (full content height) with clientHeight (visible height)
+                if (textEl.scrollHeight <= textEl.clientHeight) {
+                    // Content fits, hide the read more link
+                    readMoreLink.style.display = 'none';
+                } else {
+                    readMoreLink.style.display = 'block';
+                }
+            });
+        }
+
+
         function populateOverview(data) {
             const overviewDiv = document.getElementById('overview');
-            if (!Array.isArray(data)) { data = [data]; }
+            if (!Array.isArray(data)) { 
+                data = [data]; 
+            }
+            // Sort so that parent scenarios come first
             data.sort((a, b) => (b.isParent ? 1 : 0) - (a.isParent ? 1 : 0));
-            const gridTemplateColumns = data.length > 2 ? 'grid-template-columns: repeat(2, 1fr);' : `grid-template-columns: repeat(${data.length}, 1fr);`;
+            const gridTemplateColumns = data.length > 2 
+                ? 'grid-template-columns: repeat(2, 1fr);' 
+                : `grid-template-columns: repeat(${data.length}, 1fr);`;
 
+            // Build each overview card with a dedicated description text span
             const cards = data.map(item => `
                 <div class="comparison-card">
                     <h3 class="mb-3">${item.isParent ? 'Original Scenario' : 'Alternative Outcome'}</h3>
                     <p><strong>Title:</strong> ${getScenarioTitle(item)}</p>
                     <p class="scenario-description">
-                        ${item.scenarioDescription || 'No description available'}
+                        <span class="description-text">${item.scenarioDescription || 'No description available'}</span>
                         <span class="read-more">Read more</span>
                     </p>
                     <p><strong>Model:</strong> ${item.llmName}</p>
@@ -1048,18 +1069,20 @@
                 </div>
             `).join('');
 
-
             overviewDiv.innerHTML = `
                 <div class="comparison-container" style="${gridTemplateColumns}">
                     ${cards}
                 </div>
             `;
+
+            // After rendering the cards, check each description to see if "read more" is needed.
+            checkDescriptions();
         }
 
         function getScenarioTitle(data) {
             if (data.url) {
                 return `${data.scenarioTitle} <a href="${data.url}" target="_blank" class="scenario-link">
-                    <i class="fas fa-external-link-alt"></i></a>`;
+                            <i class="fas fa-external-link-alt"></i></a>`;
             }
             return data.scenarioTitle;
         }
@@ -1099,7 +1122,7 @@
             const dimensionContent = dimensions.map((dimension, dimIndex) => {
                 const dimensionId = `dimension${dimIndex}`;
                 const collapseId = `collapse${dimIndex}`;
-                
+
                 const scenarioTables = scenarioData.map((scenario) => {
                     const currentDimension = scenario.dimensions[dimIndex];
                     const dimensionScore = getDimensionScore(scenario, dimension.id);
@@ -1159,6 +1182,25 @@
 
             scenarioAccordion.innerHTML = dimensionContent;
         }
+
+        // Checks each scenario description to hide the "read more" link if the content doesn't overflow
+        function checkDescriptions() {
+            document.querySelectorAll('.scenario-description').forEach(function(desc) {
+                const textEl = desc.querySelector('.description-text');
+                const readMoreLink = desc.querySelector('.read-more');
+                if (textEl && readMoreLink) {
+                    // Use a small timeout to ensure the element is rendered
+                    setTimeout(() => {
+                        if (textEl.scrollHeight <= textEl.clientHeight) {
+                            readMoreLink.style.display = 'none';
+                        } else {
+                            readMoreLink.style.display = 'block';
+                        }
+                    }, 100);
+                }
+            });
+        }
+
 
 
         // Event Listeners
@@ -1331,18 +1373,19 @@
 
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('read-more')) {
-                // Get the parent paragraph (the description)
-                const descriptionEl = e.target.parentElement;
-                // Toggle the "expanded" class
-                descriptionEl.classList.toggle('expanded');
-                // Update the link text accordingly
-                if (descriptionEl.classList.contains('expanded')) {
+                // Find the closest scenario-description container
+                const container = e.target.closest('.scenario-description');
+                container.classList.toggle('expanded');
+                // Toggle the link text
+                if (container.classList.contains('expanded')) {
                     e.target.textContent = 'Show less';
                 } else {
                     e.target.textContent = 'Read more';
                 }
             }
         });
+
+
 
 
 
