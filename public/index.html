@@ -199,25 +199,23 @@
         }
 
         #overview {
-            background-color: #f8f9fa;
-            padding: 25px;
+            padding: 15px;
             border-radius: 6px;
             margin-bottom: 20px;
-            min-height: 250px;
         }
 
         .comparison-container {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;  /* Reduced gap for a more compact layout */
         }
 
         .comparison-card {
             background-color: #f8f9fa;
             border-radius: 6px;
-            padding: 20px;
-            height: 100%;
+            padding: 10px;  /* Reduced padding */
+            font-size: 0.9rem;  /* Slightly smaller text */
+            margin-bottom: 10px;
         }
 
         .scenario-section {
@@ -227,21 +225,20 @@
             border-radius: 6px;
         }
 
+        /* Read More Functionality */
         .scenario-description {
             display: -webkit-box;
-            -webkit-line-clamp: 3;  /* Show 3 lines by default */
+            -webkit-line-clamp: 3;  /* Clamp to 3 lines */
             -webkit-box-orient: vertical;
             overflow: hidden;
             position: relative;
             transition: all 0.3s ease;
         }
 
-        /* When expanded, show the full text */
         .scenario-description.expanded {
             -webkit-line-clamp: unset;
         }
 
-        /* Style for the read more link */
         .read-more {
             display: block;
             color: #007bff;
@@ -1051,6 +1048,7 @@
                 </div>
             `).join('');
 
+
             overviewDiv.innerHTML = `
                 <div class="comparison-container" style="${gridTemplateColumns}">
                     ${cards}
@@ -1330,6 +1328,7 @@
             createPlot(parentScenarios);
             updateVisualization();
         });
+
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('read-more')) {
                 // Get the parent paragraph (the description)
@@ -1344,6 +1343,7 @@
                 }
             }
         });
+
 
 
     </script>
