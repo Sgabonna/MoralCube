@@ -1049,16 +1049,18 @@
                 ? 'grid-template-columns: repeat(2, 1fr);' 
                 : `grid-template-columns: repeat(${data.length}, 1fr);`;
 
-            // Build each overview card with a dedicated description text span
+            // Build each overview card with title & model combined in the header.
             const cards = data.map(item => `
                 <div class="comparison-card">
-                    <h3 class="mb-3">${item.isParent ? 'Original Scenario' : 'Alternative Outcome'}</h3>
-                    <p><strong>Title:</strong> ${getScenarioTitle(item)}</p>
+                    <h3 class="mb-3">
+                        ${getScenarioTitle(item)} <small>(${item.llmName})</small>
+                    </h3>
                     <p class="scenario-description">
-                        <span class="description-text">${item.scenarioDescription || 'No description available'}</span>
+                        <span class="description-text">
+                            ${item.scenarioDescription || 'No description available'}
+                        </span>
                         <span class="read-more">Read more</span>
                     </p>
-                    <p><strong>Model:</strong> ${item.llmName}</p>
                     <p><strong>Category:</strong> ${getCategoryBadge(item.overallCategory)}</p>
                     <p><strong>Position:</strong></p>
                     <ul>
@@ -1078,6 +1080,8 @@
             // After rendering the cards, check each description to see if "read more" is needed.
             checkDescriptions();
         }
+
+
 
         function getScenarioTitle(data) {
             if (data.url) {
