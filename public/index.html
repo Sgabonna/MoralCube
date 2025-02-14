@@ -86,11 +86,14 @@
         .child-marker {
             border: 1px dashed #666;
         }
-
+        /* Reduce table cell padding for a more compact layout and reduce font size */
+        .compact-table {
+            font-size: 0.85rem; /* Adjust this value as needed */
+        }
         /* Reduce table cell padding for a more compact layout */
         .compact-table th,
         .compact-table td {
-            padding: 6px;  /* Reduce from 12px to 6px */
+            padding: 4px 6px;  /* Further reduce vertical and horizontal padding */
             vertical-align: middle;
         }
         .relationship-line {
@@ -1140,6 +1143,54 @@
                         ? ` (${dimension.id} Score: ${dimensionScore})`
                         : '';
 
+                    // Build table rows with hard-coded ranges based on dimension and question index.
+                    const questionRows = currentDimension.questions.map((q, qIndex) => {
+                        let range = "N/A";
+                        if (dimension.id === 'Ends') {
+                            // Ends dimension (Questions 1-5):
+                            // Q1, Q2, Q3: "0 to 4"
+                            // Q4, Q5: "0 to -4"
+                            range = qIndex < 3 ? "0 to 4" : "0 to -4";
+                        } else if (dimension.id === 'Means') {
+                            // Means dimension (Questions 6-10):
+                            // Q6: "0 to -4"
+                            // Q7: "0 to -6"
+                            // Q8: "0 to -4"
+                            // Q9: "0 to -4"
+                            // Q10: "0.01 to 1.2"
+                            switch(qIndex) {
+                                case 0: range = "0 to -4"; break;
+                                case 1: range = "0 to -6"; break;
+                                case 2: range = "0 to -4"; break;
+                                case 3: range = "0 to -4"; break;
+                                case 4: range = "0.01 to 1.2"; break;
+                                default: range = "N/A";
+                            }
+                        } else if (dimension.id === 'Character') {
+                            // Character dimension (Questions 11-18):
+                            // Q11: "0 to 1"
+                            // Q12: "0 to 2"
+                            // Q13: "0 to 4"
+                            // Q14: "0 to 1"
+                            // Q15-Q18: Open text (no numeric range)
+                            switch(qIndex) {
+                                case 0: range = "0 to 1"; break;
+                                case 1: range = "0 to 2"; break;
+                                case 2: range = "0 to 4"; break;
+                                case 3: range = "0 to 1"; break;
+                                default: range = "N/A";
+                            }
+                        }
+                        return `
+                            <tr>
+                                <td>${q.question}</td>
+                                <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
+                                <td>${range}</td>
+                                <td>${q.justification}</td>
+                            </tr>
+                        `;
+                    }).join('');
+
                     return `
                         <div class="col-md-${scenarioData.length === 1 ? '12' : '6'}">
                             <h5 class="mb-3">${scenario.scenarioTitle} (${scenario.llmName})${scoreDisplay}</h5>
@@ -1153,14 +1204,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    ${currentDimension.questions.map(q => `
-                                        <tr>
-                                            <td>${q.question}</td>
-                                            <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
-                                            <td>${q.range || 'N/A'}</td>
-                                            <td>${q.justification}</td>
-                                        </tr>
-                                    `).join('')}
+                                    ${questionRows}
                                 </tbody>
                             </table>
                         </div>
@@ -1194,6 +1238,7 @@
 
             scenarioAccordion.innerHTML = dimensionContent;
         }
+
 
 
 
