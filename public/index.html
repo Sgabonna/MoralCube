@@ -87,6 +87,12 @@
             border: 1px dashed #666;
         }
 
+        /* Reduce table cell padding for a more compact layout */
+        .compact-table th,
+        .compact-table td {
+            padding: 6px;  /* Reduce from 12px to 6px */
+            vertical-align: middle;
+        }
         .relationship-line {
             stroke-dasharray: 5,5;
             opacity: 0.6;
@@ -1126,7 +1132,7 @@
             const dimensionContent = dimensions.map((dimension, dimIndex) => {
                 const dimensionId = `dimension${dimIndex}`;
                 const collapseId = `collapse${dimIndex}`;
-
+                
                 const scenarioTables = scenarioData.map((scenario) => {
                     const currentDimension = scenario.dimensions[dimIndex];
                     const dimensionScore = getDimensionScore(scenario, dimension.id);
@@ -1137,11 +1143,12 @@
                     return `
                         <div class="col-md-${scenarioData.length === 1 ? '12' : '6'}">
                             <h5 class="mb-3">${scenario.scenarioTitle} (${scenario.llmName})${scoreDisplay}</h5>
-                            <table class="table table-bordered">
+                            <table class="table table-bordered compact-table">
                                 <thead>
                                     <tr>
                                         <th>Question</th>
                                         <th>Score</th>
+                                        <th>Range</th>
                                         <th>Justification</th>
                                     </tr>
                                 </thead>
@@ -1150,6 +1157,7 @@
                                         <tr>
                                             <td>${q.question}</td>
                                             <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
+                                            <td>${q.range || 'N/A'}</td>
                                             <td>${q.justification}</td>
                                         </tr>
                                     `).join('')}
@@ -1187,23 +1195,6 @@
             scenarioAccordion.innerHTML = dimensionContent;
         }
 
-        // Checks each scenario description to hide the "read more" link if the content doesn't overflow
-        function checkDescriptions() {
-            document.querySelectorAll('.scenario-description').forEach(function(desc) {
-                const textEl = desc.querySelector('.description-text');
-                const readMoreLink = desc.querySelector('.read-more');
-                if (textEl && readMoreLink) {
-                    // Use a small timeout to ensure the element is rendered
-                    setTimeout(() => {
-                        if (textEl.scrollHeight <= textEl.clientHeight) {
-                            readMoreLink.style.display = 'none';
-                        } else {
-                            readMoreLink.style.display = 'block';
-                        }
-                    }, 100);
-                }
-            });
-        }
 
 
 
