@@ -2334,7 +2334,7 @@
 "llmSource": {
 "model": "LLaMA",
 "version": "3",
-"provider": "Meta AI"
+"provider": "LLAMA"
 },
 "classification": {
 "type": "Virtue",
@@ -9370,9 +9370,9 @@
 "description": "Voluntary guidelines lead to higher initial mortality but faster herd immunity, polarizing opinions on state vs. personal responsibility.",
 "category": "Public Health",
 "llmSource": {
-"model": "GPT-4",
-"version": "1.0",
-"provider": "OpenAI"
+"model": "DeepSeek-V3",
+"version": "3.0",
+"provider": "DeepSeek"
 },
 "classification": {
 "type": "Morally Grey",
@@ -12584,7 +12584,7 @@
 "description": "Hailed as a wonder insecticide in the mid-20th century for killing mosquitoes and reducing malaria, DDT was deployed on a large scale by public health agencies. Despite initially saving many lives, decades later it was found to harm ecosystems and wildlife, revealing long-term environmental risks no one had anticipated.",
 "category": "Historical Event",
 "llmSource": {
-"model": "Meta AI",
+"model": "LLaMA",
 "version": "1.0",
 "provider": "Meta AI"
 },

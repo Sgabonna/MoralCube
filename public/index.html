@@ -745,11 +745,13 @@
                     <b>${p.scenarioTitle}</b><br>
                     <b>Category:</b> ${p.overallCategory}<br>
                     <b>Model:</b> ${p.llmName}<br>
-                    ${p.isParent ? '<b>Type:</b> Parent' : '<b>Type:</b> Alternative'}
+                    <b>Type:</b> ${p.isParent ? 'Parent' : 'Alternative'}<br>
+                    <b>Position:</b> Focus/Ends: ${p.x.toFixed(2)}, Sacrifice/Means: ${p.y.toFixed(2)}, Character: ${p.z.toFixed(2)}
                 `),
                 hoverinfo: 'text',
                 showlegend: false
             });
+
 
             const layout = {
                 margin: { l: 0, r: 0, b: 0, t: 0 },
@@ -1074,11 +1076,12 @@
                 ? 'grid-template-columns: repeat(2, 1fr);' 
                 : `grid-template-columns: repeat(${data.length}, 1fr);`;
 
-            // Build each overview card with title & model combined in the header.
+            // Build each overview card with the Title, Model, and Category Badge together.
             const cards = data.map(item => `
                 <div class="comparison-card">
                     <h3 class="mb-3">
-                        ${getScenarioTitle(item)} <small>(${item.llmName})</small>
+                        ${getScenarioTitle(item)} 
+                        <small>(${item.llmName} ${getCategoryBadge(item.overallCategory)})</small>
                     </h3>
                     <p class="scenario-description">
                         <span class="description-text">
@@ -1086,13 +1089,6 @@
                         </span>
                         <span class="read-more">Read more</span>
                     </p>
-                    <p><strong>Category:</strong> ${getCategoryBadge(item.overallCategory)}</p>
-                    <p><strong>Position:</strong></p>
-                    <ul>
-                        <li>Focus/Ends (X): ${item.x.toFixed(2)}</li>
-                        <li>Sacrifice/Means (Y): ${item.y.toFixed(2)}</li>
-                        <li>Character (Z): ${item.z.toFixed(2)}</li>
-                    </ul>
                 </div>
             `).join('');
 
@@ -1105,6 +1101,7 @@
             // After rendering the cards, check each description to see if "read more" is needed.
             checkDescriptions();
         }
+
 
 
 
