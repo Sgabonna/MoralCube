@@ -228,13 +228,26 @@
         }
 
         .scenario-description {
-            font-style: italic;
-            color: #666;
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #fff;
-            border-radius: 4px;
-            border-left: 3px solid #0d6efd;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;  /* Show 3 lines by default */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* When expanded, show the full text */
+        .scenario-description.expanded {
+            -webkit-line-clamp: unset;
+        }
+
+        /* Style for the read more link */
+        .read-more {
+            display: block;
+            color: #007bff;
+            cursor: pointer;
+            margin-top: 5px;
+            font-size: 0.9rem;
         }
 
         .table {
@@ -296,7 +309,7 @@
         <div class="filter-section">
             <div class="filter-group category-filter-group">
                 <label for="categoryFilter">Filter by Category Type:</label>
-                <select id="categoryFilter" class="form-control category-select" multiple size="4"></select>
+                <select id="categoryFilter" class="form-control category-select" multiple size="6"></select>
             </div>
 
             <div class="filter-group scenario-filter-group">
@@ -308,7 +321,7 @@
                     </span>
                 </label>
                 <!-- This filter now lists only parent scenarios -->
-                <select id="scenarioFilter" class="form-control scenario-select" multiple size="4"></select>
+                <select id="scenarioFilter" class="form-control scenario-select" multiple size="6"></select>
             </div>
             <div class="filter-group model-filter-group">
                 <label for="modelFilter">
@@ -318,7 +331,7 @@
                         <span class="tooltiptext">Hold Ctrl (Cmd on Mac) to select multiple models</span>
                     </span>
                 </label>
-                <select id="modelFilter" class="form-control model-select" multiple size="4"></select>
+                <select id="modelFilter" class="form-control model-select" multiple size="6"></select>
             </div>
             <div class="filter-group">
                 <label>
@@ -328,10 +341,11 @@
                         <span class="tooltiptext">Hold Ctrl (Cmd on Mac) to select multiple outcomes</span>
                     </span>
                 </label>
-                <select id="alternateOutcomes" class="form-control" multiple size="4">
+                <select id="alternateOutcomes" class="form-control" multiple size="6">
                     <option disabled>Select a scenario and model to see alternates</option>
                 </select>
             </div>
+            <!-- Moral Category Filter with Clear Filters button underneath -->
             <div class="filter-group">
                 <label>Filter by Moral Category:</label>
                 <div class="filter-badges">
@@ -342,9 +356,8 @@
                     <span class="filter-badge category-morally-grey active" data-category="morally_grey">Morally Grey</span>
                     <span class="filter-badge category-world-building active" data-category="world_building">World Building</span>
                 </div>
-            </div>
-            <div class="filter-group">
-                <button id="clearFilters" class="btn btn-secondary">Clear Filters</button>
+                <!-- Clear Filters button now placed directly underneath the moral category badges -->
+                <button id="clearFilters" class="btn btn-secondary mt-2">Clear Filters</button>
             </div>
         </div>
         
@@ -354,10 +367,11 @@
                     <div id="cube-plot"></div>
                 </div>
             </div>
-            
             <div class="col-lg-7">
+                <!-- Add a heading for the Overview section -->
+                <h3 class="text-center mb-3">Overview</h3>
                 <div id="overview">
-                    <!-- Will be populated dynamically -->
+                    <!-- Overview content will be populated dynamically -->
                 </div>
             </div>
         </div>
@@ -1022,7 +1036,10 @@
                 <div class="comparison-card">
                     <h3 class="mb-3">${item.isParent ? 'Original Scenario' : 'Alternative Outcome'}</h3>
                     <p><strong>Title:</strong> ${getScenarioTitle(item)}</p>
-                    <p class="scenario-description">${item.scenarioDescription || 'No description available'}</p>
+                    <p class="scenario-description">
+                        ${item.scenarioDescription || 'No description available'}
+                        <span class="read-more">Read more</span>
+                    </p>
                     <p><strong>Model:</strong> ${item.llmName}</p>
                     <p><strong>Category:</strong> ${getCategoryBadge(item.overallCategory)}</p>
                     <p><strong>Position:</strong></p>
@@ -1312,6 +1329,20 @@
             const parentScenarios = dataPoints.filter(point => point.isParent);
             createPlot(parentScenarios);
             updateVisualization();
+        });
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('read-more')) {
+                // Get the parent paragraph (the description)
+                const descriptionEl = e.target.parentElement;
+                // Toggle the "expanded" class
+                descriptionEl.classList.toggle('expanded');
+                // Update the link text accordingly
+                if (descriptionEl.classList.contains('expanded')) {
+                    e.target.textContent = 'Show less';
+                } else {
+                    e.target.textContent = 'Read more';
+                }
+            }
         });
 
 
