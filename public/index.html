@@ -898,6 +898,35 @@
                 alternateOutcomes.disabled = true;
                 alternateOutcomes.style.opacity = '0.5';
             }
+            
+            // If exactly one scenario and one model are selected, automatically include alternate outcomes.
+            if (selectedScenarios.length === 1 && selectedModels.length === 1) {
+                const parentScenarioTitle = selectedScenarios[0];
+                const selectedModel = selectedModels[0];
+                // Find the parent point (must be a parent scenario)
+                const parentPoint = dataPoints.find(p => p.scenarioTitle === parentScenarioTitle && p.isParent);
+                // Get all alternate outcomes (child scenarios) for this parent and model
+                const relationships = scenarioRelationships.get(parentScenarioTitle) || [];
+                const alternatives = relationships
+                    .filter(child => child.model === selectedModel)
+                    .map(child => child.data);
+                if (parentPoint) {
+                    filteredPoints = [parentPoint, ...alternatives];
+                }
+            }
+            
+            // Update category filter options based on filtered points
+            const availableCategories = new Set(filteredPoints.map(p => p.category));
+            document.querySelectorAll('#categoryFilter option').forEach(option => {
+                if (availableCategories.has(option.value)) {
+                    option.style.display = 'block';
+                    option.classList.add('relevant-option');
+                } else {
+                    option.style.display = 'none';
+                    option.selected = false;
+                }
+            });
+
 
             if (filteredPoints.length === 0) {
                 alert('No data points match the current filters.');
@@ -1121,63 +1150,42 @@
 
         // Event Listeners
 
+        // UPDATED Model Filter Listener:
         document.getElementById('modelFilter').addEventListener('change', function(e) {
             if (isUpdatingFilters || isCategoryFiltering) return;
             selectedModels = Array.from(e.target.selectedOptions).map(option => option.value);
             if (selectedModels.length > 4) {
                 alert('Please select a maximum of 4 models for comparison');
                 selectedModels = selectedModels.slice(0, 4);
-                Array.from(this.options).forEach(option => { option.selected = selectedModels.includes(option.value); });
+                Array.from(this.options).forEach(option => {
+                    option.selected = selectedModels.includes(option.value);
+                });
             }
-            const alternateOutcomes = document.getElementById('alternateOutcomes');
-            // When exactly one parent scenario and one model are selected,
-            // update alternate outcomes with children associated with that Title and Model.
-            if (selectedScenarios.length === 1 && selectedModels.length === 1) {
-                const parentScenario = selectedScenarios[0];
-                const selectedModel = selectedModels[0];
-                if (scenarioRelationships.has(parentScenario)) {
-                    const alternatives = scenarioRelationships.get(parentScenario)
-                        .filter(child => child.model === selectedModel);
-                    if (alternatives.length > 0) {
-                        alternateOutcomes.innerHTML = alternatives
-                            .map(alt => `<option value="${alt.childId}">${alt.childId} (${alt.relationshipType || 'alternative'})</option>`)
-                            .join('');
-                    } else {
-                        alternateOutcomes.innerHTML = '<option disabled>No alternate outcomes available for this model</option>';
-                    }
-                }
-            } else {
-                alternateOutcomes.innerHTML = '<option disabled>Select a single scenario and model to see alternate outcomes</option>';
-            }
-            const selectedParentScenarios = dataPoints.filter(point => 
-                point.isParent && 
-                selectedScenarios.includes(point.scenarioTitle) && 
-                (selectedModels.length === 0 || selectedModels.includes(point.llmName))
-            );
-            createPlot(selectedParentScenarios);
-            populateOverview(selectedParentScenarios);
-            populateScenarioDetails(selectedParentScenarios);
+            // Removed manual alternate outcomes and plot updates—now handled in updateVisualization()
+            updateVisualization();
         });
 
-        // Updated scenario filter: allow up to 4 parent scenarios for comparison.
+
+        // UPDATED Scenario Filter Listener (combined both versions):
         document.getElementById('scenarioFilter').addEventListener('change', function(e) {
             if (isUpdatingFilters || isCategoryFiltering) return;
             selectedScenarios = Array.from(e.target.selectedOptions).map(option => option.value);
             if (selectedScenarios.length > 4) {
                 alert('Please select a maximum of 4 scenarios for comparison');
                 selectedScenarios = selectedScenarios.slice(0, 4);
-                Array.from(this.options).forEach(option => { option.selected = selectedScenarios.includes(option.value); });
+                Array.from(this.options).forEach(option => {
+                    option.selected = selectedScenarios.includes(option.value);
+                });
             }
-            // Clear previous model selections and alternate outcomes
+            // Clear previous model selections and alternate outcomes before updating visualization
             document.getElementById('modelFilter').selectedIndex = -1;
             document.getElementById('alternateOutcomes').innerHTML = '<option disabled>Select a model to see alternate outcomes</option>';
             selectedModels = [];
-            const selectedParentScenarios = dataPoints.filter(point => point.isParent && selectedScenarios.includes(point.scenarioTitle));
-            createPlot(selectedParentScenarios);
-            populateOverview(selectedParentScenarios);
-            populateScenarioDetails(selectedParentScenarios);
+            updateVisualization();
         });
 
+
+        // Alternate Outcomes Listener (remains unchanged):
         document.getElementById('alternateOutcomes').addEventListener('change', function(e) {
             if (isUpdatingFilters) return;
             
@@ -1211,25 +1219,23 @@
             }
         });
 
+
+        // Category Filter Listener (unchanged):
         document.getElementById('categoryFilter').addEventListener('change', function(e) {
             if (isUpdatingFilters || isCategoryFiltering) return;
             selectedCategories = Array.from(e.target.selectedOptions).map(option => option.value);
             updateVisualization();
         });
 
+
+        // DOMContentLoaded remains unchanged:
         document.addEventListener('DOMContentLoaded', fetchScenarios);
 
-        document.getElementById('scenarioFilter').addEventListener('change', function(e) {
-            if (isUpdatingFilters || isCategoryFiltering) return;
-            selectedScenarios = Array.from(e.target.selectedOptions).map(option => option.value);
-            if (selectedScenarios.length > 4) {
-                alert('Please select a maximum of 4 scenarios for comparison');
-                selectedScenarios = selectedScenarios.slice(0, 4);
-                Array.from(this.options).forEach(option => { option.selected = selectedScenarios.includes(option.value); });
-            }
-            updateVisualization();
-        });
 
+        // Remove duplicate scenarioFilter listener (we now have one combined listener above)
+
+
+        // Filter Badge Listener (unchanged):
         document.querySelectorAll('.filter-badge').forEach(badge => {
             badge.addEventListener('click', function() {
                 if (isUpdatingFilters) return;
@@ -1269,6 +1275,8 @@
             });
         });
 
+
+        // UPDATED Clear Filters Listener:
         document.getElementById('clearFilters').addEventListener('click', function() {
             selectedModels = [];
             selectedScenarios = [];
@@ -1279,11 +1287,12 @@
             document.getElementById('scenarioFilter').selectedIndex = -1;
             document.getElementById('categoryFilter').selectedIndex = -1;
             document.getElementById('alternateOutcomes').innerHTML = '';
-            document.querySelectorAll('.filter-badge').forEach(badge => { badge.classList.add('active'); });
+            document.querySelectorAll('.filter-badge').forEach(badge => {
+                badge.classList.add('active');
+            });
             isUpdatingFilters = false;
             isCategoryFiltering = false;
-            const parentScenarios = dataPoints.filter(point => point.isParent);
-            createPlot(parentScenarios);
+            // After clearing filters, update visualization (which now shows all parent scenarios)
             updateVisualization();
         });
     </script>

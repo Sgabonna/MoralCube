@@ -10684,7 +10684,7 @@
 "metadata": {
 "title": "Great Leap Forward",
 "description": "Overview: The Chinese government’s campaign sought to rapidly transform the country from an agrarian economy into a socialist society through quick industrialisation and agricultural changes. Officially, it aimed to uplift living standards and end food shortages. Outcome: Poor planning, false reporting, and mismanagement led to widespread famine, causing tens of millions of deaths. Key Point: While motives are debated, the public-facing rationale centred on national development and improving citizens’ lives. However, in practice, the policies backfired and inflicted massive casualties.",
-"category": "Public Health",
+"category": "Economic",
 "llmSource": {
 "model": "GPT",
 "version": "o1",
@@ -10830,7 +10830,7 @@
 "metadata": {
 "title": "Great Leap Forward",
 "description": "Overview: The Chinese government's campaign sought to rapidly transform the country from an agrarian economy into a socialist society through quick industrialisation and agricultural changes. Officially, it aimed to uplift living standards and end food shortages. Outcome: Poor planning, false reporting, and mismanagement led to widespread famine, causing tens of millions of deaths. Key Point: While motives are debated, the public-facing rationale centred on national development and improving citizens' lives. However, in practice, the policies backfired and inflicted massive casualties.",
-"category": "Public Health",
+"category": "Economic",
 "llmSource": {
 "model": "Claude",
 "version": "3.5 Sonnet",
@@ -10976,7 +10976,7 @@
 "metadata": {
 "title": "Great Leap Forward",
 "description": "The Chinese government’s campaign sought to rapidly transform the country from an agrarian economy into a socialist society through quick industrialisation and agricultural changes. Officially, it aimed to uplift living standards and end food shortages. Poor planning, false reporting, and mismanagement led to widespread famine, causing tens of millions of deaths.",
-"category": "Evil",
+"category": "Economic",
 "llmSource": {
 "model": "Gemini",
 "version": "2.0",
@@ -11122,7 +11122,7 @@
 "metadata": {
 "title": "Great Leap Forward",
 "description": "The Chinese government's campaign to rapidly transform the country from an agrarian economy into a socialist society through quick industrialization and agricultural changes.",
-"category": "Public Health",
+"category": "Economic",
 "llmSource": {
 "model": "LLaMA",
 "version": "1.0",
@@ -12290,7 +12290,7 @@
 "metadata": {
 "title": "DDT Usage for Malaria Control",
 "description": "Hailed as a wonder insecticide in the mid-20th century for killing mosquitoes and reducing malaria, DDT was deployed on a large scale by public health agencies. Despite initially saving many lives, decades later it was found to harm ecosystems and wildlife, revealing long-term environmental risks no one had anticipated.",
-"category": "Morally Grey",
+"category": "Public Health",
 "llmSource": {
 "model": "Gemini",
 "version": "2.0",
@@ -12436,7 +12436,7 @@
 "metadata": {
 "title": "DDT Usage for Malaria Control",
 "description": "Large-scale DDT deployment to combat malaria, later found to harm ecosystems.",
-"category": "Environmental Ethics",
+"category": "Public Health",
 "llmSource": {
 "model": "DeepSeek-V3",
 "version": "1.0",
