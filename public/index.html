@@ -290,7 +290,7 @@
             <h1 class="text-center mb-3">The Moral Cube</h1>
             <div class="intro-section text-center mb-3">
                 <p class="mb-2">Navigate ethical scenarios in 3D space: Select categories to explore scenarios, choose AI models to compare responses, and discover alternate outcomes. Clear filters anytime to reset.</p>
-                <p class="text-center mb-2">themoralcube@gmail.com</p>
+                <p class="text-center mb-2">Any feedback or suggestions please email: themoralcube@gmail.com</p>
             </div>
         </div>
         <div class="filter-section">
@@ -1276,23 +1276,36 @@
 
         // UPDATED Clear Filters Listener:
         document.getElementById('clearFilters').addEventListener('click', function() {
+            // Reset all filter selection arrays
             selectedModels = [];
             selectedScenarios = [];
             selectedCategories = [];
+            
+            // Reset active categories to include all options
             activeCategories = new Set(['evil', 'virtue', 'vice', 'sin', 'morally_grey', 'world_building']);
-            isUpdatingFilters = true;
+            
+            // Clear selected indexes for each filter dropdown
             document.getElementById('modelFilter').selectedIndex = -1;
             document.getElementById('scenarioFilter').selectedIndex = -1;
             document.getElementById('categoryFilter').selectedIndex = -1;
-            document.getElementById('alternateOutcomes').innerHTML = '';
+            
+            // Reset alternate outcomes dropdown to its default message
+            document.getElementById('alternateOutcomes').innerHTML = '<option disabled>Select a scenario and model first</option>';
+            
+            // Reset filter badges to active state (full opacity)
             document.querySelectorAll('.filter-badge').forEach(badge => {
                 badge.classList.add('active');
+                badge.style.opacity = '1';
             });
+            
+            // Reset any flags used during filtering
             isUpdatingFilters = false;
             isCategoryFiltering = false;
-            // After clearing filters, update visualization (which now shows all parent scenarios)
+            
+            // Finally, update the visualization to display all parent scenarios (i.e. reset view)
             updateVisualization();
         });
+
     </script>
 </body>
 </html>
