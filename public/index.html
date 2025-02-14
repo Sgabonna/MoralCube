@@ -86,18 +86,22 @@
         .child-marker {
             border: 1px dashed #666;
         }
-        /* Adjust the scenario details table: reduce font size, padding, and add a gap below the table */
+        /* For compact tables in scenario details */
         .compact-table {
-            font-size: 0.75rem;  /* Reduced by about 2 points */
-            margin-bottom: 10px; /* Adds a slight gap after the table */
+            font-size: 0.75rem;  /* Reduced font size (2 points smaller than before) */
+            margin-bottom: 10px; /* Adds gap after the table */
         }
 
         .compact-table th,
         .compact-table td {
-            padding: 4px 6px;
+            padding: 4px 6px;    /* Reduced cell padding for a more compact row height */
             vertical-align: middle;
         }
 
+        /* Optional: if you want additional gap below the table container */
+        .scenario-table-container {
+            margin-bottom: 10px;
+        }
 
         /* (Optional) Adjust header font sizes if needed */
         .compact-table th {
@@ -1153,6 +1157,10 @@
                 const dimensionId = `dimension${dimIndex}`;
                 const collapseId = `collapse${dimIndex}`;
                 
+                // Determine if this dimension is Philosophical Analysis.
+                // (Assumes dimension.id is set to "Philosophical Analysis" for that section)
+                const isPhilosophical = dimension.id.trim().toLowerCase() === 'philosophical analysis';
+
                 const scenarioTables = scenarioData.map((scenario) => {
                     const currentDimension = scenario.dimensions[dimIndex];
                     const dimensionScore = getDimensionScore(scenario, dimension.id);
@@ -1160,71 +1168,96 @@
                         ? ` (${dimension.id} Score: ${dimensionScore})`
                         : '';
 
-                    // Build table rows with fixed ranges based on dimension and question index.
+                    // Build table rows; if Philosophical, skip the Range cell.
                     const questionRows = currentDimension.questions.map((q, qIndex) => {
                         let range = "N/A";
-                        if (dimension.id === 'Ends') {
-                            // Ends dimension (Questions 1-5):
-                            // Q1, Q2, Q3: "0 to 4"
-                            // Q4, Q5: "0 to -4"
-                            range = qIndex < 3 ? "0 to 4" : "0 to -4";
-                        } else if (dimension.id === 'Means') {
-                            // Means dimension (Questions 6-10):
-                            // Q6: "0 to -4"
-                            // Q7: "0 to -6"
-                            // Q8: "0 to -4"
-                            // Q9: "0 to -4"
-                            // Q10: "0.01 to 1.2"
-                            switch(qIndex) {
-                                case 0: range = "0 to -4"; break;
-                                case 1: range = "0 to -6"; break;
-                                case 2: range = "0 to -4"; break;
-                                case 3: range = "0 to -4"; break;
-                                case 4: range = "0.01 to 1.2"; break;
-                                default: range = "N/A";
-                            }
-                        } else if (dimension.id === 'Character') {
-                            // Character dimension (Questions 11-18):
-                            // Q11: "0 to 1"
-                            // Q12: "0 to 2"
-                            // Q13: "0 to 4"
-                            // Q14: "0 to 1"
-                            // Q15-Q18: Open text (no numeric range)
-                            switch(qIndex) {
-                                case 0: range = "0 to 1"; break;
-                                case 1: range = "0 to 2"; break;
-                                case 2: range = "0 to 4"; break;
-                                case 3: range = "0 to 1"; break;
-                                default: range = "N/A";
+                        if (!isPhilosophical) {
+                            if (dimension.id === 'Ends') {
+                                // Ends dimension (Questions 1-5):
+                                // Q1-Q3: "0 to 4", Q4-Q5: "0 to -4"
+                                range = qIndex < 3 ? "0 to 4" : "0 to -4";
+                            } else if (dimension.id === 'Means') {
+                                // Means dimension (Questions 6-10):
+                                switch(qIndex) {
+                                    case 0: range = "0 to -4"; break;
+                                    case 1: range = "0 to -6"; break;
+                                    case 2: range = "0 to -4"; break;
+                                    case 3: range = "0 to -4"; break;
+                                    case 4: range = "0.01 to 1.2"; break;
+                                    default: range = "N/A";
+                                }
+                            } else if (dimension.id === 'Character') {
+                                // Character dimension (Questions 11-18):
+                                switch(qIndex) {
+                                    case 0: range = "0 to 1"; break;
+                                    case 1: range = "0 to 2"; break;
+                                    case 2: range = "0 to 4"; break;
+                                    case 3: range = "0 to 1"; break;
+                                    default: range = "N/A";
+                                }
                             }
                         }
-                        return `
+                        if (isPhilosophical) {
+                            return `
+                                <tr>
+                                    <td>${q.question}</td>
+                                    <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
+                                    <td>${q.justification}</td>
+                                </tr>
+                            `;
+                        } else {
+                            return `
+                                <tr>
+                                    <td>${q.question}</td>
+                                    <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
+                                    <td>${range}</td>
+                                    <td>${q.justification}</td>
+                                </tr>
+                            `;
+                        }
+                    }).join('');
+
+                    // Build colgroup and header based on whether we show the range column.
+                    let colgroupHTML, headerHTML;
+                    if (isPhilosophical) {
+                        colgroupHTML = `
+                            <col style="width:25%;"> <!-- Question -->
+                            <col style="width:25%;"> <!-- Score -->
+                            <col style="width:50%;"> <!-- Justification -->
+                        `;
+                        headerHTML = `
                             <tr>
-                                <td>${q.question}</td>
-                                <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
-                                <td>${range}</td>
-                                <td>${q.justification}</td>
+                                <th>Question</th>
+                                <th>Score</th>
+                                <th>Justification</th>
                             </tr>
                         `;
-                    }).join('');
+                    } else {
+                        colgroupHTML = `
+                            <col style="width:22.5%;"> <!-- Question column reduced by 10% -->
+                            <col style="width:25%;">   <!-- Score column -->
+                            <col style="width:27.5%;"> <!-- Range column increased by 10% -->
+                            <col style="width:25%;">   <!-- Justification column -->
+                        `;
+                        headerHTML = `
+                            <tr>
+                                <th>Question</th>
+                                <th>Score</th>
+                                <th>Range</th>
+                                <th>Justification</th>
+                            </tr>
+                        `;
+                    }
 
                     return `
                         <div class="col-md-${scenarioData.length === 1 ? '12' : '6'} scenario-table-container">
                             <h5 class="mb-3">${scenario.scenarioTitle} (${scenario.llmName})${scoreDisplay}</h5>
                             <table class="table table-bordered compact-table">
                                 <colgroup>
-                                    <col style="width:12.5%;"> <!-- Question column reduced by 10% -->
-                                    <col style="width:10%;">   <!-- Score column -->
-                                    <col style="width:12.5%;"> <!-- Range column increased by 10% -->
-                                    <col style="width:65%;">   <!-- Justification column -->
+                                    ${colgroupHTML}
                                 </colgroup>
                                 <thead>
-                                    <tr>
-                                        <th>Question</th>
-                                        <th>Score</th>
-                                        <th>Range</th>
-                                        <th>Justification</th>
-                                    </tr>
+                                    ${headerHTML}
                                 </thead>
                                 <tbody>
                                     ${questionRows}
@@ -1261,6 +1294,7 @@
 
             scenarioAccordion.innerHTML = dimensionContent;
         }
+
 
 
 
