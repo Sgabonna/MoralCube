@@ -1284,12 +1284,15 @@
             // Reset active categories to include all options
             activeCategories = new Set(['evil', 'virtue', 'vice', 'sin', 'morally_grey', 'world_building']);
             
+            // Set a flag to prevent mid-update side effects
+            isUpdatingFilters = true;
+            
             // Clear selected indexes for each filter dropdown
             document.getElementById('modelFilter').selectedIndex = -1;
             document.getElementById('scenarioFilter').selectedIndex = -1;
             document.getElementById('categoryFilter').selectedIndex = -1;
             
-            // Reset alternate outcomes dropdown to its default message
+            // Reset the alternate outcomes dropdown to its default message
             document.getElementById('alternateOutcomes').innerHTML = '<option disabled>Select a scenario and model first</option>';
             
             // Reset filter badges to active state (full opacity)
@@ -1298,13 +1301,19 @@
                 badge.style.opacity = '1';
             });
             
-            // Reset any flags used during filtering
+            // Reset flags
             isUpdatingFilters = false;
             isCategoryFiltering = false;
             
-            // Finally, update the visualization to display all parent scenarios (i.e. reset view)
+            // Reset the dropdown options (this repopulates scenario, model, and category options)
+            updateFilters();
+            
+            // Show all parent scenarios in the plot by updating the visualization
+            const parentScenarios = dataPoints.filter(point => point.isParent);
+            createPlot(parentScenarios);
             updateVisualization();
         });
+
 
     </script>
 </body>
