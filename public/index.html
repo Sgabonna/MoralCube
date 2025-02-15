@@ -881,20 +881,20 @@
        function updateVisualization() {
             let filteredPoints = dataPoints;
             
-            // If more than one scenario is selected, default to comparing GPT.
+            // If more than one scenario is selected, default the model to "GPT".
             if (selectedScenarios.length > 1) {
                 selectedModels = ["GPT"];
-                // Optionally, update the model filter UI here if desired.
+                // Optionally update the model filter UI here.
             }
             
-            // --- Clear highlights for relevant options and filter badges ---
+            // --- Clear highlights ---
             document.querySelectorAll('.relevant-option').forEach(el => el.classList.remove('relevant-option'));
             document.querySelectorAll('.filter-badge').forEach(badge => {
                 badge.classList.remove('relevant-badge');
                 badge.style.display = 'inline-block';
             });
 
-            // --- Apply moral category filter (if not showing all) ---
+            // --- Apply moral category filter (if not all) ---
             if (activeCategories.size !== 6) {
                 filteredPoints = filteredPoints.filter(point =>
                 activeCategories.has(normalizeCategory(point.overallCategory))
@@ -1027,10 +1027,11 @@
                 return;
             }
 
-            // --- Build the shared color mapping using composite keys (scenarioTitle + '_' + llmName) ---
-            const uniqueKeys = [...new Set(filteredPoints.map(p => p.scenarioTitle + '_' + p.llmName))];
+            // --- Build the shared color mapping using composite keys ---
+            // Use a composite key: scenarioTitle + "_" + llmName
+            const uniqueCompositeKeys = [...new Set(filteredPoints.map(p => p.scenarioTitle + '_' + p.llmName))];
             scenarioColorMapping = {};
-            uniqueKeys.forEach((key, index) => {
+            uniqueCompositeKeys.forEach((key, index) => {
                 scenarioColorMapping[key] = sharedBorderColors[index % sharedBorderColors.length];
             });
             console.log("Shared color mapping:", scenarioColorMapping);
@@ -1080,8 +1081,9 @@
                     color: filteredPoints.map(p => getColorByCategory(p.overallCategory)),
                     opacity: 0.8,
                     line: {
+                    // Use the composite key for marker borders.
                     color: filteredPoints.map(p => scenarioColorMapping[p.scenarioTitle + '_' + p.llmName] || '#000'),
-                    width: filteredPoints.map(p => p.isParent ? 2 : 1)
+                    width: filteredPoints.map(p => p.isParent ? 4 : 2)  // Increased width for visibility.
                     }
                 },
                 text: filteredPoints.map(point => `
@@ -1116,6 +1118,7 @@
 
 
 
+
     
         function checkDescriptions() {
             document.querySelectorAll('.scenario-description').forEach(function(desc) {
@@ -1142,7 +1145,7 @@
             data = data.slice(0, 5);
             
             const cards = data.map(item => `
-                <div class="comparison-card" style="border: 2px solid ${scenarioColorMapping[item.scenarioTitle] || '#000'};">
+                <div class="comparison-card" style="border: 2px solid ${scenarioColorMapping[item.scenarioTitle + '_' + item.llmName] || '#000'};">
                 <h4>
                     ${getScenarioTitle(item)}
                     <small>(${item.llmName} ${getCategoryBadge(item.overallCategory)})</small>
@@ -1158,7 +1161,8 @@
             
             overviewDiv.innerHTML = cards;
             checkDescriptions();
-            }
+        }
+
 
 
         function updateMediaDisplay(url) {
