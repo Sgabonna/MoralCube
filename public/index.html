@@ -492,6 +492,8 @@
         let isCategoryFiltering = false;
         let isUpdatingFilters = false;
         let scenarioRelationships = new Map(); // Stores parent-child relationships
+        let currentMediaUrl = "";
+
 
         function normalizeCategory(category) {
             // Convert category to lowercase and replace spaces with underscores
@@ -1213,6 +1215,8 @@
         function updateMediaDisplay(url) {
             const container = document.getElementById('media-placeholder');
             if (url) {
+                // Store the URL globally
+                currentMediaUrl = url;
                 // Build the Reddit embed markup.
                 container.innerHTML = `
                     <blockquote class="reddit-embed" data-embed-media="true" data-height="500">
@@ -1234,9 +1238,11 @@
                     }
                 }
             } else {
+                currentMediaUrl = "";
                 container.innerHTML = "";
             }
         }
+
 
 
 
@@ -1465,12 +1471,13 @@
             updateVisualization();
         });
         document.getElementById('open-media').addEventListener('click', function() {
-            // You could store the current URL in a global variable or extract it from your data
-            const currentUrl = /* your logic to retrieve the URL */;
-            if (currentUrl) {
-                window.open(currentUrl, '_blank');
+            if (currentMediaUrl) {
+                window.open(currentMediaUrl, '_blank');
+            } else {
+                alert("No media URL available to open.");
             }
         });
+
 
 
         // Alternate Outcomes Listener (remains unchanged):
