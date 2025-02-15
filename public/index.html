@@ -265,7 +265,11 @@
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 10px;  /* Reduced gap for a more compact layout */
         }
-
+        /* Adjust badge size specifically within overview cards */
+        .comparison-card .category-badge {
+        font-size: 0.65rem;       /* Smaller font size (adjust as needed) */
+        padding: 0.1em 0.3em;      /* Reduced padding for a sleeker look */
+        }
         .scenario-section {
             margin-top: 20px;
             padding: 20px;
@@ -440,14 +444,14 @@
         <!-- New three-column layout -->
         <div id="overview-section" style="display: flex; width: 100%;">
             <!-- Left Column: Cube Plot (40% width) -->
-            <div id="cube-column" style="width: 40%;">
+            <div id="cube-column" style="width: 37%;">
             <div class="plot-container">
                 <div id="cube-plot"></div>
             </div>
             </div>
             
             <!-- Middle Column: Stacked Overview Cards (15% width) -->
-            <div id="cards-column" style="width: 15%; padding: 0 10px;">
+            <div id="cards-column" style="width: 18%; padding: 0 10px;">
             <!-- The overview cards will be populated here -->
             <div id="overview"></div>
             </div>
