@@ -801,35 +801,31 @@
                 });
             }
 
-            // Determine marker border widths based on whether any scenario or model is selected.
-            const markerLineWidths = (selectedScenarios.length > 0 || selectedModels.length > 0)
-            ? filteredPoints.map(p => p.isParent ? 10 : 8)  // Bold borders when a selection exists.
-            : filteredPoints.map(p => p.isParent ? 6 : 4);   // Default borders.
-
+            // Plot the data points (markers)
             data.push({
-            type: 'scatter3d',
-            x: points.map(p => p.x),
-            y: points.map(p => p.z),
-            z: points.map(p => p.y),
-            mode: 'markers',
-            marker: {
+                type: 'scatter3d',
+                x: points.map(p => p.x),
+                y: points.map(p => p.z),
+                z: points.map(p => p.y),
+                mode: 'markers',
+                marker: {
                 size: points.map(p => p.isParent ? 8 : 6),
                 color: points.map(p => getColorByCategory(p.overallCategory)),
                 opacity: 0.8,
                 line: {
-                // Use the composite key for marker borders.
-                color: points.map(p => scenarioColorMapping[p.scenarioTitle + '_' + p.llmName] || '#000'),
-                width: markerLineWidths
+                    // Use the composite key for marker borders and increase the width.
+                    color: points.map(p => scenarioColorMapping[p.scenarioTitle + '_' + p.llmName] || '#000'),
+                    width: points.map(p => p.isParent ? 6 : 4)
                 }
-            },
-            text: points.map(p => `
+                },
+                text: points.map(p => `
                 <b>${p.scenarioTitle}</b><br>
                 <b>Category:</b> ${p.overallCategory}<br>
                 <b>Model:</b> ${p.llmName}<br>
                 ${p.isParent ? '<b>Type:</b> Parent' : '<b>Type:</b> Alternative'}
-            `),
-            hoverinfo: 'text',
-            showlegend: false
+                `),
+                hoverinfo: 'text',
+                showlegend: false
             });
 
             const layout = {
