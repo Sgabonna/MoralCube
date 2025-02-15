@@ -467,10 +467,12 @@
             </div>
             
             <!-- Right Column: Overview Placeholder for Video/Website -->
-            <div id="placeholder-overview-column" style="width: 45%; padding: 0 10px; display: flex; flex-direction: column; height: 300px;">
+            <div id="placeholder-overview-column" style="width: 45%; padding: 0 10px; display: flex; flex-direction: column; height: 500px;">
                 <div id="media-placeholder" style="flex-grow: 1; border: none; overflow: hidden;"></div>
                 <button id="open-media" class="btn btn-secondary btn-sm mt-2" style="width: 100%;">Open in New Window</button>
-            </div>  
+            </div>
+              
+               
         </div>
   
   
@@ -764,7 +766,6 @@
 
         // Visualization functions
         function createPlot(points) {
-            // Base mesh (cube) data.
             const meshData = {
                 type: 'mesh3d',
                 x: [-8, 12, 12, -8, -8, 12, 12, -8],
@@ -781,7 +782,7 @@
 
             let data = [meshData];
 
-            // Draw relationship lines if applicable.
+            // Draw relationship lines (if applicable)
             const parentPoint = points.find(p => p.isParent);
             if (parentPoint && scenarioRelationships.has(parentPoint.scenarioTitle)) {
                 const childPoints = points.filter(p => !p.isParent);
@@ -800,8 +801,8 @@
                 });
             }
 
-            // Plot the data points (markers).
-            const scatterData = {
+            // Plot the data points (markers)
+            data.push({
                 type: 'scatter3d',
                 x: points.map(p => p.x),
                 y: points.map(p => p.z),
@@ -809,27 +810,23 @@
                 mode: 'markers',
                 marker: {
                 size: points.map(p => p.isParent ? 8 : 6),
-                // The fill color remains based on getColorByCategory.
                 color: points.map(p => getColorByCategory(p.overallCategory)),
                 opacity: 0.8,
                 line: {
-                    // Use the shared border color from our mapping.
-                    color: points.map(p => scenarioColorMapping[p.scenarioTitle] || '#000'),
-                    width: points.map(p => p.isParent ? 2 : 1)
+                    // Use the composite key for marker borders and increase the width.
+                    color: points.map(p => scenarioColorMapping[p.scenarioTitle + '_' + p.llmName] || '#000'),
+                    width: points.map(p => p.isParent ? 6 : 4)
                 }
                 },
                 text: points.map(p => `
                 <b>${p.scenarioTitle}</b><br>
                 <b>Category:</b> ${p.overallCategory}<br>
                 <b>Model:</b> ${p.llmName}<br>
-                <b>Type:</b> ${p.isParent ? 'Parent' : 'Alternative'}<br>
-                <b>Position:</b> Focus/Ends: ${p.x.toFixed(2)}, Sacrifice/Means: ${p.y.toFixed(2)}, Character: ${p.z.toFixed(2)}
+                ${p.isParent ? '<b>Type:</b> Parent' : '<b>Type:</b> Alternative'}
                 `),
                 hoverinfo: 'text',
                 showlegend: false
-            };
-
-            data.push(scatterData);
+            });
 
             const layout = {
                 margin: { l: 0, r: 0, b: 0, t: 0 },
@@ -848,6 +845,7 @@
                 responsive: true
             });
             }
+
 
 
 
@@ -884,17 +882,16 @@
             // If more than one scenario is selected, default the model to "GPT".
             if (selectedScenarios.length > 1) {
                 selectedModels = ["GPT"];
-                // Optionally update the model filter UI here.
             }
             
-            // --- Clear highlights ---
+            // --- Clear highlights for relevant options and filter badges ---
             document.querySelectorAll('.relevant-option').forEach(el => el.classList.remove('relevant-option'));
             document.querySelectorAll('.filter-badge').forEach(badge => {
                 badge.classList.remove('relevant-badge');
                 badge.style.display = 'inline-block';
             });
 
-            // --- Apply moral category filter (if not all) ---
+            // --- Apply moral category filter (if not showing all) ---
             if (activeCategories.size !== 6) {
                 filteredPoints = filteredPoints.filter(point =>
                 activeCategories.has(normalizeCategory(point.overallCategory))
@@ -1027,8 +1024,7 @@
                 return;
             }
 
-            // --- Build the shared color mapping using composite keys ---
-            // Use a composite key: scenarioTitle + "_" + llmName
+            // --- Build the shared color mapping using composite keys (scenarioTitle + "_" + llmName) ---
             const uniqueCompositeKeys = [...new Set(filteredPoints.map(p => p.scenarioTitle + '_' + p.llmName))];
             scenarioColorMapping = {};
             uniqueCompositeKeys.forEach((key, index) => {
@@ -1048,8 +1044,10 @@
                 populateOverview(compData);
                 populateScenarioDetails(compData);
             } else {
-                populateOverview(filteredPoints[0]);
-                populateScenarioDetails(filteredPoints[0]);
+                // If only one scenario is selected, ensure we only show up to 4 models.
+                let compData = Array.isArray(filteredPoints) ? filteredPoints.slice(0, 4) : filteredPoints;
+                populateOverview(compData);
+                populateScenarioDetails(compData);
             }
 
             // --- Create the 3D plot ---
@@ -1081,9 +1079,8 @@
                     color: filteredPoints.map(p => getColorByCategory(p.overallCategory)),
                     opacity: 0.8,
                     line: {
-                    // Use the composite key for marker borders.
                     color: filteredPoints.map(p => scenarioColorMapping[p.scenarioTitle + '_' + p.llmName] || '#000'),
-                    width: filteredPoints.map(p => p.isParent ? 4 : 2)  // Increased width for visibility.
+                    width: filteredPoints.map(p => p.isParent ? 6 : 4)
                     }
                 },
                 text: filteredPoints.map(point => `
@@ -1119,6 +1116,7 @@
 
 
 
+
     
         function checkDescriptions() {
             document.querySelectorAll('.scenario-description').forEach(function(desc) {
@@ -1140,9 +1138,9 @@
             if (!Array.isArray(data)) {
                 data = [data];
             }
-            // Sort and limit cards as needed.
+            // Sort and limit cards to maximum of 4.
             data.sort((a, b) => (b.isParent ? 1 : 0) - (a.isParent ? 1 : 0));
-            data = data.slice(0, 5);
+            data = data.slice(0, 4);
             
             const cards = data.map(item => `
                 <div class="comparison-card" style="border: 2px solid ${scenarioColorMapping[item.scenarioTitle + '_' + item.llmName] || '#000'};">
@@ -1161,7 +1159,8 @@
             
             overviewDiv.innerHTML = cards;
             checkDescriptions();
-        }
+            }
+
 
 
 
