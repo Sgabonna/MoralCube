@@ -961,6 +961,16 @@
                     }
                 });
             }
+            // Define a fixed array of colors
+            const sharedBorderColors = ["brown", "black", "grey", "tan", "white"];
+            let scenarioColorMapping = {};
+
+            // Later in updateVisualization(), after filtering your points:
+            const uniqueScenarioTitles = [...new Set(filteredPoints.map(p => p.scenarioTitle))];
+            scenarioColorMapping = {};
+            uniqueScenarioTitles.forEach((title, index) => {
+            scenarioColorMapping[title] = sharedBorderColors[index % sharedBorderColors.length];
+            });
 
             // Update category badges visibility and highlighting
             const relevantCategories = new Set(filteredPoints.map(point => 
