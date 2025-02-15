@@ -491,8 +491,11 @@
         let scenarioRelationships = new Map(); // Stores parent-child relationships
         let currentMediaUrl = "";
 
+        // Fixed set of shared border colors
         const sharedBorderColors = ["brown", "black", "grey", "tan", "white"];
+        // Mapping from scenario title to one of the fixed colors
         let scenarioColorMapping = {};
+
 
 
         function normalizeCategory(category) {
@@ -755,21 +758,9 @@
 
 
         // Visualization functions
-        function getColorByCategory(category) {
-            const colorMap = {
-                'evil': '#dc3545',
-                'virtue': '#28a745',
-                'vice': '#ffc107',
-                'sin': '#6c757d',
-                'morally_grey': '#6610f2',
-                'world_building': '#17a2b8'
-            };
-            return colorMap[category] || 'gray';
-        }
-
         function createPlot(points) {
-            const data = [
-                {
+            // Base mesh (cube) data.
+            const meshData = {
                 type: 'mesh3d',
                 x: [-8, 12, 12, -8, -8, 12, 12, -8],
                 y: [0, 0, 0, 0, 8, 8, 8, 8],
@@ -781,10 +772,11 @@
                 color: 'lightblue',
                 showlegend: false,
                 hoverinfo: 'none'
-                }
-            ];
+            };
 
-            // Draw relationship lines if the parent has alternates
+            let data = [meshData];
+
+            // Draw relationship lines if applicable.
             const parentPoint = points.find(p => p.isParent);
             if (parentPoint && scenarioRelationships.has(parentPoint.scenarioTitle)) {
                 const childPoints = points.filter(p => !p.isParent);
@@ -803,8 +795,8 @@
                 });
             }
 
-            // Plot the data points (markers)
-            data.push({
+            // Plot the data points (markers).
+            const scatterData = {
                 type: 'scatter3d',
                 x: points.map(p => p.x),
                 y: points.map(p => p.z),
@@ -812,11 +804,11 @@
                 mode: 'markers',
                 marker: {
                 size: points.map(p => p.isParent ? 8 : 6),
-                // The marker fill color still comes from getColorByCategory,
-                // but now the marker line (border) uses our shared color mapping.
+                // The fill color remains based on getColorByCategory.
                 color: points.map(p => getColorByCategory(p.overallCategory)),
                 opacity: 0.8,
                 line: {
+                    // Use the shared border color from our mapping.
                     color: points.map(p => scenarioColorMapping[p.scenarioTitle] || '#000'),
                     width: points.map(p => p.isParent ? 2 : 1)
                 }
@@ -830,7 +822,9 @@
                 `),
                 hoverinfo: 'text',
                 showlegend: false
-            });
+            };
+
+            data.push(scatterData);
 
             const layout = {
                 margin: { l: 0, r: 0, b: 0, t: 0 },
@@ -849,6 +843,7 @@
                 responsive: true
             });
             }
+
 
 
         function updateFilters() {
@@ -880,144 +875,124 @@
         function updateVisualization() {
             let filteredPoints = dataPoints;
             
-            // Clear highlights
+            // Clear highlights for relevant options and filter badges.
             document.querySelectorAll('.relevant-option').forEach(el => el.classList.remove('relevant-option'));
             document.querySelectorAll('.filter-badge').forEach(badge => {
                 badge.classList.remove('relevant-badge');
-                // Keep all badges visible but adjust opacity based on selection
                 badge.style.display = 'inline-block';
             });
 
             // Apply moral category filter first (if not showing all categories)
             if (activeCategories.size !== 6) {
                 filteredPoints = filteredPoints.filter(point => 
-                    activeCategories.has(normalizeCategory(point.overallCategory))
+                activeCategories.has(normalizeCategory(point.overallCategory))
                 );
                 
-                // Update available scenarios based on moral category
+                // Update available scenarios based on moral category.
                 const availableScenarios = new Set(filteredPoints.map(p => p.scenarioTitle));
                 const scenarioFilter = document.getElementById('scenarioFilter');
                 Array.from(scenarioFilter.options).forEach(option => {
-                    if (availableScenarios.has(option.value)) {
-                        option.style.display = 'block';
-                        option.classList.add('relevant-option');
-                    } else {
-                        option.style.display = 'none';
-                    }
+                if (availableScenarios.has(option.value)) {
+                    option.style.display = 'block';
+                    option.classList.add('relevant-option');
+                } else {
+                    option.style.display = 'none';
+                }
                 });
                 
-                // Update available models based on moral category
+                // Update available models based on moral category.
                 const availableModels = new Set(filteredPoints.map(p => p.llmName));
                 const modelFilter = document.getElementById('modelFilter');
                 Array.from(modelFilter.options).forEach(option => {
-                    if (availableModels.has(option.value)) {
-                        option.style.display = 'block';
-                        option.classList.add('relevant-option');
-                    } else {
-                        option.style.display = 'none';
-                    }
+                if (availableModels.has(option.value)) {
+                    option.style.display = 'block';
+                    option.classList.add('relevant-option');
+                } else {
+                    option.style.display = 'none';
+                }
                 });
             }
 
-            // Apply Category Type Filter
+            // Apply Category Type Filter.
             if (selectedCategories.length > 0) {
                 filteredPoints = filteredPoints.filter(point => selectedCategories.includes(point.category));
             }
 
-            // Apply Scenario Filter
+            // Apply Scenario Filter.
             if (selectedScenarios.length > 0) {
                 filteredPoints = filteredPoints.filter(point => 
-                    selectedScenarios.includes(point.scenarioTitle)
+                selectedScenarios.includes(point.scenarioTitle)
                 );
                 
-                // Update available models based on selected scenarios
+                // Update available models based on selected scenarios.
                 const relevantModels = new Set(filteredPoints.map(p => p.llmName));
                 document.querySelectorAll('#modelFilter option').forEach(option => {
-                    if (relevantModels.has(option.value)) {
-                        option.style.display = 'block';
-                        option.classList.add('relevant-option');
-                    } else {
-                        option.style.display = 'none';
-                        option.selected = false;
-                    }
+                if (relevantModels.has(option.value)) {
+                    option.style.display = 'block';
+                    option.classList.add('relevant-option');
+                } else {
+                    option.style.display = 'none';
+                    option.selected = false;
+                }
                 });
             }
 
-            // Apply Model Filter
+            // Apply Model Filter.
             if (selectedModels.length > 0) {
                 filteredPoints = filteredPoints.filter(point => 
-                    selectedModels.includes(point.llmName)
+                selectedModels.includes(point.llmName)
                 );
                 
-                // Update available scenarios based on selected models
+                // Update available scenarios based on selected models.
                 const relevantScenarios = new Set(filteredPoints.map(p => p.scenarioTitle));
                 document.querySelectorAll('#scenarioFilter option').forEach(option => {
-                    if (relevantScenarios.has(option.value)) {
-                        option.style.display = 'block';
-                        option.classList.add('relevant-option');
-                    } else {
-                        option.style.display = 'none';
-                        option.selected = false;
-                    }
+                if (relevantScenarios.has(option.value)) {
+                    option.style.display = 'block';
+                    option.classList.add('relevant-option');
+                } else {
+                    option.style.display = 'none';
+                    option.selected = false;
+                }
                 });
             }
-            // Define a fixed array of colors
-            const sharedBorderColors = ["brown", "black", "grey", "tan", "white"];
-            let scenarioColorMapping = {};
 
-            // Later in updateVisualization(), after filtering your points:
-            const uniqueScenarioTitles = [...new Set(filteredPoints.map(p => p.scenarioTitle))];
-            scenarioColorMapping = {};
-            uniqueScenarioTitles.forEach((title, index) => {
-            scenarioColorMapping[title] = sharedBorderColors[index % sharedBorderColors.length];
-            });
-
-            // Update category badges visibility and highlighting
+            // Update category badges visibility and highlighting.
             const relevantCategories = new Set(filteredPoints.map(point => 
                 normalizeCategory(point.overallCategory)
             ));
-            
             document.querySelectorAll('.filter-badge').forEach(badge => {
                 const category = badge.dataset.category;
-                // If any filter is applied, adjust badge visibility based on relevant categories
                 if (selectedScenarios.length > 0 || selectedModels.length > 0 || activeCategories.size !== 6) {
-                    badge.style.opacity = relevantCategories.has(category) ? '1' : '0.3';
-                    if (relevantCategories.has(category)) {
-                        badge.classList.add('relevant-badge');
-                    }
+                badge.style.opacity = relevantCategories.has(category) ? '1' : '0.3';
+                if (relevantCategories.has(category)) {
+                    badge.classList.add('relevant-badge');
+                }
                 }
             });
 
-            // Update alternate outcomes dropdown
+            // Update alternate outcomes dropdown.
             const alternateOutcomes = document.getElementById('alternateOutcomes');
             if (selectedScenarios.length === 1 && selectedModels.length === 1) {
                 const parentScenario = selectedScenarios[0];
                 const selectedModel = selectedModels[0];
-                
-                // Find all relationships for this scenario
                 const relationships = scenarioRelationships.get(parentScenario) || [];
                 console.log("Found relationships:", relationships);
-                
-                // Filter alternatives for the selected model
                 const alternatives = relationships.filter(child => child.model === selectedModel);
                 console.log("Filtered alternatives for model:", alternatives);
-                
                 if (alternatives && alternatives.length > 0) {
-                    // Clear and populate the dropdown
-                    alternateOutcomes.innerHTML = alternatives
-                        .map(alt => `
-                            <option value="${alt.childId}">
-                                ${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}
-                            </option>
-                        `).join('');
-                    alternateOutcomes.disabled = false;
-                    alternateOutcomes.style.opacity = '1';
-                    // Enable multiple selection
-                    alternateOutcomes.multiple = true;
+                alternateOutcomes.innerHTML = alternatives
+                    .map(alt => `
+                    <option value="${alt.childId}">
+                        ${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}
+                    </option>
+                    `).join('');
+                alternateOutcomes.disabled = false;
+                alternateOutcomes.style.opacity = '1';
+                alternateOutcomes.multiple = true;
                 } else {
-                    alternateOutcomes.innerHTML = '<option>No alternate outcomes available</option>';
-                    alternateOutcomes.disabled = true;
-                    alternateOutcomes.style.opacity = '0.5';
+                alternateOutcomes.innerHTML = '<option>No alternate outcomes available</option>';
+                alternateOutcomes.disabled = true;
+                alternateOutcomes.style.opacity = '0.5';
                 }
             } else {
                 alternateOutcomes.innerHTML = '<option>Select a scenario and model first</option>';
@@ -1029,54 +1004,48 @@
             if (selectedScenarios.length === 1 && selectedModels.length === 1) {
                 const parentScenarioTitle = selectedScenarios[0];
                 const selectedModel = selectedModels[0];
-                // Find the parent point (must be a parent scenario)
                 const parentPoint = dataPoints.find(p => p.scenarioTitle === parentScenarioTitle && p.isParent);
-                // Get all alternate outcomes (child scenarios) for this parent and model
                 const relationships = scenarioRelationships.get(parentScenarioTitle) || [];
                 const alternatives = relationships
-                    .filter(child => child.model === selectedModel)
-                    .map(child => child.data);
+                .filter(child => child.model === selectedModel)
+                .map(child => child.data);
                 if (parentPoint) {
-                    filteredPoints = [parentPoint, ...alternatives];
+                filteredPoints = [parentPoint, ...alternatives];
                 }
             }
-            
-            // Update category filter options based on filtered points
+
+            // Update available categories in the category filter.
             const availableCategories = new Set(filteredPoints.map(p => p.category));
             document.querySelectorAll('#categoryFilter option').forEach(option => {
                 if (availableCategories.has(option.value)) {
-                    option.style.display = 'block';
-                    option.classList.add('relevant-option');
+                option.style.display = 'block';
+                option.classList.add('relevant-option');
                 } else {
-                    option.style.display = 'none';
-                    option.selected = false;
+                option.style.display = 'none';
+                option.selected = false;
                 }
             });
-
 
             if (filteredPoints.length === 0) {
                 alert('No data points match the current filters.');
                 return;
             }
 
-            // Build a mapping from scenarioTitle to a fixed border color
+            // Build the shared color mapping from the unique scenario titles in filteredPoints.
             const uniqueScenarioTitles = [...new Set(filteredPoints.map(p => p.scenarioTitle))];
             scenarioColorMapping = {};
             uniqueScenarioTitles.forEach((title, index) => {
-            scenarioColorMapping[title] = sharedBorderColors[index % sharedBorderColors.length];
+                scenarioColorMapping[title] = sharedBorderColors[index % sharedBorderColors.length];
             });
 
-
-            // Update visualization based on filtered points
+            // Update overview cards and scenario details.
             if (selectedScenarios.length > 0) {
-                const comparisonData = filteredPoints.filter(point => 
-                    selectedScenarios.includes(point.scenarioTitle)
-                );
+                const comparisonData = filteredPoints.filter(point => selectedScenarios.includes(point.scenarioTitle));
                 populateOverview(comparisonData);
                 populateScenarioDetails(comparisonData);
             } else if (selectedModels.length === 2) {
-                const comparisonData = selectedModels.map(model => 
-                    filteredPoints.find(point => point.llmName === model)
+                const comparisonData = selectedModels.map(model =>
+                filteredPoints.find(point => point.llmName === model)
                 ).filter(Boolean);
                 populateOverview(comparisonData);
                 populateScenarioDetails(comparisonData);
@@ -1085,70 +1054,68 @@
                 populateScenarioDetails(filteredPoints[0]);
             }
 
-            // Create the 3D plot
+            // Create the 3D plot.
             const xValues = filteredPoints.map(point => point.x);
             const yValues = filteredPoints.map(point => point.z);
             const zValues = filteredPoints.map(point => point.y);
-            
-            const data = [
+            const plotData = [
                 {
-                    type: 'mesh3d',
-                    x: [-8, 12, 12, -8, -8, 12, 12, -8],
-                    y: [0, 0, 0, 0, 8, 8, 8, 8],
-                    z: [-21.6, -21.6, 0, 0, -21.6, -21.6, 0, 0],
-                    i: [0, 0, 4, 4, 0, 0, 2, 2, 0, 1],
-                    j: [1, 2, 5, 6, 1, 5, 3, 7, 0, 2],
-                    k: [2, 3, 6, 7, 5, 4, 7, 6, 3, 3],
-                    opacity: 0.1,
-                    color: 'lightblue',
-                    showlegend: false,
-                    hoverinfo: 'none'
+                type: 'mesh3d',
+                x: [-8, 12, 12, -8, -8, 12, 12, -8],
+                y: [0, 0, 0, 0, 8, 8, 8, 8],
+                z: [-21.6, -21.6, 0, 0, -21.6, -21.6, 0, 0],
+                i: [0, 0, 4, 4, 0, 0, 2, 2, 0, 1],
+                j: [1, 2, 5, 6, 1, 5, 3, 7, 0, 2],
+                k: [2, 3, 6, 7, 5, 4, 7, 6, 3, 3],
+                opacity: 0.1,
+                color: 'lightblue',
+                showlegend: false,
+                hoverinfo: 'none'
                 },
                 {
-                    type: 'scatter3d',
-                    x: xValues,
-                    y: yValues,
-                    z: zValues,
-                    mode: 'markers',
-                    marker: {
-                        size: filteredPoints.map(p => p.isParent ? 8 : 6),
-                        color: filteredPoints.map(point => getColorByCategory(point.overallCategory)),
-                        opacity: 0.8,
-                        line: {
-                            color: filteredPoints.map(p => p.isParent ? '#000' : '#666'),
-                            width: filteredPoints.map(p => p.isParent ? 2 : 1)
-                        }
-                    },
-                    text: filteredPoints.map(point => `
-                        <b>${point.scenarioTitle}</b><br>
-                        <b>Category:</b> ${point.overallCategory}<br>
-                        <b>Model:</b> ${point.llmName}<br>
-                        ${point.isParent ? '<b>Type:</b> Parent' : '<b>Type:</b> Alternative'}
-                    `),
-                    hoverinfo: 'text',
-                    showlegend: false
+                type: 'scatter3d',
+                x: xValues,
+                y: yValues,
+                z: zValues,
+                mode: 'markers',
+                marker: {
+                    size: filteredPoints.map(p => p.isParent ? 8 : 6),
+                    color: filteredPoints.map(p => getColorByCategory(p.overallCategory)),
+                    opacity: 0.8,
+                    line: {
+                    color: filteredPoints.map(p => scenarioColorMapping[p.scenarioTitle] || '#000'),
+                    width: filteredPoints.map(p => p.isParent ? 2 : 1)
+                    }
+                },
+                text: filteredPoints.map(point => `
+                    <b>${point.scenarioTitle}</b><br>
+                    <b>Category:</b> ${point.overallCategory}<br>
+                    <b>Model:</b> ${point.llmName}<br>
+                    ${point.isParent ? '<b>Type:</b> Parent' : '<b>Type:</b> Alternative'}
+                `),
+                hoverinfo: 'text',
+                showlegend: false
                 }
             ];
-
             const layout = {
                 margin: { l: 0, r: 0, b: 0, t: 0 },
                 scene: {
-                    xaxis: { title: 'Altruistic - Self Motivated', range: [-8, 12], titlefont:{size: 10} },
-                    yaxis: { title: 'Habit/Instinct - Will Power', range: [0, 8], titlefont:{size: 10} },
-                    zaxis: { title: 'Small Sacrifice - Large sacrifice', range: [-21.6, 0], titlefont:{size: 10} },
-                    camera: { eye: { x: 1.5, y: 1.5, z: 1.5 } },
-                    aspectmode: 'cube',
-                    aspectratio: { x: 1, y: 1, z: 1 }
+                xaxis: { title: 'Altruistic - Self Motivated', range: [-8, 12], titlefont: { size: 10 } },
+                yaxis: { title: 'Habit/Instinct - Will Power', range: [0, 8], titlefont: { size: 10 } },
+                zaxis: { title: 'Small Sacrifice - Large sacrifice', range: [-21.6, 0], titlefont: { size: 10 } },
+                camera: { eye: { x: 1.5, y: 1.5, z: 1.5 } },
+                aspectmode: 'cube',
+                aspectratio: { x: 1, y: 1, z: 1 }
                 }
             };
-
-            Plotly.newPlot('cube-plot', data, layout, {
+            Plotly.newPlot('cube-plot', plotData, layout, {
                 displayModeBar: false,
                 responsive: true
             });
-            // Update the media placeholder with the parent's URL.
+
+            // Update the media placeholder with the selected scenario's media URL.
             updateSelectedMedia();
-        }
+            }
     
         function checkDescriptions() {
             document.querySelectorAll('.scenario-description').forEach(function(desc) {
@@ -1170,29 +1137,29 @@
             if (!Array.isArray(data)) {
                 data = [data];
             }
-            // Sort and limit cards as before
+            // Sort and limit cards as needed.
             data.sort((a, b) => (b.isParent ? 1 : 0) - (a.isParent ? 1 : 0));
             data = data.slice(0, 5);
             
-            // Build each overview card using the shared color from the mapping
             const cards = data.map(item => `
                 <div class="comparison-card" style="border: 2px solid ${scenarioColorMapping[item.scenarioTitle] || '#000'};">
-                    <h4>
-                        ${getScenarioTitle(item)}
-                        <small>(${item.llmName} ${getCategoryBadge(item.overallCategory)})</small>
-                    </h4>
-                    <p class="scenario-description">
-                        <span class="description-text">
-                            ${item.scenarioDescription || 'No description available'}
-                        </span>
-                        <span class="read-more">Read more</span>
-                    </p>
+                <h4>
+                    ${getScenarioTitle(item)}
+                    <small>(${item.llmName} ${getCategoryBadge(item.overallCategory)})</small>
+                </h4>
+                <p class="scenario-description">
+                    <span class="description-text">
+                    ${item.scenarioDescription || 'No description available'}
+                    </span>
+                    <span class="read-more">Read more</span>
+                </p>
                 </div>
             `).join('');
             
             overviewDiv.innerHTML = cards;
             checkDescriptions();
-        }
+            }
+
 
         function updateMediaDisplay(url) {
             const container = document.getElementById('media-placeholder');
