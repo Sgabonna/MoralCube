@@ -465,7 +465,8 @@
             <!-- Right Column: Overview Placeholder for Video/Website -->
             <!-- Right Column: Overview Placeholder for Video/Website -->
             <div id="placeholder-overview-column" style="width: 45%; padding: 0 10px;">
-                <iframe id="media-placeholder" style="width: 100%; height: 300px; border: none;" src=""></iframe>
+                <!-- Replace your iframe with this div -->
+                <div id="media-placeholder" style="width: 100%; height: 300px; border: none;"></div>
                 <button id="open-media" class="btn btn-secondary btn-sm mt-2" style="width: 100%;">Open in New Window</button>
             </div>
   
@@ -1210,13 +1211,33 @@
             checkDescriptions();
         }
         function updateMediaDisplay(url) {
-            const iframe = document.getElementById('media-placeholder');
-            if (iframe && url) {
-                iframe.src = url;
-            } else if (iframe) {
-                iframe.src = ""; // Clear if no URL is provided.
+            const container = document.getElementById('media-placeholder');
+            if (url) {
+                // Build the Reddit embed markup.
+                container.innerHTML = `
+                    <blockquote class="reddit-embed" data-embed-media="true" data-height="500">
+                        <a href="${url}">View this post on Reddit</a>
+                    </blockquote>
+                `;
+                // Append the Reddit widget script if it's not already loaded.
+                if (!document.getElementById('reddit-embed-script')) {
+                    const script = document.createElement('script');
+                    script.id = 'reddit-embed-script';
+                    script.async = true;
+                    script.src = 'https://embed.reddit.com/widgets.js';
+                    script.charset = 'UTF-8';
+                    document.body.appendChild(script);
+                } else {
+                    // If the script is already there, you might need to re-run its parsing
+                    if (window.redditEmbed) {
+                        window.redditEmbed();
+                    }
+                }
+            } else {
+                container.innerHTML = "";
             }
-            }
+        }
+
 
 
         function getScenarioTitle(data) {
@@ -1444,9 +1465,10 @@
             updateVisualization();
         });
         document.getElementById('open-media').addEventListener('click', function() {
-            const iframe = document.getElementById('media-placeholder');
-            if (iframe && iframe.src) {
-                window.open(iframe.src, '_blank');
+            // You could store the current URL in a global variable or extract it from your data
+            const currentUrl = /* your logic to retrieve the URL */;
+            if (currentUrl) {
+                window.open(currentUrl, '_blank');
             }
         });
 
