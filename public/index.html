@@ -491,9 +491,9 @@
         let scenarioRelationships = new Map(); // Stores parent-child relationships
         let currentMediaUrl = "";
 
-        // Fixed array of shared border colors
+        // Fixed array of shared border colors.
         const sharedBorderColors = ["brown", "black", "grey", "tan", "white"];
-        // This mapping will be built from the filtered points
+        // Mapping from scenario title to a fixed border color.
         let scenarioColorMapping = {};
 
 
@@ -873,49 +873,46 @@
             });
         }
 
+       // === updateVisualization() Function ===
         function updateVisualization() {
             let filteredPoints = dataPoints;
             
-            // --- Clear highlights for relevant options and filter badges ---
+            // Clear highlights.
             document.querySelectorAll('.relevant-option').forEach(el => el.classList.remove('relevant-option'));
             document.querySelectorAll('.filter-badge').forEach(badge => {
                 badge.classList.remove('relevant-badge');
                 badge.style.display = 'inline-block';
             });
 
-            // --- Apply moral category filter first (if not showing all categories) ---
+            // Apply moral category filter (if not showing all).
             if (activeCategories.size !== 6) {
                 filteredPoints = filteredPoints.filter(point =>
                 activeCategories.has(normalizeCategory(point.overallCategory))
                 );
                 
-                // Update available scenarios based on moral category.
+                // Update available scenarios.
                 const availScenarios = new Set(filteredPoints.map(p => p.scenarioTitle));
                 const scenarioFilter = document.getElementById('scenarioFilter');
                 Array.from(scenarioFilter.options).forEach(option => {
                 option.style.display = availScenarios.has(option.value) ? 'block' : 'none';
-                if (availScenarios.has(option.value)) {
-                    option.classList.add('relevant-option');
-                }
+                if (availScenarios.has(option.value)) option.classList.add('relevant-option');
                 });
                 
-                // Update available models based on moral category.
+                // Update available models.
                 const availModels = new Set(filteredPoints.map(p => p.llmName));
                 const modelFilter = document.getElementById('modelFilter');
                 Array.from(modelFilter.options).forEach(option => {
                 option.style.display = availModels.has(option.value) ? 'block' : 'none';
-                if (availModels.has(option.value)) {
-                    option.classList.add('relevant-option');
-                }
+                if (availModels.has(option.value)) option.classList.add('relevant-option');
                 });
             }
 
-            // --- Apply Category Type Filter ---
+            // Apply Category Type Filter.
             if (selectedCategories.length > 0) {
                 filteredPoints = filteredPoints.filter(point => selectedCategories.includes(point.category));
             }
 
-            // --- Apply Scenario Filter ---
+            // Apply Scenario Filter.
             if (selectedScenarios.length > 0) {
                 filteredPoints = filteredPoints.filter(point =>
                 selectedScenarios.includes(point.scenarioTitle)
@@ -934,7 +931,7 @@
                 });
             }
 
-            // --- Apply Model Filter ---
+            // Apply Model Filter.
             if (selectedModels.length > 0) {
                 filteredPoints = filteredPoints.filter(point => selectedModels.includes(point.llmName));
                 
@@ -951,19 +948,17 @@
                 });
             }
 
-            // --- Update category badges visibility and highlighting ---
+            // Update category badges.
             const relCats = new Set(filteredPoints.map(point => normalizeCategory(point.overallCategory)));
             document.querySelectorAll('.filter-badge').forEach(badge => {
                 const cat = badge.dataset.category;
                 if (selectedScenarios.length > 0 || selectedModels.length > 0 || activeCategories.size !== 6) {
                 badge.style.opacity = relCats.has(cat) ? '1' : '0.3';
-                if (relCats.has(cat)) {
-                    badge.classList.add('relevant-badge');
-                }
+                if (relCats.has(cat)) badge.classList.add('relevant-badge');
                 }
             });
 
-            // --- Update alternate outcomes dropdown ---
+            // Update alternate outcomes dropdown.
             const altOutcomes = document.getElementById('alternateOutcomes');
             if (selectedScenarios.length === 1 && selectedModels.length === 1) {
                 const parentScenario = selectedScenarios[0];
@@ -993,7 +988,7 @@
                 altOutcomes.style.opacity = '0.5';
             }
             
-            // --- If exactly one scenario and one model are selected, include alternate outcomes ---
+            // If exactly one scenario and one model are selected, include alternate outcomes.
             if (selectedScenarios.length === 1 && selectedModels.length === 1) {
                 const parentScenarioTitle = selectedScenarios[0];
                 const selModel = selectedModels[0];
@@ -1005,7 +1000,7 @@
                 }
             }
 
-            // --- Update available categories in the category filter (rename to avoid duplicate variable name) ---
+            // Update available categories in the category filter.
             const filtCategories = new Set(filteredPoints.map(p => p.category));
             document.querySelectorAll('#categoryFilter option').forEach(option => {
                 if (filtCategories.has(option.value)) {
@@ -1022,14 +1017,14 @@
                 return;
             }
 
-            // --- Build the shared color mapping from the unique scenario titles ---
+            // Build the shared color mapping from unique scenario titles.
             const uniqueScenarioTitles = [...new Set(filteredPoints.map(p => p.scenarioTitle))];
             scenarioColorMapping = {};
             uniqueScenarioTitles.forEach((title, index) => {
                 scenarioColorMapping[title] = sharedBorderColors[index % sharedBorderColors.length];
             });
 
-            // --- Update overview cards and scenario details ---
+            // Update overview cards and scenario details.
             if (selectedScenarios.length > 0) {
                 const compData = filteredPoints.filter(point => selectedScenarios.includes(point.scenarioTitle));
                 populateOverview(compData);
@@ -1043,7 +1038,7 @@
                 populateScenarioDetails(filteredPoints[0]);
             }
 
-            // --- Create the 3D plot ---
+            // Create the 3D plot.
             const xValues = filteredPoints.map(point => point.x);
             const yValues = filteredPoints.map(point => point.z);
             const zValues = filteredPoints.map(point => point.y);
@@ -1102,9 +1097,9 @@
                 responsive: true
             });
 
-            // --- Update the media placeholder with the selected scenario's media URL ---
-            updateSelectedMedia();
-            }
+        // Update the media placeholder with the selected scenario's media URL.
+        updateSelectedMedia();
+        }
 
     
         function checkDescriptions() {
@@ -1230,8 +1225,21 @@
             const categoryClass = `category-badge category-${normalizedCategory}`;
             return `<span class="${categoryClass}">${category}</span>`;
         }
-
-
+        function getColorByCategory(category) {
+            const colorMap = {
+                'evil': '#dc3545',
+                'virtue': '#28a745',
+                'vice': '#ffc107',
+                'sin': '#6c757d',
+                'morally_grey': '#6610f2',
+                'world_building': '#17a2b8'
+            };
+            return colorMap[category] || 'gray';
+            }
+        // Helper function: normalize a category string.
+        function normalizeCategory(category) {
+            return category.toLowerCase().replace(/\s+/g, '_');
+            }
         function populateScenarioDetails(scenarioData) {
             if (!Array.isArray(scenarioData)) {
                 scenarioData = [scenarioData];
