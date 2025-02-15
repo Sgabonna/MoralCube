@@ -491,10 +491,11 @@
         let scenarioRelationships = new Map(); // Stores parent-child relationships
         let currentMediaUrl = "";
 
-        // Fixed set of shared border colors
+        // Fixed array of shared border colors
         const sharedBorderColors = ["brown", "black", "grey", "tan", "white"];
-        // Mapping from scenario title to one of the fixed colors
+        // This mapping will be built from the filtered points
         let scenarioColorMapping = {};
+
 
 
 
@@ -875,59 +876,55 @@
         function updateVisualization() {
             let filteredPoints = dataPoints;
             
-            // Clear highlights for relevant options and filter badges.
+            // --- Clear highlights for relevant options and filter badges ---
             document.querySelectorAll('.relevant-option').forEach(el => el.classList.remove('relevant-option'));
             document.querySelectorAll('.filter-badge').forEach(badge => {
                 badge.classList.remove('relevant-badge');
                 badge.style.display = 'inline-block';
             });
 
-            // Apply moral category filter first (if not showing all categories)
+            // --- Apply moral category filter first (if not showing all categories) ---
             if (activeCategories.size !== 6) {
-                filteredPoints = filteredPoints.filter(point => 
+                filteredPoints = filteredPoints.filter(point =>
                 activeCategories.has(normalizeCategory(point.overallCategory))
                 );
                 
                 // Update available scenarios based on moral category.
-                const availableScenarios = new Set(filteredPoints.map(p => p.scenarioTitle));
+                const availScenarios = new Set(filteredPoints.map(p => p.scenarioTitle));
                 const scenarioFilter = document.getElementById('scenarioFilter');
                 Array.from(scenarioFilter.options).forEach(option => {
-                if (availableScenarios.has(option.value)) {
-                    option.style.display = 'block';
+                option.style.display = availScenarios.has(option.value) ? 'block' : 'none';
+                if (availScenarios.has(option.value)) {
                     option.classList.add('relevant-option');
-                } else {
-                    option.style.display = 'none';
                 }
                 });
                 
                 // Update available models based on moral category.
-                const availableModels = new Set(filteredPoints.map(p => p.llmName));
+                const availModels = new Set(filteredPoints.map(p => p.llmName));
                 const modelFilter = document.getElementById('modelFilter');
                 Array.from(modelFilter.options).forEach(option => {
-                if (availableModels.has(option.value)) {
-                    option.style.display = 'block';
+                option.style.display = availModels.has(option.value) ? 'block' : 'none';
+                if (availModels.has(option.value)) {
                     option.classList.add('relevant-option');
-                } else {
-                    option.style.display = 'none';
                 }
                 });
             }
 
-            // Apply Category Type Filter.
+            // --- Apply Category Type Filter ---
             if (selectedCategories.length > 0) {
                 filteredPoints = filteredPoints.filter(point => selectedCategories.includes(point.category));
             }
 
-            // Apply Scenario Filter.
+            // --- Apply Scenario Filter ---
             if (selectedScenarios.length > 0) {
-                filteredPoints = filteredPoints.filter(point => 
+                filteredPoints = filteredPoints.filter(point =>
                 selectedScenarios.includes(point.scenarioTitle)
                 );
                 
                 // Update available models based on selected scenarios.
-                const relevantModels = new Set(filteredPoints.map(p => p.llmName));
+                const relModels = new Set(filteredPoints.map(p => p.llmName));
                 document.querySelectorAll('#modelFilter option').forEach(option => {
-                if (relevantModels.has(option.value)) {
+                if (relModels.has(option.value)) {
                     option.style.display = 'block';
                     option.classList.add('relevant-option');
                 } else {
@@ -937,16 +934,14 @@
                 });
             }
 
-            // Apply Model Filter.
+            // --- Apply Model Filter ---
             if (selectedModels.length > 0) {
-                filteredPoints = filteredPoints.filter(point => 
-                selectedModels.includes(point.llmName)
-                );
+                filteredPoints = filteredPoints.filter(point => selectedModels.includes(point.llmName));
                 
                 // Update available scenarios based on selected models.
-                const relevantScenarios = new Set(filteredPoints.map(p => p.scenarioTitle));
+                const relScenarios = new Set(filteredPoints.map(p => p.scenarioTitle));
                 document.querySelectorAll('#scenarioFilter option').forEach(option => {
-                if (relevantScenarios.has(option.value)) {
+                if (relScenarios.has(option.value)) {
                     option.style.display = 'block';
                     option.classList.add('relevant-option');
                 } else {
@@ -956,68 +951,64 @@
                 });
             }
 
-            // Update category badges visibility and highlighting.
-            const relevantCategories = new Set(filteredPoints.map(point => 
-                normalizeCategory(point.overallCategory)
-            ));
+            // --- Update category badges visibility and highlighting ---
+            const relCats = new Set(filteredPoints.map(point => normalizeCategory(point.overallCategory)));
             document.querySelectorAll('.filter-badge').forEach(badge => {
-                const category = badge.dataset.category;
+                const cat = badge.dataset.category;
                 if (selectedScenarios.length > 0 || selectedModels.length > 0 || activeCategories.size !== 6) {
-                badge.style.opacity = relevantCategories.has(category) ? '1' : '0.3';
-                if (relevantCategories.has(category)) {
+                badge.style.opacity = relCats.has(cat) ? '1' : '0.3';
+                if (relCats.has(cat)) {
                     badge.classList.add('relevant-badge');
                 }
                 }
             });
 
-            // Update alternate outcomes dropdown.
-            const alternateOutcomes = document.getElementById('alternateOutcomes');
+            // --- Update alternate outcomes dropdown ---
+            const altOutcomes = document.getElementById('alternateOutcomes');
             if (selectedScenarios.length === 1 && selectedModels.length === 1) {
                 const parentScenario = selectedScenarios[0];
-                const selectedModel = selectedModels[0];
+                const selModel = selectedModels[0];
                 const relationships = scenarioRelationships.get(parentScenario) || [];
                 console.log("Found relationships:", relationships);
-                const alternatives = relationships.filter(child => child.model === selectedModel);
+                const alternatives = relationships.filter(child => child.model === selModel);
                 console.log("Filtered alternatives for model:", alternatives);
                 if (alternatives && alternatives.length > 0) {
-                alternateOutcomes.innerHTML = alternatives
+                altOutcomes.innerHTML = alternatives
                     .map(alt => `
                     <option value="${alt.childId}">
                         ${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}
                     </option>
                     `).join('');
-                alternateOutcomes.disabled = false;
-                alternateOutcomes.style.opacity = '1';
-                alternateOutcomes.multiple = true;
+                altOutcomes.disabled = false;
+                altOutcomes.style.opacity = '1';
+                altOutcomes.multiple = true;
                 } else {
-                alternateOutcomes.innerHTML = '<option>No alternate outcomes available</option>';
-                alternateOutcomes.disabled = true;
-                alternateOutcomes.style.opacity = '0.5';
+                altOutcomes.innerHTML = '<option>No alternate outcomes available</option>';
+                altOutcomes.disabled = true;
+                altOutcomes.style.opacity = '0.5';
                 }
             } else {
-                alternateOutcomes.innerHTML = '<option>Select a scenario and model first</option>';
-                alternateOutcomes.disabled = true;
-                alternateOutcomes.style.opacity = '0.5';
+                altOutcomes.innerHTML = '<option>Select a scenario and model first</option>';
+                altOutcomes.disabled = true;
+                altOutcomes.style.opacity = '0.5';
             }
             
-            // If exactly one scenario and one model are selected, automatically include alternate outcomes.
+            // --- If exactly one scenario and one model are selected, include alternate outcomes ---
             if (selectedScenarios.length === 1 && selectedModels.length === 1) {
                 const parentScenarioTitle = selectedScenarios[0];
-                const selectedModel = selectedModels[0];
+                const selModel = selectedModels[0];
                 const parentPoint = dataPoints.find(p => p.scenarioTitle === parentScenarioTitle && p.isParent);
-                const relationships = scenarioRelationships.get(parentScenarioTitle) || [];
-                const alternatives = relationships
-                .filter(child => child.model === selectedModel)
-                .map(child => child.data);
+                const rels = scenarioRelationships.get(parentScenarioTitle) || [];
+                const alts = rels.filter(child => child.model === selModel).map(child => child.data);
                 if (parentPoint) {
-                filteredPoints = [parentPoint, ...alternatives];
+                filteredPoints = [parentPoint, ...alts];
                 }
             }
 
-            // Update available categories in the category filter.
-            const availableCategories = new Set(filteredPoints.map(p => p.category));
+            // --- Update available categories in the category filter (rename to avoid duplicate variable name) ---
+            const filtCategories = new Set(filteredPoints.map(p => p.category));
             document.querySelectorAll('#categoryFilter option').forEach(option => {
-                if (availableCategories.has(option.value)) {
+                if (filtCategories.has(option.value)) {
                 option.style.display = 'block';
                 option.classList.add('relevant-option');
                 } else {
@@ -1031,30 +1022,28 @@
                 return;
             }
 
-            // Build the shared color mapping from the unique scenario titles in filteredPoints.
+            // --- Build the shared color mapping from the unique scenario titles ---
             const uniqueScenarioTitles = [...new Set(filteredPoints.map(p => p.scenarioTitle))];
             scenarioColorMapping = {};
             uniqueScenarioTitles.forEach((title, index) => {
                 scenarioColorMapping[title] = sharedBorderColors[index % sharedBorderColors.length];
             });
 
-            // Update overview cards and scenario details.
+            // --- Update overview cards and scenario details ---
             if (selectedScenarios.length > 0) {
-                const comparisonData = filteredPoints.filter(point => selectedScenarios.includes(point.scenarioTitle));
-                populateOverview(comparisonData);
-                populateScenarioDetails(comparisonData);
+                const compData = filteredPoints.filter(point => selectedScenarios.includes(point.scenarioTitle));
+                populateOverview(compData);
+                populateScenarioDetails(compData);
             } else if (selectedModels.length === 2) {
-                const comparisonData = selectedModels.map(model =>
-                filteredPoints.find(point => point.llmName === model)
-                ).filter(Boolean);
-                populateOverview(comparisonData);
-                populateScenarioDetails(comparisonData);
+                const compData = selectedModels.map(model => filteredPoints.find(point => point.llmName === model)).filter(Boolean);
+                populateOverview(compData);
+                populateScenarioDetails(compData);
             } else {
                 populateOverview(filteredPoints[0]);
                 populateScenarioDetails(filteredPoints[0]);
             }
 
-            // Create the 3D plot.
+            // --- Create the 3D plot ---
             const xValues = filteredPoints.map(point => point.x);
             const yValues = filteredPoints.map(point => point.z);
             const zValues = filteredPoints.map(point => point.y);
@@ -1113,9 +1102,10 @@
                 responsive: true
             });
 
-            // Update the media placeholder with the selected scenario's media URL.
+            // --- Update the media placeholder with the selected scenario's media URL ---
             updateSelectedMedia();
             }
+
     
         function checkDescriptions() {
             document.querySelectorAll('.scenario-description').forEach(function(desc) {
