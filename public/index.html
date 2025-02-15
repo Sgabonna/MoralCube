@@ -260,10 +260,14 @@
             margin-bottom: 20px;
         }
 
-        #media-placeholder {
-            border: 1px solid #ddd;
-            border-radius: 4px;
+        /* Ensure that embedded iframes fill the media container */
+        #media-placeholder iframe {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: contain;
         }
+
 
 
         .comparison-container {
@@ -877,6 +881,12 @@
        function updateVisualization() {
             let filteredPoints = dataPoints;
             
+            // If more than one scenario is selected, default to comparing GPT.
+            if (selectedScenarios.length > 1) {
+                selectedModels = ["GPT"];
+                // Optionally, update the model filter UI here if desired.
+            }
+            
             // --- Clear highlights for relevant options and filter badges ---
             document.querySelectorAll('.relevant-option').forEach(el => el.classList.remove('relevant-option'));
             document.querySelectorAll('.filter-badge').forEach(badge => {
@@ -1017,11 +1027,11 @@
                 return;
             }
 
-            // --- Build the shared color mapping from unique scenario titles ---
-            const uniqueScenarioTitles = [...new Set(filteredPoints.map(p => p.scenarioTitle))];
+            // --- Build the shared color mapping using composite keys (scenarioTitle + '_' + llmName) ---
+            const uniqueKeys = [...new Set(filteredPoints.map(p => p.scenarioTitle + '_' + p.llmName))];
             scenarioColorMapping = {};
-            uniqueScenarioTitles.forEach((title, index) => {
-                scenarioColorMapping[title] = sharedBorderColors[index % sharedBorderColors.length];
+            uniqueKeys.forEach((key, index) => {
+                scenarioColorMapping[key] = sharedBorderColors[index % sharedBorderColors.length];
             });
             console.log("Shared color mapping:", scenarioColorMapping);
 
@@ -1070,8 +1080,7 @@
                     color: filteredPoints.map(p => getColorByCategory(p.overallCategory)),
                     opacity: 0.8,
                     line: {
-                    // Use our shared color mapping for marker borders.
-                    color: filteredPoints.map(p => scenarioColorMapping[p.scenarioTitle] || '#000'),
+                    color: filteredPoints.map(p => scenarioColorMapping[p.scenarioTitle + '_' + p.llmName] || '#000'),
                     width: filteredPoints.map(p => p.isParent ? 2 : 1)
                     }
                 },
@@ -1104,6 +1113,7 @@
             // --- Update the media placeholder with the selected scenario's media URL ---
             updateSelectedMedia();
             }
+
 
 
     
