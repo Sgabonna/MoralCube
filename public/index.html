@@ -180,17 +180,20 @@
             margin-left: 0.5rem;
             cursor: help;
         }
-        /* Container for the three columns */
+        /* New container for the three columns */
         #overview-section {
             display: flex;
             width: 100%;
             box-sizing: border-box;
-            }
+        }  
 
         /* Left Column (Cube) – 40% width remains */
         #cube-column {
             width: 40%;
             }
+        #cards-column {
+        width: 15%;
+        }
 
         /* Middle Column (Placeholder Overview) – 45% width */
         #placeholder-overview-column {
@@ -198,19 +201,17 @@
             }
 
         /* Right Column (Stacked Overview Cards) – 15% width */
-        #stacked-cards-column {
-            width: 15%;
-            }
+        
 
         /* The container for the stacked overview cards:
         Fixed height for 5 cards (e.g., 500px total) */
         #overview {
-            height: 500px;            /* Adjust as needed */
-            overflow: hidden;         /* Hide overflow if fewer than 5 cards */
+            height: 500px;            /* Adjust if needed */
+            overflow: hidden;         /* By default, hide overflow */
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            }
+        }
 
 
 
@@ -277,28 +278,44 @@
 
         /* Each overview card (stacked vertically) */
         .comparison-card {
-            height: calc(500px / 5);  /* Fixed height per card (e.g., 100px each if 500px total) */
+            height: calc(500px / 5);  /* Fixed height for each card (e.g., 100px if container is 500px) */
             box-sizing: border-box;
-            padding: 5px 8px;         /* Reduced padding */
-            margin-bottom: 5px;       /* Optional gap between cards */
+            padding: 5px 8px;
+            margin-bottom: 5px;
             overflow: hidden;
             font-size: 0.75rem;       /* Reduced font size */
+            transition: height 0.3s ease;
             }
 
-        /* Remove bottom margin from the last card */
-        .comparison-card:last-child {
-            margin-bottom: 0;
+        /* When the card is expanded (via read more), allow it to grow */
+        .comparison-card.expanded {
+            height: auto;
+            overflow: visible;
             }
 
-        /* Read More Functionality (for overview card descriptions) */
+        /* Alternate background colors for cards */
+        .comparison-card:nth-child(odd) {
+            background-color: #e9ecef;
+            }
+        .comparison-card:nth-child(even) {
+            background-color: #f8f9fa;
+            }
+
+        /* Make the heading smaller within the card */
+        .comparison-card h4 {
+            font-size: 0.8rem;
+            margin: 0;
+            }
+
+        /* Read More Functionality for the card description */
         .scenario-description .description-text {
             display: -webkit-box;
-            -webkit-line-clamp: 2;  /* Clamp to 2 lines (adjust as needed for card size) */
+            -webkit-line-clamp: 2;  /* Clamp to 2 lines for a compact look */
             -webkit-box-orient: vertical;
             overflow: hidden;
             transition: all 0.3s ease;
             }
-        .scenario-description.expanded .description-text {
+        .comparison-card.expanded .scenario-description .description-text {
             -webkit-line-clamp: unset;
             }
         .read-more {
@@ -420,7 +437,7 @@
             </div>
         </div>
         
-        <!-- New three-column layout for cube, placeholder overview, and stacked overview cards -->
+        <!-- New three-column layout -->
         <div id="overview-section" style="display: flex; width: 100%;">
             <!-- Left Column: Cube Plot (40% width) -->
             <div id="cube-column" style="width: 40%;">
@@ -429,18 +446,19 @@
             </div>
             </div>
             
-            <!-- Middle Column: Placeholder Overview (45% width) -->
+            <!-- Middle Column: Stacked Overview Cards (15% width) -->
+            <div id="cards-column" style="width: 15%; padding: 0 10px;">
+            <!-- The overview cards will be populated here -->
+            <div id="overview"></div>
+            </div>
+            
+            <!-- Right Column: Overview Placeholder (45% width) -->
             <div id="placeholder-overview-column" style="width: 45%; padding: 0 10px;">
             <h3 class="text-center">Overview Placeholder</h3>
             <p class="text-center">(This section is reserved for additional summary info.)</p>
             </div>
-            
-            <!-- Right Column: Stacked Overview Cards (15% width) -->
-            <div id="stacked-cards-column" style="width: 15%; padding: 0 10px;">
-            <!-- This element will hold the overview cards -->
-            <div id="overview"></div>
-            </div>
         </div>
+  
   
 
         <div id="scenarioSection" class="scenario-section">
@@ -793,6 +811,7 @@
                     <b>Type:</b> ${p.isParent ? 'Parent' : 'Alternative'}<br>
                     <b>Position:</b> Focus/Ends: ${p.x.toFixed(2)}, Sacrifice/Means: ${p.y.toFixed(2)}, Character: ${p.z.toFixed(2)}
                 `),
+
                 hoverinfo: 'text',
                 showlegend: false
             });
@@ -1111,24 +1130,24 @@
 
 
         function populateOverview(data) {
-            const overviewDiv = document.getElementById('overview'); // This is now inside #stacked-cards-column
-            if (!Array.isArray(data)) { 
-                data = [data]; 
+            const overviewDiv = document.getElementById('overview'); // Now inside the middle column (#cards-column)
+            if (!Array.isArray(data)) {
+                data = [data];
             }
-            // Sort so that parent scenarios come first (if needed)
+            // Sort as needed (e.g., parent scenarios first)
             data.sort((a, b) => (b.isParent ? 1 : 0) - (a.isParent ? 1 : 0));
-            // Limit to 5 cards (if more are selected, take only the first 5)
+            // Limit to 5 cards maximum
             data = data.slice(0, 5);
             
             // Build each overview card.
-            // Note: We remove any "Position" display here.
+            // The header now shows the title with a link (if available), and in a <small> tag the model and category badge.
             const cards = data.map(item => `
                 <div class="comparison-card">
-                    <h4 style="margin: 0; padding: 0;">
+                    <h4>
                         ${getScenarioTitle(item)}
                         <small>(${item.llmName} ${getCategoryBadge(item.overallCategory)})</small>
                     </h4>
-                    <p class="scenario-description" style="margin: 0;">
+                    <p class="scenario-description">
                         <span class="description-text">
                             ${item.scenarioDescription || 'No description available'}
                         </span>
@@ -1138,8 +1157,9 @@
             `).join('');
             
             overviewDiv.innerHTML = cards;
-            checkDescriptions(); // Check if "read more" is needed
+            checkDescriptions();
         }
+
 
 
 
@@ -1504,17 +1524,18 @@
 
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('read-more')) {
-                // Find the closest scenario-description container
-                const container = e.target.closest('.scenario-description');
-                container.classList.toggle('expanded');
-                // Toggle the link text
-                if (container.classList.contains('expanded')) {
+                // Find the parent card (.comparison-card)
+                const card = e.target.closest('.comparison-card');
+                card.classList.toggle('expanded');
+                // Update the link text accordingly
+                if (card.classList.contains('expanded')) {
                     e.target.textContent = 'Show less';
                 } else {
                     e.target.textContent = 'Read more';
                 }
             }
         });
+
 
 
 
