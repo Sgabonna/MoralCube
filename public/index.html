@@ -464,9 +464,9 @@
             
             <!-- Right Column: Overview Placeholder for Video/Website -->
             <div id="placeholder-overview-column" style="width: 45%; padding: 0 10px; display: flex; flex-direction: column; height: 300px;">
-                <div id="media-placeholder" style="flex-grow: 1; border: none;"></div>
+                <div id="media-placeholder" style="flex-grow: 1; border: none; overflow: hidden;"></div>
                 <button id="open-media" class="btn btn-secondary btn-sm mt-2" style="width: 100%;">Open in New Window</button>
-            </div>
+            </div>  
         </div>
   
   
@@ -874,17 +874,17 @@
         }
 
        // === updateVisualization() Function ===
-        function updateVisualization() {
+       function updateVisualization() {
             let filteredPoints = dataPoints;
             
-            // Clear highlights.
+            // --- Clear highlights for relevant options and filter badges ---
             document.querySelectorAll('.relevant-option').forEach(el => el.classList.remove('relevant-option'));
             document.querySelectorAll('.filter-badge').forEach(badge => {
                 badge.classList.remove('relevant-badge');
                 badge.style.display = 'inline-block';
             });
 
-            // Apply moral category filter (if not showing all).
+            // --- Apply moral category filter (if not showing all) ---
             if (activeCategories.size !== 6) {
                 filteredPoints = filteredPoints.filter(point =>
                 activeCategories.has(normalizeCategory(point.overallCategory))
@@ -907,12 +907,12 @@
                 });
             }
 
-            // Apply Category Type Filter.
+            // --- Apply Category Type Filter ---
             if (selectedCategories.length > 0) {
                 filteredPoints = filteredPoints.filter(point => selectedCategories.includes(point.category));
             }
 
-            // Apply Scenario Filter.
+            // --- Apply Scenario Filter ---
             if (selectedScenarios.length > 0) {
                 filteredPoints = filteredPoints.filter(point =>
                 selectedScenarios.includes(point.scenarioTitle)
@@ -931,7 +931,7 @@
                 });
             }
 
-            // Apply Model Filter.
+            // --- Apply Model Filter ---
             if (selectedModels.length > 0) {
                 filteredPoints = filteredPoints.filter(point => selectedModels.includes(point.llmName));
                 
@@ -948,7 +948,7 @@
                 });
             }
 
-            // Update category badges.
+            // --- Update category badges ---
             const relCats = new Set(filteredPoints.map(point => normalizeCategory(point.overallCategory)));
             document.querySelectorAll('.filter-badge').forEach(badge => {
                 const cat = badge.dataset.category;
@@ -958,7 +958,7 @@
                 }
             });
 
-            // Update alternate outcomes dropdown.
+            // --- Update alternate outcomes dropdown ---
             const altOutcomes = document.getElementById('alternateOutcomes');
             if (selectedScenarios.length === 1 && selectedModels.length === 1) {
                 const parentScenario = selectedScenarios[0];
@@ -988,7 +988,7 @@
                 altOutcomes.style.opacity = '0.5';
             }
             
-            // If exactly one scenario and one model are selected, include alternate outcomes.
+            // --- If exactly one scenario and one model are selected, include alternate outcomes ---
             if (selectedScenarios.length === 1 && selectedModels.length === 1) {
                 const parentScenarioTitle = selectedScenarios[0];
                 const selModel = selectedModels[0];
@@ -1000,7 +1000,7 @@
                 }
             }
 
-            // Update available categories in the category filter.
+            // --- Update available categories in the category filter ---
             const filtCategories = new Set(filteredPoints.map(p => p.category));
             document.querySelectorAll('#categoryFilter option').forEach(option => {
                 if (filtCategories.has(option.value)) {
@@ -1017,20 +1017,23 @@
                 return;
             }
 
-            // Build the shared color mapping from unique scenario titles.
+            // --- Build the shared color mapping from unique scenario titles ---
             const uniqueScenarioTitles = [...new Set(filteredPoints.map(p => p.scenarioTitle))];
             scenarioColorMapping = {};
             uniqueScenarioTitles.forEach((title, index) => {
                 scenarioColorMapping[title] = sharedBorderColors[index % sharedBorderColors.length];
             });
+            console.log("Shared color mapping:", scenarioColorMapping);
 
-            // Update overview cards and scenario details.
+            // --- Update overview cards and scenario details ---
             if (selectedScenarios.length > 0) {
                 const compData = filteredPoints.filter(point => selectedScenarios.includes(point.scenarioTitle));
                 populateOverview(compData);
                 populateScenarioDetails(compData);
             } else if (selectedModels.length === 2) {
-                const compData = selectedModels.map(model => filteredPoints.find(point => point.llmName === model)).filter(Boolean);
+                const compData = selectedModels.map(model =>
+                filteredPoints.find(point => point.llmName === model)
+                ).filter(Boolean);
                 populateOverview(compData);
                 populateScenarioDetails(compData);
             } else {
@@ -1038,7 +1041,7 @@
                 populateScenarioDetails(filteredPoints[0]);
             }
 
-            // Create the 3D plot.
+            // --- Create the 3D plot ---
             const xValues = filteredPoints.map(point => point.x);
             const yValues = filteredPoints.map(point => point.z);
             const zValues = filteredPoints.map(point => point.y);
@@ -1067,6 +1070,7 @@
                     color: filteredPoints.map(p => getColorByCategory(p.overallCategory)),
                     opacity: 0.8,
                     line: {
+                    // Use our shared color mapping for marker borders.
                     color: filteredPoints.map(p => scenarioColorMapping[p.scenarioTitle] || '#000'),
                     width: filteredPoints.map(p => p.isParent ? 2 : 1)
                     }
@@ -1097,9 +1101,10 @@
                 responsive: true
             });
 
-        // Update the media placeholder with the selected scenario's media URL.
-        updateSelectedMedia();
-        }
+            // --- Update the media placeholder with the selected scenario's media URL ---
+            updateSelectedMedia();
+            }
+
 
     
         function checkDescriptions() {
