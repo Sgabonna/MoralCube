@@ -260,6 +260,12 @@
             margin-bottom: 20px;
         }
 
+        #media-placeholder {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+
         .comparison-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -456,10 +462,10 @@
             <div id="overview"></div>
             </div>
             
-            <!-- Right Column: Overview Placeholder (45% width) -->
+            <!-- Right Column: Overview Placeholder for Video/Website -->
             <div id="placeholder-overview-column" style="width: 45%; padding: 0 10px;">
-            <h3 class="text-center">Overview Placeholder</h3>
-            <p class="text-center">(This section is reserved for additional summary info.)</p>
+                <iframe id="media-placeholder" style="width: 100%; height: 300px; border: none;" src=""></iframe>
+                <button id="open-media" class="btn btn-secondary btn-sm mt-2" style="width: 100%;">Open in New Window</button>
             </div>
         </div>
   
@@ -472,7 +478,7 @@
             </div>
         </div>
     </div>
-
+    
     <script>
         // Initialize global variables
         let dataPoints = [];
@@ -838,7 +844,20 @@
                 responsive: true
             });
         }
-        
+        // Example: Update media display when a scenario is selected.
+        function updateSelectedMedia() {
+        // Assuming you have a selected scenario and it has a media URL.
+        if (selectedScenarios.length === 1) {
+            const scenario = dataPoints.find(p => p.scenarioTitle === selectedScenarios[0]);
+            if (scenario && scenario.url) {
+            updateMediaDisplay(scenario.url);
+            } else {
+            updateMediaDisplay("");
+            }
+        } else {
+            updateMediaDisplay("");
+        }
+        }
         function updateFilters() {
             // Model filter
             const modelFilter = document.getElementById('modelFilter');
@@ -1117,7 +1136,20 @@
                 responsive: true
             });
         }
-
+        // Example: Update media display when a scenario is selected.
+        function updateSelectedMedia() {
+        // Assuming you have a selected scenario and it has a media URL.
+        if (selectedScenarios.length === 1) {
+            const scenario = dataPoints.find(p => p.scenarioTitle === selectedScenarios[0]);
+            if (scenario && scenario.url) {
+            updateMediaDisplay(scenario.url);
+            } else {
+            updateMediaDisplay("");
+            }
+        } else {
+            updateMediaDisplay("");
+        }
+        }
         function checkDescriptions() {
             document.querySelectorAll('.scenario-description').forEach(function(desc) {
                 const textEl = desc.querySelector('.description-text');
@@ -1163,11 +1195,15 @@
             overviewDiv.innerHTML = cards;
             checkDescriptions();
         }
-
-
-
-
-
+        function updateMediaDisplay(url) {
+            const iframe = document.getElementById('media-placeholder');
+            if (iframe && url) {
+                iframe.src = url;
+            } else {
+                // Optionally, clear or set a default if no URL provided.
+                iframe.src = "";
+            }
+        }
 
         function getScenarioTitle(data) {
             if (data.url) {
@@ -1392,6 +1428,12 @@
             document.getElementById('alternateOutcomes').innerHTML = '<option disabled>Select a model to see alternate outcomes</option>';
             selectedModels = [];
             updateVisualization();
+        });
+        document.getElementById('open-media').addEventListener('click', function() {
+            const iframe = document.getElementById('media-placeholder');
+            if (iframe && iframe.src) {
+                window.open(iframe.src, '_blank');
+            }
         });
 
 
