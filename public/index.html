@@ -844,19 +844,18 @@
                 responsive: true
             });
         }
-        // Example: Update media display when a scenario is selected.
+        // This function finds the parent scenario from selectedScenarios and updates the media display.
         function updateSelectedMedia() {
-        // Assuming you have a selected scenario and it has a media URL.
         if (selectedScenarios.length === 1) {
-            const scenario = dataPoints.find(p => p.scenarioTitle === selectedScenarios[0]);
+            // Find the scenario in dataPoints whose title matches the selected scenario.
+            const scenario = dataPoints.find(p => p.scenarioTitle === selectedScenarios[0] && p.isParent);
             if (scenario && scenario.url) {
             updateMediaDisplay(scenario.url);
-            } else {
-            updateMediaDisplay("");
+            return;
             }
-        } else {
-            updateMediaDisplay("");
         }
+        // If no scenario is selected or no URL found, clear the display.
+        updateMediaDisplay("");
         }
         function updateFilters() {
             // Model filter
@@ -1136,20 +1135,32 @@
                 responsive: true
             });
         }
-        // Example: Update media display when a scenario is selected.
         function updateSelectedMedia() {
-        // Assuming you have a selected scenario and it has a media URL.
-        if (selectedScenarios.length === 1) {
-            const scenario = dataPoints.find(p => p.scenarioTitle === selectedScenarios[0]);
-            if (scenario && scenario.url) {
-            updateMediaDisplay(scenario.url);
-            } else {
+            // Check that exactly one scenario is selected
+            if (selectedScenarios.length === 1) {
+                // Find the scenario (it may be a parent or alternative)
+                let scenario = dataPoints.find(p => p.scenarioTitle === selectedScenarios[0]);
+                if (scenario) {
+                // If it's an alternative, try to find its parent scenario using parentId
+                if (!scenario.isParent && scenario.parentId) {
+                    const parentScenario = dataPoints.find(p => p.id === scenario.parentId);
+                    if (parentScenario && parentScenario.url) {
+                    updateMediaDisplay(parentScenario.url);
+                    return;
+                    }
+                }
+                // If it's a parent (or parent's not found), use its own URL if available
+                if (scenario.url) {
+                    updateMediaDisplay(scenario.url);
+                    return;
+                }
+                }
+            }
+            // If no appropriate URL is found, clear the media display
             updateMediaDisplay("");
             }
-        } else {
-            updateMediaDisplay("");
-        }
-        }
+
+
         function checkDescriptions() {
             document.querySelectorAll('.scenario-description').forEach(function(desc) {
                 const textEl = desc.querySelector('.description-text');
@@ -1195,14 +1206,14 @@
             overviewDiv.innerHTML = cards;
             checkDescriptions();
         }
+        // This function updates the iframe's src.
         function updateMediaDisplay(url) {
-            const iframe = document.getElementById('media-placeholder');
-            if (iframe && url) {
-                iframe.src = url;
-            } else {
-                // Optionally, clear or set a default if no URL provided.
-                iframe.src = "";
-            }
+        const iframe = document.getElementById('media-placeholder');
+        if (iframe && url) {
+            iframe.src = url;
+        } else if (iframe) {
+            iframe.src = ""; // Clear if no URL is provided.
+        }
         }
 
         function getScenarioTitle(data) {
