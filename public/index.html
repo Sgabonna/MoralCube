@@ -491,6 +491,9 @@
         let scenarioRelationships = new Map(); // Stores parent-child relationships
         let currentMediaUrl = "";
 
+        const sharedBorderColors = ["brown", "black", "grey", "tan", "white"];
+        let scenarioColorMapping = {};
+
 
         function normalizeCategory(category) {
             // Convert category to lowercase and replace spaces with underscores
@@ -767,17 +770,17 @@
         function createPlot(points) {
             const data = [
                 {
-                    type: 'mesh3d',
-                    x: [-8, 12, 12, -8, -8, 12, 12, -8],
-                    y: [0, 0, 0, 0, 8, 8, 8, 8],
-                    z: [-21.6, -21.6, 0, 0, -21.6, -21.6, 0, 0],
-                    i: [0, 0, 4, 4, 0, 0, 2, 2, 0, 1],
-                    j: [1, 2, 5, 6, 1, 5, 3, 7, 0, 2],
-                    k: [2, 3, 6, 7, 5, 4, 7, 6, 3, 3],
-                    opacity: 0.1,
-                    color: 'lightblue',
-                    showlegend: false,
-                    hoverinfo: 'none'
+                type: 'mesh3d',
+                x: [-8, 12, 12, -8, -8, 12, 12, -8],
+                y: [0, 0, 0, 0, 8, 8, 8, 8],
+                z: [-21.6, -21.6, 0, 0, -21.6, -21.6, 0, 0],
+                i: [0, 0, 4, 4, 0, 0, 2, 2, 0, 1],
+                j: [1, 2, 5, 6, 1, 5, 3, 7, 0, 2],
+                k: [2, 3, 6, 7, 5, 4, 7, 6, 3, 3],
+                opacity: 0.1,
+                color: 'lightblue',
+                showlegend: false,
+                hoverinfo: 'none'
                 }
             ];
 
@@ -786,21 +789,21 @@
             if (parentPoint && scenarioRelationships.has(parentPoint.scenarioTitle)) {
                 const childPoints = points.filter(p => !p.isParent);
                 childPoints.forEach(childPoint => {
-                    data.push({
-                        type: 'scatter3d',
-                        x: [parentPoint.x, childPoint.x],
-                        y: [parentPoint.z, childPoint.z],
-                        z: [parentPoint.y, childPoint.y],
-                        mode: 'lines',
-                        line: { color: '#666', width: 2, dash: 'dash' },
-                        hoverinfo: 'text',
-                        hovertext: `${parentPoint.scenarioTitle} → ${childPoint.scenarioTitle}`,
-                        showlegend: false
-                    });
+                data.push({
+                    type: 'scatter3d',
+                    x: [parentPoint.x, childPoint.x],
+                    y: [parentPoint.z, childPoint.z],
+                    z: [parentPoint.y, childPoint.y],
+                    mode: 'lines',
+                    line: { color: '#666', width: 2, dash: 'dash' },
+                    hoverinfo: 'text',
+                    hovertext: `${parentPoint.scenarioTitle} → ${childPoint.scenarioTitle}`,
+                    showlegend: false
+                });
                 });
             }
 
-            // Plot the data points
+            // Plot the data points (markers)
             data.push({
                 type: 'scatter3d',
                 x: points.map(p => p.x),
@@ -808,37 +811,36 @@
                 z: points.map(p => p.y),
                 mode: 'markers',
                 marker: {
-                    size: points.map(p => p.isParent ? 8 : 6),
-                    color: points.map(p => getColorByCategory(p.overallCategory)),
-                    opacity: 0.8,
-                    line: {
-                        color: points.map(p => getColorByCategory(p.overallCategory)),
-                        width: points.map(p => p.isParent ? 2 : 1)
-                    }
+                size: points.map(p => p.isParent ? 8 : 6),
+                // The marker fill color still comes from getColorByCategory,
+                // but now the marker line (border) uses our shared color mapping.
+                color: points.map(p => getColorByCategory(p.overallCategory)),
+                opacity: 0.8,
+                line: {
+                    color: points.map(p => scenarioColorMapping[p.scenarioTitle] || '#000'),
+                    width: points.map(p => p.isParent ? 2 : 1)
+                }
                 },
-
                 text: points.map(p => `
-                    <b>${p.scenarioTitle}</b><br>
-                    <b>Category:</b> ${p.overallCategory}<br>
-                    <b>Model:</b> ${p.llmName}<br>
-                    <b>Type:</b> ${p.isParent ? 'Parent' : 'Alternative'}<br>
-                    <b>Position:</b> Focus/Ends: ${p.x.toFixed(2)}, Sacrifice/Means: ${p.y.toFixed(2)}, Character: ${p.z.toFixed(2)}
+                <b>${p.scenarioTitle}</b><br>
+                <b>Category:</b> ${p.overallCategory}<br>
+                <b>Model:</b> ${p.llmName}<br>
+                <b>Type:</b> ${p.isParent ? 'Parent' : 'Alternative'}<br>
+                <b>Position:</b> Focus/Ends: ${p.x.toFixed(2)}, Sacrifice/Means: ${p.y.toFixed(2)}, Character: ${p.z.toFixed(2)}
                 `),
-
                 hoverinfo: 'text',
                 showlegend: false
             });
 
-
             const layout = {
                 margin: { l: 0, r: 0, b: 0, t: 0 },
                 scene: {
-                    xaxis: { title: 'Altruistic - Self Motivated', range: [-8, 12], titlefont:{size: 10} },
-                    yaxis: { title: 'Habit/Instinct - Will Power', range: [0, 8], titlefont:{size: 10} },
-                    zaxis: { title: 'Small Sacrifice - Large sacrifice', range: [-21.6, 0], titlefont:{size: 10} },
-                    camera: { eye: { x: 1.5, y: 1.5, z: 1.5 } },
-                    aspectmode: 'cube',
-                    aspectratio: { x: 1, y: 1, z: 1 }
+                xaxis: { title: 'Altruistic - Self Motivated', range: [-8, 12], titlefont: { size: 10 } },
+                yaxis: { title: 'Habit/Instinct - Will Power', range: [0, 8], titlefont: { size: 10 } },
+                zaxis: { title: 'Small Sacrifice - Large sacrifice', range: [-21.6, 0], titlefont: { size: 10 } },
+                camera: { eye: { x: 1.5, y: 1.5, z: 1.5 } },
+                aspectmode: 'cube',
+                aspectratio: { x: 1, y: 1, z: 1 }
                 }
             };
 
@@ -846,7 +848,8 @@
                 displayModeBar: false,
                 responsive: true
             });
-        }
+            }
+
 
         function updateFilters() {
             // Model filter
@@ -1046,6 +1049,14 @@
                 return;
             }
 
+            // Build a mapping from scenarioTitle to a fixed border color
+            const uniqueScenarioTitles = [...new Set(filteredPoints.map(p => p.scenarioTitle))];
+            scenarioColorMapping = {};
+            uniqueScenarioTitles.forEach((title, index) => {
+            scenarioColorMapping[title] = sharedBorderColors[index % sharedBorderColors.length];
+            });
+
+
             // Update visualization based on filtered points
             if (selectedScenarios.length > 0) {
                 const comparisonData = filteredPoints.filter(point => 
@@ -1145,19 +1156,17 @@
 
 
         function populateOverview(data) {
-            const overviewDiv = document.getElementById('overview'); // Now inside the middle column (#cards-column)
+            const overviewDiv = document.getElementById('overview');
             if (!Array.isArray(data)) {
                 data = [data];
             }
-            // Sort as needed (e.g., parent scenarios first)
+            // Sort and limit cards as before
             data.sort((a, b) => (b.isParent ? 1 : 0) - (a.isParent ? 1 : 0));
-            // Limit to 5 cards maximum
             data = data.slice(0, 5);
             
-            // Build each overview card.
-            // The header now shows the title with a link (if available), and in a <small> tag the model and category badge.
+            // Build each overview card using the shared color from the mapping
             const cards = data.map(item => `
-                <div class="comparison-card" style="border: 2px solid ${getColorByCategory(item.overallCategory)};">
+                <div class="comparison-card" style="border: 2px solid ${scenarioColorMapping[item.scenarioTitle] || '#000'};">
                     <h4>
                         ${getScenarioTitle(item)}
                         <small>(${item.llmName} ${getCategoryBadge(item.overallCategory)})</small>
@@ -1170,7 +1179,6 @@
                     </p>
                 </div>
             `).join('');
-
             
             overviewDiv.innerHTML = cards;
             checkDescriptions();
