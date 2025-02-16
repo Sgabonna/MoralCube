@@ -253,8 +253,8 @@
             opacity: 0;
             position: absolute;
             bottom: 150%;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 0;  /* Changed from 50% to 0 */
+            transform: translateX(0);  /* Removed translateX */
             padding: 8px 12px;
             background-color: #2d3748;
             color: white;
@@ -280,8 +280,8 @@
             content: "";
             position: absolute;
             top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 10px;  /* Changed from 50% to 10px */
+            transform: translateX(0);  /* Removed translateX */
             border-width: 6px;
             border-style: solid;
             border-color: #2d3748 transparent transparent transparent;
@@ -296,6 +296,17 @@
         td {
             position: relative;
             overflow: visible !important;
+        }
+
+        /* Right side tooltip adjustment */
+        .tooltip-container:last-child .tooltip-content {
+            left: auto;
+            right: 0;
+        }
+
+        .tooltip-container:last-child .tooltip-content::after {
+            left: auto;
+            right: 10px;
         }
 
         /* Prevent tooltip from being cut off at the top of the viewport */
@@ -512,14 +523,6 @@
                 <p class="text-center mb-2"><a href="https://www.youtube.com/watch?v=hauuDOrZQ1o">Click here to learn more about the Moral Cube</a></p>
             </div>
         </div>
-        <div style="margin: 50px;">
-            Test Tooltip:
-            <span class="tooltip">
-              <i class="fas fa-info-circle info-icon"></i>
-              <span class="tooltiptext" style="max-width:300px;">This is a test tooltip.</span>
-            </span>
-          </div>
-          
         <div class="filter-section">
             <div class="filter-group category-filter-group">
                 <label for="categoryFilter">Filter by Category Type:</label>
