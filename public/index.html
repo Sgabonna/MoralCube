@@ -253,8 +253,7 @@
             opacity: 0;
             position: absolute;
             bottom: 150%;
-            left: 0;  /* Changed from 50% to 0 */
-            transform: translateX(0);  /* Removed translateX */
+            left: 0;
             padding: 8px 12px;
             background-color: #2d3748;
             color: white;
@@ -270,6 +269,25 @@
             text-align: left;
         }
 
+        /* Info tooltip (first tooltip) */
+        .tooltip-container:first-child .tooltip-content {
+            left: 0;
+        }
+
+        .tooltip-container:first-child .tooltip-content::after {
+            left: 10px;
+        }
+
+        /* Question tooltip (second tooltip) */
+        .tooltip-container:last-child .tooltip-content {
+            right: auto;
+            left: -150px; /* Adjust this value as needed */
+        }
+
+        .tooltip-container:last-child .tooltip-content::after {
+            left: 160px; /* Adjust this value to match the tooltip position */
+        }
+
         .tooltip-container:hover .tooltip-content {
             visibility: visible;
             opacity: 1;
@@ -280,8 +298,7 @@
             content: "";
             position: absolute;
             top: 100%;
-            left: 10px;  /* Changed from 50% to 10px */
-            transform: translateX(0);  /* Removed translateX */
+            transform: translateX(0);
             border-width: 6px;
             border-style: solid;
             border-color: #2d3748 transparent transparent transparent;
@@ -296,17 +313,6 @@
         td {
             position: relative;
             overflow: visible !important;
-        }
-
-        /* Right side tooltip adjustment */
-        .tooltip-container:last-child .tooltip-content {
-            left: auto;
-            right: 0;
-        }
-
-        .tooltip-container:last-child .tooltip-content::after {
-            left: auto;
-            right: 10px;
         }
 
         /* Prevent tooltip from being cut off at the top of the viewport */
