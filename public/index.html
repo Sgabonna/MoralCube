@@ -224,7 +224,23 @@
             visibility: visible;
             opacity: 1;
         }
-
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            opacity: 0;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 4px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: opacity 0.3s;
+            white-space: nowrap;
+            font-size: 0.75rem;
+        }
         .tooltiptext {
             visibility: hidden;
             opacity: 0;
@@ -503,7 +519,127 @@
         // Mapping from scenario title to a fixed border color.
         let scenarioColorMapping = {};
 
+        const surveyQuestions = [
+            {
+                short: "Societal Needs",
+                info: "If needs are essential elements to ensure survival and growth (e.g., food, water, security, love), then societal needs are essential for the survival and growth of a society. Societal needs include maintaining justice, fairness, and trust in social institutions (e.g., don’t lie, keep promises, don’t steal, help others, uphold justice, avoid cruelty). When these societal needs are met, societies function harmoniously, promoting the well-being of individuals within them.",
+                question: "To what extent was the action focused on fulfilling societal needs such as justice, fairness, equality, respect for persons, or promoting the common good?"
+            },
+            {
+                short: "Others’ Needs",
+                info: "Needs are often necessary for survival or fulfilling a core purpose. When essential needs (e.g., hunger, safety, belonging) are not met, there is an increase in unpleasant sensations. Meeting these needs reduces discomfort and ensures survival and well-being. This question focuses on whether the action was aimed at fulfilling others' essential needs.",
+                question: "To what extent was the action focused on fulfilling others' needs related to physiology, safety, love/belonging, esteem, or self-actualization?"
+            },
+            {
+                short: "Others’ Wants",
+                info: "Wants are often tied to increasing pleasant sensations or achieving rewards and favourable outcomes. They are not essential for survival but often relate to desires for financial gain, recognition, or status. This question focuses on whether the action was aimed at fulfilling others' non-essential wants.",
+                question: "To what extent was the action focused on fulfilling others' wants such as financial gain, social recognition, praise, power, appearance, conformity, reward, competition, or security?"
+            },
+            {
+                short: "Personal Needs",
+                info: "Needs are often essential for personal survival or fulfilling a core purpose. When these needs are unmet, unpleasant sensations arise (e.g., hunger, lack of security or belonging). Meeting personal needs reduces this discomfort. This question focuses on whether the action was primarily aimed at fulfilling personal essential needs.",
+                question: "To what degree was the action motivated by fulfilling essential personal needs such as safety, physiological survival, or self-actualisation?"
+            },
+            {
+                short: "Personal Wants",
+                info: "Wants are most often tied to desires for rewards or pleasant sensations, beyond essential needs. These can include financial gain, praise, or social recognition. This question assesses whether the action was motivated by fulfilling personal non-essential wants.",
+                question: "To what extent was the action focused on fulfilling personal wants such as financial gain, social recognition, praise, power, appearance, conformity, reward, competition, or security?"
+            },
+            {
+                short: "Future Self-Sacrifice",
+                info: "Our future selves don’t exist yet and morally speaking would be considered an “other”, treated as an agent yet to come. When we make decisions that negatively impact our future, it is similar to making a decision that impacts another person’s future morally speaking. With this in mind evaluate the level of sacrifice affecting the future self, including future versions of oneself, cumulative identity, long-term values, and future aspirations. This encompasses actions that impact deeply held values, long-term plans, fundamental life goals, health, or personal well-being.",
+                question: "To what extent did the action require sacrifices that impact the future self? Consider aspects like future plans, core values, psychological wellbeing, life goals, elements of personal identity and legacy, health, and long-term well-being."
+            },
+            {
+                short: "Number of Individuals Affected",
+                info: "",
+                question: "How many people were impacted by the sacrifice or harm?"
+            },
+            {
+                short: "Type of Sacrifice",
+                info: "",
+                question: "What was the severity of the impact on each individual in terms of what they lost (time, money, resources, freedom, life)?"
+            },
+            {
+                short: "Duration of Sacrifice",
+                info: "",
+                question: "How long do you think the sacrifice affected the individuals involved (short-term vs. long-term impact)?"
+            },
+            {
+                short: "Magnitude of Life Impacted",
+                info: "Evaluate the magnitude of the sacrifice based on the type of life impacted. Smaller organisms like bacteria and insects are assigned lower values, while more complex and sentient life forms, such as animals and humans, are assigned higher values. Additionally, consider the vulnerability of individuals; for example, children or disabled humans may have a slightly higher weighting due to their increased dependency and reduced capacity to defend themselves.",
+                question: "To what extent did the action impact life, considering the type and vulnerability of the affected organism(s)? Use the following scale to assess the magnitude of impact per individual:"
+            },
+            {
+                short: "Unconscious vs. Conscious",
+                info: "Evaluate the individual’s level of awareness regarding their actions and their consequences. Consider whether the action was performed reflexively, partially consciously, or with full mindfulness.",
+                question: "To what extent was the individual conscious of their actions and consequences?"
+            },
+            {
+                short: "Degree of Present Self-Sacrifice",
+                info: "A component of Self-Control is self-sacrifice, as we don’t exercise self-control when we want to do something, only when we don’t want to. Evaluate the level of sacrifice affecting the immediate, present self. This includes sacrifices that impact short-term desires, impulses, and needs—such as loss of comfort, overcoming impulses, inconvenience, or minor financial costs.",
+                question: "To what extent did the action require sacrifices from the individual's present self? Consider aspects like immediate comfort, desires, impulses, convenience, minor financial expenditures, or brief emotional distress."
+            },
+            {
+                short: "Habitual vs. Willpower",
+                info: "Our actions exist somewhere on the spectrum from a habit to an exertion of will power. When we’re doing something for the first time, or when we don’t want to do something, we often require more will power. Noting that when we want to do something, or are chasing a desire, we also form habits. This question aims to reflect on whether the action was habitual or required will power, not differentiating between desire driven habits, or value aligned habits. Evaluate whether the individual acted out of ingrained habits or deliberate effort. Consider the effort required to override impulses or habitual behaviours.",
+                question: "To what extent was the action driven by willpower versus habitual responses?"
+            },
+            {
+                short: "Unintentional vs. Intentional",
+                info: "Our actions always have a measure of intentionality, was this what was being aimed at, was it influenced by unconscious intentions (desires), or was this a mistake (not intended at all). Assess whether the action was performed deliberately or occurred reflexively without deliberate thought.",
+                question: "To what extent was the action intentional?"
+            },
+            {
+                short: "Wills at Play",
+                info: "Within each person is a composition of Wills, or unconscious drivers, with fundamental wills working together as a Will to Survive which should sit at the heart of every life form, and from that will survive do second order Wills emerging. Within the Will to survive are drives such as the Will to Consume, the Will to Homeostasis, the Will to Replicate for example, and emerging from the Will to Survive are higher order drives that might aid in our placement within a Hierarchy, or ensure genetic continuity such as a Will to Status, or a Will to Reproduction, even a Will to Create. Each of these Wills are in constant competition for airtime, there are some associated with the biological impulses (lust, envy, gluttony), and some associated with virtue (will to abstain, will to patience, empathy). Reflecting on this idea, what Wills do you think might be influencing this scenario and why?",
+                question: "List the Wills and provide a one sentence justification as to why that Will might have influenced the scenario."
+            },
+            {
+                short: "Deontology",
+                info: "",
+                question: "In one paragraph could you explain why this action was right or wrong through a deontological lens?"
+            },
+            {
+                short: "Utilitarianism",
+                info: "",
+                question: "In two paragraphs could you explain why this action was right or wrong from a utilitarian and negative utilitarian perspective?"
+            },
+            {
+                short: "Virtue Ethics",
+                info: "",
+                question: "From an Aristotelian perspective could you explain what virtues or vices were at play within this action?"
+            }
+            ];
 
+        // Function to render the questions into the container
+        function renderSurveyQuestions() {
+        const container = document.getElementById('survey-questions');
+        if (!container) return; // if the container doesn't exist, exit
+        
+        surveyQuestions.forEach(q => {
+            const questionMarkup = `
+            <div class="question-container mb-3" style="font-size: 1rem;">
+                <strong>${q.short}</strong>
+                <!-- Info icon hover -->
+                ${q.info ? `
+                <span class="tooltip">
+                    <i class="fas fa-info-circle info-icon"></i>
+                    <span class="tooltiptext" style="max-width: 300px;">${q.info}</span>
+                </span>` : ''}
+                <!-- Question icon hover -->
+                ${q.question ? `
+                <span class="tooltip">
+                    <i class="fas fa-question-circle info-icon" style="margin-left: 0.5rem;"></i>
+                    <span class="tooltiptext" style="max-width: 300px;">${q.question}</span>
+                </span>` : ''}
+            </div>
+            `;
+            // Append the markup to the container
+            container.innerHTML += questionMarkup;
+        });
+        }
+        
 
 
         function normalizeCategory(category) {
@@ -1615,6 +1751,10 @@
                     e.target.textContent = 'Read more';
                 }
             }
+        });
+        // Call the render function when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+        renderSurveyQuestions();
         });
 
 
