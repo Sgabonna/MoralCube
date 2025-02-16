@@ -519,98 +519,81 @@
         // Mapping from scenario title to a fixed border color.
         let scenarioColorMapping = {};
 
-        const surveyQuestions = [
-            {
-                short: "Societal Needs",
+        const questionTooltips = {
+
+                "Societal Needs": {
                 info: "If needs are essential elements to ensure survival and growth (e.g., food, water, security, love), then societal needs are essential for the survival and growth of a society. Societal needs include maintaining justice, fairness, and trust in social institutions (e.g., don’t lie, keep promises, don’t steal, help others, uphold justice, avoid cruelty). When these societal needs are met, societies function harmoniously, promoting the well-being of individuals within them.",
                 question: "To what extent was the action focused on fulfilling societal needs such as justice, fairness, equality, respect for persons, or promoting the common good?"
             },
-            {
-                short: "Others’ Needs",
+                "Others’ Needs": {
                 info: "Needs are often necessary for survival or fulfilling a core purpose. When essential needs (e.g., hunger, safety, belonging) are not met, there is an increase in unpleasant sensations. Meeting these needs reduces discomfort and ensures survival and well-being. This question focuses on whether the action was aimed at fulfilling others' essential needs.",
                 question: "To what extent was the action focused on fulfilling others' needs related to physiology, safety, love/belonging, esteem, or self-actualization?"
             },
-            {
-                short: "Others’ Wants",
+                "Others’ Wants": {
                 info: "Wants are often tied to increasing pleasant sensations or achieving rewards and favourable outcomes. They are not essential for survival but often relate to desires for financial gain, recognition, or status. This question focuses on whether the action was aimed at fulfilling others' non-essential wants.",
                 question: "To what extent was the action focused on fulfilling others' wants such as financial gain, social recognition, praise, power, appearance, conformity, reward, competition, or security?"
             },
-            {
-                short: "Personal Needs",
+            "Personal Needs": {
                 info: "Needs are often essential for personal survival or fulfilling a core purpose. When these needs are unmet, unpleasant sensations arise (e.g., hunger, lack of security or belonging). Meeting personal needs reduces this discomfort. This question focuses on whether the action was primarily aimed at fulfilling personal essential needs.",
                 question: "To what degree was the action motivated by fulfilling essential personal needs such as safety, physiological survival, or self-actualisation?"
             },
-            {
-                short: "Personal Wants",
+            "Personal Wants": {
                 info: "Wants are most often tied to desires for rewards or pleasant sensations, beyond essential needs. These can include financial gain, praise, or social recognition. This question assesses whether the action was motivated by fulfilling personal non-essential wants.",
                 question: "To what extent was the action focused on fulfilling personal wants such as financial gain, social recognition, praise, power, appearance, conformity, reward, competition, or security?"
             },
-            {
-                short: "Future Self-Sacrifice",
+            "Future Self-Sacrifice": {
                 info: "Our future selves don’t exist yet and morally speaking would be considered an “other”, treated as an agent yet to come. When we make decisions that negatively impact our future, it is similar to making a decision that impacts another person’s future morally speaking. With this in mind evaluate the level of sacrifice affecting the future self, including future versions of oneself, cumulative identity, long-term values, and future aspirations. This encompasses actions that impact deeply held values, long-term plans, fundamental life goals, health, or personal well-being.",
                 question: "To what extent did the action require sacrifices that impact the future self? Consider aspects like future plans, core values, psychological wellbeing, life goals, elements of personal identity and legacy, health, and long-term well-being."
             },
-            {
-                short: "Number of Individuals Affected",
+            "Number of Individuals Affected": {
                 info: "",
                 question: "How many people were impacted by the sacrifice or harm?"
             },
-            {
-                short: "Type of Sacrifice",
+            "Type of Sacrifice": {
                 info: "",
                 question: "What was the severity of the impact on each individual in terms of what they lost (time, money, resources, freedom, life)?"
             },
-            {
-                short: "Duration of Sacrifice",
+            "Duration of Sacrifice": {
                 info: "",
                 question: "How long do you think the sacrifice affected the individuals involved (short-term vs. long-term impact)?"
             },
-            {
-                short: "Magnitude of Life Impacted",
+            "Magnitude of Life Impacted": {
                 info: "Evaluate the magnitude of the sacrifice based on the type of life impacted. Smaller organisms like bacteria and insects are assigned lower values, while more complex and sentient life forms, such as animals and humans, are assigned higher values. Additionally, consider the vulnerability of individuals; for example, children or disabled humans may have a slightly higher weighting due to their increased dependency and reduced capacity to defend themselves.",
                 question: "To what extent did the action impact life, considering the type and vulnerability of the affected organism(s)? Use the following scale to assess the magnitude of impact per individual:"
             },
-            {
-                short: "Unconscious vs. Conscious",
+            "Unconscious vs. Conscious": {
                 info: "Evaluate the individual’s level of awareness regarding their actions and their consequences. Consider whether the action was performed reflexively, partially consciously, or with full mindfulness.",
                 question: "To what extent was the individual conscious of their actions and consequences?"
             },
-            {
-                short: "Degree of Present Self-Sacrifice",
+            "Degree of Present Self-Sacrifice": {
                 info: "A component of Self-Control is self-sacrifice, as we don’t exercise self-control when we want to do something, only when we don’t want to. Evaluate the level of sacrifice affecting the immediate, present self. This includes sacrifices that impact short-term desires, impulses, and needs—such as loss of comfort, overcoming impulses, inconvenience, or minor financial costs.",
                 question: "To what extent did the action require sacrifices from the individual's present self? Consider aspects like immediate comfort, desires, impulses, convenience, minor financial expenditures, or brief emotional distress."
             },
-            {
-                short: "Habitual vs. Willpower",
+            "Habitual vs. Willpower": {
                 info: "Our actions exist somewhere on the spectrum from a habit to an exertion of will power. When we’re doing something for the first time, or when we don’t want to do something, we often require more will power. Noting that when we want to do something, or are chasing a desire, we also form habits. This question aims to reflect on whether the action was habitual or required will power, not differentiating between desire driven habits, or value aligned habits. Evaluate whether the individual acted out of ingrained habits or deliberate effort. Consider the effort required to override impulses or habitual behaviours.",
                 question: "To what extent was the action driven by willpower versus habitual responses?"
             },
-            {
-                short: "Unintentional vs. Intentional",
+            "Unintentional vs. Intentional": {
                 info: "Our actions always have a measure of intentionality, was this what was being aimed at, was it influenced by unconscious intentions (desires), or was this a mistake (not intended at all). Assess whether the action was performed deliberately or occurred reflexively without deliberate thought.",
                 question: "To what extent was the action intentional?"
             },
-            {
-                short: "Wills at Play",
+            "Wills at Play": {
                 info: "Within each person is a composition of Wills, or unconscious drivers, with fundamental wills working together as a Will to Survive which should sit at the heart of every life form, and from that will survive do second order Wills emerging. Within the Will to survive are drives such as the Will to Consume, the Will to Homeostasis, the Will to Replicate for example, and emerging from the Will to Survive are higher order drives that might aid in our placement within a Hierarchy, or ensure genetic continuity such as a Will to Status, or a Will to Reproduction, even a Will to Create. Each of these Wills are in constant competition for airtime, there are some associated with the biological impulses (lust, envy, gluttony), and some associated with virtue (will to abstain, will to patience, empathy). Reflecting on this idea, what Wills do you think might be influencing this scenario and why?",
                 question: "List the Wills and provide a one sentence justification as to why that Will might have influenced the scenario."
             },
-            {
-                short: "Deontology",
+            "Deontology": {
                 info: "",
                 question: "In one paragraph could you explain why this action was right or wrong through a deontological lens?"
             },
-            {
-                short: "Utilitarianism",
+            "Utilitarianism": {
                 info: "",
                 question: "In two paragraphs could you explain why this action was right or wrong from a utilitarian and negative utilitarian perspective?"
             },
-            {
-                short: "Virtue Ethics",
+            "Virtue Ethics": {
                 info: "",
                 question: "From an Aristotelian perspective could you explain what virtues or vices were at play within this action?"
             }
-            ];
+        };
 
         // Function to render the questions into the container
         function renderSurveyQuestions() {
@@ -1390,170 +1373,199 @@
         function normalizeCategory(category) {
             return category.toLowerCase().replace(/\s+/g, '_');
             }
-        function populateScenarioDetails(scenarioData) {
-            if (!Array.isArray(scenarioData)) {
-                scenarioData = [scenarioData];
-            }
-            const scenarioAccordion = document.getElementById('scenarioAccordion');
-
-            function getDimensionScore(scenario, dimensionId) {
-                if (!['Ends', 'Means', 'Character'].includes(dimensionId)) {
-                    return null;
+            function populateScenarioDetails(scenarioData) {
+                if (!Array.isArray(scenarioData)) {
+                    scenarioData = [scenarioData];
                 }
-                switch (dimensionId) {
-                    case 'Ends':
-                        return scenario.x.toFixed(2);
-                    case 'Means':
-                        return scenario.y.toFixed(2);
-                    case 'Character':
-                        return scenario.z.toFixed(2);
-                    default:
+                const scenarioAccordion = document.getElementById('scenarioAccordion');
+
+                function getDimensionScore(scenario, dimensionId) {
+                    if (!['Ends', 'Means', 'Character'].includes(dimensionId)) {
                         return null;
+                    }
+                    switch (dimensionId) {
+                        case 'Ends':
+                            return scenario.x.toFixed(2);
+                        case 'Means':
+                            return scenario.y.toFixed(2);
+                        case 'Character':
+                            return scenario.z.toFixed(2);
+                        default:
+                            return null;
+                    }
                 }
-            }
 
-            const dimensions = scenarioData[0].dimensions;
-            const dimensionContent = dimensions.map((dimension, dimIndex) => {
-                const dimensionId = `dimension${dimIndex}`;
-                const collapseId = `collapse${dimIndex}`;
-                
-                // Determine if this dimension is Philosophical Analysis.
-                // (Assumes dimension.id is set to "Philosophical Analysis" for that section)
-                const isPhilosophical = dimension.id.trim().toLowerCase() === 'philosophical analysis';
+                const dimensions = scenarioData[0].dimensions;
+                const dimensionContent = dimensions.map((dimension, dimIndex) => {
+                    const dimensionId = `dimension${dimIndex}`;
+                    const collapseId = `collapse${dimIndex}`;
+                    
+                    // Determine if this dimension is Philosophical Analysis.
+                    // (Assumes dimension.id is set to "Philosophical Analysis" for that section)
+                    const isPhilosophical = dimension.id.trim().toLowerCase() === 'philosophical analysis';
 
-                const scenarioTables = scenarioData.map((scenario) => {
-                    const currentDimension = scenario.dimensions[dimIndex];
-                    const dimensionScore = getDimensionScore(scenario, dimension.id);
-                    const scoreDisplay = dimensionScore !== null && ['Ends', 'Means', 'Character'].includes(dimension.id)
-                        ? ` (${dimension.id} Score: ${dimensionScore})`
-                        : '';
+                    const scenarioTables = scenarioData.map((scenario) => {
+                        const currentDimension = scenario.dimensions[dimIndex];
+                        const dimensionScore = getDimensionScore(scenario, dimension.id);
+                        const scoreDisplay = dimensionScore !== null && ['Ends', 'Means', 'Character'].includes(dimension.id)
+                            ? ` (${dimension.id} Score: ${dimensionScore})`
+                            : '';
 
-                    // Build table rows; if Philosophical, skip the Range cell.
-                    const questionRows = currentDimension.questions.map((q, qIndex) => {
-                        let range = "N/A";
-                        if (!isPhilosophical) {
-                            if (dimension.id === 'Ends') {
-                                // Ends dimension (Questions 1-5):
-                                // Q1-Q3: "0 to 4", Q4-Q5: "0 to -4"
-                                range = qIndex < 3 ? "0 to 4" : "0 to -4";
-                            } else if (dimension.id === 'Means') {
-                                // Means dimension (Questions 6-10):
-                                switch(qIndex) {
-                                    case 0: range = "0 to -4"; break;
-                                    case 1: range = "0 to -6"; break;
-                                    case 2: range = "0 to -4"; break;
-                                    case 3: range = "0 to -4"; break;
-                                    case 4: range = "0.01 to 1.2"; break;
-                                    default: range = "N/A";
-                                }
-                            } else if (dimension.id === 'Character') {
-                                // Character dimension (Questions 11-18):
-                                switch(qIndex) {
-                                    case 0: range = "0 to 1"; break;
-                                    case 1: range = "0 to 2"; break;
-                                    case 2: range = "0 to 4"; break;
-                                    case 3: range = "0 to 1"; break;
-                                    default: range = "N/A";
+                        // Build table rows; modify the first cell to include tooltip icons.
+                        const questionRows = currentDimension.questions.map((q, qIndex) => {
+                            let range = "N/A";
+                            if (!isPhilosophical) {
+                                if (dimension.id === 'Ends') {
+                                    // Ends dimension (Questions 1-5):
+                                    // Q1-Q3: "0 to 4", Q4-Q5: "0 to -4"
+                                    range = qIndex < 3 ? "0 to 4" : "0 to -4";
+                                } else if (dimension.id === 'Means') {
+                                    // Means dimension (Questions 6-10):
+                                    switch(qIndex) {
+                                        case 0: range = "0 to -4"; break;
+                                        case 1: range = "0 to -6"; break;
+                                        case 2: range = "0 to -4"; break;
+                                        case 3: range = "0 to -4"; break;
+                                        case 4: range = "0.01 to 1.2"; break;
+                                        default: range = "N/A";
+                                    }
+                                } else if (dimension.id === 'Character') {
+                                    // Character dimension (Questions 11-18):
+                                    switch(qIndex) {
+                                        case 0: range = "0 to 1"; break;
+                                        case 1: range = "0 to 2"; break;
+                                        case 2: range = "0 to 4"; break;
+                                        case 3: range = "0 to 1"; break;
+                                        default: range = "N/A";
+                                    }
                                 }
                             }
-                        }
+                            
+                            // Look up tooltips based on the question text (adjust key if needed)
+                            const tooltip = questionTooltips[q.question] || null;
+
+                            if (isPhilosophical) {
+                                return `
+                                    <tr>
+                                        <td>
+                                            ${q.question}
+                                            ${tooltip ? `
+                                            <span class="tooltip">
+                                                <i class="fas fa-info-circle info-icon"></i>
+                                                <span class="tooltiptext" style="max-width:300px;">${tooltip.info}</span>
+                                            </span>
+                                            <span class="tooltip">
+                                                <i class="fas fa-question-circle info-icon" style="margin-left:0.5rem;"></i>
+                                                <span class="tooltiptext" style="max-width:300px;">${tooltip.question}</span>
+                                            </span>
+                                            ` : ''}
+                                        </td>
+                                        <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
+                                        <td>${q.justification}</td>
+                                    </tr>
+                                `;
+                            } else {
+                                return `
+                                    <tr>
+                                        <td>
+                                            ${q.question}
+                                            ${tooltip ? `
+                                            <span class="tooltip">
+                                                <i class="fas fa-info-circle info-icon"></i>
+                                                <span class="tooltiptext" style="max-width:300px;">${tooltip.info}</span>
+                                            </span>
+                                            <span class="tooltip">
+                                                <i class="fas fa-question-circle info-icon" style="margin-left:0.5rem;"></i>
+                                                <span class="tooltiptext" style="max-width:300px;">${tooltip.question}</span>
+                                            </span>
+                                            ` : ''}
+                                        </td>
+                                        <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
+                                        <td>${range}</td>
+                                        <td>${q.justification}</td>
+                                    </tr>
+                                `;
+                            }
+                        }).join('');
+
+                        // Build colgroup and header based on whether we show the range column.
+                        let colgroupHTML, headerHTML;
                         if (isPhilosophical) {
-                            return `
+                            colgroupHTML = `
+                                <col style="width:25%;"> <!-- Question -->
+                                <col style="width:25%;"> <!-- Score -->
+                                <col style="width:50%;"> <!-- Justification -->
+                            `;
+                            headerHTML = `
                                 <tr>
-                                    <td>${q.question}</td>
-                                    <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
-                                    <td>${q.justification}</td>
+                                    <th>Question</th>
+                                    <th>Score</th>
+                                    <th>Justification</th>
                                 </tr>
                             `;
                         } else {
-                            return `
+                            colgroupHTML = `
+                                <col style="width:10%;"> <!-- Question column reduced by 10% -->
+                                <col style="width:10%;">   <!-- Score column -->
+                                <col style="width:12.5%;"> <!-- Range column increased by 10% -->
+                                <col style="width:70%;">   <!-- Justification column -->
+                            `;
+                            headerHTML = `
                                 <tr>
-                                    <td>${q.question}</td>
-                                    <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
-                                    <td>${range}</td>
-                                    <td>${q.justification}</td>
+                                    <th>Question</th>
+                                    <th>Score</th>
+                                    <th>Range</th>
+                                    <th>Justification</th>
                                 </tr>
                             `;
                         }
+
+                        return `
+                            <div class="col-md-${scenarioData.length === 1 ? '12' : '6'} scenario-table-container">
+                                <h5 class="mb-3">${scenario.scenarioTitle} (${scenario.llmName})${scoreDisplay}</h5>
+                                <table class="table table-bordered compact-table">
+                                    <colgroup>
+                                        ${colgroupHTML}
+                                    </colgroup>
+                                    <thead>
+                                        ${headerHTML}
+                                    </thead>
+                                    <tbody>
+                                        ${questionRows}
+                                    </tbody>
+                                </table>
+                            </div>
+                        `;
                     }).join('');
 
-                    // Build colgroup and header based on whether we show the range column.
-                    let colgroupHTML, headerHTML;
-                    if (isPhilosophical) {
-                        colgroupHTML = `
-                            <col style="width:25%;"> <!-- Question -->
-                            <col style="width:25%;"> <!-- Score -->
-                            <col style="width:50%;"> <!-- Justification -->
-                        `;
-                        headerHTML = `
-                            <tr>
-                                <th>Question</th>
-                                <th>Score</th>
-                                <th>Justification</th>
-                            </tr>
-                        `;
-                    } else {
-                        colgroupHTML = `
-                            <col style="width:10%;"> <!-- Question column reduced by 10% -->
-                            <col style="width:10%;">   <!-- Score column -->
-                            <col style="width:12.5%;"> <!-- Range column increased by 10% -->
-                            <col style="width:70%;">   <!-- Justification column -->
-                        `;
-                        headerHTML = `
-                            <tr>
-                                <th>Question</th>
-                                <th>Score</th>
-                                <th>Range</th>
-                                <th>Justification</th>
-                            </tr>
-                        `;
-                    }
-
                     return `
-                        <div class="col-md-${scenarioData.length === 1 ? '12' : '6'} scenario-table-container">
-                            <h5 class="mb-3">${scenario.scenarioTitle} (${scenario.llmName})${scoreDisplay}</h5>
-                            <table class="table table-bordered compact-table">
-                                <colgroup>
-                                    ${colgroupHTML}
-                                </colgroup>
-                                <thead>
-                                    ${headerHTML}
-                                </thead>
-                                <tbody>
-                                    ${questionRows}
-                                </tbody>
-                            </table>
+                        <div class="card">
+                            <div class="card-header" id="${dimensionId}-header">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link ${dimIndex === 0 ? '' : 'collapsed'}" 
+                                            type="button" 
+                                            data-toggle="collapse" 
+                                            data-target="#${collapseId}">
+                                        <strong>${dimension.id} (${dimension.label})</strong>
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="${collapseId}" 
+                                class="collapse ${dimIndex === 0 ? 'show' : ''}" 
+                                data-parent="#scenarioAccordion">
+                                <div class="card-body">
+                                    <div class="row">
+                                        ${scenarioTables}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     `;
                 }).join('');
 
-                return `
-                    <div class="card">
-                        <div class="card-header" id="${dimensionId}-header">
-                            <h2 class="mb-0">
-                                <button class="btn btn-link ${dimIndex === 0 ? '' : 'collapsed'}" 
-                                        type="button" 
-                                        data-toggle="collapse" 
-                                        data-target="#${collapseId}">
-                                    <strong>${dimension.id} (${dimension.label})</strong>
-                                </button>
-                            </h2>
-                        </div>
-                        <div id="${collapseId}" 
-                            class="collapse ${dimIndex === 0 ? 'show' : ''}" 
-                            data-parent="#scenarioAccordion">
-                            <div class="card-body">
-                                <div class="row">
-                                    ${scenarioTables}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+                scenarioAccordion.innerHTML = dimensionContent;
+            }
 
-            scenarioAccordion.innerHTML = dimensionContent;
-        }
 
 
 
