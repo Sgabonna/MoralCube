@@ -1489,9 +1489,6 @@
                 const dimensionContent = dimensions.map((dimension, dimIndex) => {
                     const dimensionId = `dimension${dimIndex}`;
                     const collapseId = `collapse${dimIndex}`;
-                    
-                    // Determine if this dimension is Philosophical Analysis.
-                    // (Assumes dimension.id is set to "Philosophical Analysis" for that section)
                     const isPhilosophical = dimension.id.trim().toLowerCase() === 'philosophical analysis';
 
                     const scenarioTables = scenarioData.map((scenario) => {
@@ -1501,125 +1498,10 @@
                             ? ` (${dimension.id} Score: ${dimensionScore})`
                             : '';
 
-                            const questionRows = currentDimension.questions.map((q, qIndex) => {
-                                let range = "N/A";
-                                if (!isPhilosophical) {
-                                    if (dimension.id === 'Ends') {
-                                        range = qIndex < 3 ? "0 to 4" : "0 to -4";
-                                    } else if (dimension.id === 'Means') {
-                                        switch(qIndex) {
-                                            case 0: range = "0 to -4"; break;
-                                            case 1: range = "0 to -6"; break;
-                                            case 2: range = "0 to -4"; break;
-                                            case 3: range = "0 to -4"; break;
-                                            case 4: range = "0.01 to 1.2"; break;
-                                            default: range = "N/A";
-                                        }
-                                    } else if (dimension.id === 'Character') {
-                                        switch(qIndex) {
-                                            case 0: range = "0 to 1"; break;
-                                            case 1: range = "0 to 2"; break;
-                                            case 2: range = "0 to 4"; break;
-                                            case 3: range = "0 to 1"; break;
-                                            default: range = "N/A";
-                                        }
-                                    }
-                                }
-                                
-                                // Use the question text from JSON (q.question) as the lookup key.
-                                const tooltip = questionTooltips[q.question] || null;
-                                
-                                if (isPhilosophical) {
-                                    return `
-                                        <tr>
-                                            <td>
-                                                ${q.question}
-                                                ${tooltip ? `
-                                                <span class="tooltip">
-                                                    <i class="fas fa-info-circle info-icon"></i>
-                                                    <span class="tooltiptext" style="max-width:300px;">${tooltip.info}</span>
-                                                </span>
-                                                <span class="tooltip">
-                                                    <i class="fas fa-question-circle info-icon" style="margin-left:0.5rem;"></i>
-                                                    <span class="tooltiptext" style="max-width:300px;">${tooltip.question}</span>
-                                                </span>
-                                                ` : ''}
-                                            </td>
-                                            <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
-                                            <td>${q.justification}</td>
-                                        </tr>
-                                    `;
-                                } else {
-                                    return `
-                                        <tr>
-                                            <td>
-                                                ${q.question}
-                                                ${tooltip ? `
-                                                <span class="tooltip">
-                                                    <i class="fas fa-info-circle info-icon"></i>
-                                                    <span class="tooltiptext" style="max-width:300px;">${tooltip.info}</span>
-                                                </span>
-                                                <span class="tooltip">
-                                                    <i class="fas fa-question-circle info-icon" style="margin-left:0.5rem;"></i>
-                                                    <span class="tooltiptext" style="max-width:300px;">${tooltip.question}</span>
-                                                </span>
-                                                ` : ''}
-                                            </td>
-                                            <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
-                                            <td>${range}</td>
-                                            <td>${q.justification}</td>
-                                        </tr>
-                                    `;
-                                }
-                            }).join('');
-
-                        // Build colgroup and header based on whether we show the range column.
-                        let colgroupHTML, headerHTML;
-                        if (isPhilosophical) {
-                            colgroupHTML = `
-                                <col style="width:25%;"> <!-- Question -->
-                                <col style="width:25%;"> <!-- Score -->
-                                <col style="width:50%;"> <!-- Justification -->
-                            `;
-                            headerHTML = `
-                                <tr>
-                                    <th>Question</th>
-                                    <th>Score</th>
-                                    <th>Justification</th>
-                                </tr>
-                            `;
-                        } else {
-                            colgroupHTML = `
-                                <col style="width:10%;"> <!-- Question column reduced by 10% -->
-                                <col style="width:10%;">   <!-- Score column -->
-                                <col style="width:12.5%;"> <!-- Range column increased by 10% -->
-                                <col style="width:70%;">   <!-- Justification column -->
-                            `;
-                            headerHTML = `
-                                <tr>
-                                    <th>Question</th>
-                                    <th>Score</th>
-                                    <th>Range</th>
-                                    <th>Justification</th>
-                                </tr>
-                            `;
-                        }
-
+                        // Create a container div for the React component
+                        const containerId = `scenario-table-${scenario.id}-${dimIndex}`;
                         return `
-                            <div class="col-md-${scenarioData.length === 1 ? '12' : '6'} scenario-table-container">
-                                <h5 class="mb-3">${scenario.scenarioTitle} (${scenario.llmName})${scoreDisplay}</h5>
-                                <table class="table table-bordered compact-table">
-                                    <colgroup>
-                                        ${colgroupHTML}
-                                    </colgroup>
-                                    <thead>
-                                        ${headerHTML}
-                                    </thead>
-                                    <tbody>
-                                        ${questionRows}
-                                    </tbody>
-                                </table>
-                            </div>
+                            <div id="${containerId}" class="col-md-${scenarioData.length === 1 ? '12' : '6'}"></div>
                         `;
                     }).join('');
 
@@ -1649,6 +1531,32 @@
                 }).join('');
 
                 scenarioAccordion.innerHTML = dimensionContent;
+
+                // After the HTML is inserted, render the React components
+                scenarioData.forEach((scenario, sIndex) => {
+                    dimensions.forEach((dimension, dIndex) => {
+                        const containerId = `scenario-table-${scenario.id}-${dIndex}`;
+                        const container = document.getElementById(containerId);
+                        if (container) {
+                            const currentDimension = scenario.dimensions[dIndex];
+                            const dimensionScore = getDimensionScore(scenario, dimension.id);
+                            const scoreDisplay = dimensionScore !== null && ['Ends', 'Means', 'Character'].includes(dimension.id)
+                                ? ` (${dimension.id} Score: ${dimensionScore})`
+                                : '';
+                            const isPhilosophical = dimension.id.trim().toLowerCase() === 'philosophical analysis';
+
+                            ReactDOM.render(
+                                <ScenarioTable 
+                                    scenario={scenario}
+                                    dimension={currentDimension}
+                                    isPhilosophical={isPhilosophical}
+                                    scoreDisplay={scoreDisplay}
+                                />,
+                                container
+                            );
+                        }
+                    });
+                });
             }
 
 
