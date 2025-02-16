@@ -479,6 +479,7 @@
 
         <div id="scenarioSection" class="scenario-section">
             <h4 class="mb-3">Scenario Details</h4>
+
             <div class="accordion" id="scenarioAccordion">
                 <!-- Will be populated dynamically -->
             </div>
@@ -884,20 +885,19 @@
                 selectedModels = ["GPT"];
             }
             
-            // --- Clear highlights for relevant options and filter badges ---
+            // --- Clear highlights ---
             document.querySelectorAll('.relevant-option').forEach(el => el.classList.remove('relevant-option'));
             document.querySelectorAll('.filter-badge').forEach(badge => {
                 badge.classList.remove('relevant-badge');
                 badge.style.display = 'inline-block';
             });
 
-            // --- Apply moral category filter (if not showing all) ---
+            // --- Apply moral category filter ---
             if (activeCategories.size !== 6) {
                 filteredPoints = filteredPoints.filter(point =>
                 activeCategories.has(normalizeCategory(point.overallCategory))
                 );
                 
-                // Update available scenarios.
                 const availScenarios = new Set(filteredPoints.map(p => p.scenarioTitle));
                 const scenarioFilter = document.getElementById('scenarioFilter');
                 Array.from(scenarioFilter.options).forEach(option => {
@@ -905,7 +905,6 @@
                 if (availScenarios.has(option.value)) option.classList.add('relevant-option');
                 });
                 
-                // Update available models.
                 const availModels = new Set(filteredPoints.map(p => p.llmName));
                 const modelFilter = document.getElementById('modelFilter');
                 Array.from(modelFilter.options).forEach(option => {
@@ -925,7 +924,6 @@
                 selectedScenarios.includes(point.scenarioTitle)
                 );
                 
-                // Update available models based on selected scenarios.
                 const relModels = new Set(filteredPoints.map(p => p.llmName));
                 document.querySelectorAll('#modelFilter option').forEach(option => {
                 if (relModels.has(option.value)) {
@@ -942,7 +940,6 @@
             if (selectedModels.length > 0) {
                 filteredPoints = filteredPoints.filter(point => selectedModels.includes(point.llmName));
                 
-                // Update available scenarios based on selected models.
                 const relScenarios = new Set(filteredPoints.map(p => p.scenarioTitle));
                 document.querySelectorAll('#scenarioFilter option').forEach(option => {
                 if (relScenarios.has(option.value)) {
@@ -959,10 +956,10 @@
             const relCats = new Set(filteredPoints.map(point => normalizeCategory(point.overallCategory)));
             document.querySelectorAll('.filter-badge').forEach(badge => {
                 const cat = badge.dataset.category;
-                if (selectedScenarios.length > 0 || selectedModels.length > 0 || activeCategories.size !== 6) {
-                badge.style.opacity = relCats.has(cat) ? '1' : '0.3';
+                badge.style.opacity = (selectedScenarios.length > 0 || selectedModels.length > 0 || activeCategories.size !== 6) 
+                ? (relCats.has(cat) ? '1' : '0.3')
+                : '1';
                 if (relCats.has(cat)) badge.classList.add('relevant-badge');
-                }
             });
 
             // --- Update alternate outcomes dropdown ---
@@ -971,9 +968,7 @@
                 const parentScenario = selectedScenarios[0];
                 const selModel = selectedModels[0];
                 const relationships = scenarioRelationships.get(parentScenario) || [];
-                console.log("Found relationships:", relationships);
                 const alternatives = relationships.filter(child => child.model === selModel);
-                console.log("Filtered alternatives for model:", alternatives);
                 if (alternatives && alternatives.length > 0) {
                 altOutcomes.innerHTML = alternatives
                     .map(alt => `
@@ -1044,7 +1039,7 @@
                 populateOverview(compData);
                 populateScenarioDetails(compData);
             } else {
-                // If only one scenario is selected, ensure we only show up to 4 models.
+                // If only one scenario is selected, show a maximum of 4 models.
                 let compData = Array.isArray(filteredPoints) ? filteredPoints.slice(0, 4) : filteredPoints;
                 populateOverview(compData);
                 populateScenarioDetails(compData);
@@ -1080,7 +1075,7 @@
                     opacity: 0.8,
                     line: {
                     color: filteredPoints.map(p => scenarioColorMapping[p.scenarioTitle + '_' + p.llmName] || '#000'),
-                    width: filteredPoints.map(p => p.isParent ? 6 : 4)
+                    width: filteredPoints.map(p => p.isParent ? 8 : 6)
                     }
                 },
                 text: filteredPoints.map(point => `
@@ -1138,7 +1133,7 @@
             if (!Array.isArray(data)) {
                 data = [data];
             }
-            // Sort and limit cards to maximum of 4.
+            // Sort and limit cards to a maximum of 4.
             data.sort((a, b) => (b.isParent ? 1 : 0) - (a.isParent ? 1 : 0));
             data = data.slice(0, 4);
             
@@ -1160,6 +1155,7 @@
             overviewDiv.innerHTML = cards;
             checkDescriptions();
             }
+
 
 
 
@@ -1258,170 +1254,374 @@
         function normalizeCategory(category) {
             return category.toLowerCase().replace(/\s+/g, '_');
             }
-        function populateScenarioDetails(scenarioData) {
-            if (!Array.isArray(scenarioData)) {
-                scenarioData = [scenarioData];
-            }
+        function populateScenarioDetails() {
             const scenarioAccordion = document.getElementById('scenarioAccordion');
 
-            function getDimensionScore(scenario, dimensionId) {
-                if (!['Ends', 'Means', 'Character'].includes(dimensionId)) {
-                    return null;
-                }
-                switch (dimensionId) {
-                    case 'Ends':
-                        return scenario.x.toFixed(2);
-                    case 'Means':
-                        return scenario.y.toFixed(2);
-                    case 'Character':
-                        return scenario.z.toFixed(2);
-                    default:
-                        return null;
-                }
+            // Hardcoded HTML for the "Ends" (Focus) Section: Questions 1-5.
+            const endsHTML = `
+                <div class="card">
+                <div class="card-header" id="ends-header">
+                    <h2 class="mb-0">
+                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#ends-collapse">
+                        Ends (Focus) <span style="font-size:0.8em; color:#888;">(Click the axis to view the questions, scores, and justifications)</span>
+                    </button>
+                    </h2>
+                </div>
+                <div id="ends-collapse" class="collapse" data-parent="#scenarioAccordion">
+                    <div class="card-body">
+                    <table class="table table-bordered compact-table">
+                        <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Scale</th>
+                            <th>Justification Example</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                            <strong>Question 1: Focus on Societal Needs</strong><br>
+                            <em>Info:</em> If needs are essential elements to ensure survival and growth (e.g., food, water, security, love), then societal needs are essential for the survival and growth of a society. Societal needs include maintaining justice, fairness, and trust in social institutions (e.g., don’t lie, keep promises, don’t steal, help others, uphold justice, avoid cruelty). When these societal needs are met, societies function harmoniously, promoting the well-being of individuals within them.<br>
+                            <em>Question:</em> To what extent was the action focused on fulfilling societal needs such as justice, fairness, equality, respect for persons, or promoting the common good?
+                            </td>
+                            <td>
+                            0.0 to 0.9 – Not at all / Barely Focused<br>
+                            1.0–1.9 – Slightly focused<br>
+                            2.0–2.9 – Moderately focused<br>
+                            3.0–4.0 – Highly / Extremely Focused
+                            </td>
+                            <td>
+                            Example: 3.5 – In telling the truth, they acted in society's best interest, even though the truth may have caused short-term harm.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <strong>Question 2: Focus on Others' Needs</strong><br>
+                            <em>Info:</em> Needs are often necessary for survival or fulfilling a core purpose. When essential needs (e.g., hunger, safety, belonging) are not met, there is an increase in unpleasant sensations. Meeting these needs reduces discomfort and ensures survival and well-being. This question focuses on whether the action was aimed at fulfilling others' essential needs.<br>
+                            <em>Question:</em> To what extent was the action focused on fulfilling others' needs related to physiology, safety, love/belonging, esteem, or self-actualization?
+                            </td>
+                            <td>
+                            0.0 to 0.9 – Not at all / Barely Focused<br>
+                            1.0 to 1.9 – Slightly focused<br>
+                            2.0 to 2.9 – Moderately focused<br>
+                            3.0 to 4.0 – Highly / Extremely Focused
+                            </td>
+                            <td>
+                            Example: 1.5 – The action addressed some safety concerns, but personal desires seemed equally prioritized.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <strong>Question 3: Focus on Others' Wants</strong><br>
+                            <em>Info:</em> Wants are often tied to increasing pleasant sensations or achieving rewards and favorable outcomes. They are not essential for survival but often relate to desires for financial gain, recognition, or status. This question focuses on whether the action was aimed at fulfilling others' non-essential wants.<br>
+                            <em>Question:</em> To what extent was the action focused on fulfilling others' wants such as financial gain, social recognition, praise, power, appearance, conformity, reward, competition, or security?
+                            </td>
+                            <td>
+                            0.0 to 0.9 – Not at all / Barely Focused<br>
+                            1.0 to 1.9 – Slightly focused<br>
+                            2.0 to 2.9 – Moderately focused<br>
+                            3.0 to 4.0 – Highly / Extremely Focused
+                            </td>
+                            <td>
+                            Example: 2.7 – Primarily sought social recognition, though some consideration for others’ comfort.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <strong>Question 4: Focus on Personal Needs</strong><br>
+                            <em>Info:</em> Needs are often essential for personal survival or fulfilling a core purpose. When these needs are unmet, unpleasant sensations arise (e.g., hunger, lack of security or belonging). Meeting personal needs reduces discomfort. This question focuses on whether the action was primarily aimed at fulfilling personal essential needs.<br>
+                            <em>Question:</em> To what degree was the action motivated by fulfilling essential personal needs such as safety, physiological survival, or self-actualisation?
+                            </td>
+                            <td>
+                            0.0 to -0.9 – Not at all / Barely Focused<br>
+                            -1.0 to -1.9 – Slightly focused<br>
+                            -2.0 to -2.9 – Moderately focused<br>
+                            -3.0 to -4.0 – Highly / Extremely Focused
+                            </td>
+                            <td>
+                            Example: 3.6 – The action was clearly driven by esteem and self-actualization needs.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <strong>Question 5: Focus on Personal Wants</strong><br>
+                            <em>Info:</em> Wants are most often tied to desires for rewards or pleasant sensations, beyond essential needs. These can include financial gain, praise, or social recognition. This question assesses whether the action was motivated by fulfilling personal non-essential wants.<br>
+                            <em>Question:</em> To what extent was the action focused on fulfilling personal wants such as financial gain, social recognition, praise, power, appearance, conformity, reward, competition, or security?
+                            </td>
+                            <td>
+                            0.0 to -0.9 – Not at all / Barely Focused<br>
+                            -1.0 to -1.9 – Slightly focused<br>
+                            -2.0 to -2.9 – Moderately focused<br>
+                            -3.0 to -4.0 – Highly / Extremely Focused
+                            </td>
+                            <td>
+                            Example: 3.0 – The action heavily prioritized personal status and financial gain.
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                </div>
+            `;
+
+            // Hardcoded HTML for the "Means" (Sacrifice) Section: Questions 6-10.
+            const meansHTML = `
+                <div class="card">
+                <div class="card-header" id="means-header">
+                    <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#means-collapse">
+                        Means (Sacrifice) – Selfless > Evil <span style="font-size:0.8em; color:#888;">(Click the axis to view the questions, scores, and justifications)</span>
+                    </button>
+                    </h2>
+                </div>
+                <div id="means-collapse" class="collapse show" data-parent="#scenarioAccordion">
+                    <div class="card-body">
+                    <table class="table table-bordered compact-table">
+                        <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Scale</th>
+                            <th>Justification Example</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                            <strong>Question 6: Degree of Future Self-Sacrifice</strong><br>
+                            <em>Information:</em> Evaluate the level of sacrifice affecting the future self (future plans, values, health, etc.).<br>
+                            <em>Question:</em> To what extent did the action require sacrifices that impact the future self?
+                            </td>
+                            <td>
+                            0.0 – No sacrifice<br>
+                            -0.1 to -1.9 – Minor sacrifices<br>
+                            -2.0 to -2.9 – Moderate sacrifices<br>
+                            -3.0 to -3.9 – Major sacrifices<br>
+                            -4.0 – Extreme sacrifices
+                            </td>
+                            <td>
+                            Example: -3.2
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <strong>Question 7: Number of Individuals Affected</strong><br>
+                            How many people were impacted by the sacrifice or harm?
+                            </td>
+                            <td>
+                            0.0 – No individuals impacted<br>
+                            -0.1 to -1.0 – 1 to 5 individuals<br>
+                            -1.0 to -2.0 – 5 to 50 individuals<br>
+                            -2.0 to -3.0 – 50 to 5,000 individuals<br>
+                            -3.0 to -4.0 – 5,000 to 50,000 individuals<br>
+                            -4.1 to -6.0 – 50,000 to 1 million+ individuals
+                            </td>
+                            <td>
+                            (Example values)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <strong>Question 8: Type of Sacrifice</strong><br>
+                            What was the severity of the impact on each individual in terms of what they lost (time, money, resources, freedom, life)?
+                            </td>
+                            <td>
+                            0.0 – No sacrifice<br>
+                            -0.1 to -1.0 – Minor losses<br>
+                            -1.0 to -2.0 – Moderate losses<br>
+                            -2.0 to -3.0 – Major losses<br>
+                            -3.0 to -4.0 – Extreme losses
+                            </td>
+                            <td>
+                            (Example values)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <strong>Question 9: Duration of Sacrifice</strong><br>
+                            How long do you think the sacrifice affected the individuals involved?
+                            </td>
+                            <td>
+                            0.0 – No lasting impact<br>
+                            -0.1 to -1.0 – Momentary or short-term (less than a day)<br>
+                            -1.0 to -2.0 – Short-term (days to months)<br>
+                            -2.0 to -3.0 – Medium-term (years)<br>
+                            -3.0 to -3.9 – Long-term (lifelong)<br>
+                            -4.0 – Irreversible impact
+                            </td>
+                            <td>
+                            (Example values)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <strong>Question 10: Magnitude of Life Impacted</strong><br>
+                            Evaluate the magnitude of the sacrifice based on the type of life impacted. Use the following scale to assess the impact per individual.
+                            </td>
+                            <td>
+                            0.01 to 0.1 – Bacteria, small invertebrates, insects<br>
+                            0.1 to 0.5 – Fish, amphibians, reptiles, or small mammals<br>
+                            0.6 to 0.9 – Larger mammals or highly social animals<br>
+                            1.0 – Adult humans<br>
+                            1.1 to 1.2 – Vulnerable humans
+                            </td>
+                            <td>
+                            (Example: 0.05, 1.2)
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                </div>
+            `;
+
+            // Hardcoded HTML for the "Character" (Conscious Self-Control) Section: Questions 11-18.
+            const characterHTML = `
+                <div class="card">
+                <div class="card-header" id="character-header">
+                    <h2 class="mb-0">
+                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#character-collapse">
+                        Character (Conscious Self-Control) – Unconscious Impulsivity > Habitual Conscious Self-Control <span style="font-size:0.8em; color:#888;">(Click the axis to view the questions, scores, and justifications)</span>
+                    </button>
+                    </h2>
+                </div>
+                <div id="character-collapse" class="collapse" data-parent="#scenarioAccordion">
+                    <div class="card-body">
+                    <table class="table table-bordered compact-table">
+                        <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Scale</th>
+                            <th>Justification Example</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                            <strong>Question 11: Unconscious vs. Conscious</strong><br>
+                            <em>Info:</em> Evaluate the individual’s level of awareness regarding their actions and consequences.<br>
+                            <em>Question:</em> To what extent was the individual conscious of their actions and consequences?
+                            </td>
+                            <td>
+                            0.0 to 0.4 – Unconscious<br>
+                            0.5 to 0.9 – Partially conscious<br>
+                            1.0 – Fully conscious
+                            </td>
+                            <td>
+                            Example: 1.0
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <strong>Question 12: Degree of Present Self-Sacrifice</strong><br>
+                            <em>Info:</em> Evaluate the level of sacrifice affecting the individual's present self (immediate comfort, desires, impulses, etc.).<br>
+                            <em>Question:</em> To what extent did the action require sacrifices from the individual's present self?
+                            </td>
+                            <td>
+                            0.0 – No sacrifice<br>
+                            0.0 to 0.5 – Minor sacrifices<br>
+                            0.5 to 1.0 – Moderate sacrifices<br>
+                            1.0 to 1.5 – Major sacrifices<br>
+                            1.5 to 2.0 – Extreme sacrifices
+                            </td>
+                            <td>
+                            Example: 1.7
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <strong>Question 13: Habitual vs. Willpower</strong><br>
+                            <em>Info:</em> Reflect on whether the action was driven by automatic habit or required deliberate effort (willpower).<br>
+                            <em>Question:</em> To what extent was the action driven by willpower versus habitual responses?
+                            </td>
+                            <td>
+                            0.0 to 1.0 – Entirely habitual<br>
+                            1.0 to 1.9 – Slightly wilful<br>
+                            2.0 to 2.9 – Moderately wilful<br>
+                            3.0 to 3.9 – Highly wilful<br>
+                            4.0 – Fully wilful
+                            </td>
+                            <td>
+                            Example: 3.6
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <strong>Question 14: Unintentional vs. Intentional</strong><br>
+                            <em>Info:</em> Assess whether the action was performed deliberately or occurred accidentally.<br>
+                            <em>Question:</em> To what extent was the action intentional?
+                            </td>
+                            <td>
+                            0.0 to 0.4 – Unintentional<br>
+                            0.4 to 0.9 – Partially intentional<br>
+                            1.0 – Fully intentional
+                            </td>
+                            <td>
+                            Example: (Your example text)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <strong>Question 15: Wills at Play</strong><br>
+                            <em>Info:</em> List the unconscious drives (Wills) that might be influencing the scenario. Provide a one sentence justification for each.<br>
+                            <em>Question:</em> What Wills might be influencing this scenario and why?
+                            </td>
+                            <td>
+                            (No numerical scale)
+                            </td>
+                            <td>
+                            Example: (Your justification here)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <strong>Question 16: Deontology</strong><br>
+                            <em>Question:</em> In one paragraph, explain why this action was right or wrong through a deontological lens.
+                            </td>
+                            <td>
+                            (No numerical scale)
+                            </td>
+                            <td>
+                            Example: (Your justification here)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <strong>Question 17: Utilitarianism</strong><br>
+                            <em>Question:</em> In two paragraphs, explain why this action was right or wrong from both a utilitarian and negative utilitarian perspective.
+                            </td>
+                            <td>
+                            (No numerical scale)
+                            </td>
+                            <td>
+                            Example: (Your justification here)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                            <strong>Question 18: Virtue Ethics</strong><br>
+                            <em>Question:</em> From an Aristotelian perspective, explain what virtues or vices were at play within this action.
+                            </td>
+                            <td>
+                            (No numerical scale)
+                            </td>
+                            <td>
+                            Example: (Your justification here)
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                </div>
+            `;
+            
+            // Combine all three sections.
+            const combinedHTML = endsHTML + meansHTML + characterHTML;
+            scenarioAccordion.innerHTML = combinedHTML;
             }
 
-            const dimensions = scenarioData[0].dimensions;
-            const dimensionContent = dimensions.map((dimension, dimIndex) => {
-                const dimensionId = `dimension${dimIndex}`;
-                const collapseId = `collapse${dimIndex}`;
-                
-                // Determine if this dimension is Philosophical Analysis.
-                // (Assumes dimension.id is set to "Philosophical Analysis" for that section)
-                const isPhilosophical = dimension.id.trim().toLowerCase() === 'philosophical analysis';
-
-                const scenarioTables = scenarioData.map((scenario) => {
-                    const currentDimension = scenario.dimensions[dimIndex];
-                    const dimensionScore = getDimensionScore(scenario, dimension.id);
-                    const scoreDisplay = dimensionScore !== null && ['Ends', 'Means', 'Character'].includes(dimension.id)
-                        ? ` (${dimension.id} Score: ${dimensionScore})`
-                        : '';
-
-                    // Build table rows; if Philosophical, skip the Range cell.
-                    const questionRows = currentDimension.questions.map((q, qIndex) => {
-                        let range = "N/A";
-                        if (!isPhilosophical) {
-                            if (dimension.id === 'Ends') {
-                                // Ends dimension (Questions 1-5):
-                                // Q1-Q3: "0 to 4", Q4-Q5: "0 to -4"
-                                range = qIndex < 3 ? "0 to 4" : "0 to -4";
-                            } else if (dimension.id === 'Means') {
-                                // Means dimension (Questions 6-10):
-                                switch(qIndex) {
-                                    case 0: range = "0 to -4"; break;
-                                    case 1: range = "0 to -6"; break;
-                                    case 2: range = "0 to -4"; break;
-                                    case 3: range = "0 to -4"; break;
-                                    case 4: range = "0.01 to 1.2"; break;
-                                    default: range = "N/A";
-                                }
-                            } else if (dimension.id === 'Character') {
-                                // Character dimension (Questions 11-18):
-                                switch(qIndex) {
-                                    case 0: range = "0 to 1"; break;
-                                    case 1: range = "0 to 2"; break;
-                                    case 2: range = "0 to 4"; break;
-                                    case 3: range = "0 to 1"; break;
-                                    default: range = "N/A";
-                                }
-                            }
-                        }
-                        if (isPhilosophical) {
-                            return `
-                                <tr>
-                                    <td>${q.question}</td>
-                                    <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
-                                    <td>${q.justification}</td>
-                                </tr>
-                            `;
-                        } else {
-                            return `
-                                <tr>
-                                    <td>${q.question}</td>
-                                    <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
-                                    <td>${range}</td>
-                                    <td>${q.justification}</td>
-                                </tr>
-                            `;
-                        }
-                    }).join('');
-
-                    // Build colgroup and header based on whether we show the range column.
-                    let colgroupHTML, headerHTML;
-                    if (isPhilosophical) {
-                        colgroupHTML = `
-                            <col style="width:25%;"> <!-- Question -->
-                            <col style="width:25%;"> <!-- Score -->
-                            <col style="width:50%;"> <!-- Justification -->
-                        `;
-                        headerHTML = `
-                            <tr>
-                                <th>Question</th>
-                                <th>Score</th>
-                                <th>Justification</th>
-                            </tr>
-                        `;
-                    } else {
-                        colgroupHTML = `
-                            <col style="width:10%;"> <!-- Question column reduced by 10% -->
-                            <col style="width:10%;">   <!-- Score column -->
-                            <col style="width:12.5%;"> <!-- Range column increased by 10% -->
-                            <col style="width:70%;">   <!-- Justification column -->
-                        `;
-                        headerHTML = `
-                            <tr>
-                                <th>Question</th>
-                                <th>Score</th>
-                                <th>Range</th>
-                                <th>Justification</th>
-                            </tr>
-                        `;
-                    }
-
-                    return `
-                        <div class="col-md-${scenarioData.length === 1 ? '12' : '6'} scenario-table-container">
-                            <h5 class="mb-3">${scenario.scenarioTitle} (${scenario.llmName})${scoreDisplay}</h5>
-                            <table class="table table-bordered compact-table">
-                                <colgroup>
-                                    ${colgroupHTML}
-                                </colgroup>
-                                <thead>
-                                    ${headerHTML}
-                                </thead>
-                                <tbody>
-                                    ${questionRows}
-                                </tbody>
-                            </table>
-                        </div>
-                    `;
-                }).join('');
-
-                return `
-                    <div class="card">
-                        <div class="card-header" id="${dimensionId}-header">
-                            <h2 class="mb-0">
-                                <button class="btn btn-link ${dimIndex === 0 ? '' : 'collapsed'}" 
-                                        type="button" 
-                                        data-toggle="collapse" 
-                                        data-target="#${collapseId}">
-                                    <strong>${dimension.id} (${dimension.label})</strong>
-                                </button>
-                            </h2>
-                        </div>
-                        <div id="${collapseId}" 
-                            class="collapse ${dimIndex === 0 ? 'show' : ''}" 
-                            data-parent="#scenarioAccordion">
-                            <div class="card-body">
-                                <div class="row">
-                                    ${scenarioTables}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            scenarioAccordion.innerHTML = dimensionContent;
-        }
 
 
 

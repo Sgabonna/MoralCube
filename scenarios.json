@@ -7603,9 +7603,10 @@
 },          
 {
 "id": "Melbourne_Covid_Lockdowns_Unintended_gpt",
-"type": "base",
+"type": "alternative",
+"parentId": "Melbourne_Covid_Lockdowns_gpt",
 "metadata": {
-"title": "Melbourne Covid Lockdowns (Unintended Consequences)",
+"title": "Melbourne Covid Lockdowns",
 "description": "In August 2020, Victoria's Premier Daniel Andrews imposed a six‐week curfew on Melbourne, with significant unforeseen impacts such as developmental delays in children, increased substance abuse, mental health struggles, and a reduction in elective surgeries.",
 "category": "Public Health",
 "llmSource": {
