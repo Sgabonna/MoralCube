@@ -121,6 +121,12 @@
             border: 3px solid #0d6efd;
             box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
         }
+        .selected-card {
+            background-color: #d1e7dd; /* light green background for selected cards */
+            border: 2px solid #0d6efd;
+            /* Optional: add a box-shadow for extra emphasis */
+            box-shadow: 0 0 5px rgba(13, 110, 253, 0.8);
+        }
 
         .relationship-badge {
             font-size: 0.8rem;
@@ -234,9 +240,9 @@
             color: #fff;
             text-align: center;
             border-radius: 4px;
-            padding: 5px;
+            padding: 5px 10px;
             position: absolute;
-            z-index: 1000; /* increased from 1 */
+            z-index: 1000; /* increased z-index */
             bottom: 125%;
             left: 50%;
             transform: translateX(-50%);
@@ -244,6 +250,7 @@
             white-space: nowrap;
             font-size: 0.75rem;
         }
+
 
         .tooltiptext {
             visibility: hidden;
@@ -418,6 +425,14 @@
                 <p class="text-center mb-2"><a href="https://www.youtube.com/watch?v=hauuDOrZQ1o">Click here to learn more about the Moral Cube</a></p>
             </div>
         </div>
+        <div style="margin: 50px;">
+            Test Tooltip:
+            <span class="tooltip">
+              <i class="fas fa-info-circle info-icon"></i>
+              <span class="tooltiptext" style="max-width:300px;">This is a test tooltip.</span>
+            </span>
+        </div>
+          
         <div class="filter-section">
             <div class="filter-group category-filter-group">
                 <label for="categoryFilter">Filter by Category Type:</label>
@@ -602,36 +617,41 @@
 
         // *** New function: attachComparisonCardHandlers ***
         function attachComparisonCardHandlers() {
-        // Attach click events to all cards currently in the overview container
-        document.querySelectorAll('.comparison-card').forEach(card => {
-            card.addEventListener('click', function() {
-            const id = card.getAttribute('data-scenario-id');
-            
-            // Toggle selection: if already selected, unselect it.
-            if (card.classList.contains('selected-card')) {
-                card.classList.remove('selected-card');
-                selectedComparison = selectedComparison.filter(selectedId => selectedId !== id);
-            } else {
-                // Only allow selection if fewer than 2 are already selected.
-                if (selectedComparison.length < 2) {
-                card.classList.add('selected-card');
-                selectedComparison.push(id);
+            // Attach click events to all cards currently in the overview container
+            document.querySelectorAll('.comparison-card').forEach(card => {
+                card.addEventListener('click', function() {
+                const id = card.getAttribute('data-scenario-id');
+                
+                // If the card is already selected, unselect it.
+                if (card.classList.contains('selected-card')) {
+                    card.classList.remove('selected-card');
+                    selectedComparison = selectedComparison.filter(selectedId => selectedId !== id);
                 } else {
-                alert("You can only compare 2 scenarios/models at a time.");
+                    // If already two cards are selected and this card is not among them, reset all selections.
+                    if (selectedComparison.length === 2) {
+                    document.querySelectorAll('.comparison-card').forEach(c => {
+                        c.classList.remove('selected-card');
+                    });
+                    selectedComparison = [];
+                    }
+                    // Then select the clicked card.
+                    card.classList.add('selected-card');
+                    selectedComparison.push(id);
                 }
-            }
-            
-            // If exactly 2 items are selected, update scenario details.
-            if (selectedComparison.length === 2) {
-                const compData = dataPoints.filter(point => selectedComparison.includes(point.id));
-                populateScenarioDetails(compData);
-            } else {
-                // Optionally clear the details if fewer than 2 are selected:
-                document.getElementById('scenarioAccordion').innerHTML = '';
-            }
+                
+                // If exactly 2 items are selected, update scenario details.
+                if (selectedComparison.length === 2) {
+                    const compData = dataPoints.filter(point => selectedComparison.includes(point.id));
+                    populateScenarioDetails(compData);
+                } else {
+                    // Otherwise, clear the scenario details section.
+                    document.getElementById('scenarioAccordion').innerHTML = '';
+                }
+                });
             });
-        });
         }
+
+
 
         // Function to render the questions into the container
         function renderSurveyQuestions() {
@@ -1290,28 +1310,29 @@
             if (!Array.isArray(data)) {
                 data = [data];
             }
-            // Sort and limit cards to a maximum of 4.
             data.sort((a, b) => (b.isParent ? 1 : 0) - (a.isParent ? 1 : 0));
             data = data.slice(0, 4);
             
             const cards = data.map(item => `
                 <div class="comparison-card" data-scenario-id="${item.id}" style="border: 2px solid ${scenarioColorMapping[item.scenarioTitle + '_' + item.llmName] || '#000'};">
-                    <h4>
+                <h4>
                     ${getScenarioTitle(item)}
                     <small>(${item.llmName} ${getCategoryBadge(item.overallCategory)})</small>
-                    </h4>
-                    <p class="scenario-description">
+                </h4>
+                <p class="scenario-description">
                     <span class="description-text">
-                        ${item.scenarioDescription || 'No description available'}
+                    ${item.scenarioDescription || 'No description available'}
                     </span>
                     <span class="read-more">Read more</span>
-                    </p>
+                </p>
                 </div>
-                `).join('');
-                overviewDiv.innerHTML = cards;
-                attachComparisonCardHandlers(); // Attach our new click events here
-                checkDescriptions();
+            `).join('');
+            
+            overviewDiv.innerHTML = cards;
+            attachComparisonCardHandlers(); // Attach the click handlers to new cards
+            checkDescriptions();
             }
+
             // After setting overviewDiv.innerHTML = cards;
             document.querySelectorAll('.comparison-card').forEach(card => {
             card.addEventListener('click', function() {
