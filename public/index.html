@@ -254,7 +254,7 @@
             opacity: 0;
             position: absolute;
             bottom: 150%;
-            left: 20px; /* Changed to position tooltip to the right */
+            left: 20px; /* Base positioning for all tooltips */
             padding: 8px 12px;
             background-color: #2d3748;
             color: white;
@@ -270,28 +270,17 @@
             text-align: left;
         }
 
-        /* First tooltip (info) */
-        .tooltip-container:first-child .tooltip-content {
+        /* Remove all left/right specific rules and use the same positioning for both */
+        .tooltip-container .tooltip-content {
             left: 20px;
+            right: auto;
+            transform: none;
         }
 
-        .tooltip-container:first-child .tooltip-content::after {
+        .tooltip-container .tooltip-content::after {
             left: 10px;
-        }
-
-        /* Info tooltip (first-child) styling is working correctly, only updating the question tooltip (last-child) */
-
-        /* Second tooltip (question) - making it match the info tooltip behavior */
-        .tooltip-container:last-child .tooltip-content {
-            left: 20px;
-            right: auto; /* Reset any right positioning */
-            transform: none; /* Reset any transform */
-        }
-
-        .tooltip-container:last-child .tooltip-content::after {
-            left: 10px;
-            right: auto; /* Reset any right positioning */
-            transform: none; /* Reset any transform */
+            right: auto;
+            transform: none;
         }
 
         .tooltip-container:hover .tooltip-content {
@@ -309,26 +298,17 @@
             border-color: #2d3748 transparent transparent transparent;
         }
 
-        /* Add spacing between adjacent tooltip containers */
-        .tooltip-container + .tooltip-container {
-            margin-left: 4px;
-        }
-
-        /* Ensure tooltips don't get cut off at table edges */
-        td {
-            position: relative;
-            overflow: visible !important;
-        }
-
-        /* Right side tooltip adjustment */
+        /* Remove any specific first-child or last-child rules that might override */
+        .tooltip-container:first-child .tooltip-content,
         .tooltip-container:last-child .tooltip-content {
-            left: auto;
-            right: 0;
+            left: 20px;
+            right: auto;
         }
 
+        .tooltip-container:first-child .tooltip-content::after,
         .tooltip-container:last-child .tooltip-content::after {
-            left: auto;
-            right: 10px;
+            left: 10px;
+            right: auto;
         }
 
         /* Prevent tooltip from being cut off at the top of the viewport */
