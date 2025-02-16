@@ -279,13 +279,19 @@
             left: 10px;
         }
 
-        /* Second tooltip (question) */
+        /* Info tooltip (first-child) styling is working correctly, only updating the question tooltip (last-child) */
+
+        /* Second tooltip (question) - making it match the info tooltip behavior */
         .tooltip-container:last-child .tooltip-content {
             left: 20px;
+            right: auto; /* Reset any right positioning */
+            transform: none; /* Reset any transform */
         }
 
         .tooltip-container:last-child .tooltip-content::after {
             left: 10px;
+            right: auto; /* Reset any right positioning */
+            transform: none; /* Reset any transform */
         }
 
         .tooltip-container:hover .tooltip-content {
