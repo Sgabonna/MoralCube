@@ -58,7 +58,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No genuine future cost or harm to the child; it's a simple helpful action."
 },
@@ -201,7 +201,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No future‐oriented cost or compromise arises from not assisting the dog."
 },
@@ -344,7 +344,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "This moment of enthusiasm has no real impact on the child's future well-being or values."
 },
@@ -487,7 +487,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No long‐term compromise of the child’s well‐being or values."
 },
@@ -629,7 +629,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -0.1,
 "justification": "Minimal impact on the child's future self, possibly contributing positively to character development."
 },
@@ -772,7 +772,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -0.2,
 "justification": "Minor impact on future development of autonomous decision-making, though following instructions can be beneficial."
 },
@@ -915,7 +915,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -0.2,
 "justification": "Minor impact on future self through missed opportunity to develop better self-control and animal handling skills"
 },
@@ -1062,7 +1062,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -0.1,
 "justification": "Very minimal impact on future self, though missing an opportunity for character development"
 },
@@ -1208,7 +1208,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The action does not negatively impact the child's future."
 },
@@ -1355,7 +1355,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The action doesn't impact the child's future."
 },
@@ -1502,7 +1502,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The inaction does not impact the child's future."
 },
@@ -1649,7 +1649,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The action doesn't negatively impact the child's future."
 },
@@ -1795,7 +1795,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "The action does not require any significant sacrifice impacting the child's future self, plans, or values."
 },
@@ -1942,7 +1942,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "The action does not require any significant sacrifice impacting the child's future self, plans, or values."
 },
@@ -2089,7 +2089,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "The action does not require any significant sacrifice impacting the child's future self, plans, or values."
 },
@@ -2236,7 +2236,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No significant future sacrifices were made by the child."
 },
@@ -2382,7 +2382,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "The child's action doesn't seem to involve any significant sacrifice for their future self."
 },
@@ -2529,7 +2529,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "The child's action doesn't seem to involve any significant sacrifice for their future self."
 },
@@ -2676,7 +2676,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "The child's action doesn't seem to involve any significant sacrifice for their future self."
 },
@@ -2823,7 +2823,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "The child's inaction does not require any significant sacrifice for their future self."
 },
@@ -2969,7 +2969,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -1.0,
 "justification": "Potential social consequences or embarrassment could affect the individual’s future reputation, but the sacrifice is relatively minor."
 },
@@ -3116,7 +3116,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No significant future repercussions, thus no real sacrifice for the future self."
 },
@@ -3263,7 +3263,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No notable future repercussions or lasting compromises."
 },
@@ -3410,7 +3410,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No significant impact on future well-being or identity."
 },
@@ -3556,7 +3556,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.0,
 "justification": "Significant impact on future reputation and social standing if identified, potentially affecting relationships and public trust."
 },
@@ -3703,7 +3703,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No negative impact on future self; action aligns with maintaining positive social reputation and self-respect."
 },
@@ -3850,7 +3850,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -0.5,
 "justification": "Minor impact on future self-image and social standing, though mitigated by attempts at discretion."
 },
@@ -3997,7 +3997,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No negative impact on future self; action aligns with and reinforces positive social relationships and reputation."
 },
@@ -4143,7 +4143,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The individual's future self is not negatively impacted by this action."
 },
@@ -4290,7 +4290,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The action does not negatively impact the individual's future self."
 },
@@ -4437,7 +4437,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The action doesn't negatively impact the individual's future self."
 },
@@ -4584,7 +4584,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The action does not negatively impact the individual's future self."
 },
@@ -4730,7 +4730,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "The action does not require significant sacrifices from the future self."
 },
@@ -4872,7 +4872,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -0.5,
 "justification": "The individual made a minor sacrifice for their future self by choosing to use the restroom."
 },
@@ -5019,7 +5019,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -0.8,
 "justification": "The individual made a minor sacrifice for their future self by using a discreet urinal device, potentially avoiding long-term consequences."
 },
@@ -5166,7 +5166,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -0.8,
 "justification": "The individual made a minor sacrifice for their future self by asking for help and potentially avoiding long-term consequences."
 },
@@ -5312,7 +5312,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -0.5,
 "justification": "Potential minor social consequences but no major life impacts."
 },
@@ -5459,7 +5459,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No negative impact on future self."
 },
@@ -5606,7 +5606,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No significant future consequences from this discreet action."
 },
@@ -5753,7 +5753,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No negative future consequences from this socially appropriate action."
 },
@@ -5899,7 +5899,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.5,
 "justification": "Compromises moral values and likely leads to long-term emotional and psychological consequences for the father."
 },
@@ -6046,7 +6046,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -0.5,
 "justification": "Minor future obligations or shifts in personal pride, but no severe compromise of long-term well-being."
 },
@@ -6192,7 +6192,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -3.5,
 "justification": "Major impact on future self-image, family relationships, and psychological well-being from sacrificing children."
 },
@@ -6339,7 +6339,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -0.5,
 "justification": "Minor impact on future autonomy due to microloan obligations, but preserves family integrity and moral values."
 },
@@ -6485,7 +6485,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.0,
 "justification": "Moderate Sacrifices. While the immediate focus is on survival, the father may experience long-term emotional and psychological consequences from his decision."
 },
@@ -6633,7 +6633,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The action does not negatively impact the father's future self; it aims to improve his and his family's future."
 },
@@ -6779,7 +6779,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -3.5,
 "justification": "The action requires significant sacrifices from the daughters, impacting their future well-being, dignity, and autonomy."
 },
@@ -6926,7 +6926,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -0.5,
 "justification": "The action does not require significant sacrifices from the future self, as the community support provides temporary relief without long-term consequences."
 },
@@ -7072,7 +7072,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.0,
 "justification": "Moderate compromise to future well-being and economic aspects due to long lockdown effects."
 },
@@ -7219,7 +7219,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.0,
 "justification": "May entail moderate economic or psychological compromises for local authorities and residents over time."
 },
@@ -7366,7 +7366,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.1,
 "justification": "Moderate compromise to future values and potential political fallout due to escalating health risks."
 },
@@ -7513,7 +7513,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -1.5,
 "justification": "Moderate reputation risk if high death rates undermine trust, impacting long-term governance and policy credibility."
 },
@@ -7660,7 +7660,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.5,
 "justification": "Moderate detriment to future well-being (economic repercussions, reputational risk, ongoing political scrutiny)."
 },
@@ -7806,7 +7806,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -1.5,
 "justification": "Minor to moderate impact on future political capital and public trust."
 },
@@ -7953,7 +7953,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.0,
 "justification": "Moderate impact on political legacy and community relations due to differential treatment."
 },
@@ -8100,7 +8100,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -3.5,
 "justification": "Major impact on future political legacy and moral standing due to preventable harm."
 },
@@ -8247,7 +8247,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.5,
 "justification": "Moderate to major impact on future legacy due to controversial approach and higher mortality."
 },
@@ -8393,7 +8393,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.0,
 "justification": "Moderate sacrifices. The lockdowns impacted future plans, economic stability, and mental well-being for many individuals."
 },
@@ -8540,7 +8540,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -1.5,
 "justification": "Slightly focused. The impact on future plans and well-being is generally less severe than city-wide lockdowns, but still present, especially for those in high-risk areas."
 },
@@ -8687,7 +8687,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.5,
 "justification": "Moderately focused. The long-term consequences of an overwhelmed healthcare system and potential loss of life pose significant risks to the future well-being of the community and the economy."
 },
@@ -8834,7 +8834,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.0,
 "justification": "Moderate sacrifices. The approach accepts the potential for higher initial mortality and strain on the healthcare system, representing a significant risk to the future well-being of the community."
 },
@@ -8980,7 +8980,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.0,
 "justification": "Moderate political/legacy risks for decision-makers."
 },
@@ -9127,7 +9127,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -1.0,
 "justification": "Moderate risk of long-term trust erosion in hyper-local governance approaches."
 },
@@ -9274,7 +9274,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -3.0,
 "justification": "Severe long-term healthcare system damage and trust erosion in governance."
 },
@@ -9421,7 +9421,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.5,
 "justification": "Long-term healthcare capacity erosion and chronic illness burdens."
 },
@@ -9567,7 +9567,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -1.0,
 "justification": "The lockdown required some sacrifice from the future self, as it impacted the economy and individual freedoms."
 },
@@ -9714,7 +9714,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -1.5,
 "justification": "The targeted lockdown requires some sacrifice from the future self, as it may impact long-term economic growth or individual freedoms."
 },
@@ -9861,7 +9861,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.5,
 "justification": "The decision may have required significant sacrifices from the premier's future self, such as damage to their reputation or legacy, due to the potential long-term consequences of prioritizing individual freedoms and economic activity over public health concerns."
 },
@@ -10007,7 +10007,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -3.5,
 "justification": "Many combatants relinquished future aspirations or well-being to ensure victory, sometimes experiencing lasting trauma or injury."
 },
@@ -10153,7 +10153,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -3.5,
 "justification": "Major impact on future generations through war trauma and societal transformation."
 },
@@ -10299,7 +10299,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -3.0,
 "justification": "Major sacrifices. Soldiers faced the potential for death or serious injury, representing a significant sacrifice of their future well-being and life goals."
 },
@@ -10445,7 +10445,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -3.5,
 "justification": "Generational trauma and geopolitical realignment affecting post-war societies"
 },
@@ -10591,7 +10591,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -3.5,
 "justification": "The battle required significant sacrifices from the soldiers involved, potentially impacting their future selves, including their physical and mental well-being, relationships, and career prospects."
 },
@@ -10737,7 +10737,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -3.0,
 "justification": "Large-scale policy shifts compromised long-term stability and well-being, drastically altering the future for many individuals involved."
 },
@@ -10883,7 +10883,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -4.0,
 "justification": "Extreme impact on future generations through mass death, societal trauma, and destroyed infrastructure."
 },
@@ -11029,7 +11029,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.0,
 "justification": "Moderate sacrifices. While the leaders may have risked some political capital, the personal sacrifices were minimal compared to the immense suffering inflicted on the population."
 },
@@ -11175,7 +11175,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -3.5,
 "justification": "The campaign's leaders made decisions that severely impacted the future of the Chinese people, leading to widespread famine and suffering."
 },
@@ -11321,7 +11321,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.2,
 "justification": "Quality failures triggered major reputational damage and legal consequences, compromising long-term aspirations and values."
 },
@@ -11467,7 +11467,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -3.0,
 "justification": "Major impact on company's future and public trust in vaccines."
 },
@@ -11613,7 +11613,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -0.1,
 "justification": "Minor sacrifices. While those involved may have faced some professional or reputational risks, the personal sacrifices were relatively minor."
 },
@@ -11759,7 +11759,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -3.5,
 "justification": "Lasting damage to vaccine trust affecting future public health initiatives"
 },
@@ -11905,7 +11905,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.5,
 "justification": "The leaders of Cutter Laboratories did not make significant personal sacrifices, as they were more focused on maintaining power and control."
 },
@@ -12051,7 +12051,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-    "question": "Degree of Future Self-Sacrifice",
+    "question": "Future Self-Sacrifice",
     "score": -1.8,
     "justification": "Those implementing DDT faced limited personal compromise at the time, though credibility and legacy were later questioned."
 },
@@ -12197,7 +12197,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-    "question": "Degree of Future Self-Sacrifice",
+    "question": "Future Self-Sacrifice",
     "score": -3.0,
     "justification": "Major impact on future generations through environmental contamination."
 },
@@ -12343,7 +12343,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-    "question": "Degree of Future Self-Sacrifice",
+    "question": "Future Self-Sacrifice",
     "score": -0.1,
     "justification": "Minor sacrifices.  While some individuals or organizations might have faced minor professional risks, the personal sacrifices were minimal."
 },
@@ -12489,7 +12489,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-    "question": "Degree of Future Self-Sacrifice",
+    "question": "Future Self-Sacrifice",
     "score": 0.0,
     "justification": "No foresight of environmental harm; future sacrifices were unintended."
 },
@@ -12635,7 +12635,7 @@
 "label": "Sacrifice",
 "questions": [
 {
-"question": "Degree of Future Self-Sacrifice",
+"question": "Future Self-Sacrifice",
 "score": -2.5,
 "justification": "The use of DDT led to significant long-term environmental risks, which can be seen as a form of sacrifice of future well-being for present gains."
 },
