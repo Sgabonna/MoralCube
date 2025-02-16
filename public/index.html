@@ -228,7 +228,7 @@
             position: relative;
             display: inline-block;
         }
-        /* Replace your existing tooltip container CSS with this */
+
         .tooltip-container {
             position: relative;
             display: inline-flex;
@@ -254,7 +254,7 @@
             opacity: 0;
             position: absolute;
             bottom: 150%;
-            right: -20px; /* Changed to use right positioning */
+            left: 20px; /* Changed to position tooltip to the right */
             padding: 8px 12px;
             background-color: #2d3748;
             color: white;
@@ -272,20 +272,20 @@
 
         /* First tooltip (info) */
         .tooltip-container:first-child .tooltip-content {
-            right: -20px;
+            left: 20px;
         }
 
         .tooltip-container:first-child .tooltip-content::after {
-            right: 25px;
+            left: 10px;
         }
 
         /* Second tooltip (question) */
         .tooltip-container:last-child .tooltip-content {
-            right: -20px;
+            left: 20px;
         }
 
         .tooltip-container:last-child .tooltip-content::after {
-            right: 25px;
+            left: 10px;
         }
 
         .tooltip-container:hover .tooltip-content {
