@@ -561,11 +561,11 @@
                 info: "Evaluate the magnitude of the sacrifice based on the type of life impacted. Smaller organisms like bacteria and insects are assigned lower values, while more complex and sentient life forms, such as animals and humans, are assigned higher values. Additionally, consider the vulnerability of individuals; for example, children or disabled humans may have a slightly higher weighting due to their increased dependency and reduced capacity to defend themselves.",
                 question: "To what extent did the action impact life, considering the type and vulnerability of the affected organism(s)? Use the following scale to assess the magnitude of impact per individual:"
             },
-            "Unconscious vs. Conscious": {
+            "Unconscious vs Conscious": {
                 info: "Evaluate the individual’s level of awareness regarding their actions and their consequences. Consider whether the action was performed reflexively, partially consciously, or with full mindfulness.",
                 question: "To what extent was the individual conscious of their actions and consequences?"
             },
-            "Degree of Present Self-Sacrifice": {
+            "Present Self-Sacrifice": {
                 info: "A component of Self-Control is self-sacrifice, as we don’t exercise self-control when we want to do something, only when we don’t want to. Evaluate the level of sacrifice affecting the immediate, present self. This includes sacrifices that impact short-term desires, impulses, and needs—such as loss of comfort, overcoming impulses, inconvenience, or minor financial costs.",
                 question: "To what extent did the action require sacrifices from the individual's present self? Consider aspects like immediate comfort, desires, impulses, convenience, minor financial expenditures, or brief emotional distress."
             },
@@ -1411,82 +1411,77 @@
                             ? ` (${dimension.id} Score: ${dimensionScore})`
                             : '';
 
-                        // Build table rows; modify the first cell to include tooltip icons.
-                        const questionRows = currentDimension.questions.map((q, qIndex) => {
-                            let range = "N/A";
-                            if (!isPhilosophical) {
-                                if (dimension.id === 'Ends') {
-                                    // Ends dimension (Questions 1-5):
-                                    // Q1-Q3: "0 to 4", Q4-Q5: "0 to -4"
-                                    range = qIndex < 3 ? "0 to 4" : "0 to -4";
-                                } else if (dimension.id === 'Means') {
-                                    // Means dimension (Questions 6-10):
-                                    switch(qIndex) {
-                                        case 0: range = "0 to -4"; break;
-                                        case 1: range = "0 to -6"; break;
-                                        case 2: range = "0 to -4"; break;
-                                        case 3: range = "0 to -4"; break;
-                                        case 4: range = "0.01 to 1.2"; break;
-                                        default: range = "N/A";
-                                    }
-                                } else if (dimension.id === 'Character') {
-                                    // Character dimension (Questions 11-18):
-                                    switch(qIndex) {
-                                        case 0: range = "0 to 1"; break;
-                                        case 1: range = "0 to 2"; break;
-                                        case 2: range = "0 to 4"; break;
-                                        case 3: range = "0 to 1"; break;
-                                        default: range = "N/A";
+                            const questionRows = currentDimension.questions.map((q, qIndex) => {
+                                let range = "N/A";
+                                if (!isPhilosophical) {
+                                    if (dimension.id === 'Ends') {
+                                        range = qIndex < 3 ? "0 to 4" : "0 to -4";
+                                    } else if (dimension.id === 'Means') {
+                                        switch(qIndex) {
+                                            case 0: range = "0 to -4"; break;
+                                            case 1: range = "0 to -6"; break;
+                                            case 2: range = "0 to -4"; break;
+                                            case 3: range = "0 to -4"; break;
+                                            case 4: range = "0.01 to 1.2"; break;
+                                            default: range = "N/A";
+                                        }
+                                    } else if (dimension.id === 'Character') {
+                                        switch(qIndex) {
+                                            case 0: range = "0 to 1"; break;
+                                            case 1: range = "0 to 2"; break;
+                                            case 2: range = "0 to 4"; break;
+                                            case 3: range = "0 to 1"; break;
+                                            default: range = "N/A";
+                                        }
                                     }
                                 }
-                            }
-                            
-                            // Look up tooltips based on the question text (adjust key if needed)
-                            const tooltip = questionTooltips[q.question] || null;
-
-                            if (isPhilosophical) {
-                                return `
-                                    <tr>
-                                        <td>
-                                            ${q.question}
-                                            ${tooltip ? `
-                                            <span class="tooltip">
-                                                <i class="fas fa-info-circle info-icon"></i>
-                                                <span class="tooltiptext" style="max-width:300px;">${tooltip.info}</span>
-                                            </span>
-                                            <span class="tooltip">
-                                                <i class="fas fa-question-circle info-icon" style="margin-left:0.5rem;"></i>
-                                                <span class="tooltiptext" style="max-width:300px;">${tooltip.question}</span>
-                                            </span>
-                                            ` : ''}
-                                        </td>
-                                        <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
-                                        <td>${q.justification}</td>
-                                    </tr>
-                                `;
-                            } else {
-                                return `
-                                    <tr>
-                                        <td>
-                                            ${q.question}
-                                            ${tooltip ? `
-                                            <span class="tooltip">
-                                                <i class="fas fa-info-circle info-icon"></i>
-                                                <span class="tooltiptext" style="max-width:300px;">${tooltip.info}</span>
-                                            </span>
-                                            <span class="tooltip">
-                                                <i class="fas fa-question-circle info-icon" style="margin-left:0.5rem;"></i>
-                                                <span class="tooltiptext" style="max-width:300px;">${tooltip.question}</span>
-                                            </span>
-                                            ` : ''}
-                                        </td>
-                                        <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
-                                        <td>${range}</td>
-                                        <td>${q.justification}</td>
-                                    </tr>
-                                `;
-                            }
-                        }).join('');
+                                
+                                // Use the question text from JSON (q.question) as the lookup key.
+                                const tooltip = questionTooltips[q.question] || null;
+                                
+                                if (isPhilosophical) {
+                                    return `
+                                        <tr>
+                                            <td>
+                                                ${q.question}
+                                                ${tooltip ? `
+                                                <span class="tooltip">
+                                                    <i class="fas fa-info-circle info-icon"></i>
+                                                    <span class="tooltiptext" style="max-width:300px;">${tooltip.info}</span>
+                                                </span>
+                                                <span class="tooltip">
+                                                    <i class="fas fa-question-circle info-icon" style="margin-left:0.5rem;"></i>
+                                                    <span class="tooltiptext" style="max-width:300px;">${tooltip.question}</span>
+                                                </span>
+                                                ` : ''}
+                                            </td>
+                                            <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
+                                            <td>${q.justification}</td>
+                                        </tr>
+                                    `;
+                                } else {
+                                    return `
+                                        <tr>
+                                            <td>
+                                                ${q.question}
+                                                ${tooltip ? `
+                                                <span class="tooltip">
+                                                    <i class="fas fa-info-circle info-icon"></i>
+                                                    <span class="tooltiptext" style="max-width:300px;">${tooltip.info}</span>
+                                                </span>
+                                                <span class="tooltip">
+                                                    <i class="fas fa-question-circle info-icon" style="margin-left:0.5rem;"></i>
+                                                    <span class="tooltiptext" style="max-width:300px;">${tooltip.question}</span>
+                                                </span>
+                                                ` : ''}
+                                            </td>
+                                            <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
+                                            <td>${range}</td>
+                                            <td>${q.justification}</td>
+                                        </tr>
+                                    `;
+                                }
+                            }).join('');
 
                         // Build colgroup and header based on whether we show the range column.
                         let colgroupHTML, headerHTML;
