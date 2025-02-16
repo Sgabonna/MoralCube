@@ -308,6 +308,7 @@
 
         /* Each overview card (stacked vertically) */
         .comparison-card {
+            cursor: pointer;
             height: 125px;  /* Fixed height for each card (e.g., 125px if container is 500px) */
             box-sizing: border-box;
             padding: 5px 8px;
@@ -475,11 +476,9 @@
                 <div id="cube-plot"></div>
             </div>
             </div>
-            
-            <!-- Middle Column: Stacked Overview Cards (15% width) -->
             <div id="cards-column" style="width: 18%; padding: 0 10px;">
-            <!-- The overview cards will be populated here -->
-            <div id="overview"></div>
+                <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Select 2 scenarios/models to compare:</p>
+                <div id="overview"></div>
             </div>
             
             <!-- Right Column: Overview Placeholder for Video/Website -->
