@@ -95,7 +95,7 @@
 "justification": "The child appears partly but not fully conscious of the deeper moral implications; it's a thoughtful yet simple act."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.2,
 "justification": "A minor expenditure of effort and time, but hardly a significant sacrifice of comfort or resources."
 },
@@ -124,17 +124,17 @@
 {
 "question": "Deontology",
 "score": "Right",
-"justification": "Deontological ethics (influenced by Kant, for instance) often emphasizes acting from a sense of duty or good will. Here, the child acts out of concern for the dog’s comfort. Even if the child is not rationalizing it as a “duty,” the action itself is in harmony with the duty to treat sentient beings kindly."
+"justification": "Providing comfort to a living creature aligns with the duty of benevolence or caring for others. From a Kantian viewpoint, the child’s intention is clearly compassionate, fulfilling a moral rule such as “be kind to others (including animals)."
 },
 {
 "question": "Utilitarianism",
 "score": "Right",
-"justification": "Utilitarianism judges actions by their consequences. Providing a pillow reduces discomfort or increases the dog’s well-being, thereby increasing net “utility."
+"justification": "The dog experiences increased comfort, and no one is harmed. This creates a net positive impact on overall well-being."
 },
 {
 "question": "Virtue Ethics",
-"score": "Commendable",
-"justification": "From a virtue ethics standpoint, what matters is whether the action embodies virtuous character traits. The child demonstrates care, which is praiseworthy."
+"score": "Right",
+"justification": "The child demonstrates virtues of compassion, thoughtfulness, and kindness. These are typically seen as positive traits that virtue ethics endorses."
 }
 ]
 }
@@ -238,7 +238,7 @@
 "justification": "The child may notice the dog's situation but is largely unaware or unconcerned about the moral implications."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "Doing nothing involves no immediate cost or sacrifice of comfort for the child."
 },
@@ -266,18 +266,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological standpoint, the child neglects any moral duty to show basic kindness or care, though the violation is minor since no explicit harm is inflicted."
+"score": "Mild Failing",
+"justification": "The child is not violating a direct prohibition (not harming the dog), but also is not fulfilling a potential duty to be benevolent. Depending on how strictly one interprets “duty to help,” this could be seen as a missed duty rather than an outright wrongdoing."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "Under utilitarian analysis, inaction fails to increase overall happiness (the dog remains less comfortable) but does not actively cause harm. From a negative utilitarian viewpoint, it represents a missed chance to reduce discomfort, thus slightly negative in that the dog's mild discomfort continues unnecessarily."
+"score": "Neutral",
+"justification": "The child’s inaction neither improves nor worsens the dog’s comfort. There is no active harm, but also no additional good."
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "Within Aristotelian virtue ethics, the child misses an opportunity to practice compassion or attentiveness; this suggests a lack of virtuous action rather than a direct vice of cruelty."
+"score": "Neutral",
+"justification": "The child misses an opportunity to display compassion. They are not cruel but also not proactively kind."
 }
 ]
 }
@@ -381,7 +381,7 @@
 "justification": "The child is partially aware they want to interact with the dog but not fully mindful of the potential negative outcome."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "No inconvenience or forfeit is involved; the child is acting on immediate desire."
 },
@@ -409,18 +409,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological standpoint, the action is imperfect because it inadvertently violates the moral duty to avoid causing unnecessary distress, even if intentions were not malicious."
+"score": "Mild Failing",
+"justification": "The child’s intention is to be affectionate. However, the outcome is the dog’s mild distress. Some deontological views place a strong emphasis on intent—the child did not intend harm. The child may have overlooked a duty of care (to approach gently)."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "A classical utilitarian would note that while the intent was positive, the outcome reduces net happiness momentarily by startling the dog. From a negative utilitarian perspective, the act fails to minimise distress; however, the severity of harm remains low and short‐lived.\n\nIn both views, the outcome is suboptimal compared to a calmer, more careful approach, but it's not a severe moral failing given the minimal harm."
+"score": "Mild Failing",
+"justification": "The dog is startled and experiences mild distress, which is a negative outcome. The child’s positive feelings may be offset by the dog’s discomfort. Overall, this might result in a small net negative."
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "Aristotelian virtue ethics would identify a lack of practical wisdom and temperance in the child's approach; the child attempts kindness but lacks the measured restraint to ensure no harm."
+"score": "Mixed",
+"justification": "While well-intentioned, the child lacks prudence or temperance in their enthusiasm. They show a desire to care (which is good) but execute it clumsily, indicating a virtue that’s present but undeveloped."
 }
 ]
 }
@@ -524,7 +524,7 @@
 "justification": "Partially aware of helping, but primarily following the adult’s directive."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.2,
 "justification": "A minor expenditure of effort or inconvenience."
 },
@@ -552,18 +552,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological standpoint, the child follows a rule to help another, albeit prompted by authority rather than personal moral duty."
+"score": "Right",
+"justification": "The child is performing the same helpful act as in scenario A, but the motivation is obedience rather than personal moral conviction. Kantian deontology often considers an act fully morally praiseworthy if it’s done out of recognition of duty itself—not just because someone told you to do it."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "This action yields a positive outcome (comfort for the dog) with no harm done, making it net beneficial under classical and negative utilitarian views."
+"score": "Right",
+"justification": "The dog is helped, comfort is increased, no one is harmed. Hence, from a strictly consequential standpoint, the result is positive."
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "While kindness is performed, it arises more from obedience than personal virtue, indicating less development of empathy or compassion."
+"score": "Right",
+"justification": "The child is acting out of obedience, which can sometimes be considered a virtue (especially in children learning from adults). However, it doesn’t necessarily prove or nurture an internal sense of compassion or kindness—it’s more about following orders."
 }
 ]
 }
@@ -666,7 +666,7 @@
 "justification": "The action showed clear awareness of the dog's needs and deliberate effort to address them."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.3,
 "justification": "Minor present sacrifice of comfort and effort to help another."
 },
@@ -694,18 +694,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological perspective, this action aligns with the categorical imperative of treating all sentient beings with respect and dignity. The child demonstrated a universal maxim of caring for those dependent on us, which if universalised would create a more compassionate world."
+"score": "Right",
+"justification": "The child acts from genuine duty of care and good will, following what could be universalized as a moral maxim of help those in need when you can."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "From a utilitarian perspective, the action produces positive utility by increasing the comfort and well‐being of the dog while fostering empathy and caring behaviour in the child. The ripple effects of teaching compassion early in life could lead to greater future utility. From a negative utilitarian view, the action reduces suffering by addressing physical discomfort, though the initial discomfort was minimal."
+"score": "Right",
+"justification": "Produces positive welfare outcomes for both dog (comfort) and child (developing empathy)"
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "The action exemplifies several key virtues: compassion (caring for another's comfort), mindfulness (noticing the need), responsibility (taking action to help), and kindness (acting without expectation of reward). These virtues represent excellence of character, particularly notable in a child developing moral awareness."
+"score": "Right",
+"justification": "Demonstrates virtuous traits of compassion, thoughtfulness, and care"
 }
 ]
 }
@@ -809,7 +809,7 @@
 "justification": "The action involved conscious awareness of instructions and their execution, though less personal moral deliberation."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.2,
 "justification": "Minimal present sacrifice involved in following instructions."
 },
@@ -837,18 +837,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological perspective, while the action fulfils the duty of obedience to authority and care for dependent beings, it falls short of the categorical imperative of acting from autonomous moral reasoning, which Kant considered essential for true moral worth."
+"score": "Neutral",
+"justification": "While the outcome is positive, the action stems from obedience rather than moral duty, lacking autonomous moral worth"
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "From a utilitarian standpoint, the action produces positive utility by increasing the dog's comfort and reinforcing socially beneficial obedience. However, from a negative utilitarian perspective, while the action reduces immediate physical discomfort, it may subtly contribute to the development of heteronomous rather than autonomous moral reasoning, potentially limiting future moral development."
+"score": "Right",
+"justification": "The end result increases welfare regardless of motivation"
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "The action demonstrates the virtues of obedience and compliance, but may not fully develop the deeper virtues of compassion, practical wisdom, and moral autonomy that Aristotle considered essential for true character excellence."
+"score": "Wrong",
+"justification": "Shows a lack of attentiveness and mindfulness, failing to exercise virtuous traits"
 }
 ]
 }
@@ -952,7 +952,7 @@
 "justification": "The child was somewhat aware of their actions but not fully conscious of the potential consequences"
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.1,
 "justification": "Very minimal present self-sacrifice as the child followed their immediate impulses"
 },
@@ -980,18 +980,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological perspective, while the child's intention to show care aligns with the duty to be kind to animals, the failure to exercise proper care and consideration violates the broader duty to prevent harm and respect the dignity of other beings"
+"score": "Wrong",
+"justification": "Despite good intentions, the action violates the duty to avoid causing harm"
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "From a utilitarian perspective, the action produced a net negative outcome by causing distress rather than comfort, even though the intention was to increase well-being. The failure to consider how one's actions might affect others led to a suboptimal outcome in terms of aggregate welfare. From a negative utilitarian view, the action actively created suffering where none existed before, making it particularly problematic despite good intentions"
+"score": "Wrong",
+"justification": "Creates net negative utility through causing distress, despite good intentions"
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "The scenario reveals deficiencies in the virtues of temperance, prudence, and mindfulness, while showing an excess of enthusiasm that becomes a vice through lack of moderation according to Aristotelian mean. The child's impulse toward kindness demonstrates good character foundations but lacks the wisdom and self-regulation needed for virtuous execution"
+"score": "Wrong",
+"justification": "Though showing enthusiasm and love, lacks the wisdom and patience of true virtue"
 }
 ]
 }
@@ -1099,7 +1099,7 @@
 "justification": "The child was initially conscious of the dog's state but became unconsciously distracted"
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "No meaningful present self-sacrifice was involved in the inaction"
 },
@@ -1127,18 +1127,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological perspective, while there may not have been a strict duty to provide extra comfort to the dog, the child's failure to act represents a missed opportunity to fulfill the maxim of treating others (including animals) as ends in themselves rather than mere means or inconveniences"
+"score": "Neutral",
+"justification": "Failing to act when one could help violates the categorical imperative of treating others (including animals) as ends in themselves"
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "From a utilitarian perspective, the inaction represents a small negative as it failed to increase the overall well-being of the dog when doing so would have come at virtually no cost to the child. The absence of action led to a slightly sub-optimal outcome in terms of aggregate welfare. From a negative utilitarian view, while no significant suffering was caused, an opportunity to reduce even minor discomfort was missed, making this a mild moral failure"
+"score": "Neutral",
+"justification": "No harm done but fails to maximize potential welfare"
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "The scenario demonstrates a lack of the virtues of mindfulness, compassion, and diligence, while exhibiting the vices of negligence and inconsideration. The child's behavior, while not malicious, falls short of the Aristotelian mean by failing to develop and exercise virtuous character traits that would lead to appropriate action"
+"score": "Wrong",
+"justification": "Shows a lack of attentiveness and mindfulness, failing to exercise virtuous traits"
 }
 ]
 }
@@ -1245,7 +1245,7 @@
 "justification": "Fully conscious. The child's action is a deliberate and thoughtful act of kindness."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The action requires minimal effort from the child."
 },
@@ -1273,18 +1273,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological perspective, the action is morally good.  It reflects a duty of care towards animals and demonstrates kindness, which are inherently good actions."
+"score": "Right",
+"justification": "From a deontological perspective, the act is right.  Deontology focuses on the inherent rightness or wrongness of actions themselves, regardless of consequences. In this case, the child is acting out of care and kindness, which are generally considered good in themselves. The intention matters here, and the intention is positive.  There's no violation of any moral duty."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "From a utilitarian perspective, the action is positive. It increases the dog's comfort and likely brings joy to the child, maximizing happiness. A negative utilitarian perspective would also approve, as the action minimizes harm and promotes well-being."
+"score": "Right",
+"justification": "From a utilitarian perspective, the act is right. Utilitarianism focuses on maximizing happiness and minimizing suffering.  Providing comfort to the dog likely increases its well-being, even if only slightly. The child's action produces a positive outcome, contributing to overall happiness (even if on a small scale)."
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "From an Aristotelian perspective, the action demonstrates virtues such as compassion, kindness, and care.  It represents the virtuous mean between indifference and excessive concern for the dog. The child's action reflects practical wisdom in recognizing the dog's needs and acting accordingly."
+"score": "Right",
+"justification": "From a virtue ethics perspective, the act is right.  Virtue ethics emphasizes character traits. The child's action demonstrates virtues like compassion, kindness, and caring.  These are positive character traits, and the action flows naturally from them.  It reinforces the development of a virtuous character."
 }
 ]
 }
@@ -1392,7 +1392,7 @@
 "justification": "Moderately wilful. The child's intent is conscious, but the lack of awareness of the dog's reaction suggests some impulsivity and less than full mindfulness of the consequences."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The action requires minimal effort and no real sacrifice from the child."
 },
@@ -1420,18 +1420,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological perspective, the action is mixed. The intent (showing affection) is good, but the unintended consequence (distress) is not.  It's not inherently wrong to show affection, but the manner in which it was done caused harm."
+"score": "Mild Failing",
+"justification": "From a deontological perspective, the act is not necessarily wrong, but careless. The child's intention was likely good (to interact with the dog), but the action resulted in an unintended negative consequence.  It wasn't a malicious act, but it demonstrates a lack of consideration for the dog's well-being in the moment."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "From a utilitarian perspective, the action is not optimal.  While the child's intention was to increase happiness, the outcome resulted in a decrease in the dog's well-being, even if temporary. A negative utilitarian perspective would also likely find the action suboptimal as it caused unnecessary distress, even if minor."
+"score": "Mild Failing",
+"justification": "From a utilitarian perspective, the act is not ideal.  The action, while perhaps intended to bring joy, resulted in mild distress for the dog, thus decreasing overall happiness (even if only slightly).  The negative consequence outweighs the potential positive of the interaction."
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "From an Aristotelian perspective, the action demonstrates a lack of practical wisdom. The child's enthusiasm is not balanced with consideration for the dog's likely reaction.  While kindness is a virtue, it needs to be expressed thoughtfully to be truly virtuous.  The action, while well-intentioned, lacks the necessary judgment and awareness to be considered fully virtuous."
+"score": "Mild Failing",
+"justification": "From a virtue ethics perspective, the act is not ideal.  While the child might have intended to be kind, the action demonstrates a lack of consideration and thoughtfulness.  It doesn't reflect virtues like compassion and care, and it shows a lack of practical wisdom in how to interact gently with the dog."
 }
 ]
 }
@@ -1539,7 +1539,7 @@
 "justification": "Partially conscious. The child has the initial thought to help, but the distraction suggests a lack of full focus and awareness of the missed opportunity."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The inaction requires no effort or sacrifice."
 },
@@ -1567,18 +1567,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological perspective, the inaction is not inherently wrong, but it represents a failure to act on a potentially good impulse. It's not a violation of a clear duty, but it's a missed opportunity to do good."
+"score": "Neutral",
+"justification": "From a deontological perspective, the act is not necessarily wrong. While actively helping would be good, simply observing and not acting isn't necessarily a violation of a specific moral duty. There's no active harm being done.  It's more of a missed opportunity for a positive action."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "From a utilitarian perspective, the inaction is suboptimal. The potential for increased comfort for the dog is lost, even if the impact is minor. A negative utilitarian perspective would also likely see the inaction as suboptimal, as it fails to maximize potential well-being, even if it doesn't actively cause harm."
+"score": "Neutral",
+"justification": "From a utilitarian perspective, the act is not ideal, but not necessarily wrong.  While providing the pillow would have increased the dog's comfort (a small increase in happiness), the child's inaction doesn't necessarily cause suffering.  It's a neutral act in terms of overall utility.  A missed opportunity for positive utility, but not an act that decreases utility."
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "From an Aristotelian perspective, the inaction suggests a lack of virtues like diligence and follow-through. While the initial thought might be kind, the failure to act on it demonstrates a lack of character strength. It's not a vice, but it's a failure to cultivate virtuous habits."
+"score": "Mild Failing",
+"justification": "From a virtue ethics perspective, the act is not ideal. While not actively bad, it represents a lack of care or a missed opportunity to express virtues like compassion.  A virtuous person would likely have been moved to act in such a situation. It doesn't cultivate positive character traits as strongly as Scenario A."
 }
 ]
 }
@@ -1686,7 +1686,7 @@
 "justification": "Fully conscious. The child is aware of the action and its purpose, even if the motivation is external."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The action requires minimal effort from the child."
 },
@@ -1714,18 +1714,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological perspective, the action is morally good as it results in a positive outcome (dog's comfort). However, the lack of internal motivation might be seen as less virtuous than an act driven by genuine compassion."
+"score": "Neutral",
+"justification": "From a deontological perspective, the act is morally neutral. The child performs the correct action (helping the dog) but does so out of obedience rather than an internal moral compass.  Deontology would value acting from internal moral principles, but obedience to a legitimate authority is also not inherently wrong."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "From a utilitarian perspective, the action is positive as it increases the dog's well-being. The motivation is less important than the outcome. A negative utilitarian perspective would also approve, as the action minimizes harm and promotes well-being."
+"score": "Neutral",
+"justification": "From a utilitarian perspective, the act is right.  The outcome is positive (the dog receives comfort), regardless of the child's motivation.  The increase in happiness is what matters, not the source of the action."
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "From an Aristotelian perspective, the action is not fully virtuous because it lacks the internal motivation of compassion. While obedience is a virtue, it's not the highest virtue, and in this case, it's replacing genuine care for the dog.  The action is externally virtuous, but internally it's driven by a different motive."
+"score": "Displaying Virtue",
+"justification": "From a virtue ethics perspective, the act is not as virtuous as Scenario A. While the dog is helped, the child's action doesn't stem from compassion or kindness, but from obedience.  It doesn't cultivate the virtues of caring and empathy as effectively.  It's a good action, but for the wrong reasons, from a virtue ethics perspective."
 }
 ]
 }
@@ -1832,7 +1832,7 @@
 "justification": "The child likely acted with some awareness of their actions and the positive impact on the dog, though it may not have been a fully deliberate or deeply considered act."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "The action required minor effort and inconvenience, such as interrupting playtime to retrieve the pillow, but no significant sacrifice."
 },
@@ -1860,18 +1860,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological perspective, the action is right because it aligns with the duty to care for others, particularly those dependent on us, such as pets. The child acted out of a sense of responsibility and kindness, which are morally praiseworthy traits."
+"score": "Right",
+"justification": "The child acts from a sense of duty to care for the dog, aligning with the moral rule of kindness to animals."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "From a utilitarian perspective, the action is right because it increases overall happiness and reduces suffering. The dog's comfort is improved, and the child likely experiences positive emotions from helping. There are no significant negative consequences, making the action morally justified. From a negative utilitarian perspective, the action is also right because it reduces the dog's discomfort, aligning with the goal of minimizing suffering."
+"score": "Right",
+"justification": "The action maximizes comfort for the dog, creating positive outcomes."
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "From an Aristotelian perspective, the child demonstrated virtues such as kindness, empathy, and thoughtfulness. These traits contribute to the child's moral character and align with the concept of eudaimonia, or flourishing. There are no apparent vices in this scenario."
+"score": "Right",
+"justification": "Demonstrates compassion and thoughtfulness, reflecting virtuous character."
 }
 ]
 }
@@ -1979,7 +1979,7 @@
 "justification": "The child likely acted with some awareness of their actions, but the primary motivation was obedience rather than a fully conscious decision to help the dog."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "The action required minor effort and inconvenience, such as interrupting playtime to retrieve the pillow, but no significant sacrifice."
 },
@@ -2007,18 +2007,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological perspective, the action is morally neutral. While the child fulfills a duty to obey the adult, the action lacks the intrinsic moral value of acting out of personal empathy or care for the dog."
+"score": "Right",
+"justification": "The action fulfills the duty to care for the dog, even if motivated by obedience."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "From a utilitarian perspective, the action is right because it increases the dog's comfort and reduces its suffering. However, the child's motivation (obedience) does not contribute to overall happiness as significantly as an act driven by personal empathy would. From a negative utilitarian perspective, the action is also right because it reduces the dog's discomfort, aligning with the goal of minimizing suffering."
+"score": "Right",
+"justification": "The dog benefits from the pillow, achieving a positive outcome."
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "From an Aristotelian perspective, the child demonstrates obedience, which can be seen as a virtue in certain contexts. However, the action lacks the virtuous traits of empathy and initiative that were present in the original scenario. The child's character is not necessarily flawed, but the act is less morally praiseworthy."
+"score": "Wrong",
+"justification": "Lacks genuine compassion; virtue requires internal motivation, not mere compliance."
 }
 ]
 }
@@ -2126,7 +2126,7 @@
 "justification": "The child likely acted with partial awareness of their actions, but the enthusiasm suggests a lack of full consideration for the dog's reaction."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "The action did not require any significant sacrifice from the child's present self, as it was driven by enthusiasm rather than effort or inconvenience."
 },
@@ -2154,18 +2154,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological perspective, the action is morally ambiguous. The child's intent to interact with the dog is not inherently wrong, but the lack of consideration for the dog's well-being undermines the moral value of the act."
+"score": "Mixed",
+"justification": "The intention (to help) aligns with duty, but the action’s recklessness may violate the duty to avoid harm."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "From a utilitarian perspective, the action is wrong because it results in mild distress for the dog, reducing overall happiness. The child's enthusiasm does not outweigh the negative impact on the dog's well-being. From a negative utilitarian perspective, the action is also wrong because it increases the dog's discomfort, which conflicts with the goal of minimizing suffering."
+"score": "Wrong",
+"justification": "The distress caused outweighs the intended comfort."
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "From an Aristotelian perspective, the child demonstrates enthusiasm and a desire for connection, which can be seen as positive traits. However, the lack of consideration for the dog's reaction reflects impulsivity, a vice that detracts from the child's moral character. The action is not fully virtuous due to the unintended harm caused."
+"score": "Wrong",
+"justification": "Shows a lack of prudence and self-awareness, key virtues for ethical action."
 }
 ]
 }
@@ -2273,7 +2273,7 @@
 "justification": "The child was likely partially conscious of their inaction but did not fully consider the consequences."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "No significant present sacrifices were made by the child."
 },
@@ -2301,18 +2301,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological perspective, the child's inaction is not inherently wrong as no duty was explicitly violated, but it fails to fulfill a potential duty of care towards the dog."
+"score": "Wrong",
+"justification": "(if there’s a duty to aid). If helping the dog is a moral duty (e.g., care for dependent beings), inaction violates this duty."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "From a utilitarian perspective, the action is suboptimal as it did not maximize overall happiness; the dog's minor discomfort could have been easily alleviated. Negative utilitarianism would also view this unfavorably as it allowed for avoidable discomfort."
+"score": "Wrong",
+"justification": "The dog misses out on increased comfort, reducing overall well-being."
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "From an Aristotelian perspective, the child displayed a lack of compassion and responsibility, which are virtues. However, curiosity and exploration are also natural and can be seen as part of developing virtues."
+"score": "Wrong",
+"justification": "Reflects a lack of empathy or attentiveness, failing to cultivate kindness."
 }
 ]
 }
@@ -2419,7 +2419,7 @@
 "justification": "The child's action appears to be a deliberate and conscious choice."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "The child may have experienced minor discomfort or inconvenience, but it's not significant."
 },
@@ -2447,18 +2447,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological perspective, the child's action can be seen as fulfilling a moral duty to care for another living being. The action is in line with the moral principle of treating others with respect and kindness."
+"score": "Right",
+"justification": "The child demonstrates care and compassion, which is a moral duty. The action is right because it aligns with the moral rule of treating living beings with kindness."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "From a utilitarian perspective, the child's action can be seen as promoting the overall happiness and well-being of the dog, and potentially others who witness the act of kindness. The action contributes to a positive outcome and increases overall utility."
+"score": "Right",
+"justification": "The child's action increases the dog's comfort and happiness, contributing to overall well-being. This aligns with the utilitarian principle of maximizing happiness."
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "From a virtue ethics perspective, the child's action demonstrates the virtue of compassion and kindness. The child is cultivating a moral character by performing an act that promotes the well-being of another living being."
+"score": "Right",
+"justification": "The child demonstrates the virtues of compassion, empathy, and kindness, which are essential for a good character."
 }
 ]
 }
@@ -2566,7 +2566,7 @@
 "justification": "The child's action appears to be partially conscious, as they are following instructions, but may not fully understand the implications."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.2,
 "justification": "The child may have experienced minor discomfort or inconvenience, but it's not significant."
 },
@@ -2594,18 +2594,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological perspective, the child's action can be seen as fulfilling a moral duty to obey authority figures, but lacks personal moral initiative."
+"score": "Right",
+"justification": "The child fulfills their moral duty to obey legitimate authority (the adult) and demonstrates care for the dog. The action is right because it aligns with the moral rule of obedience."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "From a utilitarian perspective, the child's action can be seen as promoting the overall happiness and well-being of the dog, but the motivation behind the action (obedience rather than empathy) may reduce its moral value."
+"score": "Right",
+"justification": "The child's action, although motivated by obedience, still increases the dog's comfort and happiness, contributing to overall well-being."
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "From a virtue ethics perspective, the child's action demonstrates the virtue of obedience, but lacks the virtues of empathy, compassion, and personal initiative."
+"score": "Right (With Caveat)",
+"justification": "The child demonstrates obedience, which is a virtue. However, the motivation behind the action (obedience rather than personal initiative) may indicate a lack of autonomy and moral agency."
 }
 ]
 }
@@ -2713,7 +2713,7 @@
 "justification": "The child's action appears to be partially conscious, as they are enthusiastic and acting on impulse, but may not fully understand the implications."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.2,
 "justification": "The child may have experienced minor discomfort or inconvenience, but it's not significant."
 },
@@ -2741,18 +2741,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological perspective, the child's action can be seen as a violation of the dog's right to autonomy and non-maleficence, as it caused unintended harm."
+"score": "Wrong",
+"justification": "The child's action, although well-intentioned, causes harm to the dog. This violates the moral rule of non-maleficence (do no harm)."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "From a utilitarian perspective, the child's action can be seen as decreasing overall happiness and well-being, as it caused distress to the dog. However, it may also be argued that the child's intention was to increase happiness, albeit misguided."
+"score": "Wrong",
+"justification": "The child's action causes mild distress to the dog, decreasing overall happiness. This violates the utilitarian principle of maximizing happiness."
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "From a virtue ethics perspective, the child's action demonstrates a lack of prudence and self-control, as they acted impulsively without considering the potential consequences."
+"score": "Wrong",
+"justification": "The child's action, although well-intentioned, demonstrates a lack of prudence and self-control, which are essential virtues."
 }
 ]
 }
@@ -2860,7 +2860,7 @@
 "justification": "The child's inaction appears to be partially unconscious, as they are distracted and not fully aware of the dog's needs."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "The child's inaction does not require any significant sacrifice for their present self."
 },
@@ -2888,18 +2888,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological perspective, the child's inaction can be seen as a failure to fulfill a moral obligation to help those in need, specifically the dog."
+"score": "Wrong",
+"justification": "The child fails to demonstrate care and compassion, which is a moral duty. The inaction is wrong because it neglects the moral rule of treating living beings with kindness."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "From a utilitarian perspective, the child's inaction can be seen as failing to increase overall happiness and well-being, as it neglects the dog's needs."
+"score": "Wrong",
+"justification": "The child's inaction fails to increase the dog's comfort and happiness, missing an opportunity to contribute to overall well-being."
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "From a virtue ethics perspective, the child's inaction demonstrates a lack of empathy and compassion, which are important virtues in this context."
+"score": "Wrong",
+"justification": "The child fails to demonstrate the virtues of compassion and kindness, indicating a lack of moral character."
 }
 ]
 }
@@ -3006,7 +3006,7 @@
 "justification": "The individual was fully aware of what they were doing and understood the likely consequences (public exposure)."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "No real sacrifice was made in the present; this was purely an act of convenience with no immediate personal cost."
 },
@@ -3034,18 +3034,18 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "From a deontological standpoint, the act is wrong because it violates the duty to respect public space and treat others as ends in themselves. By subjecting onlookers to distress, the individual fails to uphold universal moral rules about decency and respect for persons."
+"score": "Wrong",
+"justification": "Most deontological frameworks hold that one ought not to violate norms of decency or treat others merely as means to personal convenience. Public indecency imposes discomfort on unwilling observers."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "Under a classical utilitarian view, the action causes discomfort and disgust to many while yielding only a minor convenience for one person, resulting in a net decrease in overall happiness. From a negative utilitarian perspective, the primary concern is the reduction of harm and suffering; in this scenario, the act clearly increases unpleasant experiences for onlookers without providing significant positive utility to offset that harm.\n\nHad the individual used the proper facilities, the negative utilitarian view would see substantially less harm caused to others, thereby promoting a morally preferable outcome by minimising overall suffering."
+"score": "Wrong",
+"justification": "This act likely causes significant discomfort or distress to onlookers, with no strong benefit to offset it (the convenience gained by the individual is outweighed by offense and potential health concerns for others)."
 },
 {
 "question": "Virtue Ethics",
-"score": null,
-"justification": "According to an Aristotelian view, virtues like temperance, respect, and prudence are lacking here. The person’s choice demonstrates the vice of intemperance (failure to moderate bodily needs), discourtesy towards others, and a lack of practical wisdom in social conduct."
+"score": "Wrong",
+"justification": "Urinating publicly in view of others shows lack of self-control and respect for social norms. It does not reflect traits like temperance, prudence, or consideration for others."
 }
 ]
 }
@@ -3153,7 +3153,7 @@
 "justification": "They were fully aware of the moral and social implications of their decision."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "A minor inconvenience to leave the spot and find a restroom."
 },
@@ -3181,13 +3181,13 @@
 "questions": [
 {
 "question": "Deontology",
-"score": null,
-"justification": "Deontologically, choosing to use a restroom aligns with the universal duty of respect."
+"score": "Right",
+"justification": "The individual respects the implicit rule of not exposing oneself or inconveniencing others. They uphold social norms of decency."
 },
 {
 "question": "Utilitarianism",
-"score": null,
-"justification": "Utilitarianly, avoiding public urination prevents discomfort for others, increasing overall well-being; from a negative utilitarian view, the action minimises harm by removing the potential for public offense or disgust."
+"score": "Right",
+"justification": "Going to a proper restroom prevents any offense or public health concerns, ensuring no negative impact on others."
 },
 {
 "question": "Virtue Ethics",
@@ -3300,7 +3300,7 @@
 "justification": "They are fully mindful in using a discreet method and aware of potential social repercussions."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "A minor inconvenience to acquire or use the device under a towel."
 },
@@ -3447,7 +3447,7 @@
 "justification": "They are fully aware of the consequences and choose a responsible course of action."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "A minor inconvenience in leaving the area and asking others for assistance."
 },
@@ -3593,7 +3593,7 @@
 "justification": "The individual was largely conscious of their actions and their public nature, showing deliberate choice."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.1,
 "justification": "Minimal present self-sacrifice; action chosen specifically to avoid inconvenience."
 },
@@ -3740,7 +3740,7 @@
 "justification": "Fully conscious decision to follow proper social conduct despite immediate urges."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.2,
 "justification": "Moderate present sacrifice in terms of comfort and convenience to maintain proper behavior."
 },
@@ -3887,7 +3887,7 @@
 "justification": "High awareness of situation and deliberate effort to balance competing responsibilities."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.8,
 "justification": "Moderate present sacrifice in terms of comfort and dignity to maintain supervision duties."
 },
@@ -4034,7 +4034,7 @@
 "justification": "Fully conscious decision to handle the situation appropriately through social cooperation."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.0,
 "justification": "Moderate present sacrifice in terms of time, effort, and potential embarrassment in asking for help."
 },
@@ -4180,7 +4180,7 @@
 "justification": "Fully conscious. The action is deliberate and intentional, showing a complete awareness of the act and its implications."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The action requires no sacrifice from the individual's present self; it's an act of convenience."
 },
@@ -4327,7 +4327,7 @@
 "justification": "Fully conscious. The individual is fully aware of their actions and their consequences."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "Minor sacrifice. The individual sacrifices some immediate convenience."
 },
@@ -4474,7 +4474,7 @@
 "justification": "Fully conscious. The individual is aware of their needs and the potential impact on others, making a conscious decision to use the device."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "Minor sacrifice. The individual sacrifices some degree of immediate comfort and convenience."
 },
@@ -4621,7 +4621,7 @@
 "justification": "Fully conscious. The individual is fully aware of their actions and their consequences."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "Minor sacrifice. The individual sacrifices some immediate convenience and potentially some pride."
 },
@@ -4767,7 +4767,7 @@
 "justification": "The action may be partially unconscious, driven by habit or lack of awareness."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "The action does not require significant sacrifices from the present self."
 },
@@ -4909,7 +4909,7 @@
 "justification": "The individual displayed complete awareness of how their actions aligned with both immediate and long-term consequences."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.7,
 "justification": "The individual required substantial discomfort and demand on time and convenience, significantly impacting the present self without long-term ramifications."
 },
@@ -5056,7 +5056,7 @@
 "justification": "The individual displayed significant awareness of their actions and consequences, but may have been influenced by habits or external factors."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.4,
 "justification": "The individual required moderate self-sacrifice, overcoming discomfort and convenience to use a discreet urinal device."
 },
@@ -5203,7 +5203,7 @@
 "justification": "The individual displayed complete awareness of how their actions aligned with both immediate and long-term consequences."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.7,
 "justification": "The individual required significant discomfort and demand on time and convenience, significantly impacting the present self without long-term ramifications."
 },
@@ -5349,7 +5349,7 @@
 "justification": "Likely aware of basic consequences but not full implications."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "Avoided personal inconvenience of finding restroom."
 },
@@ -5496,7 +5496,7 @@
 "justification": "Deliberate choice made with full awareness of social implications."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "Minor inconvenience of locating/using restroom."
 },
@@ -5643,7 +5643,7 @@
 "justification": "Deliberate choice with awareness of social implications, though limited consideration of alternatives."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.7,
 "justification": "Moderate effort to maintain discretion and handle waste appropriately."
 },
@@ -5790,7 +5790,7 @@
 "justification": "Full awareness of social and safety implications."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "Minor discomfort of seeking help quickly."
 },
@@ -5936,7 +5936,7 @@
 "justification": "Fully aware of the grave nature of the act, done as a desperate measure rather than in ignorance."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.4,
 "justification": "Significant moral and emotional distress for the father in relinquishing his child under duress."
 },
@@ -6083,7 +6083,7 @@
 "justification": "Fully mindful decision, deliberately avoiding harm to the children by seeking external aid."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.0,
 "justification": "Requires time, effort, and potential emotional cost to ask for help rather than resorting to child marriage."
 },
@@ -6229,7 +6229,7 @@
 "justification": "Fully conscious decision made with awareness of severe consequences and implications."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.8,
 "justification": "Extreme emotional and psychological sacrifice in giving up one's children."
 },
@@ -6376,7 +6376,7 @@
 "justification": "Fully conscious decision to seek help and protect family through legitimate means."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.2,
 "justification": "Significant present sacrifice of pride and independence in seeking assistance."
 },
@@ -6522,7 +6522,7 @@
 "justification": "Fully conscious. The action is a deliberate choice, even if made under duress. The father is aware of the implications of his decision."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The father may perceive it as a sacrifice, but it does not involve giving up something of comparable value to what the daughters lose."
 },
@@ -6670,7 +6670,7 @@
 "justification": "Fully conscious. The father is fully aware of his options and makes a conscious decision to seek help."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "Minor sacrifice. The father sacrifices some time, effort, and potentially some pride to seek assistance."
 },
@@ -6816,7 +6816,7 @@
 "justification": "The action may have been partially conscious, but also influenced by desperation and external factors."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.8,
 "justification": "The action requires some sacrifice from the father, but primarily prioritizes his immediate needs over his daughters'."
 },
@@ -6963,7 +6963,7 @@
 "justification": "The action demonstrates partial consciousness, as the father is aware of his desperation but also influenced by external factors, such as community support."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.8,
 "justification": "The action requires minor sacrifices from the present self, as the father must accept community support and temporary relief rather than immediate personal gain."
 },
@@ -7109,7 +7109,7 @@
 "justification": "Authorities acted with full awareness of the economic and social ramifications."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.1,
 "justification": "Policymakers endured intense scrutiny and political pressure, accepting significant immediate challenges."
 },
@@ -7256,7 +7256,7 @@
 "justification": "Authorities deliberately enact measures with clear awareness of the differential effects on communities."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.8,
 "justification": "Some discomfort and political risk for officials, but not as all-encompassing as a full lockdown scenario."
 },
@@ -7403,7 +7403,7 @@
 "justification": "Partially conscious of the risks but underestimating or choosing to overlook the potential severity."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.3,
 "justification": "Little immediate personal cost for leadership; minimal inconvenience in allowing normal operations."
 },
@@ -7550,7 +7550,7 @@
 "justification": "Officials show partial mindfulness of consequences but may underestimate initial mortality for broader societal autonomy."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.6,
 "justification": "Minimal immediate inconvenience for policymakers, with some potential political fallout or stress from public backlash."
 },
@@ -7697,7 +7697,7 @@
 "justification": "Partial awareness of lockdown risks existed, but many psychosocial harms were not fully predicted or understood."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.0,
 "justification": "Notable political and administrative strain was incurred, though less direct personal hardship compared to the public."
 },
@@ -7843,7 +7843,7 @@
 "justification": "Fully conscious decision with clear awareness of implications and consequences."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.0,
 "justification": "Moderate sacrifice of political popularity and public support."
 },
@@ -7990,7 +7990,7 @@
 "justification": "Fully conscious decision requiring careful analysis of risk factors and community impacts."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.5,
 "justification": "Significant political risk and administrative complexity in implementing differential restrictions."
 },
@@ -8137,7 +8137,7 @@
 "justification": "Fully conscious decision with awareness of potential health consequences."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "Minor present sacrifice in managing crisis response without restrictions."
 },
@@ -8284,7 +8284,7 @@
 "justification": "Fully conscious decision to adopt controversial but principled approach."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.2,
 "justification": "Significant present sacrifice in managing public criticism and health outcomes."
 },
@@ -8430,7 +8430,7 @@
 "justification": "Fully conscious. The decision to impose lockdowns was a deliberate and highly conscious one, based on scientific advice and public health considerations."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.5,
 "justification": "Major sacrifices. The lockdowns required significant sacrifices from individuals in terms of their freedom, social life, and often economic well-being."
 },
@@ -8577,7 +8577,7 @@
 "justification": "Fully conscious.  The decision to implement targeted restrictions is a deliberate and conscious one."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.0,
 "justification": "Moderate sacrifices. Individuals in high-risk areas face significant restrictions, requiring moderate self-sacrifice."
 },
@@ -8724,7 +8724,7 @@
 "justification": "Fully conscious. The decision not to implement a lockdown is a deliberate choice with known potential consequences."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The decision avoids immediate sacrifices related to economic activity and individual freedoms."
 },
@@ -8871,7 +8871,7 @@
 "justification": "Fully conscious. Implementing a voluntary approach is a deliberate policy decision with known potential consequences."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "Minor sacrifices. Individuals are asked to make voluntary sacrifices, but these are less demanding than mandated restrictions."
 },
@@ -9017,7 +9017,7 @@
 "justification": "Deliberate policy based on epidemiological models."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.2,
 "justification": "Significant administrative effort and political capital expended."
 },
@@ -9164,7 +9164,7 @@
 "justification": "Deliberate epidemiological strategy requiring conscious trade-off calculations."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.0,
 "justification": "Moderate administrative complexity in maintaining dual-tier systems."
 },
@@ -9311,7 +9311,7 @@
 "justification": "Deliberate rejection of epidemiological consensus for ideological reasons."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "Minimal personal inconvenience for decision-makers."
 },
@@ -9458,7 +9458,7 @@
 "justification": "Strategic choice informed by heterodox epidemiological models."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "Minimal bureaucratic effort compared to enforced lockdowns."
 },
@@ -9604,7 +9604,7 @@
 "justification": "The premier's decision was likely made with full consciousness of the consequences."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.5,
 "justification": "The premier may have experienced some discomfort or stress due to the lockdown, but it was not a significant sacrifice."
 },
@@ -9751,7 +9751,7 @@
 "justification": "The decision to implement the targeted lockdown was likely made with significant awareness of the consequences."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.2,
 "justification": "The decision to implement the targeted lockdown requires some sacrifice from the present self, including potential backlash from affected communities."
 },
@@ -9898,7 +9898,7 @@
 "justification": "The decision was likely made with some awareness of the consequences, but may have been influenced by unconscious biases or desires."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.2,
 "justification": "The decision required some sacrifice from the premier's present self, such as potential backlash from public health experts or opposition parties."
 }, 
@@ -10044,7 +10044,7 @@
 "justification": "The Allied command acted with full awareness of the operation’s gravity and long-term implications."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.7,
 "justification": "Required significant personal hardship and endangerment for soldiers and leaders alike, with intense immediate costs."
 },
@@ -10190,7 +10190,7 @@
 "justification": "Fully conscious strategic decision with clear understanding of consequences."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 2.0,
 "justification": "Extreme present sacrifice in terms of lives, resources, and immediate hardship."
 },
@@ -10336,7 +10336,7 @@
 "justification": "Fully conscious. The decision to launch the invasion was a deliberate and highly conscious one, involving extensive planning and strategic considerations."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.5,
 "justification": "Major sacrifices. Soldiers faced immediate danger and hardship, requiring significant present self-sacrifice."
 },
@@ -10482,7 +10482,7 @@
 "justification": "Meticulously planned military operation with full awareness of consequences"
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.8,
 "justification": "Extreme physical/psychological demands on troops during amphibious assault"
 },
@@ -10628,7 +10628,7 @@
 "justification": "The battle was a deliberate and conscious action, with the soldiers and commanders aware of the risks and consequences."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 1.7,
 "justification": "The battle required significant sacrifices from the soldiers involved, including immediate risks to their safety and well-being, indicating a high level of present self-sacrifice."
 },
@@ -10774,7 +10774,7 @@
 "justification": "Leadership showed partial awareness; they understood broad goals but underestimated or dismissed disastrous consequences."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.8,
 "justification": "Some personal and political risks were taken, but the immediate hardships were disproportionately borne by the populace."
 },
@@ -10920,7 +10920,7 @@
 "justification": "Fully conscious implementation of policies despite evidence of failure."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.2,
 "justification": "Minimal present sacrifice by leadership implementing policies."
 },
@@ -11066,7 +11066,7 @@
 "justification": "Fully conscious. The policies were deliberately implemented, though the full extent of the consequences may not have been fully anticipated or acknowledged."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice. The leaders implementing the policies did not experience any significant personal sacrifice in the present."
 },
@@ -11212,7 +11212,7 @@
 "justification": "The campaign's leaders may have been partially aware of the consequences of their actions, but they were also driven by ideological and personal motivations."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "The campaign's leaders did not make significant personal sacrifices, as they were more focused on maintaining power and control."
 },
@@ -11358,7 +11358,7 @@
 "justification": "Producers knew the importance of proper vaccine preparation but insufficiently recognised or accounted for the potential risks."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.4,
 "justification": "Minimal personal sacrifice beyond taking on production pressure; the burden of errors largely fell on recipients."
 },
@@ -11504,7 +11504,7 @@
 "justification": "Partially conscious, with incomplete understanding of safety risks."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.8,
 "justification": "Moderate effort in vaccine production but inadequate safety measures."
 },
@@ -11650,7 +11650,7 @@
 "justification": "Partially conscious. While the overall goal was conscious, the manufacturing oversights suggest a lack of full awareness or attention to detail regarding safety protocols and quality control."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.0,
 "justification": "No sacrifice.  Those involved did not make any significant personal sacrifices in the present."
 },
@@ -11796,7 +11796,7 @@
 "justification": "Partial awareness of manufacturing risks but insufficient vigilance"
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "Moderate financial/operational costs for quality assurance avoided"
 },
@@ -11942,7 +11942,7 @@
 "justification": "The leaders of Cutter Laboratories may have been partially aware of the risks associated with the vaccine, but they were also driven by ideological and personal motivations."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.2,
 "justification": "The leaders of Cutter Laboratories did not make significant personal sacrifices, as they were more focused on maintaining power and control."
 },
@@ -12088,7 +12088,7 @@
     "justification": "Authorities had partial awareness of potential downsides but did not fully grasp long-term ecological consequences."
 },
 {
-    "question": "Degree of Present Self-Sacrifice",
+    "question": "Present Self-Sacrifice",
     "score": 0.2,
     "justification": "Implementers faced minimal immediate hardship themselves; the main costs were borne by the environment and future generations."
 },
@@ -12234,7 +12234,7 @@
     "justification": "Partially conscious, unaware of long-term environmental impacts."
 },
 {
-    "question": "Degree of Present Self-Sacrifice",
+    "question": "Present Self-Sacrifice",
     "score": 1.0,
     "justification": "Moderate effort in implementing widespread public health campaign."
 },
@@ -12380,7 +12380,7 @@
     "justification": "Partially conscious.  While the intent to control malaria was conscious, the long-term environmental consequences were not fully understood or appreciated at the time."
 },
 {
-    "question": "Degree of Present Self-Sacrifice",
+    "question": "Present Self-Sacrifice",
     "score": 0.0,
     "justification": "No sacrifice. Those promoting DDT usage did not make any significant personal sacrifices in the present."
 },
@@ -12526,7 +12526,7 @@
     "justification": "Aware of immediate goals (malaria control) but not long-term environmental consequences."
 },
 {
-    "question": "Degree of Present Self-Sacrifice",
+    "question": "Present Self-Sacrifice",
     "score": 0.5,
     "justification": "Minor institutional effort required for implementation."
 },
@@ -12672,7 +12672,7 @@
 "justification": "The leaders of the public health agencies may have been partially aware of the potential risks associated with DDT, but they were also driven by a desire to address the urgent public health issue of malaria."
 },
 {
-"question": "Degree of Present Self-Sacrifice",
+"question": "Present Self-Sacrifice",
 "score": 0.5,
 "justification": "The leaders of the public health agencies may have experienced some minor discomfort or stress due to the urgency of the malaria crisis, but this was not a significant sacrifice."
 },
