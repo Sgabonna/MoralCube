@@ -1461,24 +1461,35 @@
 
 
 
+        // Update the updateMediaDisplay function to handle URLs more robustly
         function updateMediaDisplay(url) {
             const container = document.getElementById('media-placeholder');
-            if (url) {
-                currentMediaUrl = url;
-                
-                // For example, if the URL is from Reddit, build the embed markup:
+            const openMediaButton = document.getElementById('open-media');
+            
+            // Update the current URL
+            currentMediaUrl = url || "";
+            
+            // Enable/disable the "Open in New Window" button based on URL availability
+            openMediaButton.disabled = !currentMediaUrl;
+            
+            if (!url) {
+                container.innerHTML = "<p class='text-center text-muted mt-3'>No media available for this selection</p>";
+                return;
+            }
+
+            try {
+                // Handle different types of URLs
                 if (url.includes("reddit.com")) {
                     container.innerHTML = `
                         <blockquote class="reddit-embed" data-embed-media="true" data-height="500">
                             <a href="${url}">View this post on Reddit</a>
                         </blockquote>
                     `;
-                    // Remove the existing Reddit embed script if present.
+                    // Reload Reddit embed script
                     let existingScript = document.getElementById('reddit-embed-script');
                     if (existingScript) {
-                        existingScript.parentNode.removeChild(existingScript);
+                        existingScript.remove();
                     }
-                    // Re-inject the Reddit embed script to force re-parsing.
                     let script = document.createElement('script');
                     script.id = 'reddit-embed-script';
                     script.async = true;
@@ -1486,42 +1497,117 @@
                     script.charset = 'UTF-8';
                     document.body.appendChild(script);
                 } else if (url.includes("youtube.com") || url.includes("youtu.be")) {
-                    // Example: Convert a standard YouTube URL to an embed URL.
-                    let embedUrl = convertYouTubeUrl(url); // Define this helper function as needed.
-                    container.innerHTML = `<iframe style="width: 100%; height: 100%; border: none;" src="${embedUrl}" allowfullscreen></iframe>`;
+                    // Clear the container first
+                    container.innerHTML = '';
+                    
+                    // Extract video ID from various YouTube URL formats
+                    let videoId;
+                    if (url.includes('youtube.com')) {
+                        const urlParams = new URL(url).searchParams;
+                        videoId = urlParams.get('v');
+                    } else if (url.includes('youtu.be')) {
+                        videoId = url.split('/').pop().split('?')[0];
+                    }
+
+                    if (videoId) {
+                        // Create a new iframe element
+                        const iframe = document.createElement('iframe');
+                        iframe.width = '100%';
+                        iframe.height = '100%';
+                        iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                        iframe.frameBorder = '0';
+                        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                        iframe.allowFullscreen = true;
+                        
+                        // Append the new iframe
+                        container.appendChild(iframe);
+                    } else {
+                        console.error('Could not extract YouTube video ID from URL:', url);
+                        container.innerHTML = `
+                            <p class='text-center text-muted mt-3'>
+                                Unable to display video. <a href="${url}" target="_blank">Open externally</a>
+                            </p>`;
+                    }
                 } else {
-                    // Fallback: try to display the content in an iframe.
-                    container.innerHTML = `<iframe style="width: 100%; height: 100%; border: none;" src="${url}"></iframe>`;
+                    // For other URLs, try to embed them directly
+                    // Create a new iframe to force a refresh
+                    const iframe = document.createElement('iframe');
+                    iframe.style.width = '100%';
+                    iframe.style.height = '100%';
+                    iframe.style.border = 'none';
+                    iframe.src = url;
+                    iframe.allowFullscreen = true;
+                    
+                    // Clear the container and append the new iframe
+                    container.innerHTML = '';
+                    container.appendChild(iframe);
                 }
-            } else {
-                currentMediaUrl = "";
-                container.innerHTML = "";
+            } catch (error) {
+                console.error('Error updating media display:', error);
+                container.innerHTML = `
+                    <p class='text-center text-muted mt-3'>
+                        Unable to display media. <a href="${url}" target="_blank">Open externally</a>
+                    </p>`;
             }
         }
 
+        // Helper function to convert YouTube URL to embed URL
+        function convertYouTubeUrl(url) {
+            try {
+                let videoId;
+                if (url.includes('youtube.com')) {
+                    const urlParams = new URL(url).searchParams;
+                    videoId = urlParams.get('v');
+                } else if (url.includes('youtu.be')) {
+                    videoId = url.split('/').pop().split('?')[0];
+                }
+                
+                if (videoId) {
+                    return `https://www.youtube.com/embed/${videoId}`;
+                }
+                return url;
+            } catch (error) {
+                console.error('Error converting YouTube URL:', error);
+                return url;
+            }
+        }
+
+        // Update the updateSelectedMedia function to include logging
         function updateSelectedMedia() {
+            console.log('updateSelectedMedia called');
+            console.log('Current selected scenarios:', selectedScenarios);
+            
+            if (selectedScenarios.length === 0) {
+                console.log('No scenarios selected, clearing media');
+                updateMediaDisplay("");
+                return;
+            }
+
             if (selectedScenarios.length === 1) {
-                // Find the scenario by title (it might be a parent or an alternative)
-                let scenario = dataPoints.find(p => p.scenarioTitle === selectedScenarios[0]);
-                if (scenario) {
-                // If it's an alternative, try to find its parent scenario's URL
-                if (!scenario.isParent && scenario.parentId) {
-                    const parentScenario = dataPoints.find(p => p.id === scenario.parentId);
-                    if (parentScenario && parentScenario.url) {
+                // Find all points that match the selected scenario title
+                const scenarioPoints = dataPoints.filter(p => p.scenarioTitle === selectedScenarios[0]);
+                console.log('Found scenario points:', scenarioPoints);
+                
+                // First try to find the parent scenario
+                let parentScenario = scenarioPoints.find(p => p.isParent);
+                
+                // If no parent found but we have points, use the first point
+                if (!parentScenario && scenarioPoints.length > 0) {
+                    parentScenario = scenarioPoints[0];
+                }
+                
+                if (parentScenario && parentScenario.url) {
+                    console.log('Updating media with URL:', parentScenario.url);
                     updateMediaDisplay(parentScenario.url);
-                    return;
-                    }
+                } else {
+                    console.log('No URL found for scenario:', selectedScenarios[0]);
+                    updateMediaDisplay("");
                 }
-                // If it's a parent (or parent's not found), use its own URL if available
-                if (scenario.url) {
-                    updateMediaDisplay(scenario.url);
-                    return;
-                }
-                }
+            } else {
+                console.log('Multiple scenarios selected, clearing media');
+                updateMediaDisplay("");
             }
-            // Otherwise, clear the media display
-            updateMediaDisplay("");
-            }
+        }
 
 
         function getScenarioTitle(data) {
@@ -1763,10 +1849,14 @@
         });
 
 
-        // UPDATED Scenario Filter Listener (combined both versions):
+        // Modify the scenario filter event listener to properly trigger media updates
         document.getElementById('scenarioFilter').addEventListener('change', function(e) {
             if (isUpdatingFilters || isCategoryFiltering) return;
+            
+            // Update selected scenarios
             selectedScenarios = Array.from(e.target.selectedOptions).map(option => option.value);
+            
+            // Enforce maximum selection limit
             if (selectedScenarios.length > 4) {
                 alert('Please select a maximum of 4 scenarios for comparison');
                 selectedScenarios = selectedScenarios.slice(0, 4);
@@ -1774,17 +1864,24 @@
                     option.selected = selectedScenarios.includes(option.value);
                 });
             }
-            // Clear previous model selections and alternate outcomes before updating visualization
+
+            // Clear previous model selections and alternate outcomes
             document.getElementById('modelFilter').selectedIndex = -1;
-            document.getElementById('alternateOutcomes').innerHTML = '<option disabled>Select a model to see alternate outcomes</option>';
+            document.getElementById('alternateOutcomes').innerHTML = 
+                '<option disabled>Select a model to see alternate outcomes</option>';
             selectedModels = [];
+
+            // Update visualization and media display
             updateVisualization();
-        });
-        document.getElementById('open-media').addEventListener('click', function() {
-            if (currentMediaUrl) {
-                window.open(currentMediaUrl, '_blank');
-            } else {
-                alert("No media URL available to open.");
+            
+            // Log the current state for debugging
+            console.log('Selected scenarios:', selectedScenarios);
+            if (selectedScenarios.length === 1) {
+                const scenario = dataPoints.find(p => p.scenarioTitle === selectedScenarios[0]);
+                console.log('Found scenario:', scenario);
+                if (scenario) {
+                    console.log('Scenario URL:', scenario.url);
+                }
             }
         });
 
