@@ -775,13 +775,13 @@
                 };
                 }
                 const deontologyObj = philosophyDimension.questions.find(q => 
-                q.question && q.question.trim().toLowerCase() === 'deontology'
+                q.question && q.question.trim() === 'deontology'
                 );
                 const utilitarianismObj = philosophyDimension.questions.find(q => 
-                q.question && q.question.trim().toLowerCase() === 'utilitarianism'
+                q.question && q.question.trim() === 'utilitarianism'
                 );
                 const virtueEthicsObj = philosophyDimension.questions.find(q => 
-                q.question && q.question.trim().toLowerCase() === 'virtue ethics'
+                q.question && q.question.trim() === 'virtue ethics'
                 );
                 return {
                 deontologyScore: deontologyObj ? deontologyObj.score : 'N/A',
