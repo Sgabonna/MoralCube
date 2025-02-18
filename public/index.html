@@ -534,44 +534,49 @@
 </head>
 <body>
     <div class="filter-section">
-        <!-- First section: Category and Scenarios -->
-        <div class="filter-group-container border rounded p-3 mb-3">
-            <p class="text-muted mb-3">Choose a Category to find a Scenario, or Select a Scenario Directly</p>
-            
-            <!-- Existing category filter, but moved inside container -->
-            <div class="filter-group category-filter-group">
-                <label for="categoryFilter">Filter by Category Type:</label>
-                <select id="categoryFilter" class="form-control category-select" multiple size="6"></select>
+        <!-- Container for all filters in a row -->
+        <div class="filter-row">
+            <!-- First group: Category and Scenarios -->
+            <div class="filter-group-container border rounded p-3">
+                <p class="text-muted mb-3">Choose a Category to find a Scenario, or Select a Scenario Directly</p>
+                
+                <!-- Category Filter -->
+                <div class="filter-group category-filter-group">
+                    <label for="categoryFilter">Filter by Category Type:</label>
+                    <select id="categoryFilter" class="form-control category-select" multiple size="6"></select>
+                </div>
+    
+                <!-- Scenario Filter -->
+                <div class="filter-group scenario-filter-group mt-3">
+                    <label for="scenarioFilter">Compare Scenarios (max 4)</label>
+                    <select id="scenarioFilter" class="form-control scenario-select" multiple size="6"></select>
+                </div>
             </div>
     
-            <!-- Existing scenario filter, but moved inside container -->
-            <div class="filter-group scenario-filter-group mt-3">
-                <label for="scenarioFilter">Compare Scenarios (max 4)</label>
-                <select id="scenarioFilter" class="form-control scenario-select" multiple size="6"></select>
+            <!-- Second group: Models and What If -->
+            <div class="filter-group-container border rounded p-3">
+                <p class="text-muted mb-3">Select the AI Models you'd like to compare, or explore "what if" scenarios by selecting a single model</p>
+                
+                <!-- Model Filter -->
+                <div class="filter-group model-filter-group">
+                    <label for="modelFilter">Compare AI Models (max 4)</label>
+                    <select id="modelFilter" class="form-control model-select" multiple size="6"></select>
+                </div>
+    
+                <!-- What If Scenarios -->
+                <div class="filter-group mt-3">
+                    <label>What If Scenarios</label>
+                    <select id="alternateOutcomes" class="form-control" multiple size="6">
+                        <option disabled>Select a scenario and model to see alternates</option>
+                    </select>
+                </div>
             </div>
         </div>
     
-        <!-- Second section: Models and What If Scenarios -->
-        <div class="filter-group-container border rounded p-3">
-            <p class="text-muted mb-3">Select the AI Models you'd like to compare, or explore "what if" scenarios by selecting a single model</p>
-            
-            <!-- Existing model filter, but moved inside container -->
-            <div class="filter-group model-filter-group">
-                <label for="modelFilter">Compare AI Models (max 4)</label>
-                <select id="modelFilter" class="form-control model-select" multiple size="6"></select>
-            </div>
-    
-            <!-- Renamed alternate outcomes to What If Scenarios -->
-            <div class="filter-group mt-3">
-                <label>What If Scenarios</label>
-                <select id="alternateOutcomes" class="form-control" multiple size="6">
-                    <option disabled>Select a scenario and model to see alternates</option>
-                </select>
-            </div>
+        <!-- Clear Filters button centered below -->
+        <div class="text-center">
+            <button id="clearFilters" class="btn btn-secondary mt-3">Clear Filters</button>
         </div>
-    
-        <!-- Clear Filters button -->
-        <button id="clearFilters" class="btn btn-secondary mt-3">Clear Filters</button>
     </div>
     
     <!-- Move the overview section after filters -->
