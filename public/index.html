@@ -641,8 +641,13 @@
   
 
         <div id="scenarioSection" class="scenario-section">
-            <h4 class="mb-3">Scenario Details</h4>
-            
+            <h4 class="mb-3">
+                Scenario Details
+                <span class="tooltip-container">
+                    <i class="fas fa-info-circle tooltip-icon"></i>
+                    <span class="tooltip-content">Click two Scenario Cards above to compare the answers</span>
+                </span>
+            </h4>
             <div class="accordion" id="scenarioAccordion">
                 <!-- Will be populated dynamically -->
             </div>
@@ -745,36 +750,47 @@
 
         // *** New function: attachComparisonCardHandlers ***
         function attachComparisonCardHandlers() {
-            // Attach click events to all cards currently in the overview container
             document.querySelectorAll('.comparison-card').forEach(card => {
                 card.addEventListener('click', function() {
-                const id = card.getAttribute('data-scenario-id');
-                
-                // If the card is already selected, unselect it.
-                if (card.classList.contains('selected-card')) {
-                    card.classList.remove('selected-card');
-                    selectedComparison = selectedComparison.filter(selectedId => selectedId !== id);
-                } else {
-                    // If already two cards are selected and this card is not among them, reset all selections.
-                    if (selectedComparison.length === 2) {
-                    document.querySelectorAll('.comparison-card').forEach(c => {
-                        c.classList.remove('selected-card');
-                    });
-                    selectedComparison = [];
+                    const id = card.getAttribute('data-scenario-id');
+                    
+                    // If card is already selected, unselect it
+                    if (card.classList.contains('selected-card')) {
+                        card.classList.remove('selected-card');
+                        selectedComparison = selectedComparison.filter(selectedId => selectedId !== id);
+                    } else {
+                        // If trying to select a third card
+                        if (selectedComparison.length >= 2) {
+                            // Clear all selections
+                            document.querySelectorAll('.comparison-card').forEach(c => {
+                                c.classList.remove('selected-card');
+                            });
+                            selectedComparison = [];
+                            
+                            // Select the new card
+                            card.classList.add('selected-card');
+                            selectedComparison.push(id);
+                        } else {
+                            // Select the card normally
+                            card.classList.add('selected-card');
+                            selectedComparison.push(id);
+                        }
                     }
-                    // Then select the clicked card.
-                    card.classList.add('selected-card');
-                    selectedComparison.push(id);
-                }
-                
-                // If exactly 2 items are selected, update scenario details.
-                if (selectedComparison.length === 2) {
-                    const compData = dataPoints.filter(point => selectedComparison.includes(point.id));
-                    populateScenarioDetails(compData);
-                } else {
-                    // Otherwise, clear the scenario details section.
-                    document.getElementById('scenarioAccordion').innerHTML = '';
-                }
+                    
+                    // Update scenario details based on selection
+                    if (selectedComparison.length === 2) {
+                        const compData = dataPoints.filter(point => 
+                            selectedComparison.includes(point.id)
+                        );
+                        populateScenarioDetails(compData);
+                    } else {
+                        // Clear scenario details if fewer than 2 cards selected
+                        document.getElementById('scenarioAccordion').innerHTML = `
+                            <div class="text-center text-muted p-3">
+                                Select two scenario cards above to compare details
+                            </div>
+                        `;
+                    }
                 });
             });
         }
@@ -1765,165 +1781,182 @@
             return category.toLowerCase().replace(/\s+/g, '_');
             }
             function populateScenarioDetails(scenarioData) {
+                // Normalize input to array and limit to 2 scenarios for comparison
                 if (!Array.isArray(scenarioData)) {
                     scenarioData = [scenarioData];
                 }
-                const scenarioAccordion = document.getElementById('scenarioAccordion');
-
-                function getDimensionScore(scenario, dimensionId) {
-                    if (!['Ends', 'Means', 'Character'].includes(dimensionId)) {
-                        return null;
-                    }
-                    switch (dimensionId) {
-                        case 'Ends':
-                            return scenario.x.toFixed(2);
-                        case 'Means':
-                            return scenario.y.toFixed(2);
-                        case 'Character':
-                            return scenario.z.toFixed(2);
-                        default:
-                            return null;
-                    }
+                if (scenarioData.length > 2) {
+                    scenarioData = scenarioData.slice(0, 2);
                 }
 
-                const dimensions = scenarioData[0].dimensions;
-                const dimensionContent = dimensions.map((dimension, dimIndex) => {
-                    const dimensionId = `dimension${dimIndex}`;
-                    const collapseId = `collapse${dimIndex}`;
+                const scenarioAccordion = document.getElementById('scenarioAccordion');
+                
+                // Early return if no valid data
+                if (!scenarioData.length || !scenarioData[0].dimensions) {
+                    scenarioAccordion.innerHTML = '<div class="alert alert-info">No scenario data available.</div>';
+                    return;
+                }
+
+                // Get dimension score helper
+                function getDimensionScore(scenario, dimensionId) {
+                    if (!['Ends', 'Means', 'Character'].includes(dimensionId)) return null;
                     
-                    // Determine if this dimension is Philosophical Analysis
-                    const isPhilosophical = dimension.id.trim().toLowerCase() === 'philosophical analysis';
+                    const scores = {
+                        'Ends': scenario.x,
+                        'Means': scenario.y,
+                        'Character': scenario.z
+                    };
+                    return scores[dimensionId]?.toFixed(2) ?? null;
+                }
 
-                    const scenarioTables = scenarioData.map((scenario) => {
-                        const currentDimension = scenario.dimensions[dimIndex];
-                        const dimensionScore = getDimensionScore(scenario, dimension.id);
-                        const scoreDisplay = dimensionScore !== null && ['Ends', 'Means', 'Character'].includes(dimension.id)
-                            ? ` (${dimension.id} Score: ${dimensionScore})`
-                            : '';
+                // Get range value helper
+                function getRange(dimensionId, questionIndex) {
+                    const rangeMap = {
+                        'Ends': {
+                            default: questionIndex < 3 ? "0 to 4" : "0 to -4"
+                        },
+                        'Means': {
+                            0: "0 to -4",
+                            1: "0 to -6",
+                            2: "0 to -4",
+                            3: "0 to -4",
+                            4: "0.01 to 1.2"
+                        },
+                        'Character': {
+                            0: "0 to 1",
+                            1: "0 to 2",
+                            2: "0 to 4",
+                            3: "0 to 1"
+                        }
+                    };
 
-                        const questionRows = currentDimension.questions.map((q, qIndex) => {
-                            let range = "N/A";
-                            if (!isPhilosophical) {
-                                if (dimension.id === 'Ends') {
-                                    range = qIndex < 3 ? "0 to 4" : "0 to -4";
-                                } else if (dimension.id === 'Means') {
-                                    switch(qIndex) {
-                                        case 0: range = "0 to -4"; break;
-                                        case 1: range = "0 to -6"; break;
-                                        case 2: range = "0 to -4"; break;
-                                        case 3: range = "0 to -4"; break;
-                                        case 4: range = "0.01 to 1.2"; break;
-                                        default: range = "N/A";
-                                    }
-                                } else if (dimension.id === 'Character') {
-                                    switch(qIndex) {
-                                        case 0: range = "0 to 1"; break;
-                                        case 1: range = "0 to 2"; break;
-                                        case 2: range = "0 to 4"; break;
-                                        case 3: range = "0 to 1"; break;
-                                        default: range = "N/A";
-                                    }
-                                }
-                            }
-                            
-                            // Use the question text from JSON as the lookup key
-                            const tooltip = questionTooltips[q.question] || null;
-                            
-                            // Create tooltip HTML if tooltip exists
-                            const tooltipHTML = tooltip ? `
-                                <div style="display: inline-flex; align-items: center; gap: 4px;">
-                                    <span class="tooltip-container">
-                                        <i class="fas fa-info-circle tooltip-icon" aria-hidden="true"></i>
-                                        <span class="tooltip-content" role="tooltip">${tooltip.info}</span>
-                                    </span>
-                                    <span class="tooltip-container">
-                                        <i class="fas fa-question-circle tooltip-icon" aria-hidden="true"></i>
-                                        <span class="tooltip-content" role="tooltip">${tooltip.question}</span>
-                                    </span>
-                                </div>
-                            ` : '';
+                    return rangeMap[dimensionId]?.[questionIndex] || 
+                        rangeMap[dimensionId]?.default || 
+                        "N/A";
+                }
 
-                            if (isPhilosophical) {
-                                return `
-                                    <tr>
-                                        <td>
-                                            ${q.question}
-                                            ${tooltipHTML}
-                                        </td>
-                                        <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
-                                        <td>${q.justification}</td>
-                                    </tr>
-                                `;
-                            } else {
-                                return `
-                                    <tr>
-                                        <td>
-                                            ${q.question}
-                                            ${tooltipHTML}
-                                        </td>
-                                        <td>${typeof q.score === 'number' ? q.score.toFixed(1) : q.score}</td>
-                                        <td>${range}</td>
-                                        <td>${q.justification}</td>
-                                    </tr>
-                                `;
-                            }
-                        }).join('');
-
-                        // Build colgroup and header based on whether we show the range column
-                        let colgroupHTML, headerHTML;
-                        if (isPhilosophical) {
-                            colgroupHTML = `
+                // Build table structure helper
+                function getTableStructure(isPhilosophical) {
+                    if (isPhilosophical) {
+                        return {
+                            colgroup: `
                                 <col style="width:25%;">
                                 <col style="width:25%;">
                                 <col style="width:50%;">
-                            `;
-                            headerHTML = `
+                            `,
+                            header: `
                                 <tr>
                                     <th>Question</th>
                                     <th>Score</th>
                                     <th>Justification</th>
                                 </tr>
-                            `;
-                        } else {
-                            colgroupHTML = `
-                                <col style="width:10%;">
-                                <col style="width:10%;">
-                                <col style="width:12.5%;">
-                                <col style="width:70%;">
-                            `;
-                            headerHTML = `
-                                <tr>
-                                    <th>Question</th>
-                                    <th>Score</th>
-                                    <th>Range</th>
-                                    <th>Justification</th>
-                                </tr>
-                            `;
-                        }
+                            `
+                        };
+                    }
 
+                    return {
+                        colgroup: `
+                            <col style="width:10%;">
+                            <col style="width:10%;">
+                            <col style="width:12.5%;">
+                            <col style="width:70%;">
+                        `,
+                        header: `
+                            <tr>
+                                <th>Question</th>
+                                <th>Score</th>
+                                <th>Range</th>
+                                <th>Justification</th>
+                            </tr>
+                        `
+                    };
+                }
+
+                // Create question row helper
+                function createQuestionRow(question, tooltip, range, isPhilosophical) {
+                    const tooltipHTML = tooltip ? `
+                        <div style="display: inline-flex; align-items: center; gap: 4px;">
+                            <span class="tooltip-container">
+                                <i class="fas fa-info-circle tooltip-icon" aria-hidden="true"></i>
+                                <span class="tooltip-content" role="tooltip">${tooltip.info}</span>
+                            </span>
+                            <span class="tooltip-container">
+                                <i class="fas fa-question-circle tooltip-icon" aria-hidden="true"></i>
+                                <span class="tooltip-content" role="tooltip">${tooltip.question}</span>
+                            </span>
+                        </div>
+                    ` : '';
+
+                    const score = typeof question.score === 'number' ? 
+                        question.score.toFixed(1) : question.score;
+
+                    if (isPhilosophical) {
                         return `
-                            <div class="col-md-${scenarioData.length === 1 ? '12' : '6'} scenario-table-container">
-                                <h5 class="mb-3">${scenario.scenarioTitle} (${scenario.llmName})${scoreDisplay}</h5>
-                                <table class="table table-bordered compact-table">
-                                    <colgroup>
-                                        ${colgroupHTML}
-                                    </colgroup>
-                                    <thead>
-                                        ${headerHTML}
-                                    </thead>
-                                    <tbody>
-                                        ${questionRows}
-                                    </tbody>
-                                </table>
-                            </div>
+                            <tr>
+                                <td>${question.question}${tooltipHTML}</td>
+                                <td>${score}</td>
+                                <td>${question.justification}</td>
+                            </tr>
                         `;
+                    }
+
+                    return `
+                        <tr>
+                            <td>${question.question}${tooltipHTML}</td>
+                            <td>${score}</td>
+                            <td>${range}</td>
+                            <td>${question.justification}</td>
+                        </tr>
+                    `;
+                }
+
+                // Create scenario table helper
+                function createScenarioTable(scenario, dimension, isPhilosophical, dimensionId, tableStructure) {
+                    const dimensionScore = getDimensionScore(scenario, dimension.id);
+                    const scoreDisplay = dimensionScore !== null && 
+                        ['Ends', 'Means', 'Character'].includes(dimension.id) ?
+                        ` (${dimension.id} Score: ${dimensionScore})` : '';
+
+                    const questionRows = dimension.questions.map((question, index) => {
+                        const range = !isPhilosophical ? getRange(dimension.id, index) : "N/A";
+                        const tooltip = questionTooltips[question.question] || null;
+                        return createQuestionRow(question, tooltip, range, isPhilosophical);
                     }).join('');
+
+                    return `
+                        <div class="col-md-${scenarioData.length === 1 ? '12' : '6'} scenario-table-container">
+                            <h5 class="mb-3">${scenario.scenarioTitle} (${scenario.llmName})${scoreDisplay}</h5>
+                            <table class="table table-bordered compact-table">
+                                <colgroup>${tableStructure.colgroup}</colgroup>
+                                <thead>${tableStructure.header}</thead>
+                                <tbody>${questionRows}</tbody>
+                            </table>
+                        </div>
+                    `;
+                }
+
+                // Main content generation
+                const dimensionContent = scenarioData[0].dimensions.map((dimension, index) => {
+                    const dimensionId = `dimension${index}`;
+                    const collapseId = `collapse${index}`;
+                    const isPhilosophical = dimension.id.trim().toLowerCase() === 'philosophical analysis';
+                    const tableStructure = getTableStructure(isPhilosophical);
+
+                    const scenarioTables = scenarioData.map(scenario => 
+                        createScenarioTable(
+                            scenario, 
+                            scenario.dimensions[index], 
+                            isPhilosophical, 
+                            dimensionId, 
+                            tableStructure
+                        )
+                    ).join('');
 
                     return `
                         <div class="card">
                             <div class="card-header" id="${dimensionId}-header">
                                 <h2 class="mb-0">
-                                    <button class="btn btn-link ${dimIndex === 0 ? '' : 'collapsed'}" 
+                                    <button class="btn btn-link ${index === 0 ? '' : 'collapsed'}" 
                                             type="button" 
                                             data-toggle="collapse" 
                                             data-target="#${collapseId}">
@@ -1932,7 +1965,7 @@
                                 </h2>
                             </div>
                             <div id="${collapseId}" 
-                                class="collapse ${dimIndex === 0 ? 'show' : ''}" 
+                                class="collapse ${index === 0 ? 'show' : ''}" 
                                 data-parent="#scenarioAccordion">
                                 <div class="card-body">
                                     <div class="row">
