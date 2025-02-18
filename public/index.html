@@ -756,47 +756,43 @@
         }
 
         function getEthicsScores(item) {
-            try {
-                if (!item.survey || !Array.isArray(item.survey.dimensions)) {
-                return {
-                    deontologyScore: 'N/A',
-                    utilitarianismScore: 'N/A',
-                    virtueEthicsScore: 'N/A'
-                };
-                }
-                const philosophyDimension = item.survey.dimensions.find(dim => 
-                dim.id && dim.id.trim().toLowerCase() === 'philosophicalanalysis'
-                );
-                if (!philosophyDimension || !Array.isArray(philosophyDimension.questions)) {
-                return {
-                    deontologyScore: 'N/A',
-                    utilitarianismScore: 'N/A',
-                    virtueEthicsScore: 'N/A'
-                };
-                }
-                const deontologyObj = philosophyDimension.questions.find(q => 
-                q.question && q.question.trim().toLowerCase() === 'deontology'
-                );
-                const utilitarianismObj = philosophyDimension.questions.find(q => 
-                q.question && q.question.trim().toLowerCase() === 'utilitarianism'
-                );
-                const virtueEthicsObj = philosophyDimension.questions.find(q => 
-                q.question && q.question.trim().toLowerCase() === 'virtue ethics'
-                );
-                return {
-                deontologyScore: deontologyObj ? deontologyObj.score : 'N/A',
-                utilitarianismScore: utilitarianismObj ? utilitarianismObj.score : 'N/A',
-                virtueEthicsScore: virtueEthicsObj ? virtueEthicsObj.score : 'N/A'
-                };
-            } catch (error) {
-                console.error('Error extracting ethics scores:', error);
+            // Use the full survey if available; otherwise, use the dimensions property
+            let dimensions = (item.survey && Array.isArray(item.survey.dimensions))
+                                ? item.survey.dimensions
+                                : (Array.isArray(item.dimensions) ? item.dimensions : []);
+            if (!dimensions.length) {
                 return {
                 deontologyScore: 'N/A',
                 utilitarianismScore: 'N/A',
                 virtueEthicsScore: 'N/A'
                 };
             }
-        }
+            const philosophyDimension = dimensions.find(dim => 
+                dim.id && dim.id.trim().toLowerCase() === 'philosophicalanalysis'
+            );
+            if (!philosophyDimension || !Array.isArray(philosophyDimension.questions)) {
+                return {
+                deontologyScore: 'N/A',
+                utilitarianismScore: 'N/A',
+                virtueEthicsScore: 'N/A'
+                };
+            }
+            const deontologyObj = philosophyDimension.questions.find(q => 
+                q.question && q.question.trim().toLowerCase() === 'deontology'
+            );
+            const utilitarianismObj = philosophyDimension.questions.find(q => 
+                q.question && q.question.trim().toLowerCase() === 'utilitarianism'
+            );
+            const virtueEthicsObj = philosophyDimension.questions.find(q => 
+                q.question && q.question.trim().toLowerCase() === 'virtue ethics'
+            );
+            return {
+                deontologyScore: deontologyObj ? deontologyObj.score : 'N/A',
+                utilitarianismScore: utilitarianismObj ? utilitarianismObj.score : 'N/A',
+                virtueEthicsScore: virtueEthicsObj ? virtueEthicsObj.score : 'N/A'
+            };
+            }
+
 
 
 
