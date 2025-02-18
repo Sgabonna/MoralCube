@@ -1407,18 +1407,25 @@
             
             const cards = data.map(item => `
                 <div class="comparison-card" data-scenario-id="${item.id}" style="border: 2px solid ${scenarioColorMapping[item.scenarioTitle + '_' + item.llmName] || '#000'};">
-                <h4>
-                    ${getScenarioTitle(item)}
-                    <small>(${item.llmName} ${getCategoryBadge(item.overallCategory)})</small>
-                </h4>
-                <p class="scenario-description">
-                    <span class="description-text">
-                    ${item.scenarioDescription || 'No description available'}
-                    </span>
-                    <span class="read-more">Read more</span>
-                </p>
+                    <h4>
+                        ${getScenarioTitle(item)}
+                        <small>(${item.llmName} ${getCategoryBadge(item.overallCategory)})</small>
+                    </h4>
+                    <p class="scenario-description">
+                        <span class="description-text">
+                            ${item.scenarioDescription || 'No description available'}
+                        </span>
+                        <span class="read-more">Read more</span>
+                    </p>
+                    <!-- Ethics Scores (displayed as three lines without bullet points) -->
+                    <div class="ethics-scores" style="font-size: 0.75rem; margin-top: 8px;">
+                        <div>Deontology: ${item.deontologyScore !== undefined ? item.deontologyScore.toFixed(1) : 'N/A'}</div>
+                        <div>Utilitarianism: ${item.utilitarianismScore !== undefined ? item.utilitarianismScore.toFixed(1) : 'N/A'}</div>
+                        <div>Virtue Ethics: ${item.virtueEthicsScore !== undefined ? item.virtueEthicsScore.toFixed(1) : 'N/A'}</div>
+                    </div>
                 </div>
             `).join('');
+
             
             overviewDiv.innerHTML = cards;
             attachComparisonCardHandlers(); // Attach the click handlers to new cards
@@ -1611,12 +1618,14 @@
 
 
         function getScenarioTitle(data) {
-            if (data.url) {
+            // Only include the link if a nonempty URL exists
+            if (data.url && data.url.trim() !== "") {
                 return `${data.scenarioTitle} <a href="${data.url}" target="_blank" class="scenario-link">
                             <i class="fas fa-external-link-alt"></i></a>`;
             }
             return data.scenarioTitle;
         }
+
 
         function getCategoryBadge(category) {
             let normalizedCategory = category.toLowerCase().replace(/\s+/g, '-');
@@ -1849,7 +1858,6 @@
             
             // Update alternate outcomes if exactly one scenario and one model are selected
             const alternateOutcomes = document.getElementById('alternateOutcomes');
-            alternateOutcomes.multiple = true; // Enable multiple selection
             
             if (selectedScenarios.length === 1 && selectedModels.length === 1) {
                 const parentScenario = selectedScenarios[0];
@@ -1859,23 +1867,28 @@
                 const alternatives = relationships.filter(child => child.model === selectedModel);
                 
                 if (alternatives && alternatives.length > 0) {
-                    // Remove any existing disabled options
+                    // Configure dropdown for multiple selection
+                    alternateOutcomes.setAttribute('multiple', 'true');
+                    alternateOutcomes.size = Math.min(alternatives.length, 6);
+                    alternateOutcomes.disabled = false;
+                    
+                    // Clear existing options
                     alternateOutcomes.innerHTML = '';
                     
-                    // Add the alternatives as selectable options
+                    // Add new options
                     alternatives.forEach(alt => {
                         const option = document.createElement('option');
                         option.value = alt.childId;
                         option.text = `${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}`;
                         alternateOutcomes.appendChild(option);
                     });
-                    
-                    alternateOutcomes.disabled = false;
                 } else {
+                    alternateOutcomes.removeAttribute('multiple');
                     alternateOutcomes.innerHTML = '<option disabled>No alternate outcomes available</option>';
                     alternateOutcomes.disabled = true;
                 }
             } else {
+                alternateOutcomes.removeAttribute('multiple');
                 alternateOutcomes.innerHTML = '<option disabled>Select one scenario and one model to see alternates</option>';
                 alternateOutcomes.disabled = true;
             }
