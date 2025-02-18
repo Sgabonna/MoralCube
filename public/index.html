@@ -154,7 +154,31 @@
 
         .filter-group {
             margin-bottom: 15px;
-            transition: opacity 0.3s ease;
+        }
+
+        .filter-group select {
+            width: 100%;
+            min-height: 150px; /* Ensures consistent height across all filter boxes */
+        }
+
+        /* Specific styling for the alternate outcomes select */
+        #alternateOutcomes {
+            width: 100%;
+            min-height: 150px;
+        }
+
+        /* Add consistent padding and text size */
+        .filter-group select option {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
+        /* Add consistent label styling */
+        .filter-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
         }
 
         .filter-group label {
@@ -575,7 +599,7 @@
             </div>
             <!-- New Clear Filters button underneath the four filters -->
             <div class="filter-group">
-                <button id="clearFilters" class="btn btn-secondary">Clear Filters</button>
+                <button id="clearFilters" class="btn btn-secondary">Reset Filters</button>
             </div>
         </div>
         
@@ -1177,7 +1201,31 @@
             });
             }
 
-
+        function updateAlternateOutcomesDropdown(parentScenario, selectedModel) {
+            const alternateOutcomes = document.getElementById('alternateOutcomes');
+            
+            if (parentScenario && selectedModel) {
+                const relationships = scenarioRelationships.get(parentScenario) || [];
+                const alternatives = relationships.filter(rel => rel.model === selectedModel);
+                
+                if (alternatives && alternatives.length > 0) {
+                    alternateOutcomes.innerHTML = alternatives.map(alt => `
+                        <option value="${alt.childId}">
+                            ${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}
+                        </option>
+                    `).join('');
+                    alternateOutcomes.disabled = false;
+                    alternateOutcomes.multiple = true;
+                    alternateOutcomes.size = Math.min(6, alternatives.length);
+                } else {
+                    alternateOutcomes.innerHTML = '<option disabled>No alternate outcomes available</option>';
+                    alternateOutcomes.disabled = true;
+                }
+            } else {
+                alternateOutcomes.innerHTML = '<option disabled>Select a scenario and model first</option>';
+                alternateOutcomes.disabled = true;
+            }
+        }
 
 
         function updateFilters() {
@@ -2015,28 +2063,31 @@
 
 
 
-        // Alternate Outcomes Listener
+        // Update the alternate outcomes listener
         document.getElementById('alternateOutcomes').addEventListener('change', function(e) {
             if (isUpdatingFilters) return;
             
-            const selectedAlternates = Array.from(e.target.selectedOptions).map(opt => opt.value);
+            const selectedAlternates = Array.from(this.selectedOptions).map(opt => opt.value);
             
-            if (selectedAlternates.length > 0) {
-                // Find the first model that has this alternate outcome
+            if (selectedAlternates.length > 0 && selectedScenarios.length === 1) {
                 const parentScenario = selectedScenarios[0];
                 const relationships = scenarioRelationships.get(parentScenario) || [];
-                const firstMatchingModel = relationships.find(rel => 
-                    selectedAlternates.includes(rel.childId)
-                )?.model;
                 
-                if (firstMatchingModel) {
-                    // Update model selection to match the alternate
-                    selectedModels = [firstMatchingModel];
-                    const modelFilter = document.getElementById('modelFilter');
-                    Array.from(modelFilter.options).forEach(option => {
-                        option.selected = option.value === firstMatchingModel;
-                    });
-                }
+                selectedAlternates.forEach(alternateId => {
+                    const relationship = relationships.find(rel => rel.childId === alternateId);
+                    if (relationship) {
+                        const model = relationship.model;
+                        if (!selectedModels.includes(model)) {
+                            selectedModels.push(model);
+                        }
+                    }
+                });
+                
+                // Update model filter selection
+                const modelFilter = document.getElementById('modelFilter');
+                Array.from(modelFilter.options).forEach(option => {
+                    option.selected = selectedModels.includes(option.value);
+                });
             }
             
             updateVisualization();
