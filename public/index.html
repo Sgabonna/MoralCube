@@ -1832,7 +1832,6 @@
 
 
         // Event Listeners
-
         // Model Filter Listener
         document.getElementById('modelFilter').addEventListener('change', function(e) {
             if (isUpdatingFilters || isCategoryFiltering) return;
@@ -1977,10 +1976,13 @@
                 point.isParent && selectedCategories.includes(point.category)
             );
             
-            // Update scenario filter options
-            scenarioFilter.innerHTML = availableScenarios.map(scenario =>
-                `<option value="${scenario.scenarioTitle}">${scenario.scenarioTitle}</option>`
-            ).join('');
+            // Create a Set of unique scenario titles to prevent duplicates
+            const uniqueScenarios = [...new Set(availableScenarios.map(point => point.scenarioTitle))];
+            
+            // Update scenario filter options with unique scenarios
+            scenarioFilter.innerHTML = uniqueScenarios
+                .map(title => `<option value="${title}">${title}</option>`)
+                .join('');
             
             // Clear model filter
             document.getElementById('modelFilter').innerHTML = '<option disabled>Select a scenario first</option>';
