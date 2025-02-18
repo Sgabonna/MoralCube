@@ -249,22 +249,31 @@
         /* Middle Column (Placeholder Overview) – 45% width */
         #placeholder-overview-column {
             width: 45%;
-            }
+        }
 
-            .filter-section {
-                display: flex;
-                gap: 20px;
-                margin-bottom: 20px;
-                padding: 0;
-            }
+        .filter-section {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 6px;
+        }
 
-            .filter-group-container {
-                flex: 1;
-                background-color: #f8f9fa;
-                padding: 20px;
-                border-radius: 6px;
-                border: 1px solid #dee2e6;
-            }
+        .filter-group-container {
+            flex: 1;
+            min-width: 0; /* Prevents flex items from overflowing */
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            background-color: white;
+        }
+
+        .filter-group select {
+            width: 100%;
+            height: 200px;
+        }
 
             .moral-category-filter {
                 background-color: #f8f9fa;
@@ -273,11 +282,6 @@
                 margin-top: 15px;
             }
 
-            /* Ensure select boxes have consistent height */
-            .filter-group select {
-                width: 100%;
-                height: 200px;
-            }
         .plot-section {
             margin-top: 2rem;
         }
@@ -589,47 +593,51 @@
         .relevant-badge {
             border: 2px solid #0d6efd;
         }
+        @media (max-width: 1200px) {
+            .filter-section {
+                flex-wrap: wrap;
+            }
+            
+            .filter-group-container {
+                flex: 1 1 45%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .filter-group-container {
+                flex: 1 1 100%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="filter-section">
-        <!-- Left filter group: Categories and Scenarios -->
         <div class="filter-group-container">
-            <div class="filter-group category-filter-group">
-                <label for="categoryFilter">Filter by Category Type:</label>
-                <select id="categoryFilter" class="form-control category-select" multiple size="6"></select>
-            </div>
-    
-            <div class="filter-group scenario-filter-group">
-                <label for="scenarioFilter">Compare Scenarios (max 4)</label>
-                <select id="scenarioFilter" class="form-control scenario-select" multiple size="6"></select>
-            </div>
+            <label for="categoryFilter">Filter by Category Type:</label>
+            <select id="categoryFilter" class="form-control category-select" multiple size="6"></select>
         </div>
     
-        <!-- Right filter group: Models and What If Scenarios -->
         <div class="filter-group-container">
-            <div class="filter-group model-filter-group">
-                <label for="modelFilter">Compare AI Models (max 4)</label>
-                <select id="modelFilter" class="form-control model-select" multiple size="6"></select>
-            </div>
-    
-            <div class="filter-group">
-                <label>What If Scenarios</label>
-                <select id="alternateOutcomes" class="form-control" multiple size="6">
-                    <option disabled>Select a scenario and model to see alternates</option>
-                </select>
-            </div>
+            <label for="scenarioFilter">Compare Scenarios (max 4)</label>
+            <select id="scenarioFilter" class="form-control scenario-select" multiple size="6"></select>
         </div>
     
-        <!-- Clear Filters button centered below -->
-        <div class="text-center">
-            <button id="clearFilters" class="btn btn-secondary mt-3">Clear Filters</button>
+        <div class="filter-group-container">
+            <label for="modelFilter">Compare AI Models (max 4)</label>
+            <select id="modelFilter" class="form-control model-select" multiple size="6"></select>
+        </div>
+    
+        <div class="filter-group-container">
+            <label>What If Scenarios</label>
+            <select id="alternateOutcomes" class="form-control" multiple size="6">
+                <option disabled>Select a scenario and model to see alternates</option>
+            </select>
         </div>
     </div>
     
     <div id="overview-section">
         <!-- Left Column: Cube Plot and Moral Categories -->
-        <div id="cube-column" style="width: 37%;">
+        <div id="cube-column" style="width: 28%;">
             <div class="plot-container">
                 <div id="cube-plot"></div>
             </div>
@@ -651,13 +659,13 @@
         </div>
     
         <!-- Middle Column: Overview Cards -->
-        <div id="cards-column" style="width: 18%; padding: 0 10px;">
+        <div id="cards-column" style="width: 12%; padding: 0 10px;">
             <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Select 2 scenarios/models to compare:</p>
             <div id="overview"></div>
         </div>
     
         <!-- Right Column: Media Display -->
-        <div id="placeholder-overview-column" style="width: 45%; padding: 0 10px;">
+        <div id="placeholder-overview-column" style="width: 60%; padding: 0 10px;">
             <div id="media-placeholder" style="flex-grow: 1; border: none; overflow: hidden;"></div>
             <button id="open-media" class="btn btn-secondary btn-sm mt-2" style="width: 100%;">Open in New Window</button>
         </div>
@@ -2015,7 +2023,6 @@
         document.getElementById('categoryFilter').addEventListener('change', function(e) {
             if (isUpdatingFilters) return;
             
-            // Get selected categories
             selectedCategories = Array.from(e.target.selectedOptions).map(option => option.value);
             
             // Reset other filters
@@ -2026,14 +2033,15 @@
             document.getElementById('alternateOutcomes').innerHTML = '<option disabled>Select a scenario and model to see alternates</option>';
             
             // Filter scenarios based on selected categories
-            const relevantScenarios = dataPoints.filter(point => 
-                point.isParent && selectedCategories.includes(point.category)
-            );
+            // Only get parent scenarios and ensure uniqueness
+            const relevantScenarios = [...new Set(dataPoints
+                .filter(point => point.isParent && selectedCategories.includes(point.category))
+                .map(point => point.scenarioTitle))];
             
             // Update scenario filter options
             const scenarioFilter = document.getElementById('scenarioFilter');
             scenarioFilter.innerHTML = relevantScenarios
-                .map(scenario => `<option value="${scenario.scenarioTitle}">${scenario.scenarioTitle}</option>`)
+                .map(scenario => `<option value="${scenario}">${scenario}</option>`)
                 .join('');
             
             // Clear model and alternate outcomes filters
