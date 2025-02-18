@@ -530,7 +530,6 @@
                 <label for="categoryFilter">Filter by Category Type:</label>
                 <select id="categoryFilter" class="form-control category-select" multiple size="6"></select>
             </div>
-
             <div class="filter-group scenario-filter-group">
                 <label for="scenarioFilter">
                     Compare Scenarios (max 4)
@@ -539,7 +538,6 @@
                         <span class="tooltiptext">Hold Ctrl (Cmd on Mac) to select multiple scenarios</span>
                     </span>
                 </label>
-                <!-- This filter now lists only parent scenarios -->
                 <select id="scenarioFilter" class="form-control scenario-select" multiple size="6"></select>
             </div>
             <div class="filter-group model-filter-group">
@@ -564,6 +562,20 @@
                     <option disabled>Select a scenario and model to see alternates</option>
                 </select>
             </div>
+            <!-- New Clear Filters button underneath the four filters -->
+            <div class="filter-group">
+                <button id="clearFilters" class="btn btn-secondary">Clear Filters</button>
+            </div>
+        </div>
+        
+        
+        <!-- New three-column layout -->
+        <div id="overview-section" style="display: flex; width: 100%;">
+            <!-- Left Column: Cube Plot (40% width) -->
+            <div id="cube-column" style="width: 37%;">
+            <div class="plot-container">
+                <div id="cube-plot"></div>
+            </div>
             <!-- Moral Category Filter with Clear Filters button underneath -->
             <div class="filter-group">
                 <label>Filter by Moral Category:</label>
@@ -577,15 +589,6 @@
                 </div>
                 <!-- Clear Filters button now placed directly underneath the moral category badges -->
                 <button id="clearFilters" class="btn btn-secondary mt-2">Clear Filters</button>
-            </div>
-        </div>
-        
-        <!-- New three-column layout -->
-        <div id="overview-section" style="display: flex; width: 100%;">
-            <!-- Left Column: Cube Plot (40% width) -->
-            <div id="cube-column" style="width: 37%;">
-            <div class="plot-container">
-                <div id="cube-plot"></div>
             </div>
             </div>
             <div id="cards-column" style="width: 18%; padding: 0 10px;">
@@ -941,7 +944,6 @@
                             llmName: metadata.llmSource ? metadata.llmSource.model : "Unknown Model",
                             category: metadata.category || "Uncategorized",
                             overallCategory: metadata.classification ? normalizeCategory(metadata.classification.type) : "unknown",
-                            categoryJustification: metadata.classification ? metadata.classification.justification : "",
                             url: metadata.url || "",
                             dimensions: survey.dimensions || [],
                             x: survey.finalPosition ? survey.finalPosition.x : 0,
@@ -949,8 +951,13 @@
                             z: survey.finalPosition ? survey.finalPosition.z : 0,
                             isParent: scenario.type === 'base',
                             parentId: scenario.parentId || null,
-                            relationToBase: metadata.relationToBase || null
+                            relationToBase: metadata.relationToBase || null,
+                            // Add the ethics scores if available in your data structure:
+                            deontologyScore: survey.deontologyScore,           // Adjust as needed
+                            utilitarianismScore: survey.utilitarianismScore,       // Adjust as needed
+                            virtueEthicsScore: survey.virtueEthicsScore            // Adjust as needed
                         };
+
 
                         console.log(`Created point object:`, point);
                         console.log(`Point ID: ${point.id}`);
