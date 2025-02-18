@@ -209,11 +209,33 @@
             width: 45%;
             }
 
-        /* Right Column (Stacked Overview Cards) – 15% width */
+        .filter-group-container {
+            background-color: #f8f9fa;
+            margin-bottom: 1rem;
+        }
+
+        .moral-category-filter {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+        }
+        .plot-section {
+            margin-top: 2rem;
+        }
+
+        .filter-section {
+            display: block;
+            padding: 0;
+            gap: 0;
+        }
+
+        .filter-group {
+            margin-bottom: 1rem;
+        }
         
 
         /* The container for the stacked overview cards:
-        Fixed height for 5 cards (e.g., 500px total) */
+        Fixed height for 4 cards (e.g., 500px total) */
         #overview {
             height: 500px;            /* Adjust if needed */
             overflow: hidden;         /* By default, hide overflow */
@@ -381,18 +403,13 @@
             border-color: #333 transparent transparent transparent;
         }
 
-        #overview {
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-        }
 
         /* Ensure that embedded iframes fill the media container */
         #media-placeholder iframe {
-        width: 100%;
-        height: 100%;
-        display: block;
-        object-fit: contain;
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: contain;
         }
 
 
@@ -404,8 +421,8 @@
         }
         /* Adjust badge size specifically within overview cards */
         .comparison-card .category-badge {
-        font-size: 0.65rem;       /* Smaller font size (adjust as needed) */
-        padding: 0.1em 0.3em;      /* Reduced padding for a sleeker look */
+            font-size: 0.65rem;       /* Smaller font size (adjust as needed) */
+            padding: 0.1em 0.3em;      /* Reduced padding for a sleeker look */
         }
         .scenario-section {
             margin-top: 20px;
@@ -516,56 +533,57 @@
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <div class="page-header mb-4">
-            <h1 class="text-center mb-3">The Moral Cube</h1>
-            <div class="intro-section text-center mb-3">
-                <p class="mb-2">Navigate ethical scenarios in 3D space: Select categories to explore scenarios, choose AI models to compare responses, and discover alternate outcomes. Clear filters anytime to reset.</p>
-                <p class="text-center mb-2">Any feedback or suggestions please email: themoralcube@gmail.com</p>
-                <p class="text-center mb-2"><a href="https://www.youtube.com/watch?v=hauuDOrZQ1o">Click here to learn more about the Moral Cube</a></p>
-            </div>
-        </div>
-        <div class="filter-section">
+    <div class="filter-section">
+        <!-- First section: Category and Scenarios -->
+        <div class="filter-group-container border rounded p-3 mb-3">
+            <p class="text-muted mb-3">Choose a Category to find a Scenario, or Select a Scenario Directly</p>
+            
+            <!-- Existing category filter, but moved inside container -->
             <div class="filter-group category-filter-group">
                 <label for="categoryFilter">Filter by Category Type:</label>
                 <select id="categoryFilter" class="form-control category-select" multiple size="6"></select>
             </div>
-
-            <div class="filter-group scenario-filter-group">
-                <label for="scenarioFilter">
-                    Compare Scenarios (max 4)
-                    <span class="tooltip">
-                        <i class="fas fa-info-circle info-icon"></i>
-                        <span class="tooltiptext">Hold Ctrl (Cmd on Mac) to select multiple scenarios</span>
-                    </span>
-                </label>
-                <!-- This filter now lists only parent scenarios -->
+    
+            <!-- Existing scenario filter, but moved inside container -->
+            <div class="filter-group scenario-filter-group mt-3">
+                <label for="scenarioFilter">Compare Scenarios (max 4)</label>
                 <select id="scenarioFilter" class="form-control scenario-select" multiple size="6"></select>
             </div>
+        </div>
+    
+        <!-- Second section: Models and What If Scenarios -->
+        <div class="filter-group-container border rounded p-3">
+            <p class="text-muted mb-3">Select the AI Models you'd like to compare, or explore "what if" scenarios by selecting a single model</p>
+            
+            <!-- Existing model filter, but moved inside container -->
             <div class="filter-group model-filter-group">
-                <label for="modelFilter">
-                    Compare AI Models (max 4)
-                    <span class="tooltip">
-                        <i class="fas fa-info-circle info-icon"></i>
-                        <span class="tooltiptext">Hold Ctrl (Cmd on Mac) to select multiple models</span>
-                    </span>
-                </label>
+                <label for="modelFilter">Compare AI Models (max 4)</label>
                 <select id="modelFilter" class="form-control model-select" multiple size="6"></select>
             </div>
-            <div class="filter-group">
-                <label>
-                    Compare Alternate Outcomes
-                    <span class="tooltip">
-                        <i class="fas fa-info-circle info-icon"></i>
-                        <span class="tooltiptext">Hold Ctrl (Cmd on Mac) to select multiple outcomes</span>
-                    </span>
-                </label>
+    
+            <!-- Renamed alternate outcomes to What If Scenarios -->
+            <div class="filter-group mt-3">
+                <label>What If Scenarios</label>
                 <select id="alternateOutcomes" class="form-control" multiple size="6">
                     <option disabled>Select a scenario and model to see alternates</option>
                 </select>
             </div>
-            <!-- Moral Category Filter with Clear Filters button underneath -->
-            <div class="filter-group">
+        </div>
+    
+        <!-- Clear Filters button -->
+        <button id="clearFilters" class="btn btn-secondary mt-3">Clear Filters</button>
+    </div>
+    
+    <!-- Move the overview section after filters -->
+    <div id="overview-section" style="display: flex; width: 100%;">
+        <!-- Left Column: Cube Plot -->
+        <div id="cube-column" style="width: 37%;">
+            <div class="plot-container">
+                <div id="cube-plot"></div>
+            </div>
+            
+            <!-- Move moral category filter here, below the cube -->
+            <div class="moral-category-filter mt-3">
                 <label>Filter by Moral Category:</label>
                 <div class="filter-badges">
                     <span class="filter-badge category-evil active" data-category="evil">Evil</span>
@@ -575,8 +593,6 @@
                     <span class="filter-badge category-morally-grey active" data-category="morally_grey">Morally Grey</span>
                     <span class="filter-badge category-world-building active" data-category="world_building">World Building</span>
                 </div>
-                <!-- Clear Filters button now placed directly underneath the moral category badges -->
-                <button id="clearFilters" class="btn btn-secondary mt-2">Clear Filters</button>
             </div>
         </div>
         
@@ -1833,10 +1849,12 @@
 
         // Event Listeners
 
-        // UPDATED Model Filter Listener:
+        // Model Filter Handler
         document.getElementById('modelFilter').addEventListener('change', function(e) {
-            if (isUpdatingFilters || isCategoryFiltering) return;
+            if (isUpdatingFilters) return;
+            
             selectedModels = Array.from(e.target.selectedOptions).map(option => option.value);
+            
             if (selectedModels.length > 4) {
                 alert('Please select a maximum of 4 models for comparison');
                 selectedModels = selectedModels.slice(0, 4);
@@ -1844,16 +1862,36 @@
                     option.selected = selectedModels.includes(option.value);
                 });
             }
-            // Removed manual alternate outcomes and plot updates—now handled in updateVisualization()
+            
+            // Update what-if scenarios if exactly one scenario and one model are selected
+            if (selectedScenarios.length === 1 && selectedModels.length === 1) {
+                const scenario = selectedScenarios[0];
+                const model = selectedModels[0];
+                const alternatives = scenarioRelationships.get(scenario) || [];
+                const altOutcomes = alternatives.filter(alt => alt.model === model);
+                
+                const altOutcomesSelect = document.getElementById('alternateOutcomes');
+                if (altOutcomes.length > 0) {
+                    altOutcomesSelect.innerHTML = altOutcomes
+                        .map(alt => `<option value="${alt.childId}">
+                            ${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}
+                        </option>`)
+                        .join('');
+                    altOutcomesSelect.disabled = false;
+                } else {
+                    altOutcomesSelect.innerHTML = '<option disabled>No what-if scenarios available</option>';
+                    altOutcomesSelect.disabled = true;
+                }
+            }
+            
             updateVisualization();
         });
 
 
-        // Modify the scenario filter event listener to properly trigger media updates
+        // Scenario Filter Handler
         document.getElementById('scenarioFilter').addEventListener('change', function(e) {
-            if (isUpdatingFilters || isCategoryFiltering) return;
+            if (isUpdatingFilters) return;
             
-            // Update selected scenarios
             selectedScenarios = Array.from(e.target.selectedOptions).map(option => option.value);
             
             // Enforce maximum selection limit
@@ -1864,57 +1902,63 @@
                     option.selected = selectedScenarios.includes(option.value);
                 });
             }
-
-            // Clear previous model selections and alternate outcomes
-            document.getElementById('modelFilter').selectedIndex = -1;
-            document.getElementById('alternateOutcomes').innerHTML = 
-                '<option disabled>Select a model to see alternate outcomes</option>';
-            selectedModels = [];
-
-            // Update visualization and media display
-            updateVisualization();
             
-            // Log the current state for debugging
-            console.log('Selected scenarios:', selectedScenarios);
-            if (selectedScenarios.length === 1) {
-                const scenario = dataPoints.find(p => p.scenarioTitle === selectedScenarios[0]);
-                console.log('Found scenario:', scenario);
-                if (scenario) {
-                    console.log('Scenario URL:', scenario.url);
-                }
-            }
+            // Clear and update model filter
+            const modelFilter = document.getElementById('modelFilter');
+            const availableModels = new Set();
+            
+            selectedScenarios.forEach(scenario => {
+                dataPoints.filter(point => point.scenarioTitle === scenario)
+                    .forEach(point => availableModels.add(point.llmName));
+            });
+            
+            modelFilter.innerHTML = Array.from(availableModels)
+                .map(model => `<option value="${model}">${model}</option>`)
+                .join('');
+            
+            // Clear selections
+            selectedModels = [];
+            modelFilter.selectedIndex = -1;
+            document.getElementById('alternateOutcomes').innerHTML = 
+                '<option disabled>Select a model to see what-if scenarios</option>';
+            
+            updateVisualization();
         });
 
 
 
 
 
-        // Alternate Outcomes Listener (remains unchanged):
+        // What-If Scenarios Handler
         document.getElementById('alternateOutcomes').addEventListener('change', function(e) {
             if (isUpdatingFilters) return;
             
+            if (selectedScenarios.length !== 1) return;
+            
             const selectedAlternates = Array.from(e.target.selectedOptions).map(opt => opt.value);
             const parentScenario = selectedScenarios[0];
-            const selectedModel = selectedModels[0];
+            const selectedModel = selectedModels[0] || 
+                (scenarioRelationships.get(parentScenario) || [])
+                    .find(rel => rel.childId === selectedAlternates[0])?.model;
             
-            if (!parentScenario || !selectedModel) return;
+            if (!selectedModel) return;
             
-            // Find the parent point
-            const parentPoint = dataPoints.find(p => 
-                p.scenarioTitle === parentScenario && 
-                p.llmName === selectedModel
-            );
+            // Update model selection if it changed
+            if (!selectedModels.includes(selectedModel)) {
+                selectedModels = [selectedModel];
+                const modelFilter = document.getElementById('modelFilter');
+                Array.from(modelFilter.options).forEach(option => {
+                    option.selected = option.value === selectedModel;
+                });
+            }
             
-            // Find all selected child points
-            const selectedChildPoints = selectedAlternates
-                .map(childId => dataPoints.find(p => 
-                    p.scenarioTitle === childId && 
-                    p.llmName === selectedModel
-                ))
-                .filter(p => p); // Remove any undefined points
-            
-            // Combine parent and children for visualization
-            const pointsToShow = [parentPoint, ...selectedChildPoints].filter(Boolean);
+            // Update visualization with selected alternates
+            const pointsToShow = [
+                dataPoints.find(p => p.scenarioTitle === parentScenario && p.isParent),
+                ...selectedAlternates.map(altId => 
+                    dataPoints.find(p => p.scenarioTitle === altId && p.llmName === selectedModel)
+                ).filter(Boolean)
+            ];
             
             if (pointsToShow.length > 0) {
                 createPlot(pointsToShow);
@@ -1924,10 +1968,32 @@
         });
 
 
-        // Category Filter Listener (unchanged):
         document.getElementById('categoryFilter').addEventListener('change', function(e) {
-            if (isUpdatingFilters || isCategoryFiltering) return;
+            if (isUpdatingFilters) return;
+            
+            // Get selected categories
             selectedCategories = Array.from(e.target.selectedOptions).map(option => option.value);
+            
+            // Reset other filters
+            selectedScenarios = [];
+            selectedModels = [];
+            document.getElementById('scenarioFilter').selectedIndex = -1;
+            document.getElementById('modelFilter').selectedIndex = -1;
+            document.getElementById('alternateOutcomes').innerHTML = '<option disabled>Select a scenario and model to see alternates</option>';
+            
+            // Filter scenarios based on selected categories
+            const relevantScenarios = dataPoints.filter(point => 
+                point.isParent && selectedCategories.includes(point.category)
+            );
+            
+            // Update scenario filter options
+            const scenarioFilter = document.getElementById('scenarioFilter');
+            scenarioFilter.innerHTML = relevantScenarios
+                .map(scenario => `<option value="${scenario.scenarioTitle}">${scenario.scenarioTitle}</option>`)
+                .join('');
+            
+            // Clear model and alternate outcomes filters
+            document.getElementById('modelFilter').innerHTML = '';
             updateVisualization();
         });
 
@@ -1938,8 +2004,6 @@
         renderSurveyQuestions();
         });
 
-
-        // Remove duplicate scenarioFilter listener (we now have one combined listener above)
 
 
         // Filter Badge Listener (unchanged):
