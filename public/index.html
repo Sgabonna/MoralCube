@@ -744,6 +744,33 @@
             });
         }
 
+        function getEthicsScores(item) {
+            // Find the PhilosophicalAnalysis dimension (ignore case/whitespace)
+            const philosophyDimension = item.survey.dimensions.find(dim => 
+                dim.id.trim().toLowerCase() === 'philosophicalanalysis'
+            );
+            if (philosophyDimension) {
+                const deontologyObj = philosophyDimension.questions.find(q => 
+                q.question.trim().toLowerCase() === 'deontology'
+                );
+                const utilitarianismObj = philosophyDimension.questions.find(q => 
+                q.question.trim().toLowerCase() === 'utilitarianism'
+                );
+                const virtueEthicsObj = philosophyDimension.questions.find(q => 
+                q.question.trim().toLowerCase() === 'virtue ethics'
+                );
+                return {
+                deontologyScore: deontologyObj ? deontologyObj.score : 'N/A',
+                utilitarianismScore: utilitarianismObj ? utilitarianismObj.score : 'N/A',
+                virtueEthicsScore: virtueEthicsObj ? virtueEthicsObj.score : 'N/A'
+                };
+            }
+            return {
+                deontologyScore: 'N/A',
+                utilitarianismScore: 'N/A',
+                virtueEthicsScore: 'N/A'
+            };
+            }
 
 
         // Function to render the questions into the container
@@ -1410,8 +1437,10 @@
             data.sort((a, b) => (b.isParent ? 1 : 0) - (a.isParent ? 1 : 0));
             data = data.slice(0, 4);
             
-            const cards = data.map(item => `
-                <div class="comparison-card" data-scenario-id="${item.id}" style="border: 2px solid ${scenarioColorMapping[item.scenarioTitle + '_' + item.llmName] || '#000'};">
+            const cards = data.map(item => {
+                const scores = getEthicsScores(item);
+                return `
+                    <div class="comparison-card" data-scenario-id="${item.id}" style="border: 2px solid ${scenarioColorMapping[item.scenarioTitle + '_' + item.llmName] || '#000'};">
                     <h4>
                         ${getScenarioTitle(item)}
                         <small>(${item.llmName} ${getCategoryBadge(item.overallCategory)})</small>
@@ -1422,14 +1451,16 @@
                         </span>
                         <span class="read-more">Read more</span>
                     </p>
-                    <!-- Ethics Scores (displayed as three lines without bullet points) -->
+                    <!-- Display Ethics Scores -->
                     <div class="ethics-scores" style="font-size: 0.75rem; margin-top: 8px;">
-                        <div>Deontology: ${item.deontologyScore !== undefined ? item.deontologyScore.toFixed(1) : 'N/A'}</div>
-                        <div>Utilitarianism: ${item.utilitarianismScore !== undefined ? item.utilitarianismScore.toFixed(1) : 'N/A'}</div>
-                        <div>Virtue Ethics: ${item.virtueEthicsScore !== undefined ? item.virtueEthicsScore.toFixed(1) : 'N/A'}</div>
+                        <div>Deontology: ${scores.deontologyScore}</div>
+                        <div>Utilitarianism: ${scores.utilitarianismScore}</div>
+                        <div>Virtue Ethics: ${scores.virtueEthicsScore}</div>
                     </div>
-                </div>
-            `).join('');
+                    </div>
+                `;
+                }).join('');
+
 
             
             overviewDiv.innerHTML = cards;
