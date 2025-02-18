@@ -7,7 +7,7 @@
     "build": "echo 'No build step needed'"
   },
   "dependencies": {
-    "mongodb": "^4.10.0"
+    "mongodb": "^4.17.2"
   },
   "author": "Scott Young",
   "license": "MIT"
