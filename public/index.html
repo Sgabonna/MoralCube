@@ -1005,9 +1005,9 @@
                             parentId: scenario.parentId || null,
                             relationToBase: metadata.relationToBase || null,
                             // Add the ethics scores if available in your data structure:
-                            deontologyScore: q.score,           // Adjust as needed
-                            utilitarianismScore: q.score,       // Adjust as needed
-                            virtueEthicsScore: q.Score            // Adjust as needed
+                            deontologyScore: survey.deontologyScore,           // Adjust as needed
+                            utilitarianismScore: survey.utilitarianismScore,       // Adjust as needed
+                            virtueEthicsScore: survey.virtueEthicsScore            // Adjust as needed
                         };
 
 
@@ -1478,7 +1478,7 @@
                         </span>
                         <span class="read-more">Read more</span>
                     </p>
-                    <!-- Ethics Scores: will only show when card is expanded -->
+                    <!-- Display Ethics Scores -->
                     <div class="ethics-scores" style="font-size: 0.75rem; margin-top: 8px;">
                         <div>Deontology: ${scores.deontologyScore}</div>
                         <div>Utilitarianism: ${scores.utilitarianismScore}</div>
@@ -1487,7 +1487,6 @@
                     </div>
                 `;
                 }).join('');
-
 
 
             
