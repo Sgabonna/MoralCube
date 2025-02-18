@@ -1849,6 +1849,8 @@
             
             // Update alternate outcomes if exactly one scenario and one model are selected
             const alternateOutcomes = document.getElementById('alternateOutcomes');
+            alternateOutcomes.multiple = true; // Enable multiple selection
+            
             if (selectedScenarios.length === 1 && selectedModels.length === 1) {
                 const parentScenario = selectedScenarios[0];
                 const selectedModel = selectedModels[0];
@@ -1857,11 +1859,17 @@
                 const alternatives = relationships.filter(child => child.model === selectedModel);
                 
                 if (alternatives && alternatives.length > 0) {
-                    alternateOutcomes.innerHTML = alternatives
-                        .map(alt => `<option value="${alt.childId}">
-                            ${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}
-                        </option>`)
-                        .join('');
+                    // Remove any existing disabled options
+                    alternateOutcomes.innerHTML = '';
+                    
+                    // Add the alternatives as selectable options
+                    alternatives.forEach(alt => {
+                        const option = document.createElement('option');
+                        option.value = alt.childId;
+                        option.text = `${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}`;
+                        alternateOutcomes.appendChild(option);
+                    });
+                    
                     alternateOutcomes.disabled = false;
                 } else {
                     alternateOutcomes.innerHTML = '<option disabled>No alternate outcomes available</option>';
