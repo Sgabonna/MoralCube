@@ -251,27 +251,33 @@
             width: 45%;
             }
 
-        .filter-section {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            /* Remove the grid display and replace with these properties */
-            display: block;
-            padding: 0;
-        }
-        .filter-group-container {
-            background-color: #f8f9fa;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            border-radius: 6px;
-        }
+            .filter-section {
+                display: flex;
+                gap: 20px;
+                margin-bottom: 20px;
+                padding: 0;
+            }
 
-        .moral-category-filter {
-            background-color: #f8f9fa;
-            padding: 1rem;
-            border-radius: 6px;
-        }
+            .filter-group-container {
+                flex: 1;
+                background-color: #f8f9fa;
+                padding: 20px;
+                border-radius: 6px;
+                border: 1px solid #dee2e6;
+            }
+
+            .moral-category-filter {
+                background-color: #f8f9fa;
+                padding: 15px;
+                border-radius: 6px;
+                margin-top: 15px;
+            }
+
+            /* Ensure select boxes have consistent height */
+            .filter-group select {
+                width: 100%;
+                height: 200px;
+            }
         .plot-section {
             margin-top: 2rem;
         }
@@ -587,42 +593,31 @@
 </head>
 <body>
     <div class="filter-section">
-        <!-- Container for all filters in a row -->
-        <div class="filter-row">
-            <!-- First group: Category and Scenarios -->
-            <div class="filter-group-container border rounded p-3">
-                <p class="text-muted mb-3">Choose a Category to find a Scenario, or Select a Scenario Directly</p>
-                
-                <!-- Category Filter -->
-                <div class="filter-group category-filter-group">
-                    <label for="categoryFilter">Filter by Category Type:</label>
-                    <select id="categoryFilter" class="form-control category-select" multiple size="6"></select>
-                </div>
-    
-                <!-- Scenario Filter -->
-                <div class="filter-group scenario-filter-group mt-3">
-                    <label for="scenarioFilter">Compare Scenarios (max 4)</label>
-                    <select id="scenarioFilter" class="form-control scenario-select" multiple size="6"></select>
-                </div>
+        <!-- Left filter group: Categories and Scenarios -->
+        <div class="filter-group-container">
+            <div class="filter-group category-filter-group">
+                <label for="categoryFilter">Filter by Category Type:</label>
+                <select id="categoryFilter" class="form-control category-select" multiple size="6"></select>
             </div>
     
-            <!-- Second group: Models and What If -->
-            <div class="filter-group-container border rounded p-3">
-                <p class="text-muted mb-3">Select the AI Models you'd like to compare, or explore "what if" scenarios by selecting a single model</p>
-                
-                <!-- Model Filter -->
-                <div class="filter-group model-filter-group">
-                    <label for="modelFilter">Compare AI Models (max 4)</label>
-                    <select id="modelFilter" class="form-control model-select" multiple size="6"></select>
-                </div>
+            <div class="filter-group scenario-filter-group">
+                <label for="scenarioFilter">Compare Scenarios (max 4)</label>
+                <select id="scenarioFilter" class="form-control scenario-select" multiple size="6"></select>
+            </div>
+        </div>
     
-                <!-- What If Scenarios -->
-                <div class="filter-group mt-3">
-                    <label>What If Scenarios</label>
-                    <select id="alternateOutcomes" class="form-control" multiple size="6">
-                        <option disabled>Select a scenario and model to see alternates</option>
-                    </select>
-                </div>
+        <!-- Right filter group: Models and What If Scenarios -->
+        <div class="filter-group-container">
+            <div class="filter-group model-filter-group">
+                <label for="modelFilter">Compare AI Models (max 4)</label>
+                <select id="modelFilter" class="form-control model-select" multiple size="6"></select>
+            </div>
+    
+            <div class="filter-group">
+                <label>What If Scenarios</label>
+                <select id="alternateOutcomes" class="form-control" multiple size="6">
+                    <option disabled>Select a scenario and model to see alternates</option>
+                </select>
             </div>
         </div>
     
@@ -632,15 +627,14 @@
         </div>
     </div>
     
-    <!-- Move the overview section after filters -->
-    <div id="overview-section" style="display: flex; width: 100%;">
-        <!-- Left Column: Cube Plot -->
+    <div id="overview-section">
+        <!-- Left Column: Cube Plot and Moral Categories -->
         <div id="cube-column" style="width: 37%;">
             <div class="plot-container">
                 <div id="cube-plot"></div>
             </div>
             
-            <!-- Move moral category filter here, below the cube -->
+            <!-- Moral Category Filter moved here -->
             <div class="moral-category-filter mt-3">
                 <label>Filter by Moral Category:</label>
                 <div class="filter-badges">
@@ -652,40 +646,32 @@
                     <span class="filter-badge category-world-building active" data-category="world_building">World Building</span>
                 </div>
             </div>
+            <!-- Clear Filters button -->
+            <button id="clearFilters" class="btn btn-secondary mt-2">Clear Filters</button>
         </div>
-        
-        <!-- New three-column layout -->
-        <div id="overview-section" style="display: flex; width: 100%;">
-            <!-- Left Column: Cube Plot (40% width) -->
-            <div id="cube-column" style="width: 37%;">
-            <div class="plot-container">
-                <div id="cube-plot"></div>
-            </div>
-            </div>
-            <div id="cards-column" style="width: 18%; padding: 0 10px;">
-                <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Select 2 scenarios/models to compare:</p>
-                <div id="overview"></div>
-            </div>
-            
-            <!-- Right Column: Overview Placeholder for Video/Website -->
-            <div id="placeholder-overview-column" style="width: 45%; padding: 0 10px; display: flex; flex-direction: column; height: 500px;">
-                <div id="media-placeholder" style="flex-grow: 1; border: none; overflow: hidden;"></div>
-                <button id="open-media" class="btn btn-secondary btn-sm mt-2" style="width: 100%;">Open in New Window</button>
-            </div>
-              
-               
+    
+        <!-- Middle Column: Overview Cards -->
+        <div id="cards-column" style="width: 18%; padding: 0 10px;">
+            <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Select 2 scenarios/models to compare:</p>
+            <div id="overview"></div>
         </div>
-  
-  
-
-        <div id="scenarioSection" class="scenario-section">
-            <h4 class="mb-3">Scenario Details</h4>
-            
-            <div class="accordion" id="scenarioAccordion">
-                <!-- Will be populated dynamically -->
-            </div>
+    
+        <!-- Right Column: Media Display -->
+        <div id="placeholder-overview-column" style="width: 45%; padding: 0 10px;">
+            <div id="media-placeholder" style="flex-grow: 1; border: none; overflow: hidden;"></div>
+            <button id="open-media" class="btn btn-secondary btn-sm mt-2" style="width: 100%;">Open in New Window</button>
         </div>
     </div>
+  
+
+    <div id="scenarioSection" class="scenario-section">
+        <h4 class="mb-3">Scenario Details</h4>
+        
+        <div class="accordion" id="scenarioAccordion">
+            <!-- Will be populated dynamically -->
+            </div>
+    </div>
+
     
     <script>
         // Initialize global variables
