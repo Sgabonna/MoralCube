@@ -756,43 +756,47 @@
         }
 
         function getEthicsScores(item) {
-            // Use the full survey if available; otherwise, use the dimensions property
-            let dimensions = (item.survey && Array.isArray(item.survey.dimensions))
-                                ? item.survey.dimensions
-                                : (Array.isArray(item.dimensions) ? item.dimensions : []);
-            if (!dimensions.length) {
+            try {
+                if (!item.survey || !Array.isArray(item.survey.dimensions)) {
                 return {
-                deontologyScore: 'N/A',
-                utilitarianismScore: 'N/A',
-                virtueEthicsScore: 'N/A'
+                    deontologyScore: 'N/A',
+                    utilitarianismScore: 'N/A',
+                    virtueEthicsScore: 'N/A'
                 };
-            }
-            const philosophyDimension = dimensions.find(dim => 
+                }
+                const philosophyDimension = item.survey.dimensions.find(dim => 
                 dim.id && dim.id.trim().toLowerCase() === 'philosophicalanalysis'
-            );
-            if (!philosophyDimension || !Array.isArray(philosophyDimension.questions)) {
+                );
+                if (!philosophyDimension || !Array.isArray(philosophyDimension.questions)) {
                 return {
-                deontologyScore: 'N/A',
-                utilitarianismScore: 'N/A',
-                virtueEthicsScore: 'N/A'
+                    deontologyScore: 'N/A',
+                    utilitarianismScore: 'N/A',
+                    virtueEthicsScore: 'N/A'
                 };
-            }
-            const deontologyObj = philosophyDimension.questions.find(q => 
+                }
+                const deontologyObj = philosophyDimension.questions.find(q => 
                 q.question && q.question.trim().toLowerCase() === 'deontology'
-            );
-            const utilitarianismObj = philosophyDimension.questions.find(q => 
+                );
+                const utilitarianismObj = philosophyDimension.questions.find(q => 
                 q.question && q.question.trim().toLowerCase() === 'utilitarianism'
-            );
-            const virtueEthicsObj = philosophyDimension.questions.find(q => 
+                );
+                const virtueEthicsObj = philosophyDimension.questions.find(q => 
                 q.question && q.question.trim().toLowerCase() === 'virtue ethics'
-            );
-            return {
+                );
+                return {
                 deontologyScore: deontologyObj ? deontologyObj.score : 'N/A',
                 utilitarianismScore: utilitarianismObj ? utilitarianismObj.score : 'N/A',
                 virtueEthicsScore: virtueEthicsObj ? virtueEthicsObj.score : 'N/A'
-            };
+                };
+            } catch (error) {
+                console.error('Error extracting ethics scores:', error);
+                return {
+                deontologyScore: 'N/A',
+                utilitarianismScore: 'N/A',
+                virtueEthicsScore: 'N/A'
+                };
             }
-
+        }
 
 
 
@@ -1001,9 +1005,9 @@
                             parentId: scenario.parentId || null,
                             relationToBase: metadata.relationToBase || null,
                             // Add the ethics scores if available in your data structure:
-                            deontologyScore: survey.deontologyScore,           // Adjust as needed
-                            utilitarianismScore: survey.utilitarianismScore,       // Adjust as needed
-                            virtueEthicsScore: survey.virtueEthicsScore            // Adjust as needed
+                            deontologyScore: q.score,           // Adjust as needed
+                            utilitarianismScore: q.score,       // Adjust as needed
+                            virtueEthicsScore: q.Score            // Adjust as needed
                         };
 
 
