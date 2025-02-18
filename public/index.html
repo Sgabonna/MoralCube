@@ -1833,10 +1833,13 @@
 
         // Event Listeners
 
-        // UPDATED Model Filter Listener:
+        // Model Filter Listener
         document.getElementById('modelFilter').addEventListener('change', function(e) {
             if (isUpdatingFilters || isCategoryFiltering) return;
+            
             selectedModels = Array.from(e.target.selectedOptions).map(option => option.value);
+            
+            // Enforce maximum selection limit
             if (selectedModels.length > 4) {
                 alert('Please select a maximum of 4 models for comparison');
                 selectedModels = selectedModels.slice(0, 4);
@@ -1844,14 +1847,44 @@
                     option.selected = selectedModels.includes(option.value);
                 });
             }
-            // Removed manual alternate outcomes and plot updates—now handled in updateVisualization()
+            
+            // Update alternate outcomes if exactly one scenario and one model are selected
+            const alternateOutcomes = document.getElementById('alternateOutcomes');
+            if (selectedScenarios.length === 1 && selectedModels.length === 1) {
+                const parentScenario = selectedScenarios[0];
+                const selectedModel = selectedModels[0];
+                
+                const relationships = scenarioRelationships.get(parentScenario) || [];
+                const alternatives = relationships.filter(child => child.model === selectedModel);
+                
+                if (alternatives && alternatives.length > 0) {
+                    alternateOutcomes.innerHTML = alternatives
+                        .map(alt => `<option value="${alt.childId}">
+                            ${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}
+                        </option>`)
+                        .join('');
+                    alternateOutcomes.disabled = false;
+                } else {
+                    alternateOutcomes.innerHTML = '<option disabled>No alternate outcomes available</option>';
+                    alternateOutcomes.disabled = true;
+                }
+            } else {
+                alternateOutcomes.innerHTML = '<option disabled>Select one scenario and one model to see alternates</option>';
+                alternateOutcomes.disabled = true;
+            }
+            
             updateVisualization();
         });
 
 
-        // Modify the scenario filter event listener to properly trigger media updates
+        // Scenario Filter Listener
         document.getElementById('scenarioFilter').addEventListener('change', function(e) {
             if (isUpdatingFilters || isCategoryFiltering) return;
+            
+            // Clear previous selections
+            selectedModels = [];
+            document.getElementById('modelFilter').selectedIndex = -1;
+            document.getElementById('alternateOutcomes').innerHTML = '<option disabled>Select a model first</option>';
             
             // Update selected scenarios
             selectedScenarios = Array.from(e.target.selectedOptions).map(option => option.value);
@@ -1864,70 +1897,94 @@
                     option.selected = selectedScenarios.includes(option.value);
                 });
             }
-
-            // Clear previous model selections and alternate outcomes
-            document.getElementById('modelFilter').selectedIndex = -1;
-            document.getElementById('alternateOutcomes').innerHTML = 
-                '<option disabled>Select a model to see alternate outcomes</option>';
-            selectedModels = [];
-
-            // Update visualization and media display
-            updateVisualization();
             
-            // Log the current state for debugging
-            console.log('Selected scenarios:', selectedScenarios);
-            if (selectedScenarios.length === 1) {
-                const scenario = dataPoints.find(p => p.scenarioTitle === selectedScenarios[0]);
-                console.log('Found scenario:', scenario);
-                if (scenario) {
-                    console.log('Scenario URL:', scenario.url);
-                }
+            // Update model filter based on selected scenarios
+            const modelFilter = document.getElementById('modelFilter');
+            const availableModels = new Set();
+            
+            selectedScenarios.forEach(scenario => {
+                const scenarioData = dataPoints.filter(point => 
+                    point.scenarioTitle === scenario
+                );
+                scenarioData.forEach(data => {
+                    availableModels.add(data.llmName);
+                });
+            });
+            
+            // Populate model filter
+            if (availableModels.size > 0) {
+                modelFilter.innerHTML = Array.from(availableModels)
+                    .map(model => `<option value="${model}">${model}</option>`)
+                    .join('');
+                modelFilter.disabled = false;
+            } else {
+                modelFilter.innerHTML = '<option disabled>No models available</option>';
+                modelFilter.disabled = true;
             }
+            
+            updateVisualization();
         });
 
 
 
 
 
-        // Alternate Outcomes Listener (remains unchanged):
+        // Alternate Outcomes Listener
         document.getElementById('alternateOutcomes').addEventListener('change', function(e) {
             if (isUpdatingFilters) return;
             
             const selectedAlternates = Array.from(e.target.selectedOptions).map(opt => opt.value);
-            const parentScenario = selectedScenarios[0];
-            const selectedModel = selectedModels[0];
             
-            if (!parentScenario || !selectedModel) return;
-            
-            // Find the parent point
-            const parentPoint = dataPoints.find(p => 
-                p.scenarioTitle === parentScenario && 
-                p.llmName === selectedModel
-            );
-            
-            // Find all selected child points
-            const selectedChildPoints = selectedAlternates
-                .map(childId => dataPoints.find(p => 
-                    p.scenarioTitle === childId && 
-                    p.llmName === selectedModel
-                ))
-                .filter(p => p); // Remove any undefined points
-            
-            // Combine parent and children for visualization
-            const pointsToShow = [parentPoint, ...selectedChildPoints].filter(Boolean);
-            
-            if (pointsToShow.length > 0) {
-                createPlot(pointsToShow);
-                populateOverview(pointsToShow);
-                populateScenarioDetails(pointsToShow);
+            if (selectedAlternates.length > 0) {
+                // Find the first model that has this alternate outcome
+                const parentScenario = selectedScenarios[0];
+                const relationships = scenarioRelationships.get(parentScenario) || [];
+                const firstMatchingModel = relationships.find(rel => 
+                    selectedAlternates.includes(rel.childId)
+                )?.model;
+                
+                if (firstMatchingModel) {
+                    // Update model selection to match the alternate
+                    selectedModels = [firstMatchingModel];
+                    const modelFilter = document.getElementById('modelFilter');
+                    Array.from(modelFilter.options).forEach(option => {
+                        option.selected = option.value === firstMatchingModel;
+                    });
+                }
             }
+            
+            updateVisualization();
         });
 
 
-        // Category Filter Listener (unchanged):
+        // Category Filter Listener
         document.getElementById('categoryFilter').addEventListener('change', function(e) {
             if (isUpdatingFilters || isCategoryFiltering) return;
+            
+            // Update selected categories
             selectedCategories = Array.from(e.target.selectedOptions).map(option => option.value);
+            
+            // Clear other filters
+            selectedScenarios = [];
+            selectedModels = [];
+            document.getElementById('scenarioFilter').selectedIndex = -1;
+            document.getElementById('modelFilter').selectedIndex = -1;
+            document.getElementById('alternateOutcomes').innerHTML = '<option disabled>Select a scenario and model first</option>';
+            
+            // Filter scenarios based on selected categories
+            const scenarioFilter = document.getElementById('scenarioFilter');
+            const availableScenarios = dataPoints.filter(point => 
+                point.isParent && selectedCategories.includes(point.category)
+            );
+            
+            // Update scenario filter options
+            scenarioFilter.innerHTML = availableScenarios.map(scenario =>
+                `<option value="${scenario.scenarioTitle}">${scenario.scenarioTitle}</option>`
+            ).join('');
+            
+            // Clear model filter
+            document.getElementById('modelFilter').innerHTML = '<option disabled>Select a scenario first</option>';
+            
             updateVisualization();
         });
 
