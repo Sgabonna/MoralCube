@@ -757,43 +757,45 @@
 
         function getEthicsScores(item) {
             try {
-                if (!item.survey || !Array.isArray(item.survey.dimensions)) {
-                return {
-                    deontologyScore: 'N/A',
-                    utilitarianismScore: 'N/A',
-                    virtueEthicsScore: 'N/A'
-                };
+                if (!item.dimensions) {
+                    return {
+                        deontologyScore: 'N/A',
+                        utilitarianismScore: 'N/A',
+                        virtueEthicsScore: 'N/A'
+                    };
                 }
-                const philosophyDimension = item.survey.dimensions.find(dim => 
-                dim.id && dim.id.trim().toLowerCase() === 'philosophicalanalysis'
+                
+                const philosophyDimension = item.dimensions.find(dim => 
+                    dim.id.trim().toLowerCase() === 'philosophical analysis'
                 );
-                if (!philosophyDimension || !Array.isArray(philosophyDimension.questions)) {
-                return {
-                    deontologyScore: 'N/A',
-                    utilitarianismScore: 'N/A',
-                    virtueEthicsScore: 'N/A'
-                };
+                
+                if (!philosophyDimension || !philosophyDimension.questions) {
+                    return {
+                        deontologyScore: 'N/A',
+                        utilitarianismScore: 'N/A',
+                        virtueEthicsScore: 'N/A'
+                    };
                 }
-                const deontologyObj = philosophyDimension.questions.find(q => 
-                q.question && q.question.trim() === 'deontology'
-                );
-                const utilitarianismObj = philosophyDimension.questions.find(q => 
-                q.question && q.question.trim() === 'utilitarianism'
-                );
-                const virtueEthicsObj = philosophyDimension.questions.find(q => 
-                q.question && q.question.trim() === 'virtue ethics'
-                );
-                return {
-                deontologyScore: deontologyObj ? deontologyObj.score : 'N/A',
-                utilitarianismScore: utilitarianismObj ? utilitarianismObj.score : 'N/A',
-                virtueEthicsScore: virtueEthicsObj ? virtueEthicsObj.score : 'N/A'
-                };
+                
+                const scores = {};
+                philosophyDimension.questions.forEach(q => {
+                    const questionType = q.question.trim().toLowerCase();
+                    if (questionType === 'deontology') {
+                        scores.deontologyScore = q.score;
+                    } else if (questionType === 'utilitarianism') {
+                        scores.utilitarianismScore = q.score;
+                    } else if (questionType === 'virtue ethics') {
+                        scores.virtueEthicsScore = q.score;
+                    }
+                });
+                
+                return scores;
             } catch (error) {
                 console.error('Error extracting ethics scores:', error);
                 return {
-                deontologyScore: 'N/A',
-                utilitarianismScore: 'N/A',
-                virtueEthicsScore: 'N/A'
+                    deontologyScore: 'N/A',
+                    utilitarianismScore: 'N/A',
+                    virtueEthicsScore: 'N/A'
                 };
             }
         }
@@ -1461,39 +1463,40 @@
             if (!Array.isArray(data)) {
                 data = [data];
             }
+            
+            // Sort data to show parent scenarios first
             data.sort((a, b) => (b.isParent ? 1 : 0) - (a.isParent ? 1 : 0));
-            data = data.slice(0, 4);
+            data = data.slice(0, 4); // Limit to 4 items
             
             const cards = data.map(item => {
                 const scores = getEthicsScores(item);
                 return `
-                    <div class="comparison-card" data-scenario-id="${item.id}" style="border: 2px solid ${scenarioColorMapping[item.scenarioTitle + '_' + item.llmName] || '#000'};">
-                    <h4>
-                        ${getScenarioTitle(item)}
-                        <small>(${item.llmName} ${getCategoryBadge(item.overallCategory)})</small>
-                    </h4>
-                    <p class="scenario-description">
-                        <span class="description-text">
-                            ${item.scenarioDescription || 'No description available'}
-                        </span>
-                        <span class="read-more">Read more</span>
-                    </p>
-                    <!-- Display Ethics Scores -->
-                    <div class="ethics-scores" style="font-size: 0.75rem; margin-top: 8px;">
-                        <div>Deontology: ${scores.deontologyScore}</div>
-                        <div>Utilitarianism: ${scores.utilitarianismScore}</div>
-                        <div>Virtue Ethics: ${scores.virtueEthicsScore}</div>
-                    </div>
+                    <div class="comparison-card" 
+                        data-scenario-id="${item.id}" 
+                        style="border: 2px solid ${scenarioColorMapping[item.scenarioTitle + '_' + item.llmName] || '#000'};">
+                        <h4>
+                            ${getScenarioTitle(item)}
+                            <small>(${item.llmName} ${getCategoryBadge(item.overallCategory)})</small>
+                        </h4>
+                        <div class="scenario-description">
+                            <span class="description-text">
+                                ${item.scenarioDescription || 'No description available'}
+                            </span>
+                            <span class="read-more">Read more</span>
+                        </div>
+                        <div class="ethics-scores">
+                            <div>Deontology: ${scores.deontologyScore}</div>
+                            <div>Utilitarianism: ${scores.utilitarianismScore}</div>
+                            <div>Virtue Ethics: ${scores.virtueEthicsScore}</div>
+                        </div>
                     </div>
                 `;
-                }).join('');
-
-
+            }).join('');
             
             overviewDiv.innerHTML = cards;
-            attachComparisonCardHandlers(); // Attach the click handlers to new cards
+            attachComparisonCardHandlers();
             checkDescriptions();
-            }
+        }
 
             // After setting overviewDiv.innerHTML = cards;
             document.querySelectorAll('.comparison-card').forEach(card => {
