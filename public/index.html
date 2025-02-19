@@ -631,6 +631,29 @@
                 text-align: center;
             }
         }
+        .modal-body h4 {
+            color: #2c5282;
+            font-weight: 600;
+        }
+        
+        .modal-body h5 {
+            color: #4a5568;
+            font-weight: 600;
+        }
+        
+        .modal-body p {
+            line-height: 1.6;
+            color: #2d3748;
+        }
+        
+        .modal-body .ml-4 {
+            border-left: 3px solid #e2e8f0;
+            padding-left: 1rem;
+        }
+        
+        .modal-body strong {
+            color: #2d3748;
+        }
     </style>
 </head>
 <body>
@@ -679,21 +702,38 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <!-- Add your how-to-use content here -->
-                        <p>The Moral Cube has many scenarios to explore.
-
-                            To begin, you can select either a Category Type (to look at types of scenarios to explore), or/then select a Scenario directly from the list.
-                            The Category Type will populate all the scenarios with that category, and when you select a scenario it will generate a list of AI models who have answered the survey questions for that particular scenario.
-                            To compare different scenarios, use the control key and left click if you're on a PC, or tick multiple scenarios if you're on a mobile or tablet.
-
-                            Several of the scenarios have additional hypothetical scenarios to show how small changes in an action can drastically change the position within the cube.
-
-                            Once you've selected from the filters, you can explore the Answers the AI models gave to the questions about the scenario in the Scenario details section.
-                            Note: It should be limited to two selections for side by side comparison, as any more becomes quite cluttered.
-
-                            Lastly, each of the Scenario questions and justifications has an info and a question tooltip which will give you more information about the context and questions the models were asked.
-                        </p>
-                    </div>
+                        <div class="introduction mb-4">
+                            <h4 class="mb-3">Welcome to the Moral Cube</h4>
+                            <p>The Moral Cube is an interactive tool for exploring ethical scenarios and their analyses by various AI models. This guide will help you navigate and maximize the platform's capabilities.</p>
+                        </div>
+                    
+                        <div class="getting-started mb-4">
+                            <h5 class="mb-3">Getting Started</h5>
+                            <p>Begin your exploration through either of these approaches:</p>
+                            <div class="ml-4">
+                                <p><strong>Category-Based Exploration:</strong> Select a Category Type to view related scenarios, providing a thematic approach to ethical exploration.</p>
+                                <p><strong>Direct Scenario Selection:</strong> Choose specific scenarios from the complete list if you have particular cases in mind.</p>
+                            </div>
+                        </div>
+                    
+                        <div class="comparison-features mb-4">
+                            <h5 class="mb-3">Comparing Scenarios and Models</h5>
+                            <p>The platform offers multiple comparison capabilities:</p>
+                            <div class="ml-4">
+                                <p><strong>Scenario Selection:</strong> Use Ctrl+Click (PC) or tap multiple options (mobile/tablet) to select scenarios for comparison. The system supports up to four scenarios simultaneously.</p>
+                                <p><strong>AI Model Analysis:</strong> Once you select a scenario, the platform displays available AI models that have analyzed that particular case.</p>
+                                <p><strong>Alternative Scenarios:</strong> Many cases include hypothetical variations, demonstrating how subtle changes in actions can significantly affect ethical positioning within the cube.</p>
+                            </div>
+                        </div>
+                    
+                        <div class="detailed-analysis mb-4">
+                            <h5 class="mb-3">Exploring Detailed Analysis</h5>
+                            <p>For optimal analysis review:</p>
+                            <div class="ml-4">
+                                <p><strong>Side-by-Side Comparison:</strong> Select two scenarios to view a detailed comparison in the Scenario Details section. This limitation ensures clear and meaningful analysis presentation.</p>
+                                <p><strong>Enhanced Understanding:</strong> Each question and justification includes informative tooltips. Hover over the information (i) and question (?) icons to access additional context about the models' evaluation criteria.</p>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>
