@@ -1395,10 +1395,15 @@
             });
             }
 
-        function updateAlternateOutcomesDropdown(parentScenario, selectedModel) {
-            const alternateOutcomes = document.getElementById('alternateOutcomes');
-            
-            if (parentScenario && selectedModel) {
+            function updateAlternateOutcomesDropdown(parentScenario, selectedModel) {
+                const alternateOutcomes = document.getElementById('alternateOutcomes');
+                
+                if (!parentScenario || !selectedModel) {
+                    alternateOutcomes.innerHTML = '<option disabled>Select one scenario and one model</option>';
+                    alternateOutcomes.disabled = true;
+                    return;
+                }
+                
                 const relationships = scenarioRelationships.get(parentScenario) || [];
                 const alternatives = relationships.filter(rel => rel.model === selectedModel);
                 
@@ -1415,11 +1420,7 @@
                     alternateOutcomes.innerHTML = '<option disabled>No alternate outcomes available</option>';
                     alternateOutcomes.disabled = true;
                 }
-            } else {
-                alternateOutcomes.innerHTML = '<option disabled>Select a scenario and model first</option>';
-                alternateOutcomes.disabled = true;
             }
-        }
 
 
         function updateFilters() {
@@ -2231,8 +2232,10 @@
             
             // Clear previous selections
             selectedModels = [];
+            selectedAlternateOutcomes = []; // Add this to handle alternate outcomes
             document.getElementById('modelFilter').selectedIndex = -1;
             document.getElementById('alternateOutcomes').innerHTML = '<option disabled>Select a model first</option>';
+            document.getElementById('alternateOutcomes').disabled = true;
             
             // Update selected scenarios
             selectedScenarios = Array.from(e.target.selectedOptions).map(option => option.value);
@@ -2287,23 +2290,23 @@
 
 
 
+        // Update the alternate outcomes event listener
         document.getElementById('alternateOutcomes').addEventListener('change', function(e) {
             if (isUpdatingFilters) return;
             
-            // Update the global alternate outcomes selection
+            // Update the selected alternate outcomes
             selectedAlternateOutcomes = Array.from(this.selectedOptions).map(opt => opt.value);
             
-            // Enforce the maximum of 3 selections
+            // Enforce maximum selection limit (3 alternates)
             if (selectedAlternateOutcomes.length > 3) {
                 alert('Please select a maximum of 3 alternate scenarios');
-                const validSelections = selectedAlternateOutcomes.slice(0, 3);
-                const options = Array.from(this.options);
-                options.forEach(option => {
-                    option.selected = validSelections.includes(option.value);
+                selectedAlternateOutcomes = selectedAlternateOutcomes.slice(0, 3);
+                Array.from(this.options).forEach(option => {
+                    option.selected = selectedAlternateOutcomes.includes(option.value);
                 });
-                selectedAlternateOutcomes = validSelections;
             }
-            
+
+            // Update visualization with parent and selected alternates
             updateVisualization();
         });
 
@@ -2395,41 +2398,40 @@
         });
 
 
-        // UPDATED Clear Filters Listener:
+        // Update the clear filters function to handle alternate outcomes
         document.getElementById('clearFilters').addEventListener('click', function() {
-            // Reset all filter selection arrays
+            // Reset all filter selections
             selectedModels = [];
             selectedScenarios = [];
             selectedCategories = [];
+            selectedAlternateOutcomes = [];
             
-            // Reset active categories to include all options
+            // Reset active categories
             activeCategories = new Set(['evil', 'virtue', 'vice', 'sin', 'morally_grey', 'world_building']);
             
-            // Set a flag to prevent mid-update side effects
             isUpdatingFilters = true;
             
-            // Clear selected indexes for each filter dropdown
+            // Clear filter selections
             document.getElementById('modelFilter').selectedIndex = -1;
             document.getElementById('scenarioFilter').selectedIndex = -1;
             document.getElementById('categoryFilter').selectedIndex = -1;
             
-            // Reset the alternate outcomes dropdown to its default message
-            document.getElementById('alternateOutcomes').innerHTML = '<option disabled>Select a scenario and model first</option>';
+            // Reset alternate outcomes dropdown
+            const alternateOutcomes = document.getElementById('alternateOutcomes');
+            alternateOutcomes.innerHTML = '<option disabled>Select one scenario and one model</option>';
+            alternateOutcomes.disabled = true;
             
-            // Reset filter badges to active state (full opacity)
+            // Reset filter badges
             document.querySelectorAll('.filter-badge').forEach(badge => {
                 badge.classList.add('active');
                 badge.style.opacity = '1';
             });
             
-            // Reset flags
             isUpdatingFilters = false;
             isCategoryFiltering = false;
             
-            // Reset the dropdown options (this repopulates scenario, model, and category options)
+            // Update filters and visualization
             updateFilters();
-            
-            // Show all parent scenarios in the plot by updating the visualization
             const parentScenarios = dataPoints.filter(point => point.isParent);
             createPlot(parentScenarios);
             updateVisualization();
