@@ -1563,18 +1563,21 @@
                 altOutcomes.style.opacity = '0.5';
             }
             
-            // --- If exactly one scenario and one model are selected, include alternate outcomes ---
+            // Update the key part of updateVisualization where alternate outcomes are handled
             if (selectedScenarios.length === 1 && selectedModels.length === 1) {
                 const parentScenarioTitle = selectedScenarios[0];
                 const selModel = selectedModels[0];
                 const parentPoint = dataPoints.find(p => p.scenarioTitle === parentScenarioTitle && p.isParent);
                 const rels = scenarioRelationships.get(parentScenarioTitle) || [];
-                // Only include alternate outcomes that are selected by the user
+                // Here's the key change - only include alternates that have been specifically selected
                 const alts = rels
-                    .filter(child => child.model === selModel && selectedAlternateOutcomes.includes(child.childId))
+                    .filter(child => 
+                        child.model === selModel && 
+                        selectedAlternateOutcomes.includes(child.childId))
                     .map(child => child.data);
+                
                 if (parentPoint) {
-                    // Combine parent with selected alternate outcomes
+                    // Combine parent with only the selected alternate outcomes
                     filteredPoints = [parentPoint, ...alts];
                 }
             }
@@ -2290,14 +2293,14 @@
 
 
 
-        // Update the alternate outcomes event listener
+        // Update the alternate outcomes event listener to properly handle selections
         document.getElementById('alternateOutcomes').addEventListener('change', function(e) {
             if (isUpdatingFilters) return;
             
-            // Update the selected alternate outcomes
+            // Update selected alternate outcomes
             selectedAlternateOutcomes = Array.from(this.selectedOptions).map(opt => opt.value);
             
-            // Enforce maximum selection limit (3 alternates)
+            // Enforce maximum of 3 selections
             if (selectedAlternateOutcomes.length > 3) {
                 alert('Please select a maximum of 3 alternate scenarios');
                 selectedAlternateOutcomes = selectedAlternateOutcomes.slice(0, 3);
@@ -2305,8 +2308,30 @@
                     option.selected = selectedAlternateOutcomes.includes(option.value);
                 });
             }
-
-            // Update visualization with parent and selected alternates
+            
+            // If we have selected alternates and one scenario
+            if (selectedAlternateOutcomes.length > 0 && selectedScenarios.length === 1) {
+                const parentScenario = selectedScenarios[0];
+                const relationships = scenarioRelationships.get(parentScenario) || [];
+                
+                // Find the corresponding model for the alternate outcomes
+                selectedAlternateOutcomes.forEach(alternateId => {
+                    const relationship = relationships.find(rel => rel.childId === alternateId);
+                    if (relationship) {
+                        const model = relationship.model;
+                        if (!selectedModels.includes(model)) {
+                            selectedModels.push(model);
+                        }
+                    }
+                });
+                
+                // Update model filter selection to reflect the models of selected alternates
+                const modelFilter = document.getElementById('modelFilter');
+                Array.from(modelFilter.options).forEach(option => {
+                    option.selected = selectedModels.includes(option.value);
+                });
+            }
+            
             updateVisualization();
         });
 
