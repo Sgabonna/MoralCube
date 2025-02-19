@@ -2169,7 +2169,6 @@
         });
 
 
-        // Scenario Filter Listener
         document.getElementById('scenarioFilter').addEventListener('change', function(e) {
             if (isUpdatingFilters || isCategoryFiltering) return;
             
@@ -2189,6 +2188,16 @@
                     option.selected = selectedScenarios.includes(option.value);
                 });
             }
+            
+            // Show/hide scenarios based on selection count
+            const options = Array.from(this.options);
+            options.forEach(option => {
+                if (selectedScenarios.length < 4) {
+                    option.style.display = 'block';
+                } else {
+                    option.style.display = selectedScenarios.includes(option.value) ? 'block' : 'none';
+                }
+            });
             
             // Update model filter based on selected scenarios
             const modelFilter = document.getElementById('modelFilter');
