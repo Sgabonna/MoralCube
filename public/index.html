@@ -2281,7 +2281,6 @@
 
 
 
-        // Update the alternate outcomes listener
         document.getElementById('alternateOutcomes').addEventListener('change', function(e) {
             if (isUpdatingFilters) return;
             
@@ -2297,25 +2296,7 @@
                 });
             }
             
-            if (selectedScenarios.length === 1) {
-                const parentScenario = selectedScenarios[0];
-                const relationships = scenarioRelationships.get(parentScenario) || [];
-                
-                // Update model selection if needed
-                if (selectedAlternates.length > 0) {
-                    const relationship = relationships.find(rel => rel.childId === selectedAlternates[0]);
-                    if (relationship && !selectedModels.includes(relationship.model)) {
-                        selectedModels = [relationship.model];
-                        
-                        // Update model filter selection
-                        const modelFilter = document.getElementById('modelFilter');
-                        Array.from(modelFilter.options).forEach(option => {
-                            option.selected = option.value === relationship.model;
-                        });
-                    }
-                }
-            }
-            
+            // Let updateVisualization handle everything else
             updateVisualization();
         });
 
