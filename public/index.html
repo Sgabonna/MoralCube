@@ -698,7 +698,7 @@
             </div>
             <div class="filter-group scenario-filter-group">
                 <label for="scenarioFilter">
-                    Scenarios (max 4)
+                    Scenarios
                     <span class="tooltip">
                         <i class="fas fa-info-circle info-icon"></i>
                         <span class="tooltiptext">Hold Ctrl (Cmd on Mac) to select multiple scenarios</span>
@@ -708,7 +708,7 @@
             </div>
             <div class="filter-group model-filter-group">
                 <label for="modelFilter">
-                    AI Models (max 4)
+                    AI Models
                     <span class="tooltip">
                         <i class="fas fa-info-circle info-icon"></i>
                         <span class="tooltiptext">Hold Ctrl (Cmd on Mac) to select multiple models</span>
@@ -2191,7 +2191,7 @@
                 const alternatives = relationships.filter(child => child.model === selectedModel);
                 
                 if (alternatives && alternatives.length > 0) {
-                    // Configure dropdown for multiple selection
+                    // Configure dropdown for multiple selection (up to 3)
                     alternateOutcomes.setAttribute('multiple', 'true');
                     alternateOutcomes.size = Math.min(alternatives.length, 6);
                     alternateOutcomes.disabled = false;
@@ -2205,6 +2205,18 @@
                         option.value = alt.childId;
                         option.text = `${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}`;
                         alternateOutcomes.appendChild(option);
+                    });
+
+                    // Add event listener for selection limit
+                    alternateOutcomes.addEventListener('change', function() {
+                        const selected = Array.from(this.selectedOptions);
+                        if (selected.length > 3) {
+                            alert('Please select a maximum of 3 alternate scenarios');
+                            // Keep only the first three selections
+                            Array.from(this.options).forEach(option => {
+                                option.selected = selected.slice(0, 3).map(opt => opt.value).includes(option.value);
+                            });
+                        }
                     });
                 } else {
                     alternateOutcomes.removeAttribute('multiple');
@@ -2288,25 +2300,38 @@
             
             const selectedAlternates = Array.from(this.selectedOptions).map(opt => opt.value);
             
+            // Allow up to three selections
+            if (selectedAlternates.length > 3) {
+                alert('Please select a maximum of 3 alternate scenarios');
+                // Keep only the first three selections
+                const options = Array.from(this.options);
+                options.forEach(option => {
+                    option.selected = selectedAlternates.slice(0, 3).includes(option.value);
+                });
+                return;
+            }
+            
             if (selectedAlternates.length > 0 && selectedScenarios.length === 1) {
                 const parentScenario = selectedScenarios[0];
                 const relationships = scenarioRelationships.get(parentScenario) || [];
                 
-                selectedAlternates.forEach(alternateId => {
-                    const relationship = relationships.find(rel => rel.childId === alternateId);
-                    if (relationship) {
-                        const model = relationship.model;
-                        if (!selectedModels.includes(model)) {
-                            selectedModels.push(model);
-                        }
-                    }
-                });
+                // Ensure the model of the selected alternates is available
+                const firstRelationship = relationships.find(rel => 
+                    rel.childId === selectedAlternates[0]
+                );
                 
-                // Update model filter selection
-                const modelFilter = document.getElementById('modelFilter');
-                Array.from(modelFilter.options).forEach(option => {
-                    option.selected = selectedModels.includes(option.value);
-                });
+                if (firstRelationship) {
+                    const model = firstRelationship.model;
+                    if (!selectedModels.includes(model)) {
+                        selectedModels = [model];
+                        
+                        // Update model filter selection
+                        const modelFilter = document.getElementById('modelFilter');
+                        Array.from(modelFilter.options).forEach(option => {
+                            option.selected = option.value === model;
+                        });
+                    }
+                }
             }
             
             updateVisualization();
