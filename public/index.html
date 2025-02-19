@@ -1542,23 +1542,34 @@
                 const selModel = selectedModels[0];
                 const relationships = scenarioRelationships.get(parentScenario) || [];
                 const alternatives = relationships.filter(child => child.model === selModel);
+                
                 if (alternatives && alternatives.length > 0) {
-                altOutcomes.innerHTML = alternatives
-                    .map(alt => `
-                    <option value="${alt.childId}">
-                        ${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}
-                    </option>
-                    `).join('');
-                altOutcomes.disabled = false;
-                altOutcomes.style.opacity = '1';
-                altOutcomes.multiple = true;
+                    // Configure dropdown for multiple selection
+                    altOutcomes.setAttribute('multiple', 'true');
+                    altOutcomes.size = Math.min(alternatives.length, 6);
+                    
+                    // Update options while preserving any valid existing selections
+                    const currentSelections = Array.from(altOutcomes.selectedOptions).map(opt => opt.value);
+                    
+                    altOutcomes.innerHTML = alternatives
+                        .map(alt => {
+                            const isSelected = currentSelections.includes(alt.childId) ? 'selected' : '';
+                            return `
+                                <option value="${alt.childId}" ${isSelected}>
+                                    ${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}
+                                </option>
+                            `;
+                        }).join('');
+                    
+                    altOutcomes.disabled = false;
+                    altOutcomes.style.opacity = '1';
                 } else {
-                altOutcomes.innerHTML = '<option>No alternate outcomes available</option>';
-                altOutcomes.disabled = true;
-                altOutcomes.style.opacity = '0.5';
+                    altOutcomes.innerHTML = '<option disabled>No alternate outcomes available</option>';
+                    altOutcomes.disabled = true;
+                    altOutcomes.style.opacity = '0.5';
                 }
             } else {
-                altOutcomes.innerHTML = '<option>Select a scenario and model first</option>';
+                altOutcomes.innerHTML = '<option disabled>Select one scenario and model first</option>';
                 altOutcomes.disabled = true;
                 altOutcomes.style.opacity = '0.5';
             }
@@ -2175,7 +2186,7 @@
 
 
         // Event Listeners
-        // Model Filter Listener
+        // Model Filter Event Listener
         document.getElementById('modelFilter').addEventListener('change', function(e) {
             if (isUpdatingFilters || isCategoryFiltering) return;
             
@@ -2201,29 +2212,34 @@
                 const alternatives = relationships.filter(child => child.model === selectedModel);
                 
                 if (alternatives && alternatives.length > 0) {
-                    // Enable multiple selection and set size
+                    // Configure dropdown for multiple selection
                     alternateOutcomes.setAttribute('multiple', 'true');
                     alternateOutcomes.size = Math.min(alternatives.length, 6);
                     alternateOutcomes.disabled = false;
                     
-                    // Preserve existing selections that are still valid
-                    const currentSelections = Array.from(alternateOutcomes.selectedOptions).map(opt => opt.value);
+                    // Clear existing options
+                    alternateOutcomes.innerHTML = '';
                     
-                    // Update options while maintaining valid selections
-                    alternateOutcomes.innerHTML = alternatives
-                        .map(alt => {
-                            const isSelected = currentSelections.includes(alt.childId) ? 'selected' : '';
-                            return `<option value="${alt.childId}" ${isSelected}>
-                                ${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}
-                            </option>`;
-                        }).join('');
+                    // Add new options
+                    alternatives.forEach(alt => {
+                        const option = document.createElement('option');
+                        option.value = alt.childId;
+                        option.text = `${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}`;
+                        alternateOutcomes.appendChild(option);
+                    });
+                    
+                    // Enable the dropdown
+                    alternateOutcomes.disabled = false;
+                    alternateOutcomes.style.opacity = '1';
                 } else {
                     alternateOutcomes.innerHTML = '<option disabled>No alternate outcomes available</option>';
                     alternateOutcomes.disabled = true;
+                    alternateOutcomes.style.opacity = '0.5';
                 }
             } else {
                 alternateOutcomes.innerHTML = '<option disabled>Select one scenario and model first</option>';
                 alternateOutcomes.disabled = true;
+                alternateOutcomes.style.opacity = '0.5';
             }
             
             updateVisualization();
@@ -2293,7 +2309,7 @@
 
 
 
-        // Update the alternate outcomes event listener to properly handle selections
+        // Alternate Outcomes Event Listener
         document.getElementById('alternateOutcomes').addEventListener('change', function(e) {
             if (isUpdatingFilters) return;
             
@@ -2314,7 +2330,7 @@
                 const parentScenario = selectedScenarios[0];
                 const relationships = scenarioRelationships.get(parentScenario) || [];
                 
-                // Find the corresponding model for the alternate outcomes
+                // Sync selected models with alternate outcomes
                 selectedAlternateOutcomes.forEach(alternateId => {
                     const relationship = relationships.find(rel => rel.childId === alternateId);
                     if (relationship) {
@@ -2325,7 +2341,7 @@
                     }
                 });
                 
-                // Update model filter selection to reflect the models of selected alternates
+                // Update model filter selection
                 const modelFilter = document.getElementById('modelFilter');
                 Array.from(modelFilter.options).forEach(option => {
                     option.selected = selectedModels.includes(option.value);
