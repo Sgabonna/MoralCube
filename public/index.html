@@ -839,6 +839,7 @@
         let selectedCategories = [];
         let selectedScenarios = [];
         let selectedModels = [];
+        let selectedAlternateOutcomes = [];
         let isCategoryFiltering = false;
         let isUpdatingFilters = false;
         let scenarioRelationships = new Map(); // Stores parent-child relationships
@@ -1567,11 +1568,16 @@
                 const selModel = selectedModels[0];
                 const parentPoint = dataPoints.find(p => p.scenarioTitle === parentScenarioTitle && p.isParent);
                 const rels = scenarioRelationships.get(parentScenarioTitle) || [];
-                const alts = rels.filter(child => child.model === selModel).map(child => child.data);
+                // Only include alternate outcomes that are selected by the user
+                const alts = rels
+                    .filter(child => child.model === selModel && selectedAlternateOutcomes.includes(child.childId))
+                    .map(child => child.data);
                 if (parentPoint) {
-                filteredPoints = [parentPoint, ...alts];
+                    // Combine parent with selected alternate outcomes
+                    filteredPoints = [parentPoint, ...alts];
                 }
             }
+
 
             // --- Update available categories in the category filter ---
             const filtCategories = new Set(filteredPoints.map(p => p.category));
@@ -2284,21 +2290,23 @@
         document.getElementById('alternateOutcomes').addEventListener('change', function(e) {
             if (isUpdatingFilters) return;
             
-            const selectedAlternates = Array.from(this.selectedOptions).map(opt => opt.value);
+            // Update the global alternate outcomes selection
+            selectedAlternateOutcomes = Array.from(this.selectedOptions).map(opt => opt.value);
             
-            // Check if we're exceeding the limit
-            if (selectedAlternates.length > 3) {
+            // Enforce the maximum of 3 selections
+            if (selectedAlternateOutcomes.length > 3) {
                 alert('Please select a maximum of 3 alternate scenarios');
-                // Keep only the first three selections
+                const validSelections = selectedAlternateOutcomes.slice(0, 3);
                 const options = Array.from(this.options);
                 options.forEach(option => {
-                    option.selected = selectedAlternates.slice(0, 3).includes(option.value);
+                    option.selected = validSelections.includes(option.value);
                 });
+                selectedAlternateOutcomes = validSelections;
             }
             
-            // Let updateVisualization handle everything else
             updateVisualization();
         });
+
 
 
         // Category Filter Listener
