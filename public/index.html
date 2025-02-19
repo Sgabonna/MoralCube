@@ -2191,41 +2191,28 @@
                 const alternatives = relationships.filter(child => child.model === selectedModel);
                 
                 if (alternatives && alternatives.length > 0) {
-                    // Configure dropdown for multiple selection (up to 3)
+                    // Enable multiple selection and set size
                     alternateOutcomes.setAttribute('multiple', 'true');
                     alternateOutcomes.size = Math.min(alternatives.length, 6);
                     alternateOutcomes.disabled = false;
                     
-                    // Clear existing options
-                    alternateOutcomes.innerHTML = '';
+                    // Preserve existing selections that are still valid
+                    const currentSelections = Array.from(alternateOutcomes.selectedOptions).map(opt => opt.value);
                     
-                    // Add new options
-                    alternatives.forEach(alt => {
-                        const option = document.createElement('option');
-                        option.value = alt.childId;
-                        option.text = `${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}`;
-                        alternateOutcomes.appendChild(option);
-                    });
-
-                    // Add event listener for selection limit
-                    alternateOutcomes.addEventListener('change', function() {
-                        const selected = Array.from(this.selectedOptions);
-                        if (selected.length > 3) {
-                            alert('Please select a maximum of 3 alternate scenarios');
-                            // Keep only the first three selections
-                            Array.from(this.options).forEach(option => {
-                                option.selected = selected.slice(0, 3).map(opt => opt.value).includes(option.value);
-                            });
-                        }
-                    });
+                    // Update options while maintaining valid selections
+                    alternateOutcomes.innerHTML = alternatives
+                        .map(alt => {
+                            const isSelected = currentSelections.includes(alt.childId) ? 'selected' : '';
+                            return `<option value="${alt.childId}" ${isSelected}>
+                                ${alt.childId} ${alt.relationshipType ? `(${alt.relationshipType})` : ''}
+                            </option>`;
+                        }).join('');
                 } else {
-                    alternateOutcomes.removeAttribute('multiple');
                     alternateOutcomes.innerHTML = '<option disabled>No alternate outcomes available</option>';
                     alternateOutcomes.disabled = true;
                 }
             } else {
-                alternateOutcomes.removeAttribute('multiple');
-                alternateOutcomes.innerHTML = '<option disabled>Select one scenario and one model to see alternates</option>';
+                alternateOutcomes.innerHTML = '<option disabled>Select one scenario and model first</option>';
                 alternateOutcomes.disabled = true;
             }
             
@@ -2300,7 +2287,7 @@
             
             const selectedAlternates = Array.from(this.selectedOptions).map(opt => opt.value);
             
-            // Allow up to three selections
+            // Check if we're exceeding the limit
             if (selectedAlternates.length > 3) {
                 alert('Please select a maximum of 3 alternate scenarios');
                 // Keep only the first three selections
@@ -2308,27 +2295,22 @@
                 options.forEach(option => {
                     option.selected = selectedAlternates.slice(0, 3).includes(option.value);
                 });
-                return;
             }
             
-            if (selectedAlternates.length > 0 && selectedScenarios.length === 1) {
+            if (selectedScenarios.length === 1) {
                 const parentScenario = selectedScenarios[0];
                 const relationships = scenarioRelationships.get(parentScenario) || [];
                 
-                // Ensure the model of the selected alternates is available
-                const firstRelationship = relationships.find(rel => 
-                    rel.childId === selectedAlternates[0]
-                );
-                
-                if (firstRelationship) {
-                    const model = firstRelationship.model;
-                    if (!selectedModels.includes(model)) {
-                        selectedModels = [model];
+                // Update model selection if needed
+                if (selectedAlternates.length > 0) {
+                    const relationship = relationships.find(rel => rel.childId === selectedAlternates[0]);
+                    if (relationship && !selectedModels.includes(relationship.model)) {
+                        selectedModels = [relationship.model];
                         
                         // Update model filter selection
                         const modelFilter = document.getElementById('modelFilter');
                         Array.from(modelFilter.options).forEach(option => {
-                            option.selected = option.value === model;
+                            option.selected = option.value === relationship.model;
                         });
                     }
                 }
