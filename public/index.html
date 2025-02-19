@@ -680,19 +680,31 @@
                     </div>
                     <div class="modal-body">
                         <!-- Add your how-to-use content here -->
-                        <p>Instructions for using the Moral Cube...</p>
+                        <p>The Moral Cube has many scenarios to explore.
+
+                            To begin, you can select either a Category Type (to look at types of scenarios to explore), or/then select a Scenario directly from the list.
+                            The Category Type will populate all the scenarios with that category, and when you select a scenario it will generate a list of AI models who have answered the survey questions for that particular scenario.
+                            To compare different scenarios, use the control key and left click if you're on a PC, or tick multiple scenarios if you're on a mobile or tablet.
+
+                            Several of the scenarios have additional hypothetical scenarios to show how small changes in an action can drastically change the position within the cube.
+
+                            Once you've selected from the filters, you can explore the Answers the AI models gave to the questions about the scenario in the Scenario details section.
+                            Note: It should be limited to two selections for side by side comparison, as any more becomes quite cluttered.
+
+                            Lastly, each of the Scenario questions and justifications has an info and a question tooltip which will give you more information about the context and questions the models were asked.
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="filter-section">
             <div class="filter-group category-filter-group">
-                <label for="categoryFilter">Filter by Category Type:</label>
+                <label for="categoryFilter">Categories:</label>
                 <select id="categoryFilter" class="form-control category-select" multiple size="6"></select>
             </div>
             <div class="filter-group scenario-filter-group">
                 <label for="scenarioFilter">
-                    Compare Scenarios (max 4)
+                    Scenarios (max 4)
                     <span class="tooltip">
                         <i class="fas fa-info-circle info-icon"></i>
                         <span class="tooltiptext">Hold Ctrl (Cmd on Mac) to select multiple scenarios</span>
@@ -702,7 +714,7 @@
             </div>
             <div class="filter-group model-filter-group">
                 <label for="modelFilter">
-                    Compare AI Models (max 4)
+                    AI Models (max 4)
                     <span class="tooltip">
                         <i class="fas fa-info-circle info-icon"></i>
                         <span class="tooltiptext">Hold Ctrl (Cmd on Mac) to select multiple models</span>
@@ -712,7 +724,7 @@
             </div>
             <div class="filter-group">
                 <label>
-                    Compare Alternate Outcomes
+                    What If Scenarios
                     <span class="tooltip">
                         <i class="fas fa-info-circle info-icon"></i>
                         <span class="tooltiptext">Hold Ctrl (Cmd on Mac) to select multiple outcomes</span>
