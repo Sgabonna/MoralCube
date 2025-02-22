@@ -715,22 +715,23 @@
         @media (max-width: 991.98px) {
             .navbar-collapse {
                 display: flex !important;
+                justify-content: center !important;  /* Center the collapse container */
+                width: 100% !important;
             }
             
             .navbar-nav {
                 display: flex !important;
                 flex-direction: row !important;
-                justify-content: flex-start;  /* Changed from center to allow scrolling */
-                width: 100%;
-                overflow-x: auto;  /* Allow horizontal scrolling */
-                -webkit-overflow-scrolling: touch;  /* Smooth scrolling on iOS */
-                scrollbar-width: none;  /* Hide scrollbar on Firefox */
-                -ms-overflow-style: none;  /* Hide scrollbar on IE/Edge */
-                padding-left: 0.5rem !important;
-                padding-right: 0.5rem !important;
+                justify-content: center !important;  /* Center the nav items */
+                width: max-content !important;  /* Allow nav to be as wide as needed */
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+                padding: 0.5rem 1rem !important;
             }
             
-            /* Hide scrollbar on Chrome/Safari */
+            /* Hide scrollbar */
             .navbar-nav::-webkit-scrollbar {
                 display: none;
             }
@@ -749,6 +750,7 @@
             .nav-link {
                 padding-left: 0.8rem !important;
                 padding-right: 0.8rem !important;
+                white-space: nowrap;  /* Prevent text wrapping */
             }
         }
 
@@ -781,7 +783,7 @@
                 
                 <!-- Navigation Menu -->
                 <nav class="navbar navbar-expand-lg navbar-light p-0" style="margin-top: auto; border-top: 1px solid rgba(0, 0, 0, 0.1); box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);">
-                    <div class="collapse navbar-collapse" id="navbarNav">
+                    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                         <ul class="navbar-nav" style="padding: 0.5rem 0;">
                             <li class="nav-item mx-3">
                                 <a class="nav-link" href="/" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">Home</a>
