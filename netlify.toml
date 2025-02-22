@@ -1,3 +1,16 @@
 [build]
-  command = "npm run build"
-  publish = "public"
+  publish = "public"  # Changed from "/" to "public"
+  command = ""  # No build command needed for static site
+
+[functions]
+  directory = "netlify/functions"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[redirects]]
+from = "/feedback"
+to = "/feedback.html"
+status = 200
