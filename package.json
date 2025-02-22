@@ -7,8 +7,8 @@
     "build": "echo 'No build step needed'"
   },
   "dependencies": {
-    "mongodb": "^4.17.2",
-    "node-fetch": "^3.3.2"
+    "mongodb": "^4.1.0",
+    "node-fetch": "^2.6.1"
   },
   "author": "Scott Young",
   "license": "MIT"
