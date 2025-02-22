@@ -711,6 +711,7 @@
                 margin-right: 0 !important;
             }
         }
+        /* Base styles remain the same */
         @media (max-width: 991.98px) {
             .navbar-collapse {
                 display: flex !important;
@@ -719,12 +720,48 @@
             .navbar-nav {
                 display: flex !important;
                 flex-direction: row !important;
-                justify-content: center;
+                justify-content: flex-start;  /* Changed from center to allow scrolling */
                 width: 100%;
+                overflow-x: auto;  /* Allow horizontal scrolling */
+                -webkit-overflow-scrolling: touch;  /* Smooth scrolling on iOS */
+                scrollbar-width: none;  /* Hide scrollbar on Firefox */
+                -ms-overflow-style: none;  /* Hide scrollbar on IE/Edge */
+                padding-left: 0.5rem !important;
+                padding-right: 0.5rem !important;
+            }
+            
+            /* Hide scrollbar on Chrome/Safari */
+            .navbar-nav::-webkit-scrollbar {
+                display: none;
             }
             
             .navbar-toggler {
                 display: none !important;
+            }
+
+            /* Adjust spacing for nav items */
+            .nav-item.mx-3 {
+                margin-left: 0.5rem !important;
+                margin-right: 0.5rem !important;
+            }
+
+            /* Adjust padding for nav links */
+            .nav-link {
+                padding-left: 0.8rem !important;
+                padding-right: 0.8rem !important;
+            }
+        }
+
+        /* Additional adjustments for very small screens */
+        @media (max-width: 576px) {
+            .nav-item.mx-3 {
+                margin-left: 0.3rem !important;
+                margin-right: 0.3rem !important;
+            }
+
+            .nav-link {
+                padding-left: 0.6rem !important;
+                padding-right: 0.6rem !important;
             }
         }
     </style>
