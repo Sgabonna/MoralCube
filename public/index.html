@@ -455,6 +455,15 @@
             border-color: #CBD5E0;
             color: #2D3748;
         }
+        .navbar-nav .nav-link {
+            font-family: 'Inter', sans-serif !important;
+            font-weight: 500 !important;
+            font-size: 1.2rem !important;
+            padding: 0.7rem 1.2rem;
+            transition: all 0.2s ease;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body>
@@ -473,46 +482,46 @@
                 <!-- Navigation Menu -->
                 <nav class="navbar navbar-expand-lg navbar-light p-0" style="margin-top: auto; border-top: 1px solid rgba(0, 0, 0, 0.1); box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);">
                     <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
-                        <!-- Spacer for left side -->
-                        <div class="flex-grow-1 d-flex justify-content-start" style="width: 140px;"></div>
-                        
                         <!-- Center Menu Items -->
                         <ul class="navbar-nav mx-auto" style="padding: 0.5rem 0;">
                             <li class="nav-item mx-3">
-                                <a class="nav-link" href="/" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">Home</a>
+                                <a class="nav-link" href="/">Home</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link" href="#" data-toggle="modal" data-target="#whatIsModal" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">What is the Moral Cube?</a>
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#whatIsModal">What is the Moral Cube?</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link" href="#" data-toggle="modal" data-target="#howToUseModal" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">How to use the Cube</a>
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#howToUseModal">How to use the Cube</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link" href="/feedback.html" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">Feedback</a>
+                                <a class="nav-link" href="/feedback.html">Feedback</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link" href="https://www.youtube.com/watch?v=hauuDOrZQ1o" target="_blank" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">Learn More</a>
+                                <a class="nav-link" href="https://www.youtube.com/watch?v=hauuDOrZQ1o" target="_blank">Learn More</a>
                             </li>
                         </ul>
                         
-                        <!-- Right-aligned auth buttons -->
-                        <div class="navbar-nav flex-grow-1 d-flex justify-content-end" style="width: 140px;">
-                            <button id="login" class="btn mx-2" style="
+                        <!-- Auth buttons container -->
+                        <div class="d-flex align-items-center" style="min-width: 200px; justify-content: flex-end;">
+                            <button id="login" class="btn" style="
                                 font-family: 'Inter', sans-serif; 
                                 font-weight: 500; 
                                 background-color: #D7E8FF; 
                                 color: #2C5282;
                                 border: 1px solid #D7E8FF;
-                                transition: all 0.2s ease;">
+                                transition: all 0.2s ease;
+                                margin-right: 8px;
+                                white-space: nowrap;">
                                 Log In
                             </button>
-                            <button id="signup" class="btn mx-2" style="
+                            <button id="signup" class="btn" style="
                                 font-family: 'Inter', sans-serif; 
                                 font-weight: 500;
                                 background-color: #EBF4FF;
                                 color: #2C5282;
                                 border: 1px solid #D7E8FF;
-                                transition: all 0.2s ease;">
+                                transition: all 0.2s ease;
+                                white-space: nowrap;">
                                 Sign Up
                             </button>
                             <div id="user-container" class="d-none d-flex align-items-center">
@@ -523,7 +532,8 @@
                                     background-color: #F7FAFC;
                                     color: #4A5568;
                                     border: 1px solid #E2E8F0;
-                                    transition: all 0.2s ease;">
+                                    transition: all 0.2s ease;
+                                    white-space: nowrap;">
                                     Log Out
                                 </button>
                             </div>
