@@ -472,27 +472,31 @@
                 
                 <!-- Navigation Menu -->
                 <nav class="navbar navbar-expand-lg navbar-light p-0" style="margin-top: auto; border-top: 1px solid rgba(0, 0, 0, 0.1); box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);">
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <!-- Center the main nav items -->
+                    <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
+                        <!-- Spacer for left side -->
+                        <div class="flex-grow-1 d-flex justify-content-start" style="width: 140px;"></div>
+                        
+                        <!-- Center Menu Items -->
                         <ul class="navbar-nav mx-auto" style="padding: 0.5rem 0;">
                             <li class="nav-item mx-3">
-                                <a class="nav-link" href="/">Home</a>
+                                <a class="nav-link" href="/" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">Home</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link" href="#" data-toggle="modal" data-target="#whatIsModal">What is the Moral Cube?</a>
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#whatIsModal" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">What is the Moral Cube?</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link" href="#" data-toggle="modal" data-target="#howToUseModal">How to use the Cube</a>
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#howToUseModal" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">How to use the Cube</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link" href="/feedback.html">Feedback</a>
+                                <a class="nav-link" href="/feedback.html" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">Feedback</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link" href="https://www.youtube.com/watch?v=hauuDOrZQ1o" target="_blank">Learn More</a>
+                                <a class="nav-link" href="https://www.youtube.com/watch?v=hauuDOrZQ1o" target="_blank" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">Learn More</a>
                             </li>
                         </ul>
-                        <!-- Right-aligned auth buttons with softer colors -->
-                        <div class="navbar-nav ml-auto">
+                        
+                        <!-- Right-aligned auth buttons -->
+                        <div class="navbar-nav flex-grow-1 d-flex justify-content-end" style="width: 140px;">
                             <button id="login" class="btn mx-2" style="
                                 font-family: 'Inter', sans-serif; 
                                 font-weight: 500; 
