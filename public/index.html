@@ -461,34 +461,53 @@
                 <!-- Navigation Menu -->
                 <nav class="navbar navbar-expand-lg navbar-light p-0" style="margin-top: auto; border-top: 1px solid rgba(0, 0, 0, 0.1); box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);">
                     <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav justify-content-center flex-grow-1" style="padding: 0.5rem 0;">
+                        <!-- Center the main nav items -->
+                        <ul class="navbar-nav mx-auto" style="padding: 0.5rem 0;">
                             <li class="nav-item mx-3">
-                                <a class="nav-link" href="/" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">Home</a>
+                                <a class="nav-link" href="/">Home</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link" href="#" data-toggle="modal" data-target="#whatIsModal" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">What is the Moral Cube?</a>
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#whatIsModal">What is the Moral Cube?</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link" href="#" data-toggle="modal" data-target="#howToUseModal" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">How to use the Cube</a>
+                                <a class="nav-link" href="#" data-toggle="modal" data-target="#howToUseModal">How to use the Cube</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link" href="/feedback.html" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">Feedback</a>
+                                <a class="nav-link" href="/feedback.html">Feedback</a>
                             </li>
                             <li class="nav-item mx-3">
-                                <a class="nav-link" href="https://www.youtube.com/watch?v=hauuDOrZQ1o" target="_blank" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">Learn More</a>
+                                <a class="nav-link" href="https://www.youtube.com/watch?v=hauuDOrZQ1o" target="_blank">Learn More</a>
                             </li>
                         </ul>
-                        <!-- Auth buttons -->
-                        <div class="navbar-nav ms-auto">
-                            <button id="login" class="btn btn-primary mx-2" style="font-family: 'Inter', sans-serif; font-weight: 500; display: none;">
+                        <!-- Right-aligned auth buttons with softer colors -->
+                        <div class="navbar-nav ml-auto">
+                            <button id="login" class="btn mx-2" style="
+                                font-family: 'Inter', sans-serif; 
+                                font-weight: 500; 
+                                background-color: #D7E8FF; 
+                                color: #2C5282;
+                                border: 1px solid #D7E8FF;
+                                transition: all 0.2s ease;">
                                 Log In
                             </button>
-                            <button id="signup" class="btn btn-success mx-2" style="font-family: 'Inter', sans-serif; font-weight: 500; display: none;">
+                            <button id="signup" class="btn mx-2" style="
+                                font-family: 'Inter', sans-serif; 
+                                font-weight: 500;
+                                background-color: #EBF4FF;
+                                color: #2C5282;
+                                border: 1px solid #D7E8FF;
+                                transition: all 0.2s ease;">
                                 Sign Up
                             </button>
                             <div id="user-container" class="d-none d-flex align-items-center">
                                 <img id="user-avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; display: none;" alt="Profile">
-                                <button id="logout" class="btn btn-outline-secondary" style="font-family: 'Inter', sans-serif; font-weight: 500; display: none;">
+                                <button id="logout" class="btn" style="
+                                    font-family: 'Inter', sans-serif; 
+                                    font-weight: 500;
+                                    background-color: #F7FAFC;
+                                    color: #4A5568;
+                                    border: 1px solid #E2E8F0;
+                                    transition: all 0.2s ease;">
                                     Log Out
                                 </button>
                             </div>
@@ -2284,22 +2303,18 @@
                 }
             }
             // Keep your existing login/logout functions
-            async function login(isSignup = false) {
+            async function login() {
                 const loginBtn = document.getElementById('login');
-                const signupBtn = document.getElementById('signup');
                 try {
                     loginBtn.disabled = true;
-                    signupBtn.disabled = true;
-                    
                     await auth0Client.loginWithRedirect({
                         authorizationParams: {
-                            screen_hint: isSignup ? 'signup' : undefined
+                            // Don't specify connection to let user choose between Google/Facebook
                         }
                     });
                 } catch (error) {
-                    console.error('Login/Signup error:', error);
+                    console.error('Login error:', error);
                     loginBtn.disabled = false;
-                    signupBtn.disabled = false;
                 }
             }
 
