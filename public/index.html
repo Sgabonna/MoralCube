@@ -817,7 +817,32 @@
                 });
             });
         }
+        async function initAuth0() {
+            try {
+                auth0Client = await auth0.createAuth0Client({
+                    domain: 'dev-10xzf0prvka6p40y.us.auth0.com',
+                    clientId: 'o7n479CCBo1GoASsEQI3s44cIXdyvzJh',
+                    authorizationParams: {
+                        redirect_uri: 'https://themoralcube.com',
+                        audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/'
+                    }
+                });
 
+                if (location.search.includes("code=") && location.search.includes("state=")) {
+                    await auth0Client.handleRedirectCallback();
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+
+                const isAuthenticated = await auth0Client.isAuthenticated();
+                if (isAuthenticated) {
+                    currentUser = await auth0Client.getUser();
+                }
+
+                await updateAuthUI();
+            } catch (error) {
+                console.error('Error initializing Auth0:', error);
+            }
+        }
         function getEthicsScores(item) {
             try {
                 if (!item.dimensions) {
@@ -2251,16 +2276,6 @@
             
             updateVisualization();
         });
-        document.getElementById('login').addEventListener('click', () => auth0Client.loginWithRedirect());
-        document.getElementById('logout').addEventListener('click', () => {
-            auth0Client.logout({
-                logoutParams: {
-                    returnTo: 'https://themoralcube.com'
-                }
-            });
-        });
-        // Initialize when page loads
-        initAuth0();
 
         document.getElementById('scenarioFilter').addEventListener('change', function(e) {
             if (isUpdatingFilters || isCategoryFiltering) return;
