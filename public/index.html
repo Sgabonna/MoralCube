@@ -8,462 +8,286 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <style>
+        /* Global Styles */
         body {
-            padding: 20px;
-            background-color: #f8f9fa;
+        padding: 20px;
+        background-color: #f8f9fa;
+        font-family: 'Inter', sans-serif;
         }
-        
+
+        /* Main Container */
         .main-container {
-            max-width: 1600px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 20px;
+        max-width: 1600px;
+        margin: 0 auto;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
         }
 
+        /* Plot Container & Cube Plot */
         .plot-container {
-            background-color: white;
-            border-radius: 6px;
-            padding: 5px;
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        background-color: white;
+        border-radius: 6px;
+        padding: 5px;
+        height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         }
-
         #cube-plot {
-            width: 100%;
-            height: 100%;
+        width: 100%;
+        height: 100%;
         }
+
+        /* Page Header */
         .page-header {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        background-color: #D7E8FF;
+        padding: 20px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
 
+        /* Navigation */
+        .navbar {
+        padding: 0;
+        margin-top: auto;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+        width: 100%;
+        }
+        .navbar-nav {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        padding: 0.5rem 0;
+        }
         .navbar-nav .nav-link {
-            padding: 0.7rem 1.2rem;
-            transition: all 0.2s ease;
-            border-radius: 4px;
+        padding: 0.7rem 1.2rem;
+        transition: all 0.2s ease;
+        border-radius: 4px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
+        font-size: 1.2rem;
+        white-space: nowrap;
         }
-
         .navbar-nav .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.4);
-            color: #2c5282;
+        background-color: rgba(255, 255, 255, 0.4);
+        color: #2c5282;
         }
-
         .navbar-nav .nav-item {
-            position: relative;
+        position: relative;
+        margin: 0 1rem;
         }
-
         .navbar-nav .nav-item:not(:last-child)::after {
-            content: "";
-            position: absolute;
-            right: -3px;
-            top: 50%;
-            transform: translateY(-50%);
-            height: 4px;
-            width: 4px;
-            border-radius: 50%;
-            background-color: #718096;
-            opacity: 0.5;
+        content: "";
+        position: absolute;
+        right: -3px;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 4px;
+        width: 4px;
+        border-radius: 50%;
+        background-color: #718096;
+        opacity: 0.5;
         }
 
+        /* Media Queries for Navigation */
         @media (max-width: 991.98px) {
-            .navbar-nav .nav-item:not(:last-child)::after {
-                display: none;
-            }
-            
-            .navbar-nav .nav-item {
-                text-align: center;
-            }
+        .navbar-nav .nav-item:not(:last-child)::after {
+            display: none;
         }
-        .category-badge {
-            display: inline-block;
-            padding: 0.25em 0.6em;
-            font-size: 0.9rem;
-            font-weight: 500;
-            border-radius: 4px;
-            margin-left: 0.5rem;
+        .navbar-nav .nav-item {
+            text-align: center;
         }
-
-        .category-evil {
-            background-color: #dc3545;
-            color: white;
+        .navbar-collapse {
+            display: flex !important;
+            justify-content: center !important;
+            width: 100% !important;
         }
-
-        .category-virtue {
-            background-color: #28a745;
-            color: white;
+        .navbar-nav {
+            flex-direction: row;
+            justify-content: center;
+            width: max-content !important;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 0.5rem 1rem !important;
         }
-
-        .category-vice {
-            background-color: #ffc107;
-            color: black;
+        .navbar-nav::-webkit-scrollbar {
+            display: none;
         }
-
-        .category-sin {
-            background-color: #6c757d;
-            color: white;
+        .navbar-toggler {
+            display: none !important;
         }
-
-        .category-morally-grey {
-            background-color: #6610f2;
-            color: white;
+        .nav-item.mx-3 {
+            margin: 0 0.5rem !important;
         }
-
-        .category-world-building {
-            background-color: #17a2b8;
-            color: white;
+        .nav-link {
+            padding: 0.8rem !important;
         }
-        
-        .parent-marker {
-            border: 2px solid #000;
-            opacity: 1 !important;
         }
-
-        .child-marker {
-            border: 1px dashed #666;
+        @media (max-width: 768px) {
+        .nav-link {
+            font-size: 1rem;
+            padding: 0.5rem 0.8rem;
         }
-        /* For compact tables in scenario details */
-        .compact-table {
-            font-size: 0.75rem;  /* Reduced font size (2 points smaller than before) */
-            margin-bottom: 10px; /* Adds gap after the table */
+        }
+        @media (max-width: 576px) {
+        .page-header h1 {
+            font-size: 2.5rem !important;
+            margin-right: 0 !important;
+        }
+        .nav-item.mx-3 {
+            margin: 0 0.3rem !important;
+        }
+        .nav-link {
+            padding: 0.6rem !important;
+        }
         }
 
-        .compact-table th,
-        .compact-table td {
-            padding: 4px 6px;    /* Reduced cell padding for a more compact row height */
-            vertical-align: middle;
-        }
-
-        /* Optional: if you want additional gap below the table container */
-        .scenario-table-container {
-            margin-bottom: 10px;
-        }
-
-        /* (Optional) Adjust header font sizes if needed */
-        .compact-table th {
-            font-weight: bold;
-        }
-        .compact-table td {
-            overflow: visible;
-            position: relative; /* Ensure that the tooltip is positioned relative to the cell */
-        }   
-
-        .relationship-line {
-            stroke-dasharray: 5,5;
-            opacity: 0.6;
-        }
-
-        .selected-scenario {
-            border: 3px solid #0d6efd;
-            box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
-        }
-        .selected-card {
-            background-color: #d1e7dd; /* light green background for selected cards */
-            border: 2px solid #0d6efd;
-            /* Optional: add a box-shadow for extra emphasis */
-            box-shadow: 0 0 5px rgba(13, 110, 253, 0.8);
-        }
-
-        .relationship-badge {
-            font-size: 0.8rem;
-            padding: 0.2em 0.5em;
-            border-radius: 3px;
-            margin-left: 0.5rem;
-            background-color: #e9ecef;
-            color: #495057;
-        }
-
-        .relationship-active {
-            background-color: #0d6efd;
-            color: white;
-        }
-
+        /* Filter Section */
         .filter-section {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
         }
-
         .filter-group {
-            margin-bottom: 15px;
+        margin-bottom: 15px;
         }
-
         .filter-group select {
-            width: 100%;
-            min-height: 150px; /* Ensures consistent height across all filter boxes */
+        width: 100%;
+        min-height: 150px;
         }
-
-        /* Specific styling for the alternate outcomes select */
-        #alternateOutcomes {
-            width: 100%;
-            min-height: 150px;
-        }
-
-        /* Add consistent padding and text size */
         .filter-group select option {
-            padding: 8px 12px;
-            font-size: 14px;
+        padding: 8px 12px;
+        font-size: 14px;
         }
-
-        /* Add consistent label styling */
         .filter-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .filter-group label {
-            font-weight: 600;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .filter-badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .filter-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            opacity: 0.6;
-            transition: opacity 0.3s;
-            user-select: none;
-        }
-
-        .filter-badge.active {
-            opacity: 1;
-        }
-
-        .info-icon {
-            color: #0d6efd;
-            font-size: 0.875rem;
-            margin-left: 0.5rem;
-            cursor: help;
-        }
-
-        /* Initially hide the ethics scores in each card */
-        .comparison-card .ethics-scores {
-        display: none;
-        }
-
-        /* When the card is expanded, show the ethics scores */
-        .comparison-card.expanded .ethics-scores {
         display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        font-size: 14px;
         }
 
-        /* New container for the three columns */
-        #overview-section {
-            display: flex;
-            width: 100%;
-            box-sizing: border-box;
-        }  
-
-        /* Left Column (Cube) – 40% width remains */
-        #cube-column {
-            width: 40%;
-            }
-        #cards-column {
-        width: 15%;
+        /* Category Badges */
+        .category-badge {
+        display: inline-block;
+        padding: 0.25em 0.6em;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border-radius: 4px;
+        margin-left: 0.5rem;
+        }
+        .category-evil {
+        background-color: #dc3545;
+        color: white;
+        }
+        .category-virtue {
+        background-color: #28a745;
+        color: white;
+        }
+        .category-vice {
+        background-color: #ffc107;
+        color: black;
+        }
+        .category-sin {
+        background-color: #6c757d;
+        color: white;
+        }
+        .category-morally-grey,
+        .category-morally_grey {
+        background-color: #6610f2;
+        color: white;
+        }
+        .category-world-building,
+        .category-world_building {
+        background-color: #17a2b8;
+        color: white;
         }
 
-        /* Middle Column (Placeholder Overview) – 45% width */
-        #placeholder-overview-column {
-            width: 45%;
-            }
-
-        /* Right Column (Stacked Overview Cards) – 15% width */
-        
-
-        /* The container for the stacked overview cards:
-        Fixed height for 5 cards (e.g., 500px total) */
-        #overview {
-            height: 500px;            /* Adjust if needed */
-            overflow: hidden;         /* By default, hide overflow */
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-        }
-
-
-
+        /* Tooltip Styles */
         .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-
-        .tooltip-container {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            margin-left: 8px;
-            vertical-align: middle;
-        }
-
-        .tooltip-icon {
-            color: #0d6efd;
-            font-size: 14px;
-            cursor: help;
-            opacity: 0.8;
-            transition: opacity 0.2s;
-        }
-
-        .tooltip-icon:hover {
-            opacity: 1;
-        }
-
-        .tooltip-content {
-            visibility: hidden;
-            opacity: 0;
-            position: absolute;
-            bottom: 150%;
-            left: 20px; /* Base positioning for all tooltips */
-            padding: 8px 12px;
-            background-color: #2d3748;
-            color: white;
-            border-radius: 6px;
-            font-size: 13px;
-            line-height: 1.4;
-            white-space: normal;
-            max-width: 300px;
-            width: max-content;
-            z-index: 1000;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: left;
-        }
-
-        /* Remove all left/right specific rules and use the same positioning for both */
-        .tooltip-container .tooltip-content {
-            left: 5px;
-            right: auto;
-            transform: none;
-        }
-
-        .tooltip-container .tooltip-content::after {
-            left: 5px;
-            right: auto;
-            transform: none;
-        }
-
-        .tooltip-container:hover .tooltip-content {
-            visibility: visible;
-            opacity: 1;
-            bottom: 140%;
-        }
-
-        .tooltip-content::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            border-width: 6px;
-            border-style: solid;
-            border-color: #2d3748 transparent transparent transparent;
-        }
-
-        /* Remove any specific first-child or last-child rules that might override */
-        .tooltip-container:first-child .tooltip-content,
-        .tooltip-container:last-child .tooltip-content {
-            left: 5px;
-            right: auto;
-        }
-
-        .tooltip-container:first-child .tooltip-content::after,
-        .tooltip-container:last-child .tooltip-content::after {
-            left: 5px;
-            right: auto;
-        }
-
-        /* Prevent tooltip from being cut off at the top of the viewport */
-        @media (max-height: 500px) {
-            .tooltip-content {
-                bottom: auto;
-                top: 150%;
-            }
-            
-            .tooltip-container:hover .tooltip-content {
-                bottom: auto;
-                top: 140%;
-            }
-            
-            .tooltip-content::after {
-                top: auto;
-                bottom: 100%;
-                border-color: transparent transparent #2d3748 transparent;
-            }
-        }
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
+        position: relative;
+        display: inline-block;
         }
         .tooltip .tooltiptext {
-            visibility: hidden;
-            opacity: 0;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 4px;
-            padding: 5px 10px;
-            position: absolute;
-            z-index: 1000; /* increased z-index */
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            transition: opacity 0.3s;
-            white-space: nowrap;
-            font-size: 0.75rem;
+        visibility: hidden;
+        opacity: 0;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        padding: 5px 10px;
+        border-radius: 4px;
+        position: absolute;
+        z-index: 1000;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        transition: opacity 0.3s;
+        white-space: nowrap;
+        font-size: 0.75rem;
+        }
+        .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+        }
+        .tooltip .tooltiptext::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 5px;
+        border-style: solid;
+        border-color: #333 transparent transparent transparent;
         }
 
-
-        .tooltiptext {
-            visibility: hidden;
-            opacity: 0;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 5px 10px;
-            border-radius: 4px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            transition: opacity 0.3s;
-            white-space: nowrap;
-            font-size: 0.75rem;
+        /* Additional Tooltip Container */
+        .tooltip-container {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        margin-left: 8px;
+        vertical-align: middle;
+        }
+        .tooltip-container .tooltip-content {
+        visibility: hidden;
+        opacity: 0;
+        position: absolute;
+        bottom: 150%;
+        left: 5px;
+        padding: 8px 12px;
+        background-color: #2d3748;
+        color: white;
+        border-radius: 6px;
+        font-size: 13px;
+        line-height: 1.4;
+        white-space: normal;
+        max-width: 300px;
+        width: max-content;
+        z-index: 1000;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: left;
+        }
+        .tooltip-container:hover .tooltip-content {
+        visibility: visible;
+        opacity: 1;
+        bottom: 140%;
         }
 
-        .tooltiptext::after {
-            content: "";
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #333 transparent transparent transparent;
-        }
-
-        #overview {
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-        }
-
-        /* Ensure that embedded iframes fill the media container */
+        /* Media Placeholder */
         #media-placeholder iframe {
         width: 100%;
         height: 100%;
@@ -471,300 +295,153 @@
         object-fit: contain;
         }
 
-
-
+        /* Overview & Comparison Cards */
+        #overview {
+        height: 500px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 15px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        }
         .comparison-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 10px;  /* Reduced gap for a more compact layout */
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 10px;
         }
-        /* Adjust badge size specifically within overview cards */
-        .comparison-card .category-badge {
-        font-size: 0.65rem;       /* Smaller font size (adjust as needed) */
-        padding: 0.1em 0.3em;      /* Reduced padding for a sleeker look */
-        }
-        .scenario-section {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 6px;
-        }
-        .scenario-table-container {
-            margin-bottom: 10px;
-        }
-
-        /* Each overview card (stacked vertically) */
         .comparison-card {
-            cursor: pointer;
-            height: 125px;  /* Fixed height for each card (e.g., 125px if container is 500px) */
-            box-sizing: border-box;
-            padding: 5px 8px;
-            margin-bottom: 5px;
-            overflow: hidden;
-            font-size: 0.75rem;       /* Reduced font size */
-            transition: height 0.3s ease;
-            }
-
-        /* When the card is expanded (via read more), allow it to grow */
+        cursor: pointer;
+        height: 125px;
+        box-sizing: border-box;
+        padding: 5px 8px;
+        margin-bottom: 5px;
+        overflow: hidden;
+        font-size: 0.75rem;
+        transition: height 0.3s ease;
+        }
         .comparison-card.expanded {
-            height: auto;
-            overflow: visible;
-            }
-
-        /* Alternate background colors for cards */
+        height: auto;
+        overflow: visible;
+        }
         .comparison-card:nth-child(odd) {
-            background-color: #e9ecef;
-            }
+        background-color: #e9ecef;
+        }
         .comparison-card:nth-child(even) {
-            background-color: #f8f9fa;
-            }
-
-        /* Make the heading smaller within the card */
+        background-color: #f8f9fa;
+        }
         .comparison-card h4 {
-            font-size: 0.8rem;
-            margin: 0;
-            }
-
-        /* Read More Functionality for the card description */
+        font-size: 0.8rem;
+        margin: 0;
+        }
         .scenario-description .description-text {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;  /* Clamp to 2 lines for a compact look */
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            }
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        }
         .comparison-card.expanded .scenario-description .description-text {
-            -webkit-line-clamp: unset;
-            }
+        -webkit-line-clamp: unset;
+        }
         .read-more {
-            display: block;
-            color: #007bff;
-            cursor: pointer;
-            font-size: 0.7rem;
-            margin-top: 3px;
-            }
+        display: block;
+        color: #007bff;
+        cursor: pointer;
+        font-size: 0.7rem;
+        margin-top: 3px;
+        }
 
+        /* Tables */
         .table {
-            margin-bottom: 0;
-            font-size: 1rem;
+        margin-bottom: 0;
+        font-size: 1rem;
         }
-
         .table th {
-            background-color: #f8f9fa;
-            font-weight: 600;
-            border-bottom: 2px solid #dee2e6;
-            padding: 12px;
+        background-color: #f8f9fa;
+        font-weight: 600;
+        border-bottom: 2px solid #dee2e6;
+        padding: 12px;
         }
-
         .table td {
-            vertical-align: middle;
-            padding: 12px;
+        vertical-align: middle;
+        padding: 12px;
+        }
+        .compact-table {
+        font-size: 0.75rem;
+        margin-bottom: 10px;
+        }
+        .compact-table th,
+        .compact-table td {
+        padding: 4px 6px;
+        vertical-align: middle;
         }
 
-        .scenario-link {
-            color: #0d6efd;
-            margin-left: 5px;
-            font-size: 0.9em;
+        /* Scenario Section */
+        .scenario-section {
+        margin-top: 20px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 6px;
         }
 
-        @media (max-width: 992px) {
-            .plot-container {
-                height: 350px;
-                margin-bottom: 20px;
-            }
-            
-            .main-container {
-                padding: 15px;
-            }
-            
-            .comparison-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .relevant-option {
-            background-color: #d1e7dd;
-        }
-
-        .relevant-badge {
-            border: 2px solid #0d6efd;
-        }
-        .page-header {
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .navbar-nav .nav-link {
-            padding: 0.7rem 1.2rem;
-            transition: all 0.2s ease;
-            border-radius: 4px;
-        }
-
-        .navbar-nav .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.4);
-            color: #2c5282;
-        }
-
-        .navbar-nav .nav-item {
-            position: relative;
-        }
-
-        .navbar-nav .nav-item:not(:last-child)::after {
-            content: "";
-            position: absolute;
-            right: -3px;
-            top: 50%;
-            transform: translateY(-50%);
-            height: 4px;
-            width: 4px;
-            border-radius: 50%;
-            background-color: #718096;
-            opacity: 0.5;
-        }
-
-        @media (max-width: 991.98px) {
-            .navbar-nav .nav-item:not(:last-child)::after {
-                display: none;
-            }
-            
-            .navbar-nav .nav-item {
-                text-align: center;
-            }
-        }
-
-        
+        /* Modal Styles */
         .modal-body h4 {
-            color: #2c5282;
-            font-weight: 600;
+        color: #2c5282;
+        font-weight: 600;
         }
-        
         .modal-body h5 {
-            color: #4a5568;
-            font-weight: 600;
+        color: #4a5568;
+        font-weight: 600;
         }
-        
         .modal-body p {
-            line-height: 1.6;
-            color: #2d3748;
+        line-height: 1.6;
+        color: #2d3748;
         }
-        
         .modal-body .ml-4 {
-            border-left: 3px solid #e2e8f0;
-            padding-left: 1rem;
+        border-left: 3px solid #e2e8f0;
+        padding-left: 1rem;
         }
-        
         .modal-body strong {
-            color: #2d3748;
-        }
-        .navbar {
-            padding: 0;
-            margin-top: auto;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
-            width: 100%;
+        color: #2d3748;
         }
 
-        .navbar-nav {
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            width: 100%;
-            padding: 0.5rem 0;
+        /* Banner & Auth Buttons */
+        .banner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
-        .nav-item {
-            position: relative;
-            margin: 0 1rem;
+        .auth-buttons {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
         }
-
-        .nav-link {
-            font-family: 'Inter', sans-serif;
-            font-weight: 500;
-            font-size: 1.2rem;
-            padding: 0.7rem 1.2rem;
-            transition: all 0.2s ease;
-            border-radius: 4px;
-            white-space: nowrap;
+        .auth-btn {
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s;
         }
-
-        .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.4);
-            color: #2c5282;
+        #login {
+        background-color: #007bff;
+        color: white;
         }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .nav-link {
-                font-size: 1rem;
-                padding: 0.5rem 0.8rem;
-            }
-            
-            .nav-item {
-                margin: 0 0.5rem;
-            }
+        #logout {
+        background-color: #f8f9fa;
+        color: #333;
         }
-
-        /* Title adjustments for mobile */
-        @media (max-width: 576px) {
-            .page-header h1 {
-                font-size: 2.5rem !important;
-                margin-right: 0 !important;
-            }
-        }
-        /* Base styles remain the same */
-        @media (max-width: 991.98px) {
-            .navbar-collapse {
-                display: flex !important;
-                justify-content: center !important;  /* Center the collapse container */
-                width: 100% !important;
-            }
-            
-            .navbar-nav {
-                display: flex !important;
-                flex-direction: row !important;
-                justify-content: center !important;  /* Center the nav items */
-                width: max-content !important;  /* Allow nav to be as wide as needed */
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-                -ms-overflow-style: none;
-                padding: 0.5rem 1rem !important;
-            }
-            
-            /* Hide scrollbar */
-            .navbar-nav::-webkit-scrollbar {
-                display: none;
-            }
-            
-            .navbar-toggler {
-                display: none !important;
-            }
-
-            /* Adjust spacing for nav items */
-            .nav-item.mx-3 {
-                margin-left: 0.5rem !important;
-                margin-right: 0.5rem !important;
-            }
-
-            /* Adjust padding for nav links */
-            .nav-link {
-                padding-left: 0.8rem !important;
-                padding-right: 0.8rem !important;
-                white-space: nowrap;  /* Prevent text wrapping */
-            }
-        }
-
-        /* Additional adjustments for very small screens */
-        @media (max-width: 576px) {
-            .nav-item.mx-3 {
-                margin-left: 0.3rem !important;
-                margin-right: 0.3rem !important;
-            }
-
-            .nav-link {
-                padding-left: 0.6rem !important;
-                padding-right: 0.6rem !important;
-            }
+        .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
         }
     </style>
 </head>
@@ -783,8 +460,8 @@
                 
                 <!-- Navigation Menu -->
                 <nav class="navbar navbar-expand-lg navbar-light p-0" style="margin-top: auto; border-top: 1px solid rgba(0, 0, 0, 0.1); box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);">
-                    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-                        <ul class="navbar-nav" style="padding: 0.5rem 0;">
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav justify-content-center flex-grow-1" style="padding: 0.5rem 0;">
                             <li class="nav-item mx-3">
                                 <a class="nav-link" href="/" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">Home</a>
                             </li>
@@ -801,6 +478,18 @@
                                 <a class="nav-link" href="https://www.youtube.com/watch?v=hauuDOrZQ1o" target="_blank" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1.2rem;">Learn More</a>
                             </li>
                         </ul>
+                        <!-- Auth buttons -->
+                        <div class="navbar-nav ms-auto">
+                            <button id="login" class="btn btn-primary mx-2" style="font-family: 'Inter', sans-serif; font-weight: 500; display: none;">
+                                Log In
+                            </button>
+                            <div id="user-container" class="d-none d-flex align-items-center">
+                                <img id="user-avatar" class="rounded-circle me-2" style="width: 32px; height: 32px; display: none;" alt="Profile">
+                                <button id="logout" class="btn btn-outline-secondary" style="font-family: 'Inter', sans-serif; font-weight: 500; display: none;">
+                                    Log Out
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </nav>
             </div>
@@ -998,6 +687,8 @@
         let isUpdatingFilters = false;
         let scenarioRelationships = new Map(); // Stores parent-child relationships
         let currentMediaUrl = "";
+        let auth0Client = null;
+        let currentUser = null;
 
         // Fixed array of shared border colors.
         const sharedBorderColors = ["purple", "blue", "black", "pink", "dark green"];
@@ -2345,8 +2036,156 @@
 
                 scenarioAccordion.innerHTML = dimensionContent;
             }
+        
+            async function updateAuthUI() {
+                try {
+                    const isAuthenticated = await auth0Client.isAuthenticated();
+                    const loginBtn = document.getElementById('login');
+                    const logoutBtn = document.getElementById('logout');
+                    const userContainer = document.getElementById('user-container');
+                    
+                    if (!loginBtn || !logoutBtn || !userContainer) {
+                        console.error('Required UI elements not found');
+                        return;
+                    }
 
+                    if (isAuthenticated) {
+                        loginBtn.style.display = 'none';
+                        userContainer.classList.remove('d-none');
+                        logoutBtn.style.display = 'block';
+                        
+                        const user = await auth0Client.getUser();
+                        if (user.picture) {
+                            const userAvatar = document.getElementById('user-avatar');
+                            if (userAvatar) {
+                                userAvatar.src = user.picture;
+                                userAvatar.style.display = 'block';
+                            }
+                        }
+                    } else {
+                        loginBtn.style.display = 'block';
+                        userContainer.classList.add('d-none');
+                        logoutBtn.style.display = 'none';
+                        
+                        const userAvatar = document.getElementById('user-avatar');
+                        if (userAvatar) {
+                            userAvatar.style.display = 'none';
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error updating UI:', error);
+                }
+            }
 
+            async function saveUserData(surveyData) {
+                try {
+                    if (!auth0Client || !currentUser) {
+                        throw new Error('User not authenticated');
+                    }
+
+                    const token = await auth0Client.getTokenSilently();
+                    const response = await fetch(`https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/users/${currentUser.sub}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            user_metadata: {
+                                survey_results: surveyData,
+                                last_updated: new Date().toISOString()
+                            }
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to save user data');
+                    }
+
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error saving user data:', error);
+                    throw error;
+                }
+            }
+            async function getUserSurveyData() {
+                try {
+                    if (!auth0Client || !currentUser) {
+                        console.error('User not authenticated');
+                        return null;
+                    }
+
+                    const token = await auth0Client.getTokenSilently();
+                    const response = await fetch(`https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/users/${currentUser.sub}`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch user data');
+                    }
+
+                    const userData = await response.json();
+                    return userData.user_metadata?.survey_results || null;
+                } catch (error) {
+                    console.error('Error fetching survey data:', error);
+                    return null;
+                }
+            }
+            // Keep your existing login/logout functions
+            async function login() {
+                const loginBtn = document.getElementById('login');
+                try {
+                    loginBtn.disabled = true;
+                    await auth0Client.loginWithRedirect();
+                } catch (error) {
+                    console.error('Login error:', error);
+                    loginBtn.disabled = false;
+                }
+            }
+
+            async function logout() {
+                const logoutBtn = document.getElementById('logout');
+                try {
+                    logoutBtn.disabled = true;
+                    currentUser = null;
+                    await auth0Client.logout({
+                        logoutParams: {
+                            returnTo: 'https://themoralcube.com'
+                        }
+                    });
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    logoutBtn.disabled = false;
+                }
+            }
+
+            async function handleSurveySubmit(event) {
+                event.preventDefault();
+                
+                try {
+                    const surveyData = {
+                        question1: document.getElementById('q1').value,
+                        question2: document.getElementById('q2').value,
+                        // ... more questions ...
+                        cubePosition: {
+                            x: calculateX(), // Your calculation functions
+                            y: calculateY(),
+                            z: calculateZ()
+                        }
+                    };
+
+                    await saveUserData(surveyData);
+                    alert('Survey data saved successfully!');
+                } catch (error) {
+                    console.error('Error saving survey:', error);
+                    alert('Failed to save survey data. Please try again.');
+                }
+            }
+
+        // Initialize when page loads
+        initAuth0();
 
 
 
@@ -2412,7 +2251,16 @@
             
             updateVisualization();
         });
-
+        document.getElementById('login').addEventListener('click', () => auth0Client.loginWithRedirect());
+        document.getElementById('logout').addEventListener('click', () => {
+            auth0Client.logout({
+                logoutParams: {
+                    returnTo: 'https://themoralcube.com'
+                }
+            });
+        });
+        // Initialize when page loads
+        initAuth0();
 
         document.getElementById('scenarioFilter').addEventListener('change', function(e) {
             if (isUpdatingFilters || isCategoryFiltering) return;
