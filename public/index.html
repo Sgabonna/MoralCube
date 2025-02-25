@@ -1435,19 +1435,21 @@
                     question: "From an Aristotelian perspective could you explain what virtues or vices were at play within this action?"
                 }
             };
-            // Auth0 Client Manager - Provides safe access to auth0 client with proper initialization checking
+            // Replace your current AuthManager with this enhanced implementation
             const AuthManager = {
             client: null,
             isInitializing: false,
             initError: null,
             lastInitAttempt: 0,
+            tokenRefreshTimer: null,
             
             // Constants
             INIT_COOLDOWN: 5000, // 5 seconds between init attempts
             MAX_RETRIES: 3,
+            TOKEN_REFRESH_MARGIN: 5 * 60 * 1000, // Refresh token 5 minutes before expiration
             
             /**
-             * Safely initializes the Auth0 client with retry mechanism
+             * Safely initializes the Auth0 client with retry mechanism and session restoration
              * @returns {Promise<Object>} The initialized Auth0 client
              */
             async initialize() {
@@ -1484,58 +1486,147 @@
                 this.lastInitAttempt = Date.now();
                 this.initError = null;
                 
-                // Initialize Auth0 client with retries
-                let retries = 0;
-                while (retries <= this.MAX_RETRIES) {
+                console.log('Initializing Auth0 client with enhanced persistence...');
+                
+                // Enhanced Auth0 configuration with proper storage and session management
+                this.client = await auth0.createAuth0Client({
+                    domain: 'dev-10xzf0prvka6p40y.us.auth0.com',
+                    clientId: 'o7n479CCBo1GoASsEQI3s44cIXdyvzJh',
+                    authorizationParams: {
+                    redirect_uri: window.location.origin,
+                    audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/',
+                    scope: 'openid profile email read:current_user update:current_user_metadata offline_access'
+                    },
+                    cacheLocation: 'localstorage',
+                    useRefreshTokens: true,
+                    legacySameSiteCookie: false, // Make sure cookies use modern SameSite settings
+                    cookieDomain: window.location.hostname,
+                    sessionCheckExpiryDays: 1, // Check session daily (higher value for production)
+                });
+                
+                // Handle redirect callback if present
+                if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
                     try {
-                    console.log(`Initializing Auth0 client (attempt ${retries + 1}/${this.MAX_RETRIES + 1})`);
-                    
-                    this.client = await auth0.createAuth0Client({
-                        domain: 'dev-10xzf0prvka6p40y.us.auth0.com',
-                        clientId: 'o7n479CCBo1GoASsEQI3s44cIXdyvzJh',
-                        authorizationParams: {
-                        redirect_uri: window.location.origin,
-                        audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/',
-                        scope: 'openid profile email read:current_user update:current_user_metadata'
-                        },
-                        cacheLocation: 'localstorage', // Use persistent caching
-                        useRefreshTokens: true, // Enable refresh tokens for persistent sessions
-                        useRefreshTokensFallback: true
-                    });
-                    
-                    // Handle redirect callback
-                    if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
-                        try {
-                        await this.client.handleRedirectCallback();
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                        } catch (callbackError) {
-                        console.error('Error handling redirect callback:', callbackError);
-                        // Non-fatal error, continue with the client
-                        }
-                    }
-                    
-                    console.log('Auth0 client successfully initialized');
-                    return this.client;
-                    } catch (error) {
-                    retries++;
-                    console.warn(`Auth0 initialization attempt ${retries} failed:`, error);
-                    
-                    if (retries <= this.MAX_RETRIES) {
-                        // Exponential backoff for retries
-                        const backoffTime = Math.min(1000 * Math.pow(2, retries), 8000);
-                        await new Promise(resolve => setTimeout(resolve, backoffTime));
-                    } else {
-                        this.initError = error;
-                        throw error;
-                    }
+                    console.log('Handling Auth0 redirect callback...');
+                    await this.client.handleRedirectCallback();
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    } catch (callbackError) {
+                    console.error('Error handling redirect callback:', callbackError);
+                    // Non-fatal error, continue with the client
                     }
                 }
+                
+                // Check if user is already authenticated and set up token refresh
+                const isAuthenticated = await this.client.isAuthenticated();
+                if (isAuthenticated) {
+                    console.log('User already authenticated, setting up token refresh');
+                    
+                    // Schedule token refresh
+                    await this.scheduleTokenRefresh();
+                    
+                    // Update UI to reflect authenticated state
+                    try {
+                    if (typeof updateAuthUI === 'function') {
+                        await updateAuthUI();
+                    }
+                    } catch (uiError) {
+                    console.error('Error updating UI after initialization:', uiError);
+                    }
+                } else {
+                    console.log('No active session found during initialization');
+                }
+                
+                console.log('Auth0 client successfully initialized');
+                return this.client;
                 } catch (error) {
-                console.error('Auth0 client initialization failed after retries:', error);
+                console.error('Auth0 client initialization failed:', error);
                 this.initError = error;
                 throw error;
                 } finally {
                 this.isInitializing = false;
+                }
+            },
+            
+            /**
+             * Schedule token refresh before expiration
+             */
+            async scheduleTokenRefresh() {
+                try {
+                // Clear any existing refresh timer
+                if (this.tokenRefreshTimer) {
+                    clearTimeout(this.tokenRefreshTimer);
+                    this.tokenRefreshTimer = null;
+                }
+                
+                // Check if we're authenticated before scheduling refresh
+                if (!await this.isUserAuthenticated()) {
+                    console.log("No authenticated session to refresh");
+                    return;
+                }
+                
+                // Get current token claims to determine expiration
+                const token = await this.getToken({ignoreCache: false});
+                const claims = this.parseJwt(token);
+                
+                if (!claims || !claims.exp) {
+                    console.error("Could not parse token expiration");
+                    return;
+                }
+                
+                // Calculate when token expires (in milliseconds)
+                const expiresAt = claims.exp * 1000;
+                const now = Date.now();
+                
+                // Calculate when to refresh (TOKEN_REFRESH_MARGIN before expiration)
+                const refreshIn = Math.max(0, expiresAt - now - this.TOKEN_REFRESH_MARGIN);
+                
+                console.log(`Token expires in ${Math.floor((expiresAt - now) / 1000)} seconds, scheduling refresh in ${Math.floor(refreshIn / 1000)} seconds`);
+                
+                // Schedule token refresh
+                this.tokenRefreshTimer = setTimeout(async () => {
+                    try {
+                    console.log('Executing scheduled token refresh...');
+                    await this.getToken({ignoreCache: true});
+                    console.log('Token refreshed successfully');
+                    
+                    // Schedule next refresh
+                    this.scheduleTokenRefresh();
+                    } catch (error) {
+                    console.error('Scheduled token refresh failed:', error);
+                    
+                    // Try again in 1 minute if still authenticated
+                    const isAuthenticated = await this.isUserAuthenticated(true);
+                    if (isAuthenticated) {
+                        console.log('Still authenticated, will retry token refresh in 1 minute');
+                        setTimeout(() => this.scheduleTokenRefresh(), 60000);
+                    } else {
+                        console.log('No longer authenticated after token refresh failure');
+                    }
+                    }
+                }, refreshIn);
+                } catch (error) {
+                console.error('Error scheduling token refresh:', error);
+                }
+            },
+            
+            /**
+             * Parse JWT token to get claims
+             * @param {string} token JWT token
+             * @returns {Object|null} Parsed claims or null on failure
+             */
+            parseJwt(token) {
+                try {
+                if (!token) return null;
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                
+                return JSON.parse(jsonPayload);
+                } catch (error) {
+                console.error('Error parsing JWT:', error);
+                return null;
                 }
             },
             
@@ -1558,7 +1649,20 @@
             async isUserAuthenticated(forceCheck = false) {
                 try {
                 const client = await this.getClient();
-                return await client.isAuthenticated({ ignoreCache: forceCheck });
+                const isAuthenticated = await client.isAuthenticated({ ignoreCache: forceCheck });
+                
+                // If authentication check fails, try to get token silently to restore session
+                if (!isAuthenticated && !forceCheck) {
+                    try {
+                    await this.getTokenSilently();
+                    return await client.isAuthenticated({ ignoreCache: true });
+                    } catch (silentError) {
+                    // Silent authentication failed, user truly not authenticated
+                    return false;
+                    }
+                }
+                
+                return isAuthenticated;
                 } catch (error) {
                 console.error('Error checking authentication status:', error);
                 return false;
@@ -1571,47 +1675,86 @@
              * @returns {Promise<string>} The authentication token
              */
             async getToken(options = {}) {
+                try {
                 const client = await this.getClient();
                 let retries = 0;
                 const maxRetries = options.maxRetries || 2;
                 
                 while (retries <= maxRetries) {
-                try {
-                    return await client.getTokenSilently({
-                    authorizationParams: {
+                    try {
+                    const token = await client.getTokenSilently({
+                        authorizationParams: {
                         audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/',
                         scope: 'openid profile email read:current_user update:current_user_metadata'
-                    },
-                    timeoutInSeconds: options.timeoutInSeconds || 60,
-                    cacheMode: options.ignoreCache ? 'off' : 'on',
-                    ...options
+                        },
+                        timeoutInSeconds: options.timeoutInSeconds || 60,
+                        cacheMode: options.ignoreCache ? 'off' : 'on',
+                        ...options
                     });
-                } catch (error) {
+                    
+                    // Schedule token refresh after successful token acquisition
+                    if (!options.noRefreshScheduling) {
+                        this.scheduleTokenRefresh().catch(error => {
+                        console.warn('Failed to schedule token refresh:', error);
+                        });
+                    }
+                    
+                    return token;
+                    } catch (error) {
                     console.warn(`Token acquisition attempt ${retries + 1} failed:`, error);
                     
                     // Handle specific error types
                     if (error.error === 'login_required') {
-                    throw new Error('Authentication required');
+                        throw new Error('Authentication required');
                     }
                     
                     retries++;
                     if (retries <= maxRetries) {
-                    await new Promise(resolve => setTimeout(resolve, 1000 * retries));
+                        await new Promise(resolve => setTimeout(resolve, 1000 * retries));
                     } else {
-                    throw error;
+                        throw error;
+                    }
                     }
                 }
+                
+                throw new Error('Failed to get token after maximum retries');
+                } catch (error) {
+                console.error('Error getting token:', error);
+                throw error;
+                }
+            },
+            
+            /**
+             * Try to get a token silently (without UI) to restore session
+             * @returns {Promise<string>} Token if successful
+             */
+            async getTokenSilently() {
+                try {
+                const client = await this.getClient();
+                return await client.getTokenSilently({
+                    authorizationParams: {
+                    audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/',
+                    scope: 'openid profile email read:current_user update:current_user_metadata'
+                    },
+                    timeoutInSeconds: 10,
+                    detailedResponse: false
+                });
+                } catch (error) {
+                // Don't log this as an error since it's expected in many cases
+                console.log('Silent authentication failed:', error.message);
+                throw error;
                 }
             },
             
             /**
              * Gets the authenticated user profile
+             * @param {boolean} forceRefresh Force a fresh profile fetch
              * @returns {Promise<Object>} User profile data
              */
-            async getUser() {
+            async getUser(forceRefresh = false) {
                 try {
                 const client = await this.getClient();
-                const isAuthenticated = await client.isAuthenticated();
+                const isAuthenticated = await client.isAuthenticated({ ignoreCache: forceRefresh });
                 
                 if (!isAuthenticated) {
                     return null;
@@ -1635,13 +1778,16 @@
                 
                 await client.loginWithRedirect({
                     authorizationParams: {
+                    audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/',
+                    // Add offline_access to get refresh tokens for persistent sessions
+                    scope: 'openid profile email read:current_user update:current_user_metadata offline_access',
                     // Optionally specify screen_hint for signup vs login
                     screen_hint: isSignup ? 'signup' : undefined
                     }
                 });
                 } catch (error) {
                 console.error('Login redirect error:', error);
-                showErrorMessage('Unable to redirect to login. Please try again.');
+                alert('Unable to redirect to login. Please try again.');
                 throw error;
                 }
             },
@@ -1654,6 +1800,12 @@
                 try {
                 const client = await this.getClient();
                 
+                // Clear token refresh timer
+                if (this.tokenRefreshTimer) {
+                    clearTimeout(this.tokenRefreshTimer);
+                    this.tokenRefreshTimer = null;
+                }
+                
                 await client.logout({
                     logoutParams: {
                     returnTo: window.location.origin
@@ -1664,7 +1816,7 @@
                 this.client = null;
                 } catch (error) {
                 console.error('Logout error:', error);
-                showErrorMessage('Logout failed. You may still be logged in.');
+                alert('Logout failed. You may still be logged in.');
                 throw error;
                 }
             }
@@ -3299,53 +3451,108 @@
             });
 
             /**
-             * Update UI based on authentication state
+             * Enhanced version of updateAuthUI with better session handling
              */
             async function updateAuthUI() {
             try {
+                // Check if auth client is initialized
+                const authClient = await AuthManager.getClient().catch(() => null);
+                if (!authClient) {
+                console.warn('Auth client not available when updating UI');
+                displayLoggedOutState();
+                return;
+                }
+                
+                // Force fresh check of authentication status if needed
                 const isAuthenticated = await AuthManager.isUserAuthenticated();
                 
-                const elements = {
-                loginBtn: document.getElementById('login'),
-                logoutBtn: document.getElementById('logout'),
-                userContainer: document.getElementById('user-container'),
-                userAvatar: document.getElementById('user-avatar')
-                };
-
                 if (isAuthenticated) {
-                if (elements.loginBtn) elements.loginBtn.style.display = 'none';
-                if (elements.userContainer) elements.userContainer.classList.remove('d-none');
-                if (elements.logoutBtn) elements.logoutBtn.style.display = 'block';
-                
-                const user = await AuthManager.getUser();
-                if (user?.picture && elements.userAvatar) {
-                    elements.userAvatar.src = user.picture;
-                    elements.userAvatar.style.display = 'block';
+                try {
+                    // Get user details with error handling
+                    const user = await AuthManager.getUser();
+                    displayLoggedInState(user);
+                    
+                    // Ensure token refresh is scheduled
+                    AuthManager.scheduleTokenRefresh().catch(error => {
+                    console.warn('Failed to schedule token refresh during UI update:', error);
+                    });
+                } catch (profileError) {
+                    console.error('Error fetching user profile:', profileError);
+                    // If profile fetch fails but we're authenticated, still show logged in state
+                    displayLoggedInState(null);
                 }
-
-                // Show authenticated-only UI elements
-                document.querySelectorAll('.auth-only').forEach(el => {
-                    el.style.display = 'block';
-                });
-                
-                // Update user surveys preview
-                VisualizationManager.updateUserSurveysPreview();
                 } else {
-                if (elements.loginBtn) elements.loginBtn.style.display = 'block';
-                if (elements.userContainer) elements.userContainer.classList.add('d-none');
-                if (elements.logoutBtn) elements.logoutBtn.style.display = 'none';
-                if (elements.userAvatar) elements.userAvatar.style.display = 'none';
-                
-                // Hide authenticated-only UI elements
-                document.querySelectorAll('.auth-only').forEach(el => {
-                    el.style.display = 'none';
-                });
-                
-                // Update user surveys preview for logged out state
-                VisualizationManager.updateUserSurveysPreview();
+                displayLoggedOutState();
                 }
             } catch (error) {
                 console.error('Error updating auth UI:', error);
+                // Fallback to logged-out state on error
+                displayLoggedOutState();
+            }
+            }
+            /**
+             * Display logged in state UI elements
+             * @param {Object} user User profile data
+             */
+            function displayLoggedInState(user) {
+            // Login/logout buttons
+            const loginBtn = document.getElementById('login');
+            const userContainer = document.getElementById('user-container');
+            const userAvatar = document.getElementById('user-avatar');
+            const logoutBtn = document.getElementById('logout');
+            
+            if (loginBtn) loginBtn.style.display = 'none';
+            if (userContainer) userContainer.classList.remove('d-none');
+            if (logoutBtn) logoutBtn.style.display = 'block';
+            
+            // Set avatar if available
+            if (user?.picture && userAvatar) {
+                userAvatar.src = user.picture;
+                userAvatar.style.display = 'block';
+            }
+            
+            // Show authenticated-only elements
+            document.querySelectorAll('.auth-only').forEach(el => {
+                el.style.display = 'block';
+            });
+            
+            // Update user surveys preview
+            if (typeof VisualizationManager !== 'undefined' && 
+                VisualizationManager.updateUserSurveysPreview) {
+                VisualizationManager.updateUserSurveysPreview();
+            }
+            }
+
+            /**
+             * Display logged out state UI elements
+             */
+            function displayLoggedOutState() {
+            // Login/logout buttons
+            const loginBtn = document.getElementById('login');
+            const userContainer = document.getElementById('user-container');
+            const userAvatar = document.getElementById('user-avatar');
+            const logoutBtn = document.getElementById('logout');
+            
+            if (loginBtn) loginBtn.style.display = 'block';
+            if (userContainer) userContainer.classList.add('d-none');
+            if (logoutBtn) logoutBtn.style.display = 'none';
+            if (userAvatar) userAvatar.style.display = 'none';
+            
+            // Hide authenticated-only elements
+            document.querySelectorAll('.auth-only').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Update user surveys preview for logged out state
+            if (typeof VisualizationManager !== 'undefined' && 
+                VisualizationManager.updateUserSurveysPreview) {
+                VisualizationManager.updateUserSurveysPreview();
+            }
+            
+            // Clear token refresh timer in AuthManager
+            if (AuthManager.tokenRefreshTimer) {
+                clearTimeout(AuthManager.tokenRefreshTimer);
+                AuthManager.tokenRefreshTimer = null;
             }
             }
             // Extension of VisualizationManager object with the remaining methods
@@ -4692,14 +4899,77 @@
                         authorizationParams: {
                             redirect_uri: window.location.origin,
                             audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/',
-                            scope: 'openid profile email read:current_user update:current_user_metadata'
+                            scope: 'openid profile email read:current_user update:current_user_metadata offline_access'
                         },
                         // Enhanced persistence settings
                         cacheLocation: 'localstorage',
                         useRefreshTokens: true,
                         useRefreshTokensFallback: true,
                         // Session check interval (in milliseconds)
-                        sessionCheckIntervalInSeconds: 60
+                        sessionCheckIntervalInSeconds: 60,
+                        // Add SameSite cookie settings for better security and cross-domain handling
+                        legacySameSiteCookie: false,
+                        cookieDomain: window.location.hostname
+                    };
+                    
+                    // Add JWT parsing function
+                    AuthManager.parseJwt = function(token) {
+                        try {
+                            if (!token) return null;
+                            const base64Url = token.split('.')[1];
+                            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                            }).join(''));
+                            
+                            return JSON.parse(jsonPayload);
+                        } catch (error) {
+                            console.error('Error parsing JWT:', error);
+                            return null;
+                        }
+                    };
+                    
+                    // Add silent token refresh method
+                    AuthManager.getTokenSilently = async function() {
+                        try {
+                            const client = await this.getClient();
+                            return await client.getTokenSilently({
+                                authorizationParams: {
+                                    audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/',
+                                    scope: 'openid profile email read:current_user update:current_user_metadata offline_access'
+                                },
+                                timeoutInSeconds: 10,
+                                detailedResponse: false
+                            });
+                        } catch (error) {
+                            // Don't log this as an error since it's expected in many cases
+                            console.log('Silent authentication failed:', error.message);
+                            throw error;
+                        }
+                    };
+                    
+                    // Override authentication check to try silent auth
+                    AuthManager.isUserAuthenticated = async function(forceCheck = false) {
+                        try {
+                            const client = await this.getClient();
+                            const isAuthenticated = await client.isAuthenticated({ ignoreCache: forceCheck });
+                            
+                            // If authentication check fails, try to get token silently to restore session
+                            if (!isAuthenticated && !forceCheck) {
+                                try {
+                                    await this.getTokenSilently();
+                                    return await client.isAuthenticated({ ignoreCache: true });
+                                } catch (silentError) {
+                                    // Silent authentication failed, user truly not authenticated
+                                    return false;
+                                }
+                            }
+                            
+                            return isAuthenticated;
+                        } catch (error) {
+                            console.error('Error checking authentication status:', error);
+                            return false;
+                        }
                     };
                     
                     // Override Auth0 initialization
@@ -4751,32 +5021,71 @@
                         }
                     };
                     
-                    // Add token refresh scheduling function
-                    AuthManager.scheduleTokenRefresh = function() {
+                    // Improved token refresh scheduling function
+                    AuthManager.scheduleTokenRefresh = async function() {
                         // Clear any existing refresh timer
                         if (this.tokenRefreshTimer) {
                             clearTimeout(this.tokenRefreshTimer);
+                            this.tokenRefreshTimer = null;
                         }
                         
-                        // Schedule token refresh 5 minutes before expiration
-                        this.tokenRefreshTimer = setTimeout(async () => {
-                            try {
-                                // Try to refresh token silently
-                                await this.getToken({ ignoreCache: true });
-                                console.log('Token refreshed successfully');
-                                
-                                // Schedule next refresh
-                                this.scheduleTokenRefresh();
-                            } catch (error) {
-                                console.error('Token refresh failed:', error);
-                                // If refresh fails, check if user is still authenticated
-                                const isAuthenticated = await this.isUserAuthenticated(true);
-                                if (isAuthenticated) {
-                                    // Try again in 1 minute
-                                    setTimeout(() => this.scheduleTokenRefresh(), 60000);
-                                }
+                        try {
+                            // Check if we're authenticated before scheduling refresh
+                            if (!await this.isUserAuthenticated()) {
+                                console.log("No authenticated session to refresh");
+                                return;
                             }
-                        }, 4.5 * 60 * 1000); // 4.5 minutes (tokens usually expire in 10 minutes)
+                            
+                            // Get current token claims to determine expiration
+                            const token = await this.getToken({ignoreCache: false});
+                            const claims = this.parseJwt(token);
+                            
+                            if (!claims || !claims.exp) {
+                                console.error("Could not parse token expiration");
+                                // Fall back to fixed interval if we can't get expiration
+                                this.tokenRefreshTimer = setTimeout(async () => {
+                                    try {
+                                        await this.getToken({ ignoreCache: true });
+                                        console.log('Token refreshed successfully (fallback)');
+                                        this.scheduleTokenRefresh();
+                                    } catch (error) {
+                                        console.error('Token refresh failed:', error);
+                                    }
+                                }, 4.5 * 60 * 1000); // 4.5 minutes fallback
+                                return;
+                            }
+                            
+                            // Calculate when token expires (in milliseconds)
+                            const expiresAt = claims.exp * 1000;
+                            const now = Date.now();
+                            
+                            // Calculate when to refresh (5 minutes before expiration or sooner if already close)
+                            const refreshIn = Math.max(0, expiresAt - now - (5 * 60 * 1000));
+                            
+                            console.log(`Token expires in ${Math.floor((expiresAt - now) / 1000)} seconds, scheduling refresh in ${Math.floor(refreshIn / 1000)} seconds`);
+                            
+                            // Schedule token refresh
+                            this.tokenRefreshTimer = setTimeout(async () => {
+                                try {
+                                    // Try to refresh token silently
+                                    await this.getToken({ ignoreCache: true });
+                                    console.log('Token refreshed successfully');
+                                    
+                                    // Schedule next refresh
+                                    this.scheduleTokenRefresh();
+                                } catch (error) {
+                                    console.error('Token refresh failed:', error);
+                                    // If refresh fails, check if user is still authenticated
+                                    const isAuthenticated = await this.isUserAuthenticated(true);
+                                    if (isAuthenticated) {
+                                        // Try again in 1 minute
+                                        setTimeout(() => this.scheduleTokenRefresh(), 60000);
+                                    }
+                                }
+                            }, refreshIn);
+                        } catch (error) {
+                            console.error('Error scheduling token refresh:', error);
+                        }
                     };
                     
                     // Enhanced login function that handles both signup and login
@@ -4865,7 +5174,10 @@
                             const isAuthenticated = await AuthManager.isUserAuthenticated(true);
                             if (isAuthenticated) {
                                 // Refresh token if needed
-                                await AuthManager.getToken({ timeoutInSeconds: 10 }).catch(() => {});
+                                await AuthManager.getToken({ 
+                                    timeoutInSeconds: 10,
+                                    ignoreCache: true
+                                }).catch(() => {});
                             }
                         } catch (error) {
                             console.warn('Session check error:', error);
