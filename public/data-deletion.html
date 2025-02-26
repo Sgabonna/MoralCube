@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Deletion Request - The Moral Cube</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        header {
+            background-color: #D7E8FF;
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            color: #2C5282;
+        }
+        h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: #2C5282;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+        .last-updated {
+            font-style: italic;
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+        .nav-link {
+            color: #4A5568;
+        }
+        .nav-link:hover {
+            color: #2C5282;
+        }
+        footer {
+            background-color: #e9ecef;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 40px;
+        }
+        .alert {
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .card {
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .card-header {
+            background-color: #EBF4FF;
+            border-bottom: 1px solid #B2D5FF;
+            font-weight: 500;
+        }
+        .btn-primary {
+            background-color: #4299E1;
+            border-color: #4299E1;
+        }
+        .btn-primary:hover {
+            background-color: #2B6CB0;
+            border-color: #2B6CB0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Data Deletion Request</h1>
+            <p class="lead">Instructions for requesting deletion of your personal data</p>
+            <p class="last-updated">Last Updated: February 27, 2025</p>
+        </div>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">The Moral Cube</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/feedback.html">Feedback</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/privacy-policy">Privacy Policy</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/data-deletion">Data Deletion</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section id="introduction">
+            <div class="alert alert-info">
+                <h4 class="alert-heading">Your Right to Data Deletion</h4>
+                <p>At The Moral Cube, we respect your privacy and your right to control your personal data. In accordance with privacy regulations and our commitment to data protection, we provide this straightforward process for requesting the deletion of your personal information.</p>
+            </div>
+
+            <h2>How to Request Data Deletion</h2>
+            <p>You can request deletion of your personal data through any of the following methods:</p>
+            
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">Option 1: Email Request</div>
+                        <div class="card-body">
+                            <p class="card-text">Send an email to <strong>privacy@themoralcube.com</strong> with the subject line "Data Deletion Request".</p>
+                            <p class="card-text">Please include the email address associated with your account for verification purposes.</p>
+                            <a href="mailto:privacy@themoralcube.com?subject=Data%20Deletion%20Request" class="btn btn-primary">Send Email</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">Option 2: Account Settings</div>
+                        <div class="card-body">
+                            <p class="card-text">If you're logged in, you can delete your account and associated data directly from your account settings.</p>
+                            <p class="card-text">Navigate to your profile and look for the "Delete Account" option.</p>
+                            <button class="btn btn-primary" id="deleteAccountBtn">Go to Account Settings</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">Option 3: Feedback Form</div>
+                        <div class="card-body">
+                            <p class="card-text">Submit a request through our feedback form with the category "Data Deletion Request".</p>
+                            <p class="card-text">We'll process your request and confirm completion via the email you provide.</p>
+                            <a href="/feedback.html" class="btn btn-primary">Go to Feedback Form</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>For Facebook Users</h3>
+            <p>If you connected to our service using Facebook Login, you can also:</p>
+            <ol>
+                <li>Visit your <a href="https://www.facebook.com/settings_apps" target="_blank">Facebook Apps and Websites settings</a></li>
+                <li>Remove The Moral Cube from your list of connected applications</li>
+                <li>This will prevent future data sharing, but to delete existing data, please also use one of the methods above</li>
+            </ol>
+        </section>
+
+        <section id="what-happens">
+            <h2>What Happens When You Request Deletion</h2>
+            <p>When you submit a data deletion request, we will:</p>
+            <ol>
+                <li>Acknowledge receipt of your request within 7 days</li>
+                <li>Verify your identity as the account owner</li>
+                <li>Delete your personal information from our active systems, including:</li>
+                <ul>
+                    <li>Account information (name, email, profile picture)</li>
+                    <li>Survey responses and analyses</li>
+                    <li>Usage history and preferences</li>
+                </ul>
+                <li>Notify you once the deletion is complete (typically within 30 days)</li>
+            </ol>
+            
+            <div class="alert alert-warning">
+                <h4 class="alert-heading">Important Notes:</h4>
+                <ul>
+                    <li>Deletion is permanent and cannot be undone</li>
+                    <li>Some information may be retained in backup systems for up to 90 days before complete deletion</li>
+                    <li>Anonymized or aggregated data that cannot be linked to you may be retained for research purposes</li>
+                    <li>We may retain certain information if required by law or for legitimate business purposes, such as fraud prevention</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="contact">
+            <h2>Questions About Data Deletion</h2>
+            <p>If you have any questions about the data deletion process or need assistance, please contact us at privacy@themoralcube.com</p>
+            
+            <div class="alert alert-info">
+                <p class="mb-0">For more information about how we collect, use, and protect your data, please review our <a href="/privacy-policy">Privacy Policy</a>.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 The Moral Cube. All rights reserved.</p>
+            <p>
+                <a href="/">Home</a> |
+                <a href="/privacy-policy">Privacy Policy</a> |
+                <a href="/data-deletion">Data Deletion</a> |
+                <a href="/feedback.html">Feedback</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Handle the account deletion button - redirect to account settings or show login prompt
+        document.getElementById('deleteAccountBtn').addEventListener('click', function() {
+            // Check if user is logged in (this is a simplified example)
+            const isLoggedIn = false; // Replace with actual auth check
+            
+            if (isLoggedIn) {
+                // Redirect to account settings page
+                window.location.href = '/account-settings';
+            } else {
+                // Show login prompt
+                alert('Please log in to access your account settings and deletion options.');
+                window.location.href = '/';
+            }
+        });
+    </script>
+</body>
+</html>
