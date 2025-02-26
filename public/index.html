@@ -2738,7 +2738,112 @@
                 AUTH_RETRY_LIMIT: 2,
                 DATA_SIZE_WARNING: 10 * 1024 * 1024, // 10MB
                 DATA_SIZE_LIMIT: 15 * 1024 * 1024,   // 15MB (Auth0 limit is 16MB)
-
+                enhanceSurveyUI: function() {
+                    try {
+                        console.log('Enhancing survey UI');
+                        
+                        // Fix scrolling issues in the modal
+                        const modalDialog = document.querySelector('#surveyModal .modal-dialog');
+                        if (modalDialog) {
+                            modalDialog.classList.add('modal-xl');
+                            modalDialog.classList.add('modal-dialog-scrollable');
+                            modalDialog.style.maxHeight = '95vh';
+                        }
+                        
+                        const modalContent = document.querySelector('#surveyModal .modal-content');
+                        if (modalContent) {
+                            modalContent.style.maxHeight = '95vh';
+                        }
+                        
+                        const modalBody = document.querySelector('#surveyModal .modal-body');
+                        if (modalBody) {
+                            modalBody.style.maxHeight = 'calc(95vh - 120px)';
+                            modalBody.style.overflowY = 'auto';
+                            modalBody.style.padding = '20px';
+                        }
+                        
+                        // Add sliders for numeric inputs
+                        document.querySelectorAll('#surveyTabContent input[type="number"]').forEach(input => {
+                            const inputId = input.id;
+                            if (!inputId.endsWith('-score')) return;
+                            
+                            const baseId = inputId.replace('-score', '');
+                            const existingSlider = document.getElementById(`${baseId}-slider`);
+                            
+                            // Don't add duplicate sliders
+                            if (existingSlider) return;
+                            
+                            // Create slider container
+                            const sliderContainer = document.createElement('div');
+                            sliderContainer.className = 'form-group mt-2';
+                            
+                            // Get min/max values from input
+                            const min = parseFloat(input.min) || 0;
+                            const max = parseFloat(input.max) || 4;
+                            const step = parseFloat(input.step) || 0.1;
+                            const value = parseFloat(input.value) || 0;
+                            
+                            // Create slider
+                            const slider = document.createElement('input');
+                            slider.type = 'range';
+                            slider.className = 'form-control-range';
+                            slider.id = `${baseId}-slider`;
+                            slider.min = min;
+                            slider.max = max;
+                            slider.step = step;
+                            slider.value = value;
+                            
+                            // Add slider label
+                            const sliderLabel = document.createElement('div');
+                            sliderLabel.className = 'd-flex justify-content-between';
+                            sliderLabel.innerHTML = `
+                                <small class="text-left">${min}</small>
+                                <small class="text-center">Adjust Value</small>
+                                <small class="text-right">${max}</small>
+                            `;
+                            
+                            // Add event listeners for two-way binding
+                            slider.addEventListener('input', () => {
+                                input.value = slider.value;
+                                // Trigger change event
+                                input.dispatchEvent(new Event('change'));
+                            });
+                            
+                            input.addEventListener('change', () => {
+                                slider.value = input.value;
+                            });
+                            
+                            // Add slider to container
+                            sliderContainer.appendChild(sliderLabel);
+                            sliderContainer.appendChild(slider);
+                            
+                            // Add slider after input's form group
+                            const inputGroup = input.closest('.form-group');
+                            if (inputGroup && inputGroup.nextElementSibling) {
+                                inputGroup.parentNode.insertBefore(sliderContainer, inputGroup.nextElementSibling);
+                            } else if (inputGroup) {
+                                inputGroup.parentNode.appendChild(sliderContainer);
+                            }
+                        });
+                        
+                        // Focus the first tab content
+                        setTimeout(() => {
+                            const firstTab = document.querySelector('.tab-pane.active');
+                            if (firstTab) {
+                                firstTab.scrollTop = 0;
+                            }
+                            
+                            // Update progress bar
+                            if (typeof this.updateProgressBar === 'function') {
+                                this.updateProgressBar();
+                            }
+                        }, 100);
+                        
+                        console.log('Survey UI enhanced');
+                    } catch (error) {
+                        console.error('Error enhancing survey UI:', error);
+                    }
+                },
                 /**
                 * Initialize survey functionality
                 */
@@ -4542,39 +4647,45 @@
                         // Show loading state
                         scenariosBody.innerHTML = '<tr><td colspan="5" class="text-center"><div class="spinner-border spinner-border-sm" role="status"></div> Loading scenarios...</td></tr>';
                         
-                        // Get only GPT model scenarios that are parent scenarios
-                        const scenarios = ScenarioDataProcessor.dataPoints.filter(s => 
-                            s.isParent && s.llmName === "GPT"
-                        );
+                        // Group scenarios by title and take only GPT model for each
+                        const scenarioMap = new Map();
                         
-                        if (scenarios.length === 0) {
-                            scenariosBody.innerHTML = '<tr><td colspan="5" class="text-center">No GPT scenarios available</td></tr>';
+                        // First collect all scenarios
+                        ScenarioDataProcessor.dataPoints.forEach(scenario => {
+                            if (scenario.isParent) {
+                                const key = scenario.scenarioTitle;
+                                
+                                // If we don't have this scenario yet, or if this is the GPT model, store it
+                                if (!scenarioMap.has(key) || scenario.llmName === 'GPT') {
+                                    scenarioMap.set(key, scenario);
+                                }
+                            }
+                        });
+                        
+                        // Now prioritize GPT models
+                        const uniqueScenarios = Array.from(scenarioMap.values());
+                        
+                        if (uniqueScenarios.length === 0) {
+                            scenariosBody.innerHTML = '<tr><td colspan="5" class="text-center">No scenarios available</td></tr>';
                             return;
                         }
                         
-                        // Sort scenarios by title for easier navigation
-                        const sortedScenarios = [...scenarios].sort((a, b) => 
+                        // Sort scenarios by title
+                        const sortedScenarios = [...uniqueScenarios].sort((a, b) => 
                             a.scenarioTitle.localeCompare(b.scenarioTitle));
-                        
-                        // Get currently selected scenario if any
-                        const currentlySelected = this.selectedScenarios.length > 0 ? 
-                            this.selectedScenarios[0] : null;
                         
                         // Create rows for each scenario
                         const rows = sortedScenarios.map(scenario => {
-                            // Check if this is the currently selected scenario
-                            const isSelected = scenario.scenarioTitle === currentlySelected;
-                            
                             return `
-                                <tr class="${isSelected ? 'table-primary' : ''}">
+                                <tr>
                                     <td>${ScenarioDataProcessor.escapeHTML(scenario.scenarioTitle)}</td>
                                     <td>${ScenarioDataProcessor.escapeHTML(scenario.category)}</td>
-                                    <td>GPT</td>
+                                    <td>${ScenarioDataProcessor.escapeHTML(scenario.llmName)}</td>
                                     <td>${ScenarioDataProcessor.escapeHTML(scenario.overallCategory || '')}</td>
                                     <td>
                                         <button class="btn btn-sm btn-primary analyze-btn" 
                                                 data-scenario-id="${ScenarioDataProcessor.escapeHTML(scenario.id)}">
-                                            ${isSelected ? 'Currently Selected' : 'Analyze'}
+                                            Analyze
                                         </button>
                                     </td>
                                 </tr>
@@ -4588,7 +4699,6 @@
                             btn.addEventListener('click', (e) => {
                                 const scenarioId = e.target.getAttribute('data-scenario-id');
                                 if (scenarioId) {
-                                    // Directly select this scenario for analysis with GPT model
                                     this.selectScenarioForAnalysis(scenarioId, true);
                                     $('#scenarioSelectModal').modal('hide');
                                 }
@@ -4620,7 +4730,6 @@
                         scenariosBody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error loading scenarios</td></tr>';
                     }
                 },
-
                 /**
                  * Select scenario for analysis
                  * @param {string} scenarioId ID of scenario to analyze
@@ -4639,155 +4748,155 @@
                         
                         // Add a new method to UserSurveyManager if it doesn't exist
                         if (!UserSurveyManager.prepareScenarioForAnalysis) {
-                            UserSurveyManager.prepareScenarioForAnalysis = function(scenario, useModelAnswers) {
+                            UserSurveyManager.populateModelAnswers = function(scenario) {
                                 try {
-                                    console.log('Preparing scenario for analysis:', scenario.scenarioTitle);
-                                    
-                                    // Reset form first
-                                    if (typeof this.resetSurveyForm === 'function') {
-                                        this.resetSurveyForm();
+                                    if (!scenario.dimensions) {
+                                        console.warn('No dimensions found in scenario:', scenario.id);
+                                        return;
                                     }
                                     
-                                    // Set scenario data in form
-                                    document.getElementById('scenario-id').value = scenario.id;
-                                    document.getElementById('scenario-title-display').value = scenario.scenarioTitle;
-                                    document.getElementById('scenario-description-display').value = scenario.scenarioDescription || '';
-                                    document.getElementById('scenario-category-display').value = scenario.category || '';
-                                    document.getElementById('scenario-type').value = 'analysis';
-                                    document.getElementById('scenario-parent-id').value = scenario.isParent ? scenario.id : (scenario.parentId || '');
-                                    document.getElementById('scenario-url').value = scenario.url || '';
+                                    console.log('Populating model answers from scenario:', scenario.id);
                                     
-                                    // Set classification if available
-                                    if (scenario.overallCategory && document.getElementById('moral-classification')) {
-                                        const classSelect = document.getElementById('moral-classification');
-                                        const normalizedCategory = scenario.overallCategory.toLowerCase().replace(/\s+/g, '_');
+                                    // Map dimension IDs to tab IDs
+                                    const dimensionTabMap = {
+                                        'Ends': 'ends',
+                                        'Means': 'means',
+                                        'Character': 'character',
+                                        'PhilosophicalAnalysis': 'philosophy'
+                                    };
+                                    
+                                    // Map of question IDs to form field IDs
+                                    const questionFieldMap = {
+                                        'Societal Needs': 'societal-needs',
+                                        'Others Needs': 'others-needs',
+                                        'Others Wants': 'others-wants',
+                                        'Personal Needs': 'personal-needs',
+                                        'Personal Wants': 'personal-wants',
+                                        'Future Self-Sacrifice': 'future-sacrifice',
+                                        'Number of Individuals Affected': 'individuals-affected',
+                                        'Type of Sacrifice': 'sacrifice-type',
+                                        'Duration of Sacrifice': 'sacrifice-duration',
+                                        'Magnitude of Life Impacted': 'life-magnitude',
+                                        'Unconscious vs Conscious': 'consciousness',
+                                        'Present Self-Sacrifice': 'present-sacrifice',
+                                        'Habit vs Will Power': 'willpower',
+                                        'Unintentional vs Intentional': 'intentionality',
+                                        'Wills at Play': 'wills',
+                                        'Deontology': 'deontology',
+                                        'Utilitarianism': 'utilitarianism',
+                                        'Virtue Ethics': 'virtue-ethics'
+                                    };
+                                    
+                                    // Process each dimension and its questions
+                                    scenario.dimensions.forEach(dimension => {
+                                        const tabId = dimensionTabMap[dimension.id];
+                                        if (!tabId) {
+                                            console.warn(`Unknown dimension: ${dimension.id}`);
+                                            return;
+                                        }
                                         
-                                        // Find matching option
-                                        Array.from(classSelect.options).forEach(option => {
-                                            if (option.value.toLowerCase() === normalizedCategory) {
-                                                option.selected = true;
-                                            }
-                                        });
-                                    }
-                                    
-                                    // If using model answers, populate form with those values
-                                    if (useModelAnswers && scenario.dimensions) {
-                                        this.populateModelAnswers(scenario);
-                                    }
-                                    
-                                    // Reset tab to first tab
-                                    if (typeof this.currentTabIndex !== 'undefined' && typeof this.updateTabDisplay === 'function') {
-                                        this.currentTabIndex = 0;
-                                        this.updateTabDisplay();
-                                    }
-                                    
-                                    // Update UI to show we're analyzing an existing scenario
-                                    const modalTitle = document.getElementById('surveyModalLabel');
-                                    if (modalTitle) {
-                                        modalTitle.textContent = useModelAnswers ? 
-                                            `Analyze with GPT: ${scenario.scenarioTitle}` : 
-                                            `Analyze: ${scenario.scenarioTitle}`;
-                                    }
-                                    
-                                    // Enhance survey UI with sliders and better scrolling
-                                    this.enhanceSurveyUI();
-                                    
-                                    console.log('Scenario prepared for analysis:', scenario.scenarioTitle);
-                                } catch (error) {
-                                    console.error('Error preparing scenario for analysis:', error);
-                                }
-                            };
-                            
-                            // Add helper method to populate model answers if it doesn't exist
-                            if (!UserSurveyManager.populateModelAnswers) {
-                                UserSurveyManager.populateModelAnswers = function(scenario) {
-                                    try {
-                                        if (!scenario.dimensions) return;
+                                        console.log(`Processing dimension: ${dimension.id}, with ${dimension.questions?.length || 0} questions`);
                                         
-                                        // Map of dimension IDs to tab IDs
-                                        const dimensionTabMap = {
-                                            'Ends': 'ends',
-                                            'Means': 'means',
-                                            'Character': 'character',
-                                            'PhilosophicalAnalysis': 'philosophy'
-                                        };
+                                        if (!dimension.questions || dimension.questions.length === 0) {
+                                            console.warn(`No questions in dimension: ${dimension.id}`);
+                                            return;
+                                        }
                                         
-                                        // Map of question IDs to form field IDs
-                                        const questionFieldMap = {
-                                            'Societal Needs': 'societal-needs',
-                                            'Others Needs': 'others-needs',
-                                            'Others Wants': 'others-wants',
-                                            'Personal Needs': 'personal-needs',
-                                            'Personal Wants': 'personal-wants',
-                                            'Future Self-Sacrifice': 'future-sacrifice',
-                                            'Number of Individuals Affected': 'individuals-affected',
-                                            'Type of Sacrifice': 'sacrifice-type',
-                                            'Duration of Sacrifice': 'sacrifice-duration',
-                                            'Magnitude of Life Impacted': 'life-magnitude',
-                                            'Unconscious vs Conscious': 'consciousness',
-                                            'Present Self-Sacrifice': 'present-sacrifice',
-                                            'Habit vs Will Power': 'willpower',
-                                            'Unintentional vs Intentional': 'intentionality',
-                                            'Wills at Play': 'wills',
-                                            'Deontology': 'deontology',
-                                            'Utilitarianism': 'utilitarianism',
-                                            'Virtue Ethics': 'virtue-ethics'
-                                        };
-                                        
-                                        // Process each dimension and its questions
-                                        scenario.dimensions.forEach(dimension => {
-                                            const tabId = dimensionTabMap[dimension.id];
-                                            if (!tabId) return;
+                                        dimension.questions.forEach(question => {
+                                            const questionText = question.question;
                                             
-                                            (dimension.questions || []).forEach(question => {
-                                                const fieldBase = questionFieldMap[question.question];
-                                                if (!fieldBase) return;
+                                            if (!questionText) {
+                                                console.warn('Question missing text in dimension:', dimension.id);
+                                                return;
+                                            }
+                                            
+                                            const fieldBase = questionFieldMap[questionText];
+                                            if (!fieldBase) {
+                                                console.warn(`Unknown question: ${questionText} in dimension ${dimension.id}`);
+                                                return;
+                                            }
+                                            
+                                            // Set score field
+                                            const scoreField = document.getElementById(`${fieldBase}-score`);
+                                            if (scoreField && question.score !== undefined) {
+                                                console.log(`Setting ${fieldBase}-score to ${question.score}`);
+                                                scoreField.value = question.score;
                                                 
-                                                // Set score field
-                                                const scoreField = document.getElementById(`${fieldBase}-score`);
-                                                if (scoreField && question.score !== undefined) {
-                                                    scoreField.value = question.score;
-                                                    
-                                                    // Update slider if it exists
-                                                    const slider = document.getElementById(`${fieldBase}-slider`);
-                                                    if (slider) {
-                                                        slider.value = question.score;
-                                                    }
+                                                // Update slider if it exists
+                                                const slider = document.getElementById(`${fieldBase}-slider`);
+                                                if (slider) {
+                                                    slider.value = question.score;
                                                 }
-                                                
-                                                // Set justification field
-                                                const justField = document.getElementById(`${fieldBase}-justification`);
-                                                if (justField && question.justification) {
-                                                    justField.value = question.justification;
-                                                }
-                                                
-                                                // For philosophy questions that use select elements
-                                                if (tabId === 'philosophy') {
-                                                    if (fieldBase === 'deontology' || fieldBase === 'utilitarianism' || fieldBase === 'virtue-ethics') {
-                                                        const select = document.getElementById(`${fieldBase}-score`);
-                                                        if (select && question.score) {
-                                                            Array.from(select.options).forEach(option => {
-                                                                if (option.value === question.score) {
-                                                                    option.selected = true;
-                                                                }
-                                                            });
+                                            } else if (!scoreField) {
+                                                console.warn(`Score field not found: ${fieldBase}-score`);
+                                            }
+                                            
+                                            // Set justification field
+                                            const justField = document.getElementById(`${fieldBase}-justification`);
+                                            if (justField && question.justification) {
+                                                console.log(`Setting ${fieldBase}-justification`);
+                                                justField.value = question.justification;
+                                            } else if (!justField) {
+                                                console.warn(`Justification field not found: ${fieldBase}-justification`);
+                                            }
+                                            
+                                            // Special handling for philosophy questions with select elements
+                                            if (tabId === 'philosophy') {
+                                                if (fieldBase === 'deontology' || fieldBase === 'utilitarianism' || fieldBase === 'virtue-ethics') {
+                                                    const select = document.getElementById(`${fieldBase}-score`);
+                                                    if (select && question.score) {
+                                                        const scoreValue = String(question.score);
+                                                        console.log(`Setting ${fieldBase}-score dropdown to ${scoreValue}`);
+                                                        
+                                                        // Find and select the matching option
+                                                        let optionFound = false;
+                                                        Array.from(select.options).forEach(option => {
+                                                            if (option.value === scoreValue) {
+                                                                option.selected = true;
+                                                                optionFound = true;
+                                                            }
+                                                        });
+                                                        
+                                                        if (!optionFound) {
+                                                            console.warn(`No matching option found for ${fieldBase}-score: ${scoreValue}`);
                                                         }
                                                     }
                                                 }
-                                            });
-                                        });
-                                        
-                                        // Set classification justification if available
-                                        if (scenario.metadata?.classification?.justification) {
-                                            const justField = document.getElementById('classification-justification');
-                                            if (justField) {
-                                                justField.value = scenario.metadata.classification.justification;
                                             }
+                                            
+                                            // Mark as edited to ensure it gets saved
+                                            const editedCheckbox = document.getElementById(`${fieldBase}-edited`);
+                                            if (editedCheckbox) {
+                                                editedCheckbox.checked = true;
+                                            }
+                                        });
+                                    });
+                                    
+                                    // Set classification and justification if available
+                                    if (scenario.metadata?.classification) {
+                                        // Set classification type
+                                        const classSelect = document.getElementById('moral-classification');
+                                        if (classSelect && scenario.metadata.classification.type) {
+                                            console.log(`Setting moral classification to ${scenario.metadata.classification.type}`);
+                                            Array.from(classSelect.options).forEach(option => {
+                                                if (option.value.toLowerCase() === scenario.metadata.classification.type.toLowerCase()) {
+                                                    option.selected = true;
+                                                }
+                                            });
                                         }
-                                    } catch (error) {
-                                        console.error('Error populating model answers:', error);
+                                        
+                                        // Set classification justification
+                                        const justField = document.getElementById('classification-justification');
+                                        if (justField && scenario.metadata.classification.justification) {
+                                            console.log('Setting classification justification');
+                                            justField.value = scenario.metadata.classification.justification;
+                                        }
                                     }
-                                };
+                                    
+                                    console.log('Finished populating model answers');
+                                } catch (error) {
+                                    console.error('Error populating model answers:', error);
+                                }
                             }
                             
                             // Add method to enhance survey UI with sliders if it doesn't exist
