@@ -5642,26 +5642,21 @@
                         }
                     };
                     
-                    // Enhanced login function that handles both signup and login
-                    AuthManager.login = async function(isSignup = false) {
+                    // Simplified login function that explicitly uses Google
+                    AuthManager.login = async function() {
                         try {
                             const client = await this.getClient();
                             
                             await client.loginWithRedirect({
                                 authorizationParams: {
-                                    redirect_uri: 'https://themoralcube.com',
-                                    scope: 'openid profile email offline_access',
-                                    // Force display of connection selection
-                                    prompt: 'select_account',
-                                    // Show social connections only
-                                    connection: null // Leave as null to show all enabled social connections
-                                },
-                                // Ensure users see provider selection
-                                display: 'page'
+                                    redirect_uri: window.location.origin,
+                                    scope: 'openid profile email',
+                                    connection: 'google-oauth2'  // Explicitly use Google
+                                }
                             });
                         } catch (error) {
                             console.error('Login redirect error:', error);
-                            alert('Unable to redirect to login. Please try again.');
+                            alert('Unable to login. Please try again.');
                         }
                     };
                     
@@ -5818,6 +5813,25 @@
                 }
             }
         </script>
+        <!-- Footer Component -->
+        <footer style="background-color: #e9ecef; padding: 20px 0; text-align: center; margin-top: 40px; border-top: 1px solid #dee2e6;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 mx-auto">
+                        <p>&copy; 2025 The Moral Cube. All rights reserved.</p>
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item"><a href="/" style="color: #4A5568; text-decoration: none;">Home</a></li>
+                            <li class="list-inline-item">|</li>
+                            <li class="list-inline-item"><a href="/feedback.html" style="color: #4A5568; text-decoration: none;">Feedback</a></li>
+                            <li class="list-inline-item">|</li>
+                            <li class="list-inline-item"><a href="/privacy-policy.html" style="color: #4A5568; text-decoration: none;">Privacy Policy</a></li>
+                            <li class="list-inline-item">|</li>
+                            <li class="list-inline-item"><a href="/data-deletion.html" style="color: #4A5568; text-decoration: none;">Data Deletion</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </body>
 </html>
                             
