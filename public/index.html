@@ -4361,383 +4361,7 @@
                     alert('There was a problem initializing the application. Please refresh the page.');
                 }
             });
-            // Add this to your existing JavaScript code section
-            document.addEventListener('DOMContentLoaded', function() {
-                // State variables for scenario pagination
-                let allScenarios = [];
-                let filteredScenarios = [];
-                let currentScenarioIndex = 0;
-                
-                // Function to set up scenario selection with pagination
-                function setupScenarioPagination() {
-                    // Get all scenarios from the data processor
-                    allScenarios = ScenarioDataProcessor.dataPoints.filter(p => p.isParent);
-                    
-                    // Sort by title for consistency
-                    allScenarios.sort((a, b) => a.scenarioTitle.localeCompare(b.scenarioTitle));
-                    
-                    // Initialize filtered scenarios
-                    filteredScenarios = [...allScenarios];
-                    currentScenarioIndex = 0;
-                    
-                    // Create category and type options for filters
-                    addFilterOptions();
-                    
-                    // Update the pagination display
-                    updateScenarioDisplay();
-                }
-                
-                // Function to add filter dropdowns to modal
-                function addFilterOptions() {
-                    const modalBody = document.querySelector('#scenarioSelectModal .modal-body');
-                    if (!modalBody) return;
-                    
-                    // Find existing search container or create it
-                    let searchContainer = modalBody.querySelector('.search-filters-container');
-                    if (!searchContainer) {
-                        searchContainer = document.createElement('div');
-                        searchContainer.className = 'search-filters-container mb-3';
-                        
-                        // Add search input if not already present
-                        if (!modalBody.querySelector('#scenario-search')) {
-                            const searchGroup = document.createElement('div');
-                            searchGroup.className = 'form-group';
-                            searchGroup.innerHTML = `
-                                <input type="text" class="form-control" id="scenario-search" placeholder="Search scenarios...">
-                            `;
-                            searchContainer.appendChild(searchGroup);
-                        } else {
-                            // Move existing search input to our container
-                            const existingSearch = modalBody.querySelector('.form-group');
-                            if (existingSearch) {
-                                searchContainer.appendChild(existingSearch.cloneNode(true));
-                                existingSearch.remove();
-                            }
-                        }
-                        
-                        // Add category and type filters
-                        const filterRow = document.createElement('div');
-                        filterRow.className = 'row mt-2';
-                        
-                        // Get unique categories and types
-                        const categories = [...new Set(allScenarios.map(s => s.category))].filter(Boolean);
-                        const types = [...new Set(allScenarios.map(s => s.overallCategory))].filter(Boolean);
-                        
-                        filterRow.innerHTML = `
-                            <div class="col-md-6">
-                                <select class="form-control" id="scenario-category-filter">
-                                    <option value="">All Categories</option>
-                                    ${categories.map(category => 
-                                        `<option value="${ScenarioDataProcessor.escapeHTML(category)}">${ScenarioDataProcessor.escapeHTML(category)}</option>`
-                                    ).join('')}
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <select class="form-control" id="scenario-type-filter">
-                                    <option value="">All Types</option>
-                                    ${types.map(type => 
-                                        `<option value="${ScenarioDataProcessor.escapeHTML(type)}">${ScenarioDataProcessor.escapeHTML(type)}</option>`
-                                    ).join('')}
-                                </select>
-                            </div>
-                        `;
-                        
-                        searchContainer.appendChild(filterRow);
-                        
-                        // Add pagination controls
-                        const paginationContainer = document.createElement('div');
-                        paginationContainer.className = 'pagination-container d-flex justify-content-between align-items-center mt-3';
-                        paginationContainer.innerHTML = `
-                            <div class="scenario-counter">
-                                Showing scenario 1 of ${allScenarios.length}
-                            </div>
-                            <div class="pagination-controls">
-                                <button class="btn btn-sm btn-primary" id="prev-scenario" disabled>
-                                    <i class="fas fa-chevron-left"></i> Previous
-                                </button>
-                                <button class="btn btn-sm btn-primary ml-2" id="next-scenario" ${allScenarios.length <= 1 ? 'disabled' : ''}>
-                                    Next <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        `;
-                        
-                        searchContainer.appendChild(paginationContainer);
-                        
-                        // Insert at the beginning of modal body
-                        modalBody.insertBefore(searchContainer, modalBody.firstChild);
-                    }
-                }
-                
-                // Function to update scenario table display
-                function updateScenarioDisplay() {
-                    const scenariosBody = document.getElementById('scenarios-body');
-                    const scenarioCounter = document.querySelector('.scenario-counter');
-                    const prevButton = document.getElementById('prev-scenario');
-                    const nextButton = document.getElementById('next-scenario');
-                    
-                    if (!scenariosBody) return;
-                    
-                    // Update counter text
-                    if (scenarioCounter) {
-                        scenarioCounter.textContent = `Showing scenario ${currentScenarioIndex + 1} of ${filteredScenarios.length}`;
-                    }
-                    
-                    // Update pagination buttons
-                    if (prevButton) {
-                        prevButton.disabled = currentScenarioIndex <= 0;
-                    }
-                    
-                    if (nextButton) {
-                        nextButton.disabled = currentScenarioIndex >= filteredScenarios.length - 1;
-                    }
-                    
-                    // Display current scenario
-                    if (filteredScenarios.length === 0) {
-                        scenariosBody.innerHTML = '<tr><td colspan="5" class="text-center">No scenarios match your search criteria</td></tr>';
-                        return;
-                    }
-                    
-                    const currentScenario = filteredScenarios[currentScenarioIndex];
-                    
-                    if (!currentScenario) {
-                        scenariosBody.innerHTML = '<tr><td colspan="5" class="text-center">No scenario available</td></tr>';
-                        return;
-                    }
-                    
-                    // Display current scenario
-                    scenariosBody.innerHTML = `
-                        <tr>
-                            <td>${ScenarioDataProcessor.escapeHTML(currentScenario.scenarioTitle)}</td>
-                            <td>${ScenarioDataProcessor.escapeHTML(currentScenario.category || 'Uncategorized')}</td>
-                            <td>${ScenarioDataProcessor.escapeHTML(currentScenario.llmName || 'Unknown')}</td>
-                            <td>${ScenarioDataProcessor.escapeHTML(currentScenario.overallCategory || '')}</td>
-                            <td>
-                                <button class="btn btn-primary analyze-btn" 
-                                        data-scenario-id="${ScenarioDataProcessor.escapeHTML(currentScenario.id)}">
-                                    Analyze
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                    
-                    // Attach event listener to analyze button
-                    const analyzeBtn = scenariosBody.querySelector('.analyze-btn');
-                    if (analyzeBtn) {
-                        analyzeBtn.addEventListener('click', function() {
-                            const scenarioId = this.getAttribute('data-scenario-id');
-                            if (!scenarioId) return;
-                            
-                            // Find scenario and show model selection
-                            const scenario = ScenarioDataProcessor.dataPoints.find(s => s.id === scenarioId);
-                            if (scenario) {
-                                showModelSelectionForScenario(scenario);
-                            }
-                        });
-                    }
-                }
-                
-                // Function to filter scenarios
-                function filterScenarios() {
-                    const searchText = document.getElementById('scenario-search')?.value.toLowerCase() || '';
-                    const categoryFilter = document.getElementById('scenario-category-filter')?.value || '';
-                    const typeFilter = document.getElementById('scenario-type-filter')?.value || '';
-                    
-                    // Apply filters
-                    filteredScenarios = allScenarios.filter(scenario => {
-                        const titleMatch = scenario.scenarioTitle.toLowerCase().includes(searchText);
-                        const categoryMatch = !categoryFilter || scenario.category === categoryFilter;
-                        const typeMatch = !typeFilter || scenario.overallCategory === typeFilter;
-                        return titleMatch && categoryMatch && typeMatch;
-                    });
-                    
-                    // Reset to first page
-                    currentScenarioIndex = 0;
-                    
-                    // Update display
-                    updateScenarioDisplay();
-                }
-                
-                // Function to show model selection modal
-                function showModelSelectionForScenario(scenario) {
-                    // Create or get model selection modal
-                    let modelModal = document.getElementById('modelSelectionModal');
-                    
-                    if (!modelModal) {
-                        const modalHTML = `
-                        <div class="modal fade" id="modelSelectionModal" tabindex="-1" role="dialog">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Choose Analysis Method</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <h6 id="model-scenario-title"></h6>
-                                        <p>How would you like to analyze this scenario?</p>
-                                        
-                                        <div class="list-group mb-3" id="model-options">
-                                            <button type="button" class="list-group-item list-group-item-action" id="own-analysis-btn">
-                                                <i class="fas fa-user mr-2"></i> Enter my own analysis
-                                            </button>
-                                        </div>
-                                        
-                                        <div class="text-center text-muted" id="loading-models">
-                                            <div class="spinner-border spinner-border-sm" role="status">
-                                                <span class="sr-only">Loading models...</span>
-                                            </div>
-                                            <span>Loading available AI models...</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        `;
-                        
-                        const modalContainer = document.createElement('div');
-                        modalContainer.innerHTML = modalHTML;
-                        document.body.appendChild(modalContainer);
-                        
-                        modelModal = document.getElementById('modelSelectionModal');
-                    }
-                    
-                    // Set scenario title
-                    const titleEl = document.getElementById('model-scenario-title');
-                    if (titleEl) {
-                        titleEl.textContent = `Scenario: ${scenario.scenarioTitle}`;
-                    }
-                    
-                    // Configure model options
-                    const modelOptions = document.getElementById('model-options');
-                    const loadingEl = document.getElementById('loading-models');
-                    
-                    if (modelOptions && loadingEl) {
-                        // Keep only own analysis button
-                        const ownAnalysisBtn = document.getElementById('own-analysis-btn');
-                        modelOptions.innerHTML = '';
-                        if (ownAnalysisBtn) {
-                            modelOptions.appendChild(ownAnalysisBtn.cloneNode(true));
-                        } else {
-                            const newOwnBtn = document.createElement('button');
-                            newOwnBtn.className = 'list-group-item list-group-item-action';
-                            newOwnBtn.id = 'own-analysis-btn';
-                            newOwnBtn.innerHTML = '<i class="fas fa-user mr-2"></i> Enter my own analysis';
-                            modelOptions.appendChild(newOwnBtn);
-                        }
-                        
-                        // Show loading indicator
-                        loadingEl.style.display = 'block';
-                        
-                        // Find available models
-                        setTimeout(() => {
-                            // Get all versions of this scenario across models
-                            const scenarioPoints = ScenarioDataProcessor.dataPoints.filter(p => 
-                                p.scenarioTitle === scenario.scenarioTitle
-                            );
-                            
-                            // Get unique models
-                            const availableModels = [...new Set(scenarioPoints.map(p => p.llmName))];
-                            
-                            // Add model buttons
-                            availableModels.forEach(model => {
-                                const modelBtn = document.createElement('button');
-                                modelBtn.className = 'list-group-item list-group-item-action';
-                                modelBtn.innerHTML = `<i class="fas fa-robot mr-2"></i> Use ${ScenarioDataProcessor.escapeHTML(model)} analysis`;
-                                
-                                modelBtn.addEventListener('click', () => {
-                                    // Find the scenario for this model
-                                    const modelScenario = scenarioPoints.find(p => p.llmName === model);
-                                    if (modelScenario) {
-                                        // Close modal
-                                        $('#modelSelectionModal').modal('hide');
-                                        
-                                        // Use model's analysis (with existing function)
-                                        if (typeof UserSurveyManager.prepareScenarioForAnalysis === 'function') {
-                                            UserSurveyManager.prepareScenarioForAnalysis(modelScenario, true);
-                                            $('#surveyModal').modal('show');
-                                        } else {
-                                            console.error('UserSurveyManager.prepareScenarioForAnalysis function not found');
-                                            alert('Unable to load model analysis. Please try again.');
-                                        }
-                                    }
-                                });
-                                
-                                modelOptions.appendChild(modelBtn);
-                            });
-                            
-                            // Hide loading indicator
-                            loadingEl.style.display = 'none';
-                            
-                            // Setup own analysis button
-                            const ownAnalysisBtn = document.getElementById('own-analysis-btn');
-                            if (ownAnalysisBtn) {
-                                ownAnalysisBtn.addEventListener('click', () => {
-                                    // Close modal
-                                    $('#modelSelectionModal').modal('hide');
-                                    
-                                    // Start fresh analysis
-                                    if (typeof UserSurveyManager.prepareScenarioForAnalysis === 'function') {
-                                        UserSurveyManager.prepareScenarioForAnalysis(scenario, false);
-                                        $('#surveyModal').modal('show');
-                                    } else {
-                                        console.error('UserSurveyManager.prepareScenarioForAnalysis function not found');
-                                        alert('Unable to load analysis form. Please try again.');
-                                    }
-                                });
-                            }
-                        }, 500);
-                    }
-                    
-                    // Close scenario selection modal and show model selection modal
-                    $('#scenarioSelectModal').modal('hide');
-                    $('#modelSelectionModal').modal('show');
-                }
-                
-                // Attach event listeners when analyze-scenario-btn is clicked
-                const analyzeScenarioBtn = document.getElementById('analyze-scenario-btn');
-                if (analyzeScenarioBtn) {
-                    analyzeScenarioBtn.addEventListener('click', async function() {
-                        try {
-                            const isAuthenticated = await AuthManager.isUserAuthenticated();
-                            if (isAuthenticated) {
-                                // Set up pagination and display first scenario
-                                setupScenarioPagination();
-                                
-                                // Show modal
-                                $('#scenarioSelectModal').modal('show');
-                                
-                                // Set up filter event listeners
-                                document.getElementById('scenario-search')?.addEventListener('input', filterScenarios);
-                                document.getElementById('scenario-category-filter')?.addEventListener('change', filterScenarios);
-                                document.getElementById('scenario-type-filter')?.addEventListener('change', filterScenarios);
-                                
-                                // Set up pagination buttons
-                                document.getElementById('prev-scenario')?.addEventListener('click', function() {
-                                    if (currentScenarioIndex > 0) {
-                                        currentScenarioIndex--;
-                                        updateScenarioDisplay();
-                                    }
-                                });
-                                
-                                document.getElementById('next-scenario')?.addEventListener('click', function() {
-                                    if (currentScenarioIndex < filteredScenarios.length - 1) {
-                                        currentScenarioIndex++;
-                                        updateScenarioDisplay();
-                                    }
-                                });
-                            } else {
-                                // Show login prompt
-                                alert('Please log in to analyze scenarios');
-                                AuthManager.login();
-                            }
-                        } catch (error) {
-                            console.error('Error handling analyze scenario click:', error);
-                            alert('An error occurred. Please try again.');
-                        }
-                    });
-                }
-            });
+            
 
             /**
              * Enhanced version of updateAuthUI with better session handling
@@ -7031,6 +6655,411 @@
                     if (elements.userContainer) elements.userContainer.classList.add('d-none');
                 }
             }
+            // Enhanced Scenario Selection with Single-Scenario View
+            (function() {
+                // Initialize when document is fully loaded
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Find the analyze scenario button
+                    const analyzeScenarioBtn = document.getElementById('analyze-scenario-btn');
+                    if (!analyzeScenarioBtn) return;
+                    
+                    // Replace existing listener with enhanced version
+                    const newAnalyzeBtn = analyzeScenarioBtn.cloneNode(true);
+                    if (analyzeScenarioBtn.parentNode) {
+                        analyzeScenarioBtn.parentNode.replaceChild(newAnalyzeBtn, analyzeScenarioBtn);
+                    }
+                    
+                    // Add our custom handler for the button
+                    newAnalyzeBtn.addEventListener('click', handleAnalyzeScenarioClick);
+                });
+                
+                // Main handler for analyze scenario button click
+                async function handleAnalyzeScenarioClick() {
+                    try {
+                        // Check authentication first
+                        const isAuthenticated = await AuthManager.isUserAuthenticated();
+                        if (!isAuthenticated) {
+                            alert('Please log in to analyze scenarios');
+                            AuthManager.login();
+                            return;
+                        }
+                        
+                        // Show the scenario selection modal
+                        $('#scenarioSelectModal').modal('show');
+                        
+                        // Set up the single-scenario view
+                        setupSingleScenarioView();
+                    } catch (error) {
+                        console.error('Error handling analyze scenario click:', error);
+                        alert('An error occurred. Please try again.');
+                    }
+                }
+                
+                // Data for scenario pagination
+                const scenarioState = {
+                    allScenarios: [],
+                    filteredScenarios: [],
+                    currentIndex: 0
+                };
+                
+                // Setup the single-scenario view
+                function setupSingleScenarioView() {
+                    // Get scenarios from data processor
+                    scenarioState.allScenarios = ScenarioDataProcessor.dataPoints.filter(p => p.isParent);
+                    
+                    // Sort by title
+                    scenarioState.allScenarios.sort((a, b) => 
+                        a.scenarioTitle.localeCompare(b.scenarioTitle));
+                    
+                    // Initialize filtered scenarios
+                    scenarioState.filteredScenarios = [...scenarioState.allScenarios];
+                    scenarioState.currentIndex = 0;
+                    
+                    // Add filter controls to modal
+                    addFilterControls();
+                    
+                    // Display the first scenario
+                    updateScenarioDisplay();
+                    
+                    // Set up event listeners for filters and navigation
+                    setupEventListeners();
+                }
+                
+                // Add filter controls to the modal
+                function addFilterControls() {
+                    const modalBody = document.querySelector('#scenarioSelectModal .modal-body');
+                    if (!modalBody) return;
+                    
+                    // Remove any existing filter container
+                    const existingContainer = modalBody.querySelector('.scenario-filter-container');
+                    if (existingContainer) {
+                        existingContainer.remove();
+                    }
+                    
+                    // Create filter container
+                    const filterContainer = document.createElement('div');
+                    filterContainer.className = 'scenario-filter-container mb-3';
+                    
+                    // Build search input and filters
+                    const categories = [...new Set(scenarioState.allScenarios.map(s => s.category))]
+                        .filter(Boolean).sort();
+                    
+                    const types = [...new Set(scenarioState.allScenarios.map(s => s.overallCategory))]
+                        .filter(Boolean).sort();
+                    
+                    filterContainer.innerHTML = `
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="scenario-search" 
+                                placeholder="Search scenarios...">
+                        </div>
+                        
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <select class="form-control" id="scenario-category-filter">
+                                    <option value="">All Categories</option>
+                                    ${categories.map(category => 
+                                        `<option value="${ScenarioDataProcessor.escapeHTML(category)}">${ScenarioDataProcessor.escapeHTML(category)}</option>`
+                                    ).join('')}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <select class="form-control" id="scenario-type-filter">
+                                    <option value="">All Types</option>
+                                    ${types.map(type => 
+                                        `<option value="${ScenarioDataProcessor.escapeHTML(type)}">${ScenarioDataProcessor.escapeHTML(type)}</option>`
+                                    ).join('')}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="pagination-container d-flex justify-content-between align-items-center mt-3">
+                            <div class="scenario-counter">
+                                Showing scenario 1 of ${scenarioState.allScenarios.length}
+                            </div>
+                            <div class="pagination-controls">
+                                <button class="btn btn-sm btn-primary" id="prev-scenario" disabled>
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </button>
+                                <button class="btn btn-sm btn-primary ml-2" id="next-scenario" 
+                                    ${scenarioState.allScenarios.length <= 1 ? 'disabled' : ''}>
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Insert at beginning of modal body
+                    modalBody.insertBefore(filterContainer, modalBody.firstChild);
+                }
+                
+                // Set up event listeners for filters and navigation
+                function setupEventListeners() {
+                    // Filter event listeners
+                    document.getElementById('scenario-search')?.addEventListener('input', filterScenarios);
+                    document.getElementById('scenario-category-filter')?.addEventListener('change', filterScenarios);
+                    document.getElementById('scenario-type-filter')?.addEventListener('change', filterScenarios);
+                    
+                    // Navigation event listeners
+                    document.getElementById('prev-scenario')?.addEventListener('click', function() {
+                        if (scenarioState.currentIndex > 0) {
+                            scenarioState.currentIndex--;
+                            updateScenarioDisplay();
+                        }
+                    });
+                    
+                    document.getElementById('next-scenario')?.addEventListener('click', function() {
+                        if (scenarioState.currentIndex < scenarioState.filteredScenarios.length - 1) {
+                            scenarioState.currentIndex++;
+                            updateScenarioDisplay();
+                        }
+                    });
+                }
+                
+                // Filter scenarios based on search input and dropdown selections
+                function filterScenarios() {
+                    const searchText = document.getElementById('scenario-search')?.value.toLowerCase() || '';
+                    const categoryFilter = document.getElementById('scenario-category-filter')?.value || '';
+                    const typeFilter = document.getElementById('scenario-type-filter')?.value || '';
+                    
+                    // Apply filters
+                    scenarioState.filteredScenarios = scenarioState.allScenarios.filter(scenario => {
+                        const titleMatch = scenario.scenarioTitle.toLowerCase().includes(searchText);
+                        const categoryMatch = !categoryFilter || scenario.category === categoryFilter;
+                        const typeMatch = !typeFilter || scenario.overallCategory === typeFilter;
+                        return titleMatch && categoryMatch && typeMatch;
+                    });
+                    
+                    // Reset to first scenario
+                    scenarioState.currentIndex = 0;
+                    
+                    // Update display
+                    updateScenarioDisplay();
+                }
+                
+                // Update the scenario display with current scenario
+                function updateScenarioDisplay() {
+                    const scenariosBody = document.getElementById('scenarios-body');
+                    const scenarioCounter = document.querySelector('.scenario-counter');
+                    const prevButton = document.getElementById('prev-scenario');
+                    const nextButton = document.getElementById('next-scenario');
+                    
+                    if (!scenariosBody) return;
+                    
+                    // Update scenario counter
+                    if (scenarioCounter) {
+                        scenarioCounter.textContent = `Showing scenario ${scenarioState.currentIndex + 1} of ${scenarioState.filteredScenarios.length}`;
+                    }
+                    
+                    // Update navigation buttons
+                    if (prevButton) {
+                        prevButton.disabled = scenarioState.currentIndex <= 0;
+                    }
+                    
+                    if (nextButton) {
+                        nextButton.disabled = scenarioState.currentIndex >= scenarioState.filteredScenarios.length - 1;
+                    }
+                    
+                    // Handle empty results
+                    if (scenarioState.filteredScenarios.length === 0) {
+                        scenariosBody.innerHTML = `
+                            <tr>
+                                <td colspan="5" class="text-center">
+                                    No scenarios match your search criteria
+                                </td>
+                            </tr>`;
+                        return;
+                    }
+                    
+                    // Get current scenario
+                    const currentScenario = scenarioState.filteredScenarios[scenarioState.currentIndex];
+                    
+                    // Render current scenario
+                    scenariosBody.innerHTML = `
+                        <tr>
+                            <td>${ScenarioDataProcessor.escapeHTML(currentScenario.scenarioTitle)}</td>
+                            <td>${ScenarioDataProcessor.escapeHTML(currentScenario.category || 'Uncategorized')}</td>
+                            <td>${ScenarioDataProcessor.escapeHTML(currentScenario.llmName || 'Unknown')}</td>
+                            <td>${ScenarioDataProcessor.escapeHTML(currentScenario.overallCategory || '')}</td>
+                            <td>
+                                <button class="btn btn-primary analyze-btn" 
+                                        data-scenario-id="${ScenarioDataProcessor.escapeHTML(currentScenario.id)}">
+                                    Analyze
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    
+                    // Add event listener to analyze button
+                    const analyzeBtn = scenariosBody.querySelector('.analyze-btn');
+                    if (analyzeBtn) {
+                        analyzeBtn.addEventListener('click', onAnalyzeButtonClick);
+                    }
+                }
+                
+                // Handle analyze button click
+                function onAnalyzeButtonClick(event) {
+                    const scenarioId = event.target.getAttribute('data-scenario-id');
+                    if (!scenarioId) return;
+                    
+                    // Find the scenario
+                    const scenario = ScenarioDataProcessor.dataPoints.find(s => s.id === scenarioId);
+                    if (!scenario) {
+                        console.error('Scenario not found:', scenarioId);
+                        return;
+                    }
+                    
+                    // Show model selection modal
+                    showModelSelectionModal(scenario);
+                }
+                
+                // Show model selection modal
+                function showModelSelectionModal(scenario) {
+                    // Create or get the modal
+                    let modelModal = document.getElementById('modelSelectionModal');
+                    
+                    if (!modelModal) {
+                        // Create the modal if it doesn't exist
+                        const modalHTML = `
+                            <div class="modal fade" id="modelSelectionModal" tabindex="-1" role="dialog">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Choose Analysis Method</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h6 id="model-scenario-title"></h6>
+                                            <p>How would you like to analyze this scenario?</p>
+                                            
+                                            <div class="list-group mb-3" id="model-options">
+                                                <button type="button" class="list-group-item list-group-item-action" id="own-analysis-btn">
+                                                    <i class="fas fa-user mr-2"></i> Enter my own analysis
+                                                </button>
+                                            </div>
+                                            
+                                            <div class="text-center text-muted" id="loading-models">
+                                                <div class="spinner-border spinner-border-sm" role="status">
+                                                    <span class="sr-only">Loading models...</span>
+                                                </div>
+                                                <span>Loading available AI models...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        const modalContainer = document.createElement('div');
+                        modalContainer.innerHTML = modalHTML;
+                        document.body.appendChild(modalContainer);
+                        
+                        modelModal = document.getElementById('modelSelectionModal');
+                    }
+                    
+                    // Set the scenario title
+                    const titleElement = document.getElementById('model-scenario-title');
+                    if (titleElement) {
+                        titleElement.textContent = `Scenario: ${scenario.scenarioTitle}`;
+                    }
+                    
+                    // Get model options and loading elements
+                    const modelOptions = document.getElementById('model-options');
+                    const loadingElement = document.getElementById('loading-models');
+                    
+                    if (!modelOptions || !loadingElement) return;
+                    
+                    // Clear previous model options
+                    const ownAnalysisBtn = document.getElementById('own-analysis-btn');
+                    modelOptions.innerHTML = '';
+                    
+                    // Recreate own analysis button
+                    const newOwnBtn = document.createElement('button');
+                    newOwnBtn.className = 'list-group-item list-group-item-action';
+                    newOwnBtn.id = 'own-analysis-btn';
+                    newOwnBtn.innerHTML = '<i class="fas fa-user mr-2"></i> Enter my own analysis';
+                    modelOptions.appendChild(newOwnBtn);
+                    
+                    // Show loading indicator
+                    loadingElement.style.display = 'block';
+                    
+                    // Simulate loading delay
+                    setTimeout(() => {
+                        // Find all models for this scenario
+                        const scenarioPoints = ScenarioDataProcessor.dataPoints.filter(p => 
+                            p.scenarioTitle === scenario.scenarioTitle
+                        );
+                        
+                        // Get unique models
+                        const availableModels = [...new Set(scenarioPoints.map(p => p.llmName))].filter(Boolean);
+                        
+                        // Add model buttons
+                        availableModels.forEach(model => {
+                            const modelBtn = document.createElement('button');
+                            modelBtn.className = 'list-group-item list-group-item-action';
+                            modelBtn.innerHTML = `<i class="fas fa-robot mr-2"></i> Use ${ScenarioDataProcessor.escapeHTML(model)} analysis`;
+                            
+                            modelBtn.addEventListener('click', () => {
+                                // Find specific scenario for this model
+                                const modelScenario = scenarioPoints.find(p => p.llmName === model);
+                                if (modelScenario) {
+                                    // Close modal
+                                    $('#modelSelectionModal').modal('hide');
+                                    
+                                    // Select scenario for analysis using appropriate method
+                                    selectScenarioForAnalysis(modelScenario, true);
+                                }
+                            });
+                            
+                            modelOptions.appendChild(modelBtn);
+                        });
+                        
+                        // Hide loading indicator
+                        loadingElement.style.display = 'none';
+                        
+                        // Setup own analysis button
+                        const ownAnalysisBtn = document.getElementById('own-analysis-btn');
+                        if (ownAnalysisBtn) {
+                            ownAnalysisBtn.addEventListener('click', () => {
+                                // Close modal
+                                $('#modelSelectionModal').modal('hide');
+                                
+                                // Start fresh analysis
+                                selectScenarioForAnalysis(scenario, false);
+                            });
+                        }
+                    }, 500);
+                    
+                    // Close scenario selection modal and show model selection modal
+                    $('#scenarioSelectModal').modal('hide');
+                    $('#modelSelectionModal').modal('show');
+                }
+                
+                // Select scenario for analysis - adapts to existing code structure
+                function selectScenarioForAnalysis(scenario, useModelAnswers) {
+                    // Try to use existing methods if available
+                    if (typeof UserSurveyManager !== 'undefined') {
+                        // Try prepareScenarioForAnalysis first
+                        if (typeof UserSurveyManager.prepareScenarioForAnalysis === 'function') {
+                            UserSurveyManager.prepareScenarioForAnalysis(scenario, useModelAnswers);
+                            $('#surveyModal').modal('show');
+                            return;
+                        }
+                        
+                        // Fall back to selectScenarioForAnalysis if available
+                        if (typeof VisualizationManager !== 'undefined' && 
+                            typeof VisualizationManager.selectScenarioForAnalysis === 'function') {
+                            VisualizationManager.selectScenarioForAnalysis(scenario.id, useModelAnswers);
+                            return;
+                        }
+                    }
+                    
+                    // If no existing methods found, show an error
+                    console.error('No method found to prepare scenario for analysis');
+                    alert('Unable to prepare scenario for analysis. Please try again later.');
+                }
+            })();
         </script>
     </body>
 </html>
