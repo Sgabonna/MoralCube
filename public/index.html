@@ -532,6 +532,19 @@
             cursor: pointer;
             text-decoration: underline;
         }
+        /* Add this to your CSS */
+        .modal-dialog-scrollable {
+            max-height: 90vh;
+        }
+
+        .modal-dialog-scrollable .modal-body {
+            overflow-y: auto;
+            max-height: calc(90vh - 120px);
+        }
+
+        .form-control-range {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -1319,7 +1332,8 @@
             </div>
           </div>
         </div>
-        
+        <!-- This should be added to your HTML if not already present -->
+        <div id="modelSelectionContainer"></div>
         <!-- Scenario Selection Modal -->
         <div class="modal fade" id="scenarioSelectModal" tabindex="-1" role="dialog" aria-labelledby="scenarioSelectModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-lg" role="document">
@@ -2683,7 +2697,125 @@
                 this.updateAvailableModels();
                 this.updateVisualization();
             },
-            
+            showModelSelectionModal: function(scenarioId, scenarioTitle) {
+                // Create modal if it doesn't exist
+                let modelModal = document.getElementById('modelSelectionModal');
+                
+                if (!modelModal) {
+                    // Create modal HTML
+                    const modalHTML = `
+                    <div class="modal fade" id="modelSelectionModal" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Choose Analysis Method</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <h6 id="model-scenario-title"></h6>
+                                    <p>How would you like to analyze this scenario?</p>
+                                    
+                                    <div class="list-group mb-3" id="model-options">
+                                        <button type="button" class="list-group-item list-group-item-action" id="own-analysis-btn">
+                                            <i class="fas fa-user mr-2"></i> Enter my own analysis
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="text-center text-muted" id="loading-models">
+                                        <div class="spinner-border spinner-border-sm" role="status">
+                                            <span class="sr-only">Loading models...</span>
+                                        </div>
+                                        <span>Loading available AI models...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                    
+                    // Add modal to body
+                    const modalContainer = document.createElement('div');
+                    modalContainer.innerHTML = modalHTML;
+                    document.body.appendChild(modalContainer);
+                    
+                    modelModal = document.getElementById('modelSelectionModal');
+                }
+                
+                // Update scenario title
+                const titleElement = document.getElementById('model-scenario-title');
+                if (titleElement) {
+                    titleElement.textContent = `Scenario: ${scenarioTitle}`;
+                }
+                
+                // Clear previous model options and show loading
+                const modelOptions = document.getElementById('model-options');
+                const loadingElement = document.getElementById('loading-models');
+                
+                if (modelOptions && loadingElement) {
+                    // Keep only the "own analysis" button
+                    const ownAnalysisBtn = document.getElementById('own-analysis-btn');
+                    modelOptions.innerHTML = '';
+                    modelOptions.appendChild(ownAnalysisBtn);
+                    
+                    // Show loading indicator
+                    loadingElement.style.display = 'block';
+                    
+                    // Find available models for this scenario
+                    setTimeout(() => {
+                        // Get all available models for this scenario title
+                        const scenarioPoints = ScenarioDataProcessor.dataPoints.filter(p => 
+                            p.scenarioTitle === scenarioTitle
+                        );
+                        
+                        // Get unique models
+                        const availableModels = [...new Set(scenarioPoints.map(p => p.llmName))];
+                        
+                        // Add model buttons
+                        availableModels.forEach(model => {
+                            const modelBtn = document.createElement('button');
+                            modelBtn.className = 'list-group-item list-group-item-action';
+                            modelBtn.innerHTML = `<i class="fas fa-robot mr-2"></i> Use ${ScenarioDataProcessor.escapeHTML(model)} analysis`;
+                            
+                            modelBtn.addEventListener('click', () => {
+                                // Find the scenario for this model
+                                const modelScenario = scenarioPoints.find(p => p.llmName === model);
+                                if (modelScenario) {
+                                    // Close modal
+                                    $('#modelSelectionModal').modal('hide');
+                                    
+                                    // Use this model's analysis
+                                    this.selectScenarioForAnalysis(modelScenario.id, true);
+                                }
+                            });
+                            
+                            modelOptions.appendChild(modelBtn);
+                        });
+                        
+                        // Hide loading indicator
+                        loadingElement.style.display = 'none';
+                        
+                        // Set up own analysis button
+                        const ownAnalysisBtn = document.getElementById('own-analysis-btn');
+                        if (ownAnalysisBtn) {
+                            ownAnalysisBtn.addEventListener('click', () => {
+                                // Close modal
+                                $('#modelSelectionModal').modal('hide');
+                                
+                                // Start fresh analysis
+                                this.selectScenarioForAnalysis(scenarioId, false);
+                            });
+                        }
+                    }, 500);
+                }
+                
+                // Close the scenario selection modal
+                $('#scenarioSelectModal').modal('hide');
+                
+                // Show the model selection modal
+                $('#modelSelectionModal').modal('show');
+            },
             /**
              * Update available models based on selected scenarios.
              */
@@ -3711,7 +3843,7 @@
                 /**
                  * Load scenarios for analysis selection
                  */
-                loadScenariosForAnalysis: async function() {
+                 loadScenariosForAnalysis: async function() {
                     console.log('Loading scenarios for analysis');
                     const scenariosBody = document.getElementById('scenarios-body');
                     if (!scenariosBody) {
@@ -3723,18 +3855,27 @@
                         // Show loading state
                         scenariosBody.innerHTML = '<tr><td colspan="5" class="text-center">Loading scenarios...</td></tr>';
                         
-                        // Get all scenarios from the data processor
-                        const scenarios = ScenarioDataProcessor.displayPoints || [];
+                        // Get all parent scenarios (to prevent duplicates)
+                        const scenarios = ScenarioDataProcessor.displayPoints.filter(s => s.isParent) || [];
                         
                         if (scenarios.length === 0) {
                             scenariosBody.innerHTML = '<tr><td colspan="5" class="text-center">No scenarios available</td></tr>';
                             return;
                         }
                         
-                        console.log(`Found ${scenarios.length} scenarios to display`);
+                        // Group scenarios by title to avoid duplicates
+                        const uniqueScenarios = [];
+                        const seenTitles = new Set();
+                        
+                        scenarios.forEach(scenario => {
+                            if (!seenTitles.has(scenario.scenarioTitle)) {
+                                seenTitles.add(scenario.scenarioTitle);
+                                uniqueScenarios.push(scenario);
+                            }
+                        });
                         
                         // Sort scenarios by title
-                        const sortedScenarios = [...scenarios].sort((a, b) => 
+                        const sortedScenarios = uniqueScenarios.sort((a, b) => 
                             a.scenarioTitle.localeCompare(b.scenarioTitle));
                         
                         // Get currently selected scenario if any
@@ -3750,11 +3891,10 @@
                                 <tr class="${isSelected ? 'table-primary' : ''}">
                                     <td>${ScenarioDataProcessor.escapeHTML(scenario.scenarioTitle)}</td>
                                     <td>${ScenarioDataProcessor.escapeHTML(scenario.category)}</td>
-                                    <td>${ScenarioDataProcessor.escapeHTML(scenario.llmName)}</td>
-                                    <td>${scenario.isParent ? 'Base' : 'Variant'}</td>
                                     <td>
                                         <button class="btn btn-sm btn-primary analyze-btn" 
-                                                data-scenario-id="${ScenarioDataProcessor.escapeHTML(scenario.id)}">
+                                                data-scenario-id="${ScenarioDataProcessor.escapeHTML(scenario.id)}"
+                                                data-scenario-title="${ScenarioDataProcessor.escapeHTML(scenario.scenarioTitle)}">
                                             ${isSelected ? 'Currently Selected' : 'Select'}
                                         </button>
                                     </td>
@@ -3768,9 +3908,10 @@
                         document.querySelectorAll('.analyze-btn').forEach(btn => {
                             btn.addEventListener('click', (e) => {
                                 const scenarioId = e.target.getAttribute('data-scenario-id');
-                                if (scenarioId) {
-                                    this.selectScenarioForAnalysis(scenarioId);
-                                    $('#scenarioSelectModal').modal('hide');
+                                const scenarioTitle = e.target.getAttribute('data-scenario-title');
+                                if (scenarioId && scenarioTitle) {
+                                    // First show model selection modal
+                                    this.showModelSelectionModal(scenarioId, scenarioTitle);
                                 }
                             });
                         });
@@ -3780,6 +3921,16 @@
                         if (searchInput) {
                             searchInput.value = ''; // Clear previous search
                             searchInput.focus();
+                            
+                            // Add search functionality
+                            searchInput.addEventListener('input', () => {
+                                const searchText = searchInput.value.toLowerCase();
+                                document.querySelectorAll('#scenarios-body tr').forEach(row => {
+                                    const title = row.cells[0]?.textContent.toLowerCase() || '';
+                                    const category = row.cells[1]?.textContent.toLowerCase() || '';
+                                    row.style.display = (title.includes(searchText) || category.includes(searchText)) ? '' : 'none';
+                                });
+                            });
                         }
                         
                     } catch (error) {
@@ -3792,7 +3943,7 @@
                  * Select scenario for analysis
                  * @param {string} scenarioId ID of scenario to analyze
                  */
-                selectScenarioForAnalysis: function(scenarioId) {
+                 selectScenarioForAnalysis: function(scenarioId, useModelAnswers = false) {
                     try {
                         console.log('Selecting scenario for analysis:', scenarioId);
                         // Find the scenario in data points
@@ -3804,9 +3955,9 @@
                         
                         console.log('Selected scenario for analysis:', scenario.scenarioTitle);
                         
-                        // Make sure UserSurveyManager is ready
+                        // Extend UserSurveyManager with enhanced scenario preparation
                         if (!UserSurveyManager.prepareScenarioForAnalysis) {
-                            UserSurveyManager.prepareScenarioForAnalysis = function(scenario) {
+                            UserSurveyManager.prepareScenarioForAnalysis = function(scenario, useModelAnswers) {
                                 try {
                                     console.log('Preparing scenario for analysis:', scenario.scenarioTitle);
                                     
@@ -3824,6 +3975,24 @@
                                     document.getElementById('scenario-parent-id').value = scenario.isParent ? scenario.id : (scenario.parentId || '');
                                     document.getElementById('scenario-url').value = scenario.url || '';
                                     
+                                    // Set classification if available
+                                    if (scenario.overallCategory && document.getElementById('moral-classification')) {
+                                        const classSelect = document.getElementById('moral-classification');
+                                        const normalizedCategory = scenario.overallCategory.toLowerCase().replace(/\s+/g, '_');
+                                        
+                                        // Find matching option
+                                        Array.from(classSelect.options).forEach(option => {
+                                            if (option.value.toLowerCase() === normalizedCategory) {
+                                                option.selected = true;
+                                            }
+                                        });
+                                    }
+                                    
+                                    // If using model answers, populate form with those values
+                                    if (useModelAnswers && scenario.dimensions) {
+                                        this.populateModelAnswers(scenario);
+                                    }
+                                    
                                     // Reset tab to first tab if possible
                                     if (typeof this.currentTabIndex !== 'undefined' && typeof this.updateTabDisplay === 'function') {
                                         this.currentTabIndex = 0;
@@ -3833,18 +4002,208 @@
                                     // Update UI to show we're analyzing an existing scenario
                                     const modalTitle = document.getElementById('surveyModalLabel');
                                     if (modalTitle) {
-                                        modalTitle.textContent = `Analyze: ${scenario.scenarioTitle}`;
+                                        modalTitle.textContent = useModelAnswers ? 
+                                            `${scenario.llmName} Analysis: ${scenario.scenarioTitle}` : 
+                                            `Analyze: ${scenario.scenarioTitle}`;
+                                    }
+                                    
+                                    // Add helper text if using model answers
+                                    if (useModelAnswers) {
+                                        const headerNotice = document.createElement('div');
+                                        headerNotice.className = 'alert alert-info mb-3';
+                                        headerNotice.innerHTML = `
+                                            <i class="fas fa-info-circle mr-2"></i> 
+                                            You're viewing ${scenario.llmName}'s analysis. You can adjust any values 
+                                            to create your own version.
+                                        `;
+                                        
+                                        const modalBody = document.querySelector('#surveyModal .modal-body');
+                                        if (modalBody && modalBody.firstChild) {
+                                            modalBody.insertBefore(headerNotice, modalBody.firstChild);
+                                        }
                                     }
                                     
                                     console.log('Scenario prepared for analysis:', scenario.scenarioTitle);
+                                    
+                                    // Enhance survey UI with sliders and better scrolling
+                                    this.enhanceSurveyUI();
+                                    
                                 } catch (error) {
                                     console.error('Error preparing scenario for analysis:', error);
+                                }
+                            };
+                            
+                            // Add helper method to populate model answers
+                            UserSurveyManager.populateModelAnswers = function(scenario) {
+                                try {
+                                    if (!scenario.dimensions) return;
+                                    
+                                    // Map of dimension IDs to tab IDs
+                                    const dimensionTabMap = {
+                                        'Ends': 'ends',
+                                        'Means': 'means',
+                                        'Character': 'character',
+                                        'PhilosophicalAnalysis': 'philosophy'
+                                    };
+                                    
+                                    // Map of question IDs to form field IDs
+                                    const questionFieldMap = {
+                                        'Societal Needs': 'societal-needs',
+                                        'Others Needs': 'others-needs',
+                                        'Others Wants': 'others-wants',
+                                        'Personal Needs': 'personal-needs',
+                                        'Personal Wants': 'personal-wants',
+                                        'Future Self-Sacrifice': 'future-sacrifice',
+                                        'Number of Individuals Affected': 'individuals-affected',
+                                        'Type of Sacrifice': 'sacrifice-type',
+                                        'Duration of Sacrifice': 'sacrifice-duration',
+                                        'Magnitude of Life Impacted': 'life-magnitude',
+                                        'Unconscious vs Conscious': 'consciousness',
+                                        'Present Self-Sacrifice': 'present-sacrifice',
+                                        'Habit vs Will Power': 'willpower',
+                                        'Unintentional vs Intentional': 'intentionality',
+                                        'Wills at Play': 'wills',
+                                        'Deontology': 'deontology',
+                                        'Utilitarianism': 'utilitarianism',
+                                        'Virtue Ethics': 'virtue-ethics'
+                                    };
+                                    
+                                    // Process each dimension and its questions
+                                    scenario.dimensions.forEach(dimension => {
+                                        const tabId = dimensionTabMap[dimension.id];
+                                        if (!tabId) return;
+                                        
+                                        (dimension.questions || []).forEach(question => {
+                                            const fieldBase = questionFieldMap[question.question];
+                                            if (!fieldBase) return;
+                                            
+                                            // Set score field
+                                            const scoreField = document.getElementById(`${fieldBase}-score`);
+                                            if (scoreField && question.score !== undefined) {
+                                                scoreField.value = question.score;
+                                                
+                                                // Update slider if it exists
+                                                const slider = document.getElementById(`${fieldBase}-slider`);
+                                                if (slider) {
+                                                    slider.value = question.score;
+                                                }
+                                            }
+                                            
+                                            // Set justification field
+                                            const justField = document.getElementById(`${fieldBase}-justification`);
+                                            if (justField && question.justification) {
+                                                justField.value = question.justification;
+                                            }
+                                            
+                                            // For philosophy questions that use select elements
+                                            if (tabId === 'philosophy') {
+                                                if (fieldBase === 'deontology' || fieldBase === 'utilitarianism') {
+                                                    const select = document.getElementById(`${fieldBase}-score`);
+                                                    if (select && question.score) {
+                                                        Array.from(select.options).forEach(option => {
+                                                            if (option.value === question.score) {
+                                                                option.selected = true;
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            }
+                                        });
+                                    });
+                                    
+                                    // Set classification justification if available
+                                    if (scenario.metadata?.classification?.justification) {
+                                        const justField = document.getElementById('classification-justification');
+                                        if (justField) {
+                                            justField.value = scenario.metadata.classification.justification;
+                                        }
+                                    }
+                                } catch (error) {
+                                    console.error('Error populating model answers:', error);
+                                }
+                            };
+                            
+                            // Add method to enhance survey UI
+                            UserSurveyManager.enhanceSurveyUI = function() {
+                                try {
+                                    // Make modal scrollable and larger
+                                    const modalDialog = document.querySelector('#surveyModal .modal-dialog');
+                                    if (modalDialog) {
+                                        modalDialog.classList.add('modal-dialog-scrollable');
+                                        
+                                        // Remove any existing max-height style
+                                        const modalBody = document.querySelector('#surveyModal .modal-body');
+                                        if (modalBody) {
+                                            modalBody.style.maxHeight = 'none';
+                                            modalBody.style.overflow = 'initial';
+                                        }
+                                    }
+                                    
+                                    // Add sliders for numeric inputs
+                                    document.querySelectorAll('#surveyTabContent input[type="number"]').forEach(input => {
+                                        const inputId = input.id;
+                                        const baseId = inputId.replace('-score', '');
+                                        
+                                        // Create slider container
+                                        const sliderContainer = document.createElement('div');
+                                        sliderContainer.className = 'form-group mt-2';
+                                        
+                                        // Get min/max values from input
+                                        const min = parseFloat(input.min) || 0;
+                                        const max = parseFloat(input.max) || 4;
+                                        const step = parseFloat(input.step) || 0.1;
+                                        
+                                        // Create slider
+                                        const slider = document.createElement('input');
+                                        slider.type = 'range';
+                                        slider.className = 'form-control-range';
+                                        slider.id = `${baseId}-slider`;
+                                        slider.min = min;
+                                        slider.max = max;
+                                        slider.step = step;
+                                        slider.value = input.value || 0;
+                                        
+                                        // Add slider label
+                                        const sliderLabel = document.createElement('label');
+                                        sliderLabel.htmlFor = slider.id;
+                                        sliderLabel.className = 'd-flex justify-content-between';
+                                        sliderLabel.innerHTML = `
+                                            <small class="text-left">${min}</small>
+                                            <small class="text-center">Adjust Value</small>
+                                            <small class="text-right">${max}</small>
+                                        `;
+                                        
+                                        // Add event listeners
+                                        slider.addEventListener('input', () => {
+                                            input.value = slider.value;
+                                        });
+                                        
+                                        input.addEventListener('input', () => {
+                                            slider.value = input.value;
+                                        });
+                                        
+                                        // Add slider to container
+                                        sliderContainer.appendChild(sliderLabel);
+                                        sliderContainer.appendChild(slider);
+                                        
+                                        // Add slider after input's form group
+                                        const inputGroup = input.closest('.form-group');
+                                        if (inputGroup && inputGroup.nextElementSibling) {
+                                            inputGroup.parentNode.insertBefore(sliderContainer, inputGroup.nextElementSibling);
+                                        }
+                                    });
+                                    
+                                    // Enhance the progress bar
+                                    this.updateProgressBar();
+                                    
+                                } catch (error) {
+                                    console.error('Error enhancing survey UI:', error);
                                 }
                             };
                         }
                         
                         // Pre-populate survey form with scenario data
-                        UserSurveyManager.prepareScenarioForAnalysis(scenario);
+                        UserSurveyManager.prepareScenarioForAnalysis(scenario, useModelAnswers);
                         
                         // Show the survey modal
                         $('#surveyModal').modal('show');
