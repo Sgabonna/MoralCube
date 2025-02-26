@@ -1505,7 +1505,7 @@
                 // Enhanced Auth0 configuration with proper storage and session management
                 this.client = await auth0.createAuth0Client({
                     domain: 'dev-10xzf0prvka6p40y.us.auth0.com',
-                    clientId: 'o7n479CCBo1GoASsEQI3s44cIXdyvzJh',
+                    clientId: '825601327735-57vicivul6o61iob8fuaq71avvoi25lu.apps.googleusercontent.com',
                     authorizationParams: {
                     redirect_uri: window.location.origin,
                     audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/',
@@ -5432,7 +5432,7 @@
                     // Add additional Auth0 client setup for persistent sessions
                     const authConfig = {
                         domain: 'dev-10xzf0prvka6p40y.us.auth0.com',
-                        clientId: 'o7n479CCBo1GoASsEQI3s44cIXdyvzJh',
+                        clientId: '825601327735-57vicivul6o61iob8fuaq71avvoi25lu.apps.googleusercontent.com',
                         authorizationParams: {
                             redirect_uri: window.location.origin,
                             // Only request Management API access when needed
@@ -5509,53 +5509,70 @@
                         }
                     };
                     
-                    // Override Auth0 initialization
+                    // Replace the current AuthManager.initialize() method with this simplified version
                     AuthManager.initialize = async function() {
+                    // This method is now just a wrapper that calls the enhanced implementation
+                    try {
                         if (this.client) return this.client;
                         
                         if (this.isInitializing) {
-                            return new Promise((resolve, reject) => {
-                                const checkInterval = setInterval(() => {
-                                    if (!this.isInitializing) {
-                                        clearInterval(checkInterval);
-                                        if (this.client) resolve(this.client);
-                                        else reject(this.initError || new Error("Auth0 client initialization failed"));
-                                    }
-                                }, 100);
-                            });
+                        return new Promise((resolve, reject) => {
+                            const checkInterval = setInterval(() => {
+                            if (!this.isInitializing) {
+                                clearInterval(checkInterval);
+                                if (this.client) resolve(this.client);
+                                else reject(this.initError || new Error("Auth0 client initialization failed"));
+                            }
+                            }, 100);
+                        });
                         }
                         
                         this.isInitializing = true;
                         this.lastInitAttempt = Date.now();
                         
+                        // Use the enhanced config from initializeApplication
+                        const authConfig = {
+                        domain: 'dev-10xzf0prvka6p40y.us.auth0.com',
+                        clientId: '825601327735-57vicivul6o61iob8fuaq71avvoi25lu.apps.googleusercontent.com', // Update this with your new key
+                        authorizationParams: {
+                            redirect_uri: window.location.origin,
+                            scope: 'openid profile email offline_access'
+                        },
+                        cacheLocation: 'localstorage',
+                        useRefreshTokens: true,
+                        useRefreshTokensFallback: true,
+                        useCookiesForTransactions: true,
+                        cookieDomain: window.location.hostname,
+                        useFormData: true
+                        };
+                        
+                        console.log('Initializing Auth0 client with enhanced configuration...');
+                        this.client = await auth0.createAuth0Client(authConfig);
+                        
+                        // Handle redirect callback
+                        if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
                         try {
-                            console.log('Initializing Auth0 client with enhanced persistence...');
-                            this.client = await auth0.createAuth0Client(authConfig);
-                            
-                            // Handle redirect callback
-                            if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
-                                try {
-                                    await this.client.handleRedirectCallback();
-                                    window.history.replaceState({}, document.title, window.location.pathname);
-                                } catch (callbackError) {
-                                    console.error('Error handling redirect callback:', callbackError);
-                                }
-                            }
-                            
-                            // Set up automatic token refresh
-                            if (await this.client.isAuthenticated()) {
-                                console.log('User authenticated, scheduling token refresh');
-                                this.scheduleTokenRefresh();
-                            }
-                            
-                            return this.client;
-                        } catch (error) {
-                            console.error('Enhanced Auth0 initialization failed:', error);
-                            this.initError = error;
-                            throw error;
-                        } finally {
-                            this.isInitializing = false;
+                            await this.client.handleRedirectCallback();
+                            window.history.replaceState({}, document.title, window.location.pathname);
+                        } catch (callbackError) {
+                            console.error('Error handling redirect callback:', callbackError);
                         }
+                        }
+                        
+                        // Set up automatic token refresh
+                        if (await this.client.isAuthenticated()) {
+                        console.log('User authenticated, scheduling token refresh');
+                        this.scheduleTokenRefresh();
+                        }
+                        
+                        return this.client;
+                    } catch (error) {
+                        console.error('Auth0 initialization failed:', error);
+                        this.initError = error;
+                        throw error;
+                    } finally {
+                        this.isInitializing = false;
+                    }
                     };
                     
                     // Improved token refresh scheduling function
