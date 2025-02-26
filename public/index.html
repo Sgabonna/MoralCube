@@ -1674,53 +1674,41 @@
              * @param {Object} options Token options
              * @returns {Promise<string>} The authentication token
              */
-            async getToken(options = {}) {
+             async getToken(options = {}) {
                 try {
-                const client = await this.getClient();
-                let retries = 0;
-                const maxRetries = options.maxRetries || 2;
-                
-                while (retries <= maxRetries) {
-                    try {
-                    const token = await client.getTokenSilently({
-                        authorizationParams: {
-                        audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/',
-                        scope: 'openid profile email read:current_user update:current_user_metadata'
-                        },
-                        timeoutInSeconds: options.timeoutInSeconds || 60,
-                        cacheMode: options.ignoreCache ? 'off' : 'on',
-                        ...options
-                    });
+                    const client = await this.getClient();
+                    let retries = 0;
+                    const maxRetries = options.maxRetries || 2;
                     
-                    // Schedule token refresh after successful token acquisition
-                    if (!options.noRefreshScheduling) {
-                        this.scheduleTokenRefresh().catch(error => {
-                        console.warn('Failed to schedule token refresh:', error);
-                        });
+                    while (retries <= maxRetries) {
+                        try {
+                            return await client.getTokenSilently({
+                                authorizationParams: {
+                                    // Use audience only when specifically needed
+                                    ...(options.useAudience ? {
+                                        audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/'
+                                    } : {}),
+                                    // Simplified scope
+                                    scope: 'openid profile email offline_access'
+                                },
+                                timeoutInSeconds: options.timeoutInSeconds || 60,
+                                cacheMode: options.ignoreCache ? 'off' : 'on',
+                                ...options
+                            });
+                        } catch (error) {
+                            console.warn(`Token acquisition attempt ${retries + 1} failed:`, error);
+                            
+                            retries++;
+                            if (retries <= maxRetries) {
+                                await new Promise(resolve => setTimeout(resolve, 1000 * retries));
+                            } else {
+                                throw error;
+                            }
+                        }
                     }
-                    
-                    return token;
-                    } catch (error) {
-                    console.warn(`Token acquisition attempt ${retries + 1} failed:`, error);
-                    
-                    // Handle specific error types
-                    if (error.error === 'login_required') {
-                        throw new Error('Authentication required');
-                    }
-                    
-                    retries++;
-                    if (retries <= maxRetries) {
-                        await new Promise(resolve => setTimeout(resolve, 1000 * retries));
-                    } else {
-                        throw error;
-                    }
-                    }
-                }
-                
-                throw new Error('Failed to get token after maximum retries');
                 } catch (error) {
-                console.error('Error getting token:', error);
-                throw error;
+                    console.error('Error getting token:', error);
+                    throw error;
                 }
             },
             
@@ -4898,18 +4886,18 @@
                         clientId: 'o7n479CCBo1GoASsEQI3s44cIXdyvzJh',
                         authorizationParams: {
                             redirect_uri: window.location.origin,
-                            audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/',
-                            scope: 'openid profile email read:current_user update:current_user_metadata offline_access'
+                            // Only request Management API access when needed
+                            scope: 'openid profile email offline_access'
                         },
-                        // Enhanced persistence settings
+                        // These settings specifically address third-party cookie issues
                         cacheLocation: 'localstorage',
                         useRefreshTokens: true,
                         useRefreshTokensFallback: true,
-                        // Session check interval (in milliseconds)
-                        sessionCheckIntervalInSeconds: 60,
-                        // Add SameSite cookie settings for better security and cross-domain handling
-                        legacySameSiteCookie: false,
-                        cookieDomain: window.location.hostname
+                        useCookiesForTransactions: true,
+                        // Force a consistent login experience
+                        cookieDomain: window.location.hostname,
+                        // Important setting to help with third-party cookies
+                        useFormData: true
                     };
                     
                     // Add JWT parsing function
@@ -5095,12 +5083,11 @@
                             
                             await client.loginWithRedirect({
                                 authorizationParams: {
-                                    // Use 'signUp' as the screen_hint if signup is specified
-                                    // Auth0 will show signup screen instead of login screen
-                                    // For login-only, don't set the screen_hint parameter at all
-                                    ...(isSignup ? { screen_hint: 'signup' } : {}),
-                                    // Add offline_access to get refresh tokens
-                                    scope: 'openid profile email read:current_user update:current_user_metadata offline_access'
+                                    redirect_uri: window.location.origin,
+                                    // Use a simple scope without Management API
+                                    scope: 'openid profile email offline_access',
+                                    // Force fresh login
+                                    prompt: 'login'
                                 }
                             });
                         } catch (error) {
