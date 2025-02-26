@@ -3683,7 +3683,176 @@
                         }
                     }
                 },
-                
+                /**
+                 * Handle analyze scenario button click
+                 */
+                handleAnalyzeScenarioClick: async function() {
+                    try {
+                        console.log('Handling analyze scenario click');
+                        const isAuthenticated = await AuthManager.isUserAuthenticated();
+                        if (!isAuthenticated) {
+                            // Show login prompt
+                            alert('Please log in to analyze scenarios');
+                            AuthManager.login();
+                            return;
+                        }
+                        
+                        // Load available scenarios
+                        await this.loadScenariosForAnalysis();
+                        
+                        // Show the scenario selection modal
+                        $('#scenarioSelectModal').modal('show');
+                    } catch (error) {
+                        console.error('Error handling analyze scenario click:', error);
+                        alert('An error occurred. Please try again.');
+                    }
+                },
+
+                /**
+                 * Load scenarios for analysis selection
+                 */
+                loadScenariosForAnalysis: async function() {
+                    console.log('Loading scenarios for analysis');
+                    const scenariosBody = document.getElementById('scenarios-body');
+                    if (!scenariosBody) {
+                        console.error('Scenarios body element not found');
+                        return;
+                    }
+                    
+                    try {
+                        // Show loading state
+                        scenariosBody.innerHTML = '<tr><td colspan="5" class="text-center">Loading scenarios...</td></tr>';
+                        
+                        // Get all scenarios from the data processor
+                        const scenarios = ScenarioDataProcessor.displayPoints || [];
+                        
+                        if (scenarios.length === 0) {
+                            scenariosBody.innerHTML = '<tr><td colspan="5" class="text-center">No scenarios available</td></tr>';
+                            return;
+                        }
+                        
+                        console.log(`Found ${scenarios.length} scenarios to display`);
+                        
+                        // Sort scenarios by title
+                        const sortedScenarios = [...scenarios].sort((a, b) => 
+                            a.scenarioTitle.localeCompare(b.scenarioTitle));
+                        
+                        // Get currently selected scenario if any
+                        const currentlySelected = this.selectedScenarios.length > 0 ? 
+                            this.selectedScenarios[0] : null;
+                        
+                        // Create rows for each scenario
+                        const rows = sortedScenarios.map(scenario => {
+                            // Check if this is the currently selected scenario
+                            const isSelected = scenario.scenarioTitle === currentlySelected;
+                            
+                            return `
+                                <tr class="${isSelected ? 'table-primary' : ''}">
+                                    <td>${ScenarioDataProcessor.escapeHTML(scenario.scenarioTitle)}</td>
+                                    <td>${ScenarioDataProcessor.escapeHTML(scenario.category)}</td>
+                                    <td>${ScenarioDataProcessor.escapeHTML(scenario.llmName)}</td>
+                                    <td>${scenario.isParent ? 'Base' : 'Variant'}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary analyze-btn" 
+                                                data-scenario-id="${ScenarioDataProcessor.escapeHTML(scenario.id)}">
+                                            ${isSelected ? 'Currently Selected' : 'Select'}
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('');
+                        
+                        scenariosBody.innerHTML = rows;
+                        
+                        // Add event listeners to the analyze buttons
+                        document.querySelectorAll('.analyze-btn').forEach(btn => {
+                            btn.addEventListener('click', (e) => {
+                                const scenarioId = e.target.getAttribute('data-scenario-id');
+                                if (scenarioId) {
+                                    this.selectScenarioForAnalysis(scenarioId);
+                                    $('#scenarioSelectModal').modal('hide');
+                                }
+                            });
+                        });
+                        
+                        // Set up search functionality
+                        const searchInput = document.getElementById('scenario-search');
+                        if (searchInput) {
+                            searchInput.value = ''; // Clear previous search
+                            searchInput.focus();
+                        }
+                        
+                    } catch (error) {
+                        console.error('Error loading scenarios for analysis:', error);
+                        scenariosBody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error loading scenarios</td></tr>';
+                    }
+                },
+
+                /**
+                 * Select scenario for analysis
+                 * @param {string} scenarioId ID of scenario to analyze
+                 */
+                selectScenarioForAnalysis: function(scenarioId) {
+                    try {
+                        console.log('Selecting scenario for analysis:', scenarioId);
+                        // Find the scenario in data points
+                        const scenario = ScenarioDataProcessor.dataPoints.find(p => p.id === scenarioId);
+                        if (!scenario) {
+                            console.error('Scenario not found:', scenarioId);
+                            return;
+                        }
+                        
+                        console.log('Selected scenario for analysis:', scenario.scenarioTitle);
+                        
+                        // Make sure UserSurveyManager is ready
+                        if (!UserSurveyManager.prepareScenarioForAnalysis) {
+                            UserSurveyManager.prepareScenarioForAnalysis = function(scenario) {
+                                try {
+                                    console.log('Preparing scenario for analysis:', scenario.scenarioTitle);
+                                    
+                                    // Try to reset form first
+                                    if (typeof this.resetSurveyForm === 'function') {
+                                        this.resetSurveyForm();
+                                    }
+                                    
+                                    // Set scenario data in form
+                                    document.getElementById('scenario-id').value = scenario.id;
+                                    document.getElementById('scenario-title-display').value = scenario.scenarioTitle;
+                                    document.getElementById('scenario-description-display').value = scenario.scenarioDescription || '';
+                                    document.getElementById('scenario-category-display').value = scenario.category || '';
+                                    document.getElementById('scenario-type').value = 'analysis';
+                                    document.getElementById('scenario-parent-id').value = scenario.isParent ? scenario.id : (scenario.parentId || '');
+                                    document.getElementById('scenario-url').value = scenario.url || '';
+                                    
+                                    // Reset tab to first tab if possible
+                                    if (typeof this.currentTabIndex !== 'undefined' && typeof this.updateTabDisplay === 'function') {
+                                        this.currentTabIndex = 0;
+                                        this.updateTabDisplay();
+                                    }
+                                    
+                                    // Update UI to show we're analyzing an existing scenario
+                                    const modalTitle = document.getElementById('surveyModalLabel');
+                                    if (modalTitle) {
+                                        modalTitle.textContent = `Analyze: ${scenario.scenarioTitle}`;
+                                    }
+                                    
+                                    console.log('Scenario prepared for analysis:', scenario.scenarioTitle);
+                                } catch (error) {
+                                    console.error('Error preparing scenario for analysis:', error);
+                                }
+                            };
+                        }
+                        
+                        // Pre-populate survey form with scenario data
+                        UserSurveyManager.prepareScenarioForAnalysis(scenario);
+                        
+                        // Show the survey modal
+                        $('#surveyModal').modal('show');
+                    } catch (error) {
+                        console.error('Error selecting scenario for analysis:', error);
+                        alert('Error selecting scenario. Please try again.');
+                    }
+                },
                 /**
                  * Check if descriptions need "read more" links
                  */
@@ -4261,6 +4430,27 @@
                 }
             });
 
+            // Update the analyze button event listener
+            document.addEventListener('DOMContentLoaded', function() {
+                const analyzeScenarioBtn = document.getElementById('analyze-scenario-btn');
+                if (analyzeScenarioBtn) {
+                    // Clone the button to remove any existing event listeners
+                    const newBtn = analyzeScenarioBtn.cloneNode(true);
+                    if (analyzeScenarioBtn.parentNode) {
+                        analyzeScenarioBtn.parentNode.replaceChild(newBtn, analyzeScenarioBtn);
+                    }
+                    
+                    newBtn.addEventListener('click', function() {
+                        if (VisualizationManager.handleAnalyzeScenarioClick) {
+                            VisualizationManager.handleAnalyzeScenarioClick();
+                        } else {
+                            console.error('handleAnalyzeScenarioClick method not found');
+                            alert('Analysis function not available');
+                        }
+                    });
+                }
+            });
+            
             // Complete the missing UserSurveyManager methods
             Object.assign(UserSurveyManager, {
                 /**
@@ -5084,11 +5274,14 @@
                             await client.loginWithRedirect({
                                 authorizationParams: {
                                     redirect_uri: window.location.origin,
-                                    // Use a simple scope without Management API
                                     scope: 'openid profile email offline_access',
-                                    // Force fresh login
-                                    prompt: 'login'
-                                }
+                                    // Force display of connection selection
+                                    prompt: 'select_account',
+                                    // Show social connections only
+                                    connection: null // Leave as null to show all enabled social connections
+                                },
+                                // Ensure users see provider selection
+                                display: 'page'
                             });
                         } catch (error) {
                             console.error('Login redirect error:', error);
