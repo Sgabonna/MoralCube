@@ -1505,9 +1505,9 @@
                 // Enhanced Auth0 configuration with proper storage and session management
                 this.client = await auth0.createAuth0Client({
                     domain: 'dev-10xzf0prvka6p40y.us.auth0.com',
-                    clientId: '825601327735-57vicivul6o61iob8fuaq71avvoi25lu.apps.googleusercontent.com',
+                    clientId: 'o7n479CCBo1GoASsEQI3s44cIXdyvzJh',
                     authorizationParams: {
-                    redirect_uri: window.location.origin,
+                    redirect_uri: 'https://themoralcube.com',
                     audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/',
                     scope: 'openid profile email read:current_user update:current_user_metadata offline_access'
                     },
@@ -5432,9 +5432,9 @@
                     // Add additional Auth0 client setup for persistent sessions
                     const authConfig = {
                         domain: 'dev-10xzf0prvka6p40y.us.auth0.com',
-                        clientId: '825601327735-57vicivul6o61iob8fuaq71avvoi25lu.apps.googleusercontent.com',
+                        clientId: 'o7n479CCBo1GoASsEQI3s44cIXdyvzJh',
                         authorizationParams: {
-                            redirect_uri: window.location.origin,
+                            redirect_uri: 'https://themoralcube.com',
                             // Only request Management API access when needed
                             scope: 'openid profile email offline_access'
                         },
@@ -5533,9 +5533,9 @@
                         // Use the enhanced config from initializeApplication
                         const authConfig = {
                         domain: 'dev-10xzf0prvka6p40y.us.auth0.com',
-                        clientId: '825601327735-57vicivul6o61iob8fuaq71avvoi25lu.apps.googleusercontent.com', // Update this with your new key
+                        clientId: 'o7n479CCBo1GoASsEQI3s44cIXdyvzJh', // Update this with your new key
                         authorizationParams: {
-                            redirect_uri: window.location.origin,
+                            redirect_uri: 'https://themoralcube.com',
                             scope: 'openid profile email offline_access'
                         },
                         cacheLocation: 'localstorage',
@@ -5649,7 +5649,7 @@
                             
                             await client.loginWithRedirect({
                                 authorizationParams: {
-                                    redirect_uri: window.location.origin,
+                                    redirect_uri: 'https://themoralcube.com',
                                     scope: 'openid profile email offline_access',
                                     // Force display of connection selection
                                     prompt: 'select_account',
