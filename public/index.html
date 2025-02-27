@@ -2587,6 +2587,38 @@
                 async checkAuthentication() {
                     // Always return true to prevent errors
                     return true;
+                },
+                /**
+                 * Save survey data to MongoDB via Netlify function
+                 * @param {Object} surveyData Survey data to save
+                 * @returns {Promise<Object>} Result of the operation
+                 */
+                async saveToMongoDB(surveyData) {
+                    try {
+                        const token = await AuthManager.getToken({
+                            timeoutInSeconds: 60,
+                            maxRetries: this.AUTH_RETRY_LIMIT
+                        });
+                        
+                        const response = await fetch('/.netlify/functions/saveSurvey', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify(surveyData)
+                        });
+                        
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            throw new Error(`Failed to save survey: ${response.status} - ${errorText}`);
+                        }
+                        
+                        return await response.json();
+                    } catch (error) {
+                        console.error('Error saving survey to MongoDB:', error);
+                        throw error;
+                    }
                 }
             };
             // Base VisualizationManager definition
@@ -4149,6 +4181,9 @@
                             
                             // Add method to enhance survey UI
                             UserSurveyManager.enhanceSurveyUI = function() {
+                                document.querySelectorAll('[id$="-slider-container"]').forEach(container => {
+                                    container.remove();
+                                });
                                 try {
                                     // Make modal scrollable and larger
                                     const modalDialog = document.querySelector('#surveyModal .modal-dialog');
@@ -4860,71 +4895,6 @@
                         modalBody.style.maxHeight = '70vh';
                         modalBody.style.overflow = 'auto';
                     }
-                    
-                    // Fix duplicate sliders
-                    // First, remove any existing sliders to avoid duplicates
-                    document.querySelectorAll('[id$="-slider-container"]').forEach(container => {
-                        container.remove();
-                    });
-                    
-                    // Then add sliders for numeric inputs
-                    document.querySelectorAll('#surveyTabContent input[type="number"]').forEach(input => {
-                        const inputId = input.id;
-                        const baseId = inputId.replace('-score', '');
-                        
-                        // Create slider container with unique ID to help with cleanup
-                        const sliderContainer = document.createElement('div');
-                        sliderContainer.className = 'form-group mt-2';
-                        sliderContainer.id = `${baseId}-slider-container`;
-                        
-                        // Get min/max values from input
-                        const min = parseFloat(input.min) || 0;
-                        const max = parseFloat(input.max) || 4;
-                        const step = parseFloat(input.step) || 0.1;
-                        
-                        // Create slider
-                        const slider = document.createElement('input');
-                        slider.type = 'range';
-                        slider.className = 'form-control-range';
-                        slider.id = `${baseId}-slider`;
-                        slider.min = min;
-                        slider.max = max;
-                        slider.step = step;
-                        slider.value = input.value || min;
-                        
-                        // Add slider label
-                        const sliderLabel = document.createElement('label');
-                        sliderLabel.htmlFor = slider.id;
-                        sliderLabel.className = 'd-flex justify-content-between';
-                        sliderLabel.innerHTML = `
-                            <small class="text-left">${min}</small>
-                            <small class="text-center">Adjust Value</small>
-                            <small class="text-right">${max}</small>
-                        `;
-                        
-                        // Add event listeners
-                        slider.addEventListener('input', () => {
-                            input.value = slider.value;
-                            const event = new Event('change', { bubbles: true });
-                            input.dispatchEvent(event);
-                        });
-                        
-                        input.addEventListener('change', () => {
-                            slider.value = input.value;
-                        });
-                        
-                        // Add slider to container
-                        sliderContainer.appendChild(sliderLabel);
-                        sliderContainer.appendChild(slider);
-                        
-                        // Add slider after input's form group
-                        const inputGroup = input.closest('.form-group');
-                        if (inputGroup && inputGroup.nextElementSibling) {
-                            inputGroup.parentNode.insertBefore(sliderContainer, inputGroup.nextElementSibling);
-                        } else if (inputGroup) {
-                            inputGroup.parentNode.appendChild(sliderContainer);
-                        }
-                    });
                 });
             });    
                 
@@ -4992,14 +4962,18 @@
                  */
                 async submitSurvey(surveyData) {
                     try {
-                        // Calculate approximate size of survey data
-                        const surveySize = new TextEncoder().encode(JSON.stringify(surveyData)).length;
+                        // Save to Auth0 metadata for backward compatibility
+                        const auth0Result = await this.performUserDataOperation('add', surveyData);
                         
-                        if (surveySize > 1024 * 1024) { // 1MB per survey warning
-                            console.warn('Survey data is large:', surveySize, 'bytes');
+                        // Also save to MongoDB
+                        try {
+                            const mongoResult = await this.saveToMongoDB(surveyData);
+                            console.log('Survey saved to MongoDB:', mongoResult);
+                        } catch (mongoError) {
+                            console.error('Error saving to MongoDB, but saved to Auth0:', mongoError);
                         }
                         
-                        return await this.performUserDataOperation('add', surveyData);
+                        return auth0Result;
                     } catch (error) {
                         console.error('Error submitting survey:', error);
                         throw error;
@@ -5012,9 +4986,26 @@
                  * @param {Object} updatedSurveyData Updated survey data
                  * @returns {Promise<Object>} Result of the update
                  */
+                /**
+                 * Update an existing survey
+                 * @param {string} surveyId Survey ID to update
+                 * @param {Object} updatedSurveyData Updated survey data
+                 * @returns {Promise<Object>} Result of the update
+                 */
                 async updateSurvey(surveyId, updatedSurveyData) {
                     try {
-                        return await this.performUserDataOperation('update', updatedSurveyData, surveyId);
+                        // Update in Auth0 metadata for backward compatibility
+                        const auth0Result = await this.performUserDataOperation('update', updatedSurveyData, surveyId);
+                        
+                        // Also update in MongoDB
+                        try {
+                            const mongoResult = await this.saveToMongoDB(updatedSurveyData);
+                            console.log('Survey updated in MongoDB:', mongoResult);
+                        } catch (mongoError) {
+                            console.error('Error updating in MongoDB, but updated in Auth0:', mongoError);
+                        }
+                        
+                        return auth0Result;
                     } catch (error) {
                         console.error('Error updating survey:', error);
                         throw error;
@@ -5397,6 +5388,10 @@
                         // Uncheck all checkboxes
                         document.querySelectorAll('#surveyTabContent input[type="checkbox"]').forEach(checkbox => {
                             checkbox.checked = false;
+                        });
+                        // Remove any existing sliders
+                        document.querySelectorAll('[id$="-slider-container"]').forEach(container => {
+                            container.remove();
                         });
                         
                         // Reset tabs
