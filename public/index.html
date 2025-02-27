@@ -4789,9 +4789,11 @@
                 }
             });
 
-            // Survey form and modal fixes - add this to your JavaScript file
+            // Fix for survey form issues without breaking existing functionality
             document.addEventListener('DOMContentLoaded', function() {
-                // Fix scenario selection modal columns
+                console.log("DOM Content Loaded - Survey form fixes being applied");
+                
+                // 1. Fix scenario selection modal columns
                 const scenarioTableHeaders = document.querySelector('#scenarioSelectModal thead tr');
                 if (scenarioTableHeaders) {
                     scenarioTableHeaders.innerHTML = `
@@ -4801,12 +4803,56 @@
                     `;
                 }
                 
-                // Fix survey modal when it's shown
+                // 2. Set up survey modal improvements without replacing existing functionality
                 $(document).on('shown.bs.modal', '#surveyModal', function() {
-                    fixSurveyForm();
+                    console.log("Survey modal shown - applying fixes");
+                    
+                    // Fix scrolling
+                    const modalDialog = document.querySelector('#surveyModal .modal-dialog');
+                    if (modalDialog) {
+                        modalDialog.classList.add('modal-dialog-scrollable');
+                        modalDialog.classList.add('modal-xl');
+                    }
+                    
+                    const modalBody = document.querySelector('#surveyModal .modal-body');
+                    if (modalBody) {
+                        modalBody.style.maxHeight = '70vh';
+                        modalBody.style.overflow = 'auto';
+                    }
+                    
+                    // Fix duplicate sliders - only if they exist
+                    if (document.querySelectorAll('[id$="-slider-container"]').length > 0) {
+                        // Count sliders for each input to detect duplicates
+                        const sliderCounts = {};
+                        
+                        document.querySelectorAll('[id$="-slider-container"]').forEach(container => {
+                            const baseId = container.id.replace('-slider-container', '');
+                            sliderCounts[baseId] = (sliderCounts[baseId] || 0) + 1;
+                            
+                            // If this is a duplicate, remove it
+                            if (sliderCounts[baseId] > 1) {
+                                container.remove();
+                            }
+                        });
+                    }
+                    
+                    // Setup auto-edit detection
+                    document.querySelectorAll('#surveyTabContent input:not([type="checkbox"]), #surveyTabContent textarea, #surveyTabContent select').forEach(element => {
+                        // Skip if already has listener
+                        if (element.dataset.hasEditListener) return;
+                        
+                        element.dataset.hasEditListener = 'true';
+                        element.addEventListener('change', function() {
+                            const baseId = this.id.replace('-score', '').replace('-justification', '');
+                            const checkbox = document.getElementById(`${baseId}-edited`);
+                            if (checkbox) {
+                                checkbox.checked = true;
+                            }
+                        });
+                    });
                 });
                 
-                // Add CSS for modal scrolling and UI improvements
+                // 3. Add CSS for modal scrolling
                 const styleElement = document.createElement('style');
                 styleElement.textContent = `
                     /* Modal scrolling fixes */
@@ -4831,14 +4877,6 @@
                     /* Hide "I have edited this assessment" checkboxes */
                     .form-check input[id$="-edited"] + label {
                         display: none;
-                    }
-                    
-                    /* Make the submit button more visible */
-                    .submit-survey-btn {
-                        background-color: #28a745;
-                        color: white;
-                        font-weight: bold;
-                        padding: 10px 20px;
                     }
                 `;
                 document.head.appendChild(styleElement);
