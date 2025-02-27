@@ -545,6 +545,30 @@
         .form-control-range {
             width: 100%;
         }
+        .modal-dialog-scrollable {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 60px);
+            max-height: 90vh;
+        }
+        
+        .modal-dialog-scrollable .modal-content {
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-dialog-scrollable .modal-body {
+            overflow-y: auto !important;
+            padding-right: 15px;
+            scrollbar-width: thin;
+        }
+        
+        #surveyTabContent {
+            overflow: visible !important;
+            max-height: none !important;
+        }
     </style>
 </head>
 <body>
@@ -4139,8 +4163,59 @@
                                         }
                                     }
                                     
-                                    // Add sliders using the centralized function
-                                    createSlidersForInputs();
+                                    // Add sliders for numeric inputs
+                                    document.querySelectorAll('#surveyTabContent input[type="number"]').forEach(input => {
+                                        const inputId = input.id;
+                                        const baseId = inputId.replace('-score', '');
+                                        
+                                        // Create slider container
+                                        const sliderContainer = document.createElement('div');
+                                        sliderContainer.className = 'form-group mt-2';
+                                        
+                                        // Get min/max values from input
+                                        const min = parseFloat(input.min) || 0;
+                                        const max = parseFloat(input.max) || 4;
+                                        const step = parseFloat(input.step) || 0.1;
+                                        
+                                        // Create slider
+                                        const slider = document.createElement('input');
+                                        slider.type = 'range';
+                                        slider.className = 'form-control-range';
+                                        slider.id = `${baseId}-slider`;
+                                        slider.min = min;
+                                        slider.max = max;
+                                        slider.step = step;
+                                        slider.value = input.value || 0;
+                                        
+                                        // Add slider label
+                                        const sliderLabel = document.createElement('label');
+                                        sliderLabel.htmlFor = slider.id;
+                                        sliderLabel.className = 'd-flex justify-content-between';
+                                        sliderLabel.innerHTML = `
+                                            <small class="text-left">${min}</small>
+                                            <small class="text-center">Adjust Value</small>
+                                            <small class="text-right">${max}</small>
+                                        `;
+                                        
+                                        // Add event listeners
+                                        slider.addEventListener('input', () => {
+                                            input.value = slider.value;
+                                        });
+                                        
+                                        input.addEventListener('input', () => {
+                                            slider.value = input.value;
+                                        });
+                                        
+                                        // Add slider to container
+                                        sliderContainer.appendChild(sliderLabel);
+                                        sliderContainer.appendChild(slider);
+                                        
+                                        // Add slider after input's form group
+                                        const inputGroup = input.closest('.form-group');
+                                        if (inputGroup && inputGroup.nextElementSibling) {
+                                            inputGroup.parentNode.insertBefore(sliderContainer, inputGroup.nextElementSibling);
+                                        }
+                                    });
                                     
                                     // Enhance the progress bar
                                     this.updateProgressBar();
@@ -4738,25 +4813,25 @@
                 }
             });
 
-            // Update the modal shown event handler
+            // Update the analyze button event listener
             document.addEventListener('DOMContentLoaded', function() {
-                $('#surveyModal').on('shown.bs.modal', function() {
-                    // Fix scrolling
-                    const modalDialog = document.querySelector('#surveyModal .modal-dialog');
-                    if (modalDialog) {
-                        modalDialog.classList.add('modal-dialog-scrollable');
-                        modalDialog.classList.add('modal-xl');
+                const analyzeScenarioBtn = document.getElementById('analyze-scenario-btn');
+                if (analyzeScenarioBtn) {
+                    // Clone the button to remove any existing event listeners
+                    const newBtn = analyzeScenarioBtn.cloneNode(true);
+                    if (analyzeScenarioBtn.parentNode) {
+                        analyzeScenarioBtn.parentNode.replaceChild(newBtn, analyzeScenarioBtn);
                     }
                     
-                    const modalBody = document.querySelector('#surveyModal .modal-body');
-                    if (modalBody) {
-                        modalBody.style.maxHeight = '70vh';
-                        modalBody.style.overflow = 'auto';
-                    }
-                    
-                    // Use the centralized function for sliders
-                    createSlidersForInputs();
-                });
+                    newBtn.addEventListener('click', function() {
+                        if (VisualizationManager.handleAnalyzeScenarioClick) {
+                            VisualizationManager.handleAnalyzeScenarioClick();
+                        } else {
+                            console.error('handleAnalyzeScenarioClick method not found');
+                            alert('Analysis function not available');
+                        }
+                    });
+                }
             });
 
             // Wait for document to be ready
@@ -4851,37 +4926,8 @@
                         }
                     });
                 });
+            });    
                 
-                // Add CSS for scrolling
-                const styleElement = document.createElement('style');
-                styleElement.textContent = `
-                    .modal-dialog-scrollable {
-                        display: flex;
-                        flex-direction: column;
-                        height: calc(100% - 60px);
-                        max-height: 90vh;
-                    }
-                    
-                    .modal-dialog-scrollable .modal-content {
-                        max-height: 90vh;
-                        overflow: hidden;
-                        display: flex;
-                        flex-direction: column;
-                    }
-                    
-                    .modal-dialog-scrollable .modal-body {
-                        overflow-y: auto !important;
-                        padding-right: 15px;
-                        scrollbar-width: thin;
-                    }
-                    
-                    #surveyTabContent {
-                        overflow: visible !important;
-                        max-height: none !important;
-                    }
-                `;
-                document.head.appendChild(styleElement);
-            });
             
             // Complete the missing UserSurveyManager methods
             Object.assign(UserSurveyManager, {
@@ -5464,72 +5510,7 @@
                     return true;
                 }
             });
-            // Define a single function to handle slider creation
-            function createSlidersForInputs() {
-                // First, clean up any existing sliders to prevent duplication
-                document.querySelectorAll('[id$="-slider-container"]').forEach(container => {
-                    container.remove();
-                });
-                
-                // Then add sliders for numeric inputs
-                document.querySelectorAll('#surveyTabContent input[type="number"]').forEach(input => {
-                    const inputId = input.id;
-                    const baseId = inputId.replace('-score', '');
-                    
-                    // Create slider container with unique ID to help with cleanup
-                    const sliderContainer = document.createElement('div');
-                    sliderContainer.className = 'form-group mt-2';
-                    sliderContainer.id = `${baseId}-slider-container`;
-                    
-                    // Get min/max values from input
-                    const min = parseFloat(input.min) || 0;
-                    const max = parseFloat(input.max) || 4;
-                    const step = parseFloat(input.step) || 0.1;
-                    
-                    // Create slider
-                    const slider = document.createElement('input');
-                    slider.type = 'range';
-                    slider.className = 'form-control-range';
-                    slider.id = `${baseId}-slider`;
-                    slider.min = min;
-                    slider.max = max;
-                    slider.step = step;
-                    slider.value = input.value || min;
-                    
-                    // Add slider label
-                    const sliderLabel = document.createElement('label');
-                    sliderLabel.htmlFor = slider.id;
-                    sliderLabel.className = 'd-flex justify-content-between';
-                    sliderLabel.innerHTML = `
-                        <small class="text-left">${min}</small>
-                        <small class="text-center">Adjust Value</small>
-                        <small class="text-right">${max}</small>
-                    `;
-                    
-                    // Add event listeners
-                    slider.addEventListener('input', () => {
-                        input.value = slider.value;
-                        const event = new Event('change', { bubbles: true });
-                        input.dispatchEvent(event);
-                    });
-                    
-                    input.addEventListener('change', () => {
-                        slider.value = input.value;
-                    });
-                    
-                    // Add slider to container
-                    sliderContainer.appendChild(sliderLabel);
-                    sliderContainer.appendChild(slider);
-                    
-                    // Add slider after input's form group
-                    const inputGroup = input.closest('.form-group');
-                    if (inputGroup && inputGroup.nextElementSibling) {
-                        inputGroup.parentNode.insertBefore(sliderContainer, inputGroup.nextElementSibling);
-                    } else if (inputGroup) {
-                        inputGroup.parentNode.appendChild(sliderContainer);
-                    }
-                });
-            }
+
             // Add event listener for Analyze Scenario button
             document.addEventListener('DOMContentLoaded', () => {
                 const analyzeScenarioBtn = document.getElementById('analyze-scenario-btn');
