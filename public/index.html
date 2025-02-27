@@ -2496,30 +2496,26 @@
                         const progressBar = document.querySelector('.progress-bar');
                         if (!progressBar) return;
 
-                        // Get the current tab ID
-                        const currentTabId = this.tabIds[this.currentTabIndex];
+                        // Define tab weights (each contributes 25% to total)
+                        const tabWeights = {
+                            'ends': 0.25,
+                            'means': 0.25, 
+                            'character': 0.25,
+                            'philosophy': 0.25
+                        };
                         
-                        // Get all form fields in the current tab that should be filled
-                        const formFields = document.querySelectorAll(
-                            `#${currentTabId} input:not([disabled]):not([readonly]):not([type="checkbox"]), ` +
-                            `#${currentTabId} textarea:not([disabled]):not([readonly]), ` +
-                            `#${currentTabId} select:not([disabled]):not([readonly])`
-                        );
+                        // Calculate completion percentage for each tab
+                        const tabCompletions = {};
                         
-                        // Add special handling for the first tab (metadata)
-                        let totalFields = formFields.length;
-                        let completedFields = 0;
-                        
-                        if (this.currentTabIndex === 0) {
-                            // Check if moral classification is selected
-                            const moralClassification = document.getElementById('moral-classification');
-                            if (moralClassification && moralClassification.value) {
-                                completedFields++;
-                            }
-                            totalFields++; // Add moral classification to total
-                        } else {
-                            // Count completed fields in current tab
-                            completedFields = [...formFields].filter(field => {
+                        this.tabIds.forEach(tabId => {
+                            const formFields = document.querySelectorAll(
+                                `#${tabId} input:not([disabled]):not([readonly]):not([type="checkbox"]), ` +
+                                `#${tabId} textarea:not([disabled]):not([readonly]), ` +
+                                `#${tabId} select:not([disabled]):not([readonly])`
+                            );
+                            
+                            const totalFields = formFields.length;
+                            const completedFields = [...formFields].filter(field => {
                                 if (field.tagName.toLowerCase() === 'select') {
                                     return field.value !== '' && field.value !== null && field.selectedIndex !== -1;
                                 } else if (field.tagName.toLowerCase() === 'textarea') {
@@ -2528,30 +2524,31 @@
                                     return field.value !== '' && field.value !== null;
                                 }
                             }).length;
+                            
+                            tabCompletions[tabId] = totalFields > 0 ? (completedFields / totalFields) : 0;
+                        });
+                        
+                        // Calculate overall weighted completion
+                        let totalCompletion = 0;
+                        for (const [tabId, completion] of Object.entries(tabCompletions)) {
+                            totalCompletion += completion * tabWeights[tabId];
                         }
-
-                        // Calculate completion percentage for current tab
-                        const completionPercentage = Math.floor((completedFields / totalFields) * 100);
-
+                        
+                        // Calculate completion percentage (0-100)
+                        const completionPercentage = Math.floor(totalCompletion * 100);
+                        
                         // Update progress bar
                         progressBar.style.width = `${completionPercentage}%`;
                         progressBar.setAttribute('aria-valuenow', completionPercentage);
                         progressBar.textContent = `${completionPercentage}%`;
-
-                        // Set color based on completion
+                        
+                        // Update progress bar color
                         if (completionPercentage < 30) {
                             progressBar.className = 'progress-bar bg-danger';
                         } else if (completionPercentage < 70) {
                             progressBar.className = 'progress-bar bg-warning';
                         } else {
                             progressBar.className = 'progress-bar bg-success';
-                        }
-
-                        // Update the tab title to show progress
-                        const tabLink = document.querySelector(`#${currentTabId}-tab`);
-                        if (tabLink) {
-                            const baseTitle = tabLink.textContent.split('(')[0].trim();
-                            tabLink.textContent = `${baseTitle} (${completionPercentage}%)`;
                         }
                     } catch (error) {
                         console.error('Error updating progress bar:', error);
@@ -2738,7 +2735,7 @@
                  * @param {Object} surveyData Survey data to save
                  * @returns {Promise<Object>} Result of the operation
                  */
-                 async saveToMongoDB(surveyData) {
+                async saveToMongoDB(surveyData) {
                     try {
                         const token = await AuthManager.getToken({
                             timeoutInSeconds: 60,
@@ -5416,7 +5413,7 @@
                  * Collect survey data from form
                  * @returns {Promise<Object>} Collected survey data
                  */
-                async collectSurveyData() {
+                 async collectSurveyData() {
                     try {
                         // Ensure user is authenticated
                         const isAuthenticated = await AuthManager.isUserAuthenticated();
@@ -5436,7 +5433,7 @@
                             throw new Error('Missing required fields: scenario ID, title, or classification');
                         }
                         
-                        // Create survey data with proper validation
+                        // Create survey data with proper structure
                         const surveyData = {
                             id: scenarioId || this.generateId(),
                             type: document.getElementById('scenario-type')?.value || 'base',
@@ -5516,13 +5513,88 @@
                             lastModified: new Date().toISOString()
                         };
                         
-                        // Final validation check
-                        this.validateSurveyData(surveyData);
-                        
+                        // Validate and return data
                         return surveyData;
                     } catch (error) {
                         console.error('Error collecting survey data:', error);
                         throw error;
+                    }
+                },
+
+                /**
+                 * Process form data for a question
+                 * @param {string} questionId Base ID of the question (without -score or -justification)
+                 * @param {boolean} noScore Whether this question doesn't have a score field
+                 * @returns {Object} Processed question data
+                 */
+                processQuestionData(questionId, noScore = false) {
+                    const scoreField = document.getElementById(`${questionId}-score`);
+                    const justField = document.getElementById(`${questionId}-justification`);
+                    
+                    const question = {
+                        question: questionId.split('-').map(word => 
+                            word.charAt(0).toUpperCase() + word.slice(1)
+                        ).join(' '),
+                        justification: justField?.value || ''
+                    };
+                    
+                    if (!noScore && scoreField) {
+                        // Convert score to appropriate type (number or string)
+                        if (scoreField.tagName.toLowerCase() === 'select') {
+                            question.score = scoreField.value;
+                        } else {
+                            question.score = parseFloat(scoreField.value) || 0;
+                        }
+                    }
+                    
+                    return question;
+                },
+
+                /**
+                 * Calculate final x/y/z position from form values
+                 * @returns {Object} Position coordinates
+                 */
+                calculateFinalPosition() {
+                    try {
+                        // Calculate X axis (Ends)
+                        const societalNeedsScore = parseFloat(document.getElementById('societal-needs-score')?.value) || 0;
+                        const othersNeedsScore = parseFloat(document.getElementById('others-needs-score')?.value) || 0;
+                        const othersWantsScore = parseFloat(document.getElementById('others-wants-score')?.value) || 0;
+                        const personalNeedsScore = parseFloat(document.getElementById('personal-needs-score')?.value) || 0;
+                        const personalWantsScore = parseFloat(document.getElementById('personal-wants-score')?.value) || 0;
+                        
+                        // Calculate Y axis (Means)
+                        const futureSacrificeScore = parseFloat(document.getElementById('future-sacrifice-score')?.value) || 0;
+                        const individualsAffectedScore = parseFloat(document.getElementById('individuals-affected-score')?.value) || 0;
+                        const sacrificeTypeScore = parseFloat(document.getElementById('sacrifice-type-score')?.value) || 0;
+                        const sacrificeDurationScore = parseFloat(document.getElementById('sacrifice-duration-score')?.value) || 0;
+                        const lifeMagnitudeScore = parseFloat(document.getElementById('life-magnitude-score')?.value) || 0;
+                        
+                        // Calculate Z axis (Character)
+                        const consciousnessScore = parseFloat(document.getElementById('consciousness-score')?.value) || 0;
+                        const presentSacrificeScore = parseFloat(document.getElementById('present-sacrifice-score')?.value) || 0;
+                        const willpowerScore = parseFloat(document.getElementById('willpower-score')?.value) || 0;
+                        const intentionalityScore = parseFloat(document.getElementById('intentionality-score')?.value) || 0;
+                        
+                        // Final calculations
+                        const x = ((societalNeedsScore + othersNeedsScore + othersWantsScore) - 
+                                Math.abs(personalNeedsScore) - Math.abs(personalWantsScore));
+                                
+                        const y = ((futureSacrificeScore + individualsAffectedScore + 
+                                sacrificeTypeScore + sacrificeDurationScore) * -1) * 
+                                lifeMagnitudeScore;
+                                
+                        const z = consciousnessScore + presentSacrificeScore + 
+                                willpowerScore + intentionalityScore;
+                        
+                        return {
+                            x: parseFloat(x.toFixed(2)),
+                            y: parseFloat(y.toFixed(2)),
+                            z: parseFloat(z.toFixed(2))
+                        };
+                    } catch (error) {
+                        console.error('Error calculating final position:', error);
+                        return { x: 0, y: 0, z: 0 };
                     }
                 },
                 

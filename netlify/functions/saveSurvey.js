@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const MONGODB_URI = process.env.MONGODB_URI;
 const DB_NAME = 'moralcube';
-const COLLECTION_NAME = 'user_surveys';
+const COLLECTION_NAME = 'surveys';
 
 exports.handler = async (event, context) => {
   // Only allow POST requests
