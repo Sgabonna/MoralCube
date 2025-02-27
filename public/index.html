@@ -2220,6 +2220,8 @@
                 currentTabIndex: 0,
                 tabIds: ['ends', 'means', 'character', 'philosophy'],
                 isSubmitting: false,
+                initialFormState: {},
+                changedFields: new Set(),
 
                 // Constants
                 AUTH_RETRY_LIMIT: 2,
@@ -2236,6 +2238,76 @@
                     console.log('Survey manager initialized');
                 },
 
+                // Initialize change tracking
+                initializeChangeTracking() {
+                    // Clear previous state
+                    this.initialFormState = {};
+                    this.changedFields = new Set();
+                    
+                    // Capture initial form state
+                    document.querySelectorAll('#surveyTabContent input:not([type="checkbox"]), #surveyTabContent textarea, #surveyTabContent select').forEach(field => {
+                        const fieldId = field.id;
+                        this.initialFormState[fieldId] = field.value;
+                        
+                        // Add change listener
+                        field.addEventListener('change', () => {
+                            const originalValue = this.initialFormState[fieldId];
+                            const currentValue = field.value;
+                            
+                            if (originalValue !== currentValue) {
+                                this.changedFields.add(fieldId);
+                                console.log(`Field changed: ${fieldId}`);
+                            } else {
+                                this.changedFields.delete(fieldId);
+                            }
+                            
+                            // Update submission button based on changes
+                            this.updateSubmitButton();
+                        });
+                    });
+                    
+                    // Initialize submit button state
+                    this.updateSubmitButton();
+                },
+
+                // Update submit button based on changes
+                updateSubmitButton() {
+                    const submitBtn = document.querySelector('.submit-survey-btn');
+                    if (!submitBtn) return;
+                    
+                    if (this.changedFields.size === 0) {
+                        submitBtn.textContent = 'No Changes to Submit';
+                        submitBtn.disabled = true;
+                        submitBtn.classList.remove('btn-success');
+                        submitBtn.classList.add('btn-secondary');
+                    } else {
+                        submitBtn.textContent = `Submit Analysis (${this.changedFields.size} changes)`;
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('btn-secondary');
+                        submitBtn.classList.add('btn-success');
+                    }
+                },
+
+                // Get edited fields for submission
+                getEditedFields() {
+                    return Array.from(this.changedFields).map(fieldId => {
+                        // Convert field ID to a more meaningful name
+                        // Remove suffixes like -score or -justification
+                        const baseField = fieldId.replace(/-score$|-justification$/, '');
+                        return baseField;
+                    });
+                },
+
+                // Remove edit checkboxes
+                removeEditCheckboxes() {
+                    // Remove all edit checkboxes
+                    document.querySelectorAll('input[id$="-edited"]').forEach(checkbox => {
+                        const checkboxContainer = checkbox.closest('.form-check');
+                        if (checkboxContainer) {
+                            checkboxContainer.remove();
+                        }
+                    });
+                },
                 /**
                 * Initialize survey controls with event listeners
                 */
@@ -2279,11 +2351,14 @@
                                     submitBtn.disabled = true;
                                     submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
 
+                                    // Save to both Auth0 user metadata and MongoDB
                                     if (this.isEditMode && this.editSurveyId) {
                                         await this.updateSurvey(this.editSurveyId, surveyData);
+                                        await this.saveToMongoDB(surveyData);
                                         this.showSuccessMessage('Survey edits submitted successfully!');
                                     } else {
                                         await this.submitSurvey(surveyData);
+                                        await this.saveToMongoDB(surveyData);
                                         this.showSuccessMessage('Analysis submitted successfully!');
                                     }
 
@@ -2303,7 +2378,7 @@
                             }
                         });
                     }
-
+                    
                     // Add input change listeners to track edits
                     document.querySelectorAll(
                         '#surveyTabContent input:not([type="checkbox"]), #surveyTabContent textarea, #surveyTabContent select'
@@ -2319,7 +2394,7 @@
                             }
                         });
                     });
-
+                    
                     // Create new survey button
                     const createNewSurveyBtn = document.getElementById('create-new-survey-btn');
                     if (createNewSurveyBtn) {
@@ -2415,31 +2490,48 @@
                 /**
                 * Update the progress bar based on form completion
                 */
+                // Replace the existing updateProgressBar method with this improved version
                 updateProgressBar() {
                     try {
                         const progressBar = document.querySelector('.progress-bar');
                         if (!progressBar) return;
 
-                        // Get all form fields that should be filled
+                        // Get the current tab ID
+                        const currentTabId = this.tabIds[this.currentTabIndex];
+                        
+                        // Get all form fields in the current tab that should be filled
                         const formFields = document.querySelectorAll(
-                            '#surveyTabContent input:not([disabled]):not([readonly]):not([type="checkbox"]), ' +
-                            '#surveyTabContent textarea:not([disabled]):not([readonly]), ' +
-                            '#surveyTabContent select:not([disabled]):not([readonly])'
+                            `#${currentTabId} input:not([disabled]):not([readonly]):not([type="checkbox"]), ` +
+                            `#${currentTabId} textarea:not([disabled]):not([readonly]), ` +
+                            `#${currentTabId} select:not([disabled]):not([readonly])`
                         );
-
-                        // Count completed fields
-                        const completedFields = [...formFields].filter(field => {
-                            if (field.tagName.toLowerCase() === 'select') {
-                                return field.value !== '' && field.value !== null && field.selectedIndex !== -1;
-                            } else if (field.tagName.toLowerCase() === 'textarea') {
-                                return field.value.trim() !== '';
-                            } else {
-                                return field.value !== '' && field.value !== null;
+                        
+                        // Add special handling for the first tab (metadata)
+                        let totalFields = formFields.length;
+                        let completedFields = 0;
+                        
+                        if (this.currentTabIndex === 0) {
+                            // Check if moral classification is selected
+                            const moralClassification = document.getElementById('moral-classification');
+                            if (moralClassification && moralClassification.value) {
+                                completedFields++;
                             }
-                        }).length;
+                            totalFields++; // Add moral classification to total
+                        } else {
+                            // Count completed fields in current tab
+                            completedFields = [...formFields].filter(field => {
+                                if (field.tagName.toLowerCase() === 'select') {
+                                    return field.value !== '' && field.value !== null && field.selectedIndex !== -1;
+                                } else if (field.tagName.toLowerCase() === 'textarea') {
+                                    return field.value.trim() !== '';
+                                } else {
+                                    return field.value !== '' && field.value !== null;
+                                }
+                            }).length;
+                        }
 
-                        // Calculate completion percentage
-                        const completionPercentage = Math.floor((completedFields / formFields.length) * 100);
+                        // Calculate completion percentage for current tab
+                        const completionPercentage = Math.floor((completedFields / totalFields) * 100);
 
                         // Update progress bar
                         progressBar.style.width = `${completionPercentage}%`;
@@ -2453,6 +2545,13 @@
                             progressBar.className = 'progress-bar bg-warning';
                         } else {
                             progressBar.className = 'progress-bar bg-success';
+                        }
+
+                        // Update the tab title to show progress
+                        const tabLink = document.querySelector(`#${currentTabId}-tab`);
+                        if (tabLink) {
+                            const baseTitle = tabLink.textContent.split('(')[0].trim();
+                            tabLink.textContent = `${baseTitle} (${completionPercentage}%)`;
                         }
                     } catch (error) {
                         console.error('Error updating progress bar:', error);
@@ -2499,7 +2598,53 @@
                         return false;
                     }
                 },
-
+                initializeChangeTracking() {
+                    // Clear previous state
+                    this.initialFormState = {};
+                    this.changedFields = new Set();
+                    
+                    // Capture initial form state
+                    document.querySelectorAll('#surveyTabContent input:not([type="checkbox"]), #surveyTabContent textarea, #surveyTabContent select').forEach(field => {
+                        const fieldId = field.id;
+                        this.initialFormState[fieldId] = field.value;
+                        
+                        // Add change listener
+                        field.addEventListener('change', () => {
+                            const originalValue = this.initialFormState[fieldId];
+                            const currentValue = field.value;
+                            
+                            if (originalValue !== currentValue) {
+                                this.changedFields.add(fieldId);
+                                console.log(`Field changed: ${fieldId}`);
+                            } else {
+                                this.changedFields.delete(fieldId);
+                            }
+                            
+                            // Update submission button based on changes
+                            this.updateSubmitButton();
+                        });
+                    });
+                    
+                    // Initialize submit button state
+                    this.updateSubmitButton();
+                },
+                // Add function to update submit button
+                updateSubmitButton() {
+                    const submitBtn = document.querySelector('.submit-survey-btn');
+                    if (!submitBtn) return;
+                    
+                    if (this.changedFields.size === 0) {
+                        submitBtn.textContent = 'No Changes to Submit';
+                        submitBtn.disabled = true;
+                        submitBtn.classList.remove('btn-success');
+                        submitBtn.classList.add('btn-secondary');
+                    } else {
+                        submitBtn.textContent = `Submit Analysis (${this.changedFields.size} changes)`;
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('btn-secondary');
+                        submitBtn.classList.add('btn-success');
+                    }
+                },
                 /**
                 * Filter the scenarios list based on search input
                 * @param {string} searchText Text to search for
@@ -2593,7 +2738,7 @@
                  * @param {Object} surveyData Survey data to save
                  * @returns {Promise<Object>} Result of the operation
                  */
-                async saveToMongoDB(surveyData) {
+                 async saveToMongoDB(surveyData) {
                     try {
                         const token = await AuthManager.getToken({
                             timeoutInSeconds: 60,
@@ -4083,6 +4228,8 @@
                                     
                                     // Enhance survey UI with sliders and better scrolling
                                     this.enhanceSurveyUI();
+                                    this.removeEditCheckboxes();
+                                    this.initializeChangeTracking();
                                     
                                 } catch (error) {
                                     console.error('Error preparing scenario for analysis:', error);
@@ -4151,16 +4298,27 @@
                                                 justField.value = question.justification;
                                             }
                                             
-                                            // For philosophy questions that use select elements
+                                            // For philosophy questions
                                             if (tabId === 'philosophy') {
-                                                if (fieldBase === 'deontology' || fieldBase === 'utilitarianism') {
+                                                // Handle philosophy questions with select elements
+                                                if (fieldBase === 'deontology' || fieldBase === 'utilitarianism' || fieldBase === 'virtue-ethics') {
                                                     const select = document.getElementById(`${fieldBase}-score`);
+                                                    const justification = document.getElementById(`${fieldBase}-justification`);
+                                                    
                                                     if (select && question.score) {
+                                                        // Make sure score is treated as string for comparison with option values
+                                                        const scoreValue = String(question.score);
+                                                        
+                                                        // Set dropdown value
                                                         Array.from(select.options).forEach(option => {
-                                                            if (option.value === question.score) {
+                                                            if (option.value === scoreValue) {
                                                                 option.selected = true;
                                                             }
                                                         });
+                                                    }
+                                                    // Ensure justification is populated
+                                                    if (justification && question.justification) {
+                                                        justification.value = question.justification;
                                                     }
                                                 }
                                             }
