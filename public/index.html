@@ -4789,10 +4789,29 @@
                 }
             });
 
-            // Fix for survey form issues without breaking existing functionality
+            // Update the analyze button event listener
             document.addEventListener('DOMContentLoaded', function() {
-                console.log("DOM Content Loaded - Survey form fixes being applied");
-                
+                const analyzeScenarioBtn = document.getElementById('analyze-scenario-btn');
+                if (analyzeScenarioBtn) {
+                    // Clone the button to remove any existing event listeners
+                    const newBtn = analyzeScenarioBtn.cloneNode(true);
+                    if (analyzeScenarioBtn.parentNode) {
+                        analyzeScenarioBtn.parentNode.replaceChild(newBtn, analyzeScenarioBtn);
+                    }
+                    
+                    newBtn.addEventListener('click', function() {
+                        if (VisualizationManager.handleAnalyzeScenarioClick) {
+                            VisualizationManager.handleAnalyzeScenarioClick();
+                        } else {
+                            console.error('handleAnalyzeScenarioClick method not found');
+                            alert('Analysis function not available');
+                        }
+                    });
+                }
+            });
+
+            // Wait for document to be ready
+            document.addEventListener('DOMContentLoaded', function() {
                 // 1. Fix scenario selection modal columns
                 const scenarioTableHeaders = document.querySelector('#scenarioSelectModal thead tr');
                 if (scenarioTableHeaders) {
@@ -4803,10 +4822,8 @@
                     `;
                 }
                 
-                // 2. Set up survey modal improvements without replacing existing functionality
-                $(document).on('shown.bs.modal', '#surveyModal', function() {
-                    console.log("Survey modal shown - applying fixes");
-                    
+                // 2 & 3. Fix survey modal scrolling and slider issues
+                $('#surveyModal').on('shown.bs.modal', function() {
                     // Fix scrolling
                     const modalDialog = document.querySelector('#surveyModal .modal-dialog');
                     if (modalDialog) {
@@ -4820,340 +4837,102 @@
                         modalBody.style.overflow = 'auto';
                     }
                     
-                    // Fix duplicate sliders - only if they exist
-                    if (document.querySelectorAll('[id$="-slider-container"]').length > 0) {
-                        // Count sliders for each input to detect duplicates
-                        const sliderCounts = {};
-                        
-                        document.querySelectorAll('[id$="-slider-container"]').forEach(container => {
-                            const baseId = container.id.replace('-slider-container', '');
-                            sliderCounts[baseId] = (sliderCounts[baseId] || 0) + 1;
-                            
-                            // If this is a duplicate, remove it
-                            if (sliderCounts[baseId] > 1) {
-                                container.remove();
-                            }
-                        });
-                    }
+                    // Fix duplicate sliders
+                    // First, remove any existing sliders to avoid duplicates
+                    document.querySelectorAll('[id$="-slider-container"]').forEach(container => {
+                        container.remove();
+                    });
                     
-                    // Setup auto-edit detection
-                    document.querySelectorAll('#surveyTabContent input:not([type="checkbox"]), #surveyTabContent textarea, #surveyTabContent select').forEach(element => {
-                        // Skip if already has listener
-                        if (element.dataset.hasEditListener) return;
+                    // Then add sliders for numeric inputs
+                    document.querySelectorAll('#surveyTabContent input[type="number"]').forEach(input => {
+                        const inputId = input.id;
+                        const baseId = inputId.replace('-score', '');
                         
-                        element.dataset.hasEditListener = 'true';
-                        element.addEventListener('change', function() {
-                            const baseId = this.id.replace('-score', '').replace('-justification', '');
-                            const checkbox = document.getElementById(`${baseId}-edited`);
-                            if (checkbox) {
-                                checkbox.checked = true;
-                            }
+                        // Create slider container with unique ID to help with cleanup
+                        const sliderContainer = document.createElement('div');
+                        sliderContainer.className = 'form-group mt-2';
+                        sliderContainer.id = `${baseId}-slider-container`;
+                        
+                        // Get min/max values from input
+                        const min = parseFloat(input.min) || 0;
+                        const max = parseFloat(input.max) || 4;
+                        const step = parseFloat(input.step) || 0.1;
+                        
+                        // Create slider
+                        const slider = document.createElement('input');
+                        slider.type = 'range';
+                        slider.className = 'form-control-range';
+                        slider.id = `${baseId}-slider`;
+                        slider.min = min;
+                        slider.max = max;
+                        slider.step = step;
+                        slider.value = input.value || min;
+                        
+                        // Add slider label
+                        const sliderLabel = document.createElement('label');
+                        sliderLabel.htmlFor = slider.id;
+                        sliderLabel.className = 'd-flex justify-content-between';
+                        sliderLabel.innerHTML = `
+                            <small class="text-left">${min}</small>
+                            <small class="text-center">Adjust Value</small>
+                            <small class="text-right">${max}</small>
+                        `;
+                        
+                        // Add event listeners
+                        slider.addEventListener('input', () => {
+                            input.value = slider.value;
+                            const event = new Event('change', { bubbles: true });
+                            input.dispatchEvent(event);
                         });
+                        
+                        input.addEventListener('change', () => {
+                            slider.value = input.value;
+                        });
+                        
+                        // Add slider to container
+                        sliderContainer.appendChild(sliderLabel);
+                        sliderContainer.appendChild(slider);
+                        
+                        // Add slider after input's form group
+                        const inputGroup = input.closest('.form-group');
+                        if (inputGroup && inputGroup.nextElementSibling) {
+                            inputGroup.parentNode.insertBefore(sliderContainer, inputGroup.nextElementSibling);
+                        } else if (inputGroup) {
+                            inputGroup.parentNode.appendChild(sliderContainer);
+                        }
                     });
                 });
                 
-                // 3. Add CSS for modal scrolling
+                // Add CSS for scrolling
                 const styleElement = document.createElement('style');
                 styleElement.textContent = `
-                    /* Modal scrolling fixes */
                     .modal-dialog-scrollable {
+                        display: flex;
+                        flex-direction: column;
+                        height: calc(100% - 60px);
                         max-height: 90vh;
                     }
                     
                     .modal-dialog-scrollable .modal-content {
                         max-height: 90vh;
+                        overflow: hidden;
+                        display: flex;
+                        flex-direction: column;
                     }
                     
                     .modal-dialog-scrollable .modal-body {
                         overflow-y: auto !important;
-                        max-height: 70vh !important;
+                        padding-right: 15px;
+                        scrollbar-width: thin;
                     }
                     
                     #surveyTabContent {
                         overflow: visible !important;
                         max-height: none !important;
                     }
-                    
-                    /* Hide "I have edited this assessment" checkboxes */
-                    .form-check input[id$="-edited"] + label {
-                        display: none;
-                    }
                 `;
                 document.head.appendChild(styleElement);
             });
-
-            /**
-             * Fix survey form issues - duplicate sliders and scrolling
-             */
-            function fixSurveyForm() {
-                console.log("Fixing survey form...");
-                
-                // Fix scrolling
-                const modalDialog = document.querySelector('#surveyModal .modal-dialog');
-                if (modalDialog) {
-                    modalDialog.classList.add('modal-dialog-scrollable');
-                    modalDialog.classList.add('modal-xl');
-                }
-                
-                const modalBody = document.querySelector('#surveyModal .modal-body');
-                if (modalBody) {
-                    modalBody.style.maxHeight = '70vh';
-                    modalBody.style.overflow = 'auto';
-                }
-                
-                // Fix duplicate sliders
-                removeAllSliders();
-                addSlidersToInputs();
-                setupAutoEditDetection();
-                
-                // Fix form height
-                const tabContent = document.getElementById('surveyTabContent');
-                if (tabContent) {
-                    tabContent.style.maxHeight = 'none';
-                    tabContent.style.overflow = 'visible';
-                }
-                
-                document.querySelectorAll('.tab-pane').forEach(pane => {
-                    pane.style.maxHeight = 'none';
-                    pane.style.overflow = 'visible';
-                });
-                
-                // Fix submit button
-                enhanceSubmitButton();
-            }
-
-            /**
-             * Remove all sliders to avoid duplicates
-             */
-            function removeAllSliders() {
-                document.querySelectorAll('[id$="-slider-container"]').forEach(container => {
-                    container.remove();
-                });
-            }
-
-            /**
-             * Add sliders to numeric inputs
-             */
-            function addSlidersToInputs() {
-                document.querySelectorAll('#surveyTabContent input[type="number"]').forEach(input => {
-                    const inputId = input.id;
-                    const baseId = inputId.replace('-score', '');
-                    
-                    // Create slider container
-                    const sliderContainer = document.createElement('div');
-                    sliderContainer.className = 'form-group mt-2';
-                    sliderContainer.id = `${baseId}-slider-container`;
-                    
-                    // Get min/max values from input
-                    const min = parseFloat(input.min) || 0;
-                    const max = parseFloat(input.max) || 4;
-                    const step = parseFloat(input.step) || 0.1;
-                    
-                    // Create slider
-                    const slider = document.createElement('input');
-                    slider.type = 'range';
-                    slider.className = 'form-control-range';
-                    slider.id = `${baseId}-slider`;
-                    slider.min = min;
-                    slider.max = max;
-                    slider.step = step;
-                    slider.value = input.value || min;
-                    
-                    // Add slider label
-                    const sliderLabel = document.createElement('label');
-                    sliderLabel.htmlFor = slider.id;
-                    sliderLabel.className = 'd-flex justify-content-between';
-                    sliderLabel.innerHTML = `
-                        <small class="text-left">${min}</small>
-                        <small class="text-center">Adjust Value</small>
-                        <small class="text-right">${max}</small>
-                    `;
-                    
-                    // Add event listeners
-                    slider.addEventListener('input', () => {
-                        input.value = slider.value;
-                        
-                        // Trigger change event for validation
-                        const event = new Event('change', { bubbles: true });
-                        input.dispatchEvent(event);
-                        
-                        // Auto-mark as edited
-                        markAsEdited(baseId);
-                    });
-                    
-                    input.addEventListener('input', () => {
-                        slider.value = input.value;
-                        markAsEdited(baseId);
-                    });
-                    
-                    // Add slider to container
-                    sliderContainer.appendChild(sliderLabel);
-                    sliderContainer.appendChild(slider);
-                    
-                    // Add slider after input's form group
-                    const inputGroup = input.closest('.form-group');
-                    if (inputGroup && inputGroup.nextElementSibling) {
-                        inputGroup.parentNode.insertBefore(sliderContainer, inputGroup.nextElementSibling);
-                    } else if (inputGroup) {
-                        inputGroup.parentNode.appendChild(sliderContainer);
-                    }
-                });
-            }
-
-            /**
-             * Set up automatic detection of edits
-             */
-            function setupAutoEditDetection() {
-                document.querySelectorAll('#surveyTabContent input:not([type="checkbox"]), #surveyTabContent textarea, #surveyTabContent select').forEach(element => {
-                    if (element.dataset.hasChangeListener) return;
-                    
-                    element.dataset.hasChangeListener = 'true';
-                    element.addEventListener('change', function() {
-                        const baseId = this.id.replace('-score', '').replace('-justification', '');
-                        markAsEdited(baseId);
-                    });
-                });
-            }
-
-            /**
-             * Enhance the submit button functionality
-             */
-            function enhanceSubmitButton() {
-                const submitButton = document.querySelector('.submit-survey-btn');
-                if (!submitButton || submitButton.dataset.enhanced) return;
-                
-                // Mark as enhanced to avoid duplicate handlers
-                submitButton.dataset.enhanced = 'true';
-                
-                // Replace the existing click handler
-                const newButton = submitButton.cloneNode(true);
-                if (submitButton.parentNode) {
-                    submitButton.parentNode.replaceChild(newButton, submitButton);
-                }
-                
-                // Add new click handler
-                newButton.addEventListener('click', async function() {
-                    try {
-                        // Validate form
-                        const currentTabId = document.querySelector('.tab-pane.active').id;
-                        if (!validateCurrentTab(currentTabId)) {
-                            alert('Please complete all required fields before submitting.');
-                            return;
-                        }
-                        
-                        // Disable button to prevent multiple submissions
-                        newButton.disabled = true;
-                        newButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
-                        
-                        // Get survey data
-                        const surveyData = await collectSurveyData();
-                        
-                        // Submit to MongoDB via existing mechanism
-                        if (window.UserSurveyManager && typeof window.UserSurveyManager.submitSurvey === 'function') {
-                            await window.UserSurveyManager.submitSurvey(surveyData);
-                            alert('Survey submitted successfully!');
-                            $('#surveyModal').modal('hide');
-                        } else {
-                            throw new Error('Survey submission function not available');
-                        }
-                    } catch (error) {
-                        console.error('Error submitting survey:', error);
-                        alert('Error submitting survey: ' + error.message);
-                    } finally {
-                        // Re-enable button
-                        newButton.disabled = false;
-                        newButton.textContent = 'Submit Survey';
-                    }
-                });
-            }
-
-            /**
-             * Mark a question as edited
-             * @param {string} baseId The base ID of the question 
-             */
-            function markAsEdited(baseId) {
-                const checkbox = document.getElementById(`${baseId}-edited`);
-                if (checkbox) {
-                    checkbox.checked = true;
-                }
-            }
-
-            /**
-             * Validate the current tab
-             * @param {string} tabId The ID of the current tab
-             * @returns {boolean} Whether the tab is valid
-             */
-            function validateCurrentTab(tabId) {
-                let isValid = true;
-                
-                // Check required numeric inputs in the current tab
-                document.querySelectorAll(`#${tabId} input[type="number"]`).forEach(input => {
-                    if (input.value === '' || isNaN(parseFloat(input.value))) {
-                        input.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        input.classList.remove('is-invalid');
-                    }
-                });
-                
-                // Check required selects in the current tab
-                document.querySelectorAll(`#${tabId} select:not([disabled])`).forEach(select => {
-                    if (select.value === '' || select.selectedIndex === -1 || 
-                        (select.selectedIndex === 0 && select.options[0].disabled)) {
-                        select.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        select.classList.remove('is-invalid');
-                    }
-                });
-                
-                // Special check for moral classification
-                if (tabId === 'philosophy' || tabId === 'ends') {
-                    const moralClassification = document.getElementById('moral-classification');
-                    if (moralClassification && !moralClassification.value) {
-                        moralClassification.classList.add('is-invalid');
-                        isValid = false;
-                    }
-                }
-                
-                return isValid;
-            }
-
-            /**
-             * Collect survey data from the form
-             * @returns {Promise<Object>} The collected survey data
-             */
-            async function collectSurveyData() {
-                // If UserSurveyManager.collectSurveyData exists, use it
-                if (window.UserSurveyManager && typeof window.UserSurveyManager.collectSurveyData === 'function') {
-                    return await window.UserSurveyManager.collectSurveyData();
-                }
-                
-                // Otherwise, create a basic implementation
-                const surveyData = {
-                    id: document.getElementById('scenario-id')?.value,
-                    type: document.getElementById('scenario-type')?.value || 'base',
-                    parentId: document.getElementById('scenario-parent-id')?.value || null,
-                    metadata: {
-                        title: document.getElementById('scenario-title-display')?.value,
-                        description: document.getElementById('scenario-description-display')?.value || '',
-                        category: document.getElementById('scenario-category-display')?.value || '',
-                        llmSource: {
-                            model: "Human",
-                            version: "1.0",
-                            provider: "Human"
-                        },
-                        classification: {
-                            type: document.getElementById('moral-classification')?.value,
-                            justification: document.getElementById('classification-justification')?.value || ''
-                        },
-                        url: document.getElementById('scenario-url')?.value || ''
-                    },
-                    // Add more fields as needed
-                };
-                
-                return surveyData;
-            }
             
             // Complete the missing UserSurveyManager methods
             Object.assign(UserSurveyManager, {
