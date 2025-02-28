@@ -6163,7 +6163,17 @@
                             lastModified: new Date().toISOString()
                         };
                         
-                        // Validate and return data
+                        // Ensure required fields are editable before collection
+                        this.ensureFormFieldsEditable();
+                        
+                        // Log the survey data structure for debugging
+                        console.log("Survey data structure:", JSON.stringify(surveyData, null, 2));
+                        
+                        // Validate the survey data before returning
+                        console.log("Validating survey data...");
+                        this.validateSurveyData(surveyData);
+                        console.log("Survey data validation successful");
+                        
                         return surveyData;
                     } catch (error) {
                         console.error('Error collecting survey data:', error);
