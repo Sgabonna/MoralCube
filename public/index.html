@@ -2684,17 +2684,14 @@
                 * @returns {Object} Processed question data
                 */
                 processQuestionData(questionId, noScore = false) {
-                    const scoreField = document.getElementById(`${questionId}-score`);
-                    const justField = document.getElementById(`${questionId}-justification`);
-                    
-                    // Map of field IDs to proper question names
-                    const questionNameMap = {
+                    // Direct mapping to ensure exact match with expected format
+                    const EXACT_QUESTION_NAMES = {
                         'societal-needs': 'Societal Needs',
                         'others-needs': 'Others Needs',
                         'others-wants': 'Others Wants', 
                         'personal-needs': 'Personal Needs',
                         'personal-wants': 'Personal Wants',
-                        'future-sacrifice': 'Future Self-Sacrifice',
+                        'future-sacrifice': 'Future Self-Sacrifice', // Critical fix
                         'individuals-affected': 'Number of Individuals Affected',
                         'sacrifice-type': 'Type of Sacrifice',
                         'sacrifice-duration': 'Duration of Sacrifice',
@@ -2708,11 +2705,18 @@
                         'utilitarianism': 'Utilitarianism',
                         'virtue-ethics': 'Virtue Ethics'
                     };
+
+                    const scoreField = document.getElementById(`${questionId}-score`);
+                    const justField = document.getElementById(`${questionId}-justification`);
+                    
+                    // Use exact mapping to ensure consistency
+                    const exactQuestionName = EXACT_QUESTION_NAMES[questionId];
+                    if (!exactQuestionName) {
+                        console.error(`Missing question name mapping for field ID: ${questionId}`);
+                    }
                     
                     const question = {
-                        question: questionNameMap[questionId] || questionId.split('-').map(word => 
-                            word.charAt(0).toUpperCase() + word.slice(1)
-                        ).join(' '),
+                        question: exactQuestionName || questionId,
                         justification: justField?.value || ''
                     };
                     
@@ -2779,9 +2783,14 @@
                 * Populate model answers in the form
                 * @param {Object} scenario Scenario data
                 */
+                /**
+                * Enhanced version for philosophy tab population
+                */
                 populateModelAnswers(scenario) {
                     try {
                         if (!scenario.dimensions) return;
+                        
+                        console.log("Populating model answers from scenario:", scenario.scenarioTitle);
                         
                         // Map of dimension IDs to tab IDs
                         const dimensionTabMap = {
@@ -2818,59 +2827,52 @@
                             const tabId = dimensionTabMap[dimension.id];
                             if (!tabId) return;
                             
-                            // Find the philosophical analysis dimension
-                            if (dimension.id === 'PhilosophicalAnalysis') {
-                                (dimension.questions || []).forEach(question => {
-                                    const fieldBase = questionFieldMap[question.question];
-                                    if (!fieldBase) return;
-                                    
-                                    // Handle philosophy questions with select elements
-                                    const select = document.getElementById(`${fieldBase}-score`);
-                                    const justification = document.getElementById(`${fieldBase}-justification`);
-                                    
-                                    // Set dropdown value for philosophy questions
-                                    if (select && question.score) {
-                                        // Make sure to convert any value to string for proper comparison
+                            // Process all questions in this dimension
+                            (dimension.questions || []).forEach(question => {
+                                const fieldBase = questionFieldMap[question.question];
+                                if (!fieldBase) {
+                                    console.warn(`Unknown question: ${question.question}`);
+                                    return;
+                                }
+                                
+                                // Set score field
+                                const scoreField = document.getElementById(`${fieldBase}-score`);
+                                if (scoreField) {
+                                    // Handle select elements (for philosophy)
+                                    if (scoreField.tagName.toLowerCase() === 'select') {
+                                        // Try to match option by value or text
+                                        let optionFound = false;
                                         const scoreValue = String(question.score);
                                         
-                                        // Find matching option
-                                        let optionFound = false;
-                                        Array.from(select.options).forEach(option => {
-                                            if (option.value.toLowerCase() === scoreValue.toLowerCase()) {
+                                        // First try matching by value
+                                        Array.from(scoreField.options).forEach(option => {
+                                            if (option.value === scoreValue) {
                                                 option.selected = true;
                                                 optionFound = true;
                                             }
                                         });
                                         
-                                        // If no direct match found, try to match by option text content
+                                        // If no match by value, try matching by text content
                                         if (!optionFound) {
-                                            Array.from(select.options).forEach(option => {
-                                                if (option.textContent.toLowerCase().includes(scoreValue.toLowerCase())) {
+                                            Array.from(scoreField.options).forEach(option => {
+                                                if (option.textContent.includes(scoreValue)) {
                                                     option.selected = true;
                                                     optionFound = true;
                                                 }
                                             });
                                         }
-                                    }
-                                    
-                                    // Set justification text
-                                    if (justification && question.justification) {
-                                        justification.value = question.justification;
                                         
-                                        // Trigger change event to update UI
-                                        const event = new Event('change', { bubbles: true });
-                                        justification.dispatchEvent(event);
-                                    }
-                                });
-                            } else {
-                                // Handle regular questions
-                                (dimension.questions || []).forEach(question => {
-                                    const fieldBase = questionFieldMap[question.question];
-                                    if (!fieldBase) return;
-                                    
-                                    // Set score field
-                                    const scoreField = document.getElementById(`${fieldBase}-score`);
-                                    if (scoreField && question.score !== undefined) {
+                                        // If still no match, use first non-disabled option
+                                        if (!optionFound && scoreField.options.length > 0) {
+                                            for (let i = 0; i < scoreField.options.length; i++) {
+                                                if (!scoreField.options[i].disabled) {
+                                                    scoreField.options[i].selected = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    } else if (question.score !== undefined) {
+                                        // For number inputs
                                         scoreField.value = question.score;
                                         
                                         // Update slider if it exists
@@ -2880,13 +2882,26 @@
                                         }
                                     }
                                     
-                                    // Set justification field
-                                    const justField = document.getElementById(`${fieldBase}-justification`);
-                                    if (justField && question.justification) {
-                                        justField.value = question.justification;
-                                    }
-                                });
-                            }
+                                    // Trigger change event
+                                    const event = new Event('change', { bubbles: true });
+                                    scoreField.dispatchEvent(event);
+                                }
+                                
+                                // Set justification field
+                                const justField = document.getElementById(`${fieldBase}-justification`);
+                                if (justField && question.justification) {
+                                    // Ensure it's editable
+                                    justField.readOnly = false;
+                                    justField.disabled = false;
+                                    
+                                    // Set value
+                                    justField.value = question.justification;
+                                    
+                                    // Trigger change event
+                                    const event = new Event('change', { bubbles: true });
+                                    justField.dispatchEvent(event);
+                                }
+                            });
                         });
                         
                         // Set classification justification if available
@@ -2896,9 +2911,143 @@
                                 justField.value = scenario.metadata.classification.justification;
                             }
                         }
+                        
+                        // Make sure all fields are editable
+                        this.ensureFormFieldsEditable();
+                        
                     } catch (error) {
                         console.error('Error populating model answers:', error);
                     }
+                },
+
+                /**
+                * Specifically handle philosophy tab population
+                */
+                populatePhilosophyTab(dimension) {
+                    // Direct field mappings
+                    const PHILOSOPHY_FIELD_MAP = {
+                        'Deontology': 'deontology',
+                        'Utilitarianism': 'utilitarianism',
+                        'Virtue Ethics': 'virtue-ethics'
+                    };
+                    
+                    // Process each philosophy question
+                    (dimension.questions || []).forEach(question => {
+                        const questionName = question.question;
+                        const fieldBase = PHILOSOPHY_FIELD_MAP[questionName];
+                        
+                        if (!fieldBase) {
+                            console.warn(`Unknown philosophy question: ${questionName}`);
+                            return;
+                        }
+                        
+                        console.log(`Populating philosophy field: ${fieldBase} with score: ${question.score}`);
+                        
+                        // Get form elements
+                        const scoreSelect = document.getElementById(`${fieldBase}-score`);
+                        const justField = document.getElementById(`${fieldBase}-justification`);
+                        
+                        // Populate score dropdown
+                        if (scoreSelect && question.score) {
+                            // Try exact match first
+                            let optionFound = false;
+                            Array.from(scoreSelect.options).forEach(option => {
+                                if (option.value === String(question.score)) {
+                                    option.selected = true;
+                                    optionFound = true;
+                                }
+                            });
+                            
+                            // If no exact match, try matching text content
+                            if (!optionFound) {
+                                Array.from(scoreSelect.options).forEach(option => {
+                                    if (option.textContent.trim() === String(question.score) ||
+                                        option.textContent.trim().toLowerCase() === String(question.score).toLowerCase()) {
+                                        option.selected = true;
+                                    }
+                                });
+                            }
+                            
+                            // Force a change event
+                            const changeEvent = new Event('change', { bubbles: true });
+                            scoreSelect.dispatchEvent(changeEvent);
+                        }
+                        
+                        // Populate justification text
+                        if (justField && question.justification) {
+                            // Make sure it's not readonly
+                            justField.readOnly = false;
+                            justField.disabled = false;
+                            
+                            // Set the value
+                            justField.value = question.justification;
+                            
+                            // Force a change event
+                            const changeEvent = new Event('change', { bubbles: true });
+                            justField.dispatchEvent(changeEvent);
+                        }
+                    });
+                },
+
+                /**
+                * Handle standard dimensions
+                */
+                populateStandardDimension(dimension) {
+                    // Question field mapping
+                    const QUESTION_FIELD_MAP = {
+                        'Societal Needs': 'societal-needs',
+                        'Others Needs': 'others-needs',
+                        'Others Wants': 'others-wants',
+                        'Personal Needs': 'personal-needs',
+                        'Personal Wants': 'personal-wants',
+                        'Future Self-Sacrifice': 'future-sacrifice',
+                        'Number of Individuals Affected': 'individuals-affected',
+                        'Type of Sacrifice': 'sacrifice-type',
+                        'Duration of Sacrifice': 'sacrifice-duration',
+                        'Magnitude of Life Impacted': 'life-magnitude',
+                        'Unconscious vs Conscious': 'consciousness',
+                        'Present Self-Sacrifice': 'present-sacrifice',
+                        'Habit vs Will Power': 'willpower',
+                        'Unintentional vs Intentional': 'intentionality',
+                        'Wills at Play': 'wills'
+                    };
+                    
+                    // Process each question
+                    (dimension.questions || []).forEach(question => {
+                        const questionName = question.question;
+                        const fieldBase = QUESTION_FIELD_MAP[questionName];
+                        
+                        if (!fieldBase) {
+                            console.warn(`Unknown question for ${dimension.id}: ${questionName}`);
+                            return;
+                        }
+                        
+                        // Set score field
+                        const scoreField = document.getElementById(`${fieldBase}-score`);
+                        if (scoreField && question.score !== undefined) {
+                            scoreField.value = question.score;
+                            
+                            // Update slider if it exists
+                            const slider = document.getElementById(`${fieldBase}-slider`);
+                            if (slider) {
+                                slider.value = question.score;
+                            }
+                            
+                            // Force a change event
+                            const changeEvent = new Event('change', { bubbles: true });
+                            scoreField.dispatchEvent(changeEvent);
+                        }
+                        
+                        // Set justification field
+                        const justField = document.getElementById(`${fieldBase}-justification`);
+                        if (justField && question.justification) {
+                            justField.value = question.justification;
+                            
+                            // Force a change event
+                            const changeEvent = new Event('change', { bubbles: true });
+                            justField.dispatchEvent(changeEvent);
+                        }
+                    });
                 },
 
                 /**
@@ -2908,7 +3057,24 @@
                 generateId() {
                     return `survey_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
                 },
-
+                /**
+                * Ensure all form fields are editable
+                */
+                ensureFormFieldsEditable() {
+                    // Enable all fields in form
+                    document.querySelectorAll('#surveyTabContent textarea, #surveyTabContent select, #surveyTabContent input').forEach(field => {
+                        field.disabled = false;
+                        field.readOnly = false;
+                    });
+                    
+                    // Specifically target philosophy fields which might have special handling
+                    document.querySelectorAll('#philosophy textarea, #philosophy select').forEach(field => {
+                        field.disabled = false;
+                        field.readOnly = false;
+                    });
+                    
+                    console.log("All form fields are now editable");
+                },
                 /**
                 * Collect survey data from form
                 * @returns {Promise<Object>} Collected survey data
@@ -3105,8 +3271,10 @@
                     } catch (error) {
                         console.error('Error enhancing survey UI:', error);
                     }
+                    // Add after enhanceSurveyUI
+                this.ensureFormFieldsEditable();
                 },
-
+                
                 /**
                 * Reset the survey form
                 */
@@ -4707,6 +4875,8 @@
                                     this.enhanceSurveyUI();
                                     this.removeEditCheckboxes();
                                     this.initializeChangeTracking();
+                                    this.ensureFormFieldsEditable();
+                                    
                                     
                                 } catch (error) {
                                     console.error('Error preparing scenario for analysis:', error);
@@ -6008,18 +6178,43 @@
                  * @returns {Object} Processed question data
                  */
                 processQuestionData(questionId, noScore = false) {
+                    // Direct mapping to ensure exact match with expected format
+                    const EXACT_QUESTION_NAMES = {
+                        'societal-needs': 'Societal Needs',
+                        'others-needs': 'Others Needs',
+                        'others-wants': 'Others Wants', 
+                        'personal-needs': 'Personal Needs',
+                        'personal-wants': 'Personal Wants',
+                        'future-sacrifice': 'Future Self-Sacrifice', // Critical fix
+                        'individuals-affected': 'Number of Individuals Affected',
+                        'sacrifice-type': 'Type of Sacrifice',
+                        'sacrifice-duration': 'Duration of Sacrifice',
+                        'life-magnitude': 'Magnitude of Life Impacted',
+                        'consciousness': 'Unconscious vs Conscious',
+                        'present-sacrifice': 'Present Self-Sacrifice',
+                        'willpower': 'Habit vs Will Power',
+                        'intentionality': 'Unintentional vs Intentional',
+                        'wills': 'Wills at Play',
+                        'deontology': 'Deontology',
+                        'utilitarianism': 'Utilitarianism',
+                        'virtue-ethics': 'Virtue Ethics'
+                    };
+
                     const scoreField = document.getElementById(`${questionId}-score`);
                     const justField = document.getElementById(`${questionId}-justification`);
                     
+                    // Use exact mapping to ensure consistency
+                    const exactQuestionName = EXACT_QUESTION_NAMES[questionId];
+                    if (!exactQuestionName) {
+                        console.error(`Missing question name mapping for field ID: ${questionId}`);
+                    }
+                    
                     const question = {
-                        question: questionId.split('-').map(word => 
-                            word.charAt(0).toUpperCase() + word.slice(1)
-                        ).join(' '),
+                        question: exactQuestionName || questionId,
                         justification: justField?.value || ''
                     };
                     
                     if (!noScore && scoreField) {
-                        // Convert score to appropriate type (number or string)
                         if (scoreField.tagName.toLowerCase() === 'select') {
                             question.score = scoreField.value;
                         } else {
