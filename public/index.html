@@ -1020,7 +1020,7 @@
                 <div class="tab-pane fade" id="means" role="tabpanel">
                   <div class="question-section mb-4">
                     <div class="question-item p-3 mb-3 border rounded">
-                      <h5>Degree of Future Self-Sacrifice <span class="badge badge-success">Y Axis</span></h5>
+                      <h5>Future Self-Sacrifice <span class="badge badge-success">Y Axis</span></h5>
                       <p class="text-muted small">To what extent did the action require sacrifices that impact the future self? Consider aspects like future plans, core values, psychological wellbeing, life goals, elements of personal identity and legacy, health, and long-term well-being.</p>
                       <div class="form-group">
                         <label for="future-sacrifice-score">Score (0.0 to -4.0)</label>
@@ -2687,15 +2687,36 @@
                     const scoreField = document.getElementById(`${questionId}-score`);
                     const justField = document.getElementById(`${questionId}-justification`);
                     
+                    // Map of field IDs to proper question names
+                    const questionNameMap = {
+                        'societal-needs': 'Societal Needs',
+                        'others-needs': 'Others Needs',
+                        'others-wants': 'Others Wants', 
+                        'personal-needs': 'Personal Needs',
+                        'personal-wants': 'Personal Wants',
+                        'future-sacrifice': 'Future Self-Sacrifice',
+                        'individuals-affected': 'Number of Individuals Affected',
+                        'sacrifice-type': 'Type of Sacrifice',
+                        'sacrifice-duration': 'Duration of Sacrifice',
+                        'life-magnitude': 'Magnitude of Life Impacted',
+                        'consciousness': 'Unconscious vs Conscious',
+                        'present-sacrifice': 'Present Self-Sacrifice',
+                        'willpower': 'Habit vs Will Power',
+                        'intentionality': 'Unintentional vs Intentional',
+                        'wills': 'Wills at Play',
+                        'deontology': 'Deontology',
+                        'utilitarianism': 'Utilitarianism',
+                        'virtue-ethics': 'Virtue Ethics'
+                    };
+                    
                     const question = {
-                        question: questionId.split('-').map(word => 
+                        question: questionNameMap[questionId] || questionId.split('-').map(word => 
                             word.charAt(0).toUpperCase() + word.slice(1)
                         ).join(' '),
                         justification: justField?.value || ''
                     };
                     
                     if (!noScore && scoreField) {
-                        // Convert score to appropriate type (number or string)
                         if (scoreField.tagName.toLowerCase() === 'select') {
                             question.score = scoreField.value;
                         } else {
@@ -2809,33 +2830,36 @@
                                     
                                     // Set dropdown value for philosophy questions
                                     if (select && question.score) {
-                                        // Convert any type to string for comparison with option values
+                                        // Make sure to convert any value to string for proper comparison
                                         const scoreValue = String(question.score);
                                         
                                         // Find matching option
                                         let optionFound = false;
                                         Array.from(select.options).forEach(option => {
-                                            if (option.value === scoreValue) {
+                                            if (option.value.toLowerCase() === scoreValue.toLowerCase()) {
                                                 option.selected = true;
                                                 optionFound = true;
                                             }
                                         });
                                         
-                                        // If no direct match, try to find close match
-                                        if (!optionFound && select.options.length > 0) {
-                                            // Default to first non-disabled option
-                                            for (let i = 0; i < select.options.length; i++) {
-                                                if (!select.options[i].disabled) {
-                                                    select.options[i].selected = true;
-                                                    break;
+                                        // If no direct match found, try to match by option text content
+                                        if (!optionFound) {
+                                            Array.from(select.options).forEach(option => {
+                                                if (option.textContent.toLowerCase().includes(scoreValue.toLowerCase())) {
+                                                    option.selected = true;
+                                                    optionFound = true;
                                                 }
-                                            }
+                                            });
                                         }
                                     }
                                     
-                                    // Set justification
+                                    // Set justification text
                                     if (justification && question.justification) {
                                         justification.value = question.justification;
+                                        
+                                        // Trigger change event to update UI
+                                        const event = new Event('change', { bubbles: true });
+                                        justification.dispatchEvent(event);
                                     }
                                 });
                             } else {
