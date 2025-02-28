@@ -6779,7 +6779,7 @@
     "label": "Sacrifice",
     "questions": [
     {
-        "question": "Degree of Future Self-Sacrifice",
+        "question": "Future Self-Sacrifice",
         "score": -2.8,
         "justification": "Major sacrifice: lifelong guilt, loss of familial trust, and potential social stigma."
     },
@@ -6926,7 +6926,7 @@
     "label": "Sacrifice",
     "questions": [
     {
-        "question": "Degree of Future Self-Sacrifice",
+        "question": "Future Self-Sacrifice",
         "score": -0.5,
         "justification": "Minor future burden: potential microloan repayment, but avoids lifelong guilt."
     },
@@ -7953,7 +7953,7 @@
     "label": "Sacrifice",
     "questions": [
     {
-        "question": "Degree of Future Self-Sacrifice",
+        "question": "Future Self-Sacrifice",
         "score": -1.2,
         "justification": "Some minor compromise of future political stability or personal moral stance; however, it doesn’t deeply upend the decision-maker’s long-term identity or goals."
     },
@@ -10448,7 +10448,7 @@
     "label": "Sacrifice",
     "questions": [
     {
-        "question": "Degree of Future Self-Sacrifice",
+        "question": "Future Self-Sacrifice",
         "score": -2.5,
         "justification": "The action may lead to short-term sacrifices in public health, but aims to promote long-term benefits."
     },

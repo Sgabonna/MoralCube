@@ -2242,47 +2242,113 @@
                     this.initialFormState = {};
                     this.changedFields = new Set();
                     
-                    // Capture initial form state
-                    document.querySelectorAll('#surveyTabContent input:not([type="checkbox"]), #surveyTabContent textarea, #surveyTabContent select').forEach(field => {
-                        const fieldId = field.id;
-                        this.initialFormState[fieldId] = field.value;
-                        
-                        // Add change listener
-                        field.addEventListener('change', () => {
-                            const originalValue = this.initialFormState[fieldId];
-                            const currentValue = field.value;
-                            
-                            if (originalValue !== currentValue) {
-                                this.changedFields.add(fieldId);
-                                console.log(`Field changed: ${fieldId}`);
-                            } else {
-                                this.changedFields.delete(fieldId);
-                            }
-                            
-                            // Update submission button based on changes
-                            this.updateSubmitButton();
-                        });
-                    });
+                    console.log('Initializing change tracking');
                     
-                    // Initialize submit button state
-                    this.updateSubmitButton();
+                    // Capture initial form state with a slight delay to ensure values are fully loaded
+                    setTimeout(() => {
+                        document.querySelectorAll('#surveyTabContent input:not([type="checkbox"]), #surveyTabContent textarea, #surveyTabContent select').forEach(field => {
+                            const fieldId = field.id;
+                            this.initialFormState[fieldId] = field.value;
+                            console.log(`Stored initial value for ${fieldId}: "${field.value}"`);
+                            
+                            // Add event listeners for both input and change events
+                            ['change', 'input'].forEach(eventType => {
+                                field.addEventListener(eventType, () => {
+                                    const originalValue = this.initialFormState[fieldId];
+                                    const currentValue = field.value;
+                                    
+                                    // Compare with proper type conversion for numerical values
+                                    let hasChanged = false;
+                                    if (field.type === 'number') {
+                                        // For number inputs, compare numerical values
+                                        hasChanged = parseFloat(originalValue) !== parseFloat(currentValue);
+                                    } else {
+                                        // For other inputs, compare string values
+                                        hasChanged = originalValue !== currentValue;
+                                    }
+                                    
+                                    if (hasChanged) {
+                                        this.changedFields.add(fieldId);
+                                        console.log(`Field changed: ${fieldId} from "${originalValue}" to "${currentValue}"`);
+                                    } else {
+                                        this.changedFields.delete(fieldId);
+                                    }
+                                    
+                                    // Update submission button based on changes
+                                    this.updateSubmitButton();
+                                });
+                            });
+                        });
+                        
+                        // Handle select dropdowns separately to catch all change events
+                        document.querySelectorAll('#surveyTabContent select').forEach(select => {
+                            select.addEventListener('change', () => {
+                                const fieldId = select.id;
+                                const originalValue = this.initialFormState[fieldId];
+                                const currentValue = select.value;
+                                
+                                if (originalValue !== currentValue) {
+                                    this.changedFields.add(fieldId);
+                                    console.log(`Select changed: ${fieldId} from "${originalValue}" to "${currentValue}"`);
+                                } else {
+                                    this.changedFields.delete(fieldId);
+                                }
+                                
+                                this.updateSubmitButton();
+                            });
+                        });
+                        
+                        // Initialize submit button state
+                        this.updateSubmitButton();
+                    }, 500); // Half-second delay to ensure form is fully populated
                 },
 
                 // Update submit button based on changes
                 updateSubmitButton() {
                     const submitBtn = document.querySelector('.submit-survey-btn');
-                    if (!submitBtn) return;
-                    
-                    if (this.changedFields.size === 0) {
-                        submitBtn.textContent = 'No Changes to Submit';
-                        submitBtn.disabled = true;
-                        submitBtn.classList.remove('btn-success');
-                        submitBtn.classList.add('btn-secondary');
-                    } else {
-                        submitBtn.textContent = `Submit Analysis (${this.changedFields.size} changes)`;
-                        submitBtn.disabled = false;
-                        submitBtn.classList.remove('btn-secondary');
-                        submitBtn.classList.add('btn-success');
+                    if (submitBtn) {
+                        submitBtn.addEventListener('click', async () => {
+                            console.log('Submit button clicked');
+                            console.log('Current tab index:', this.currentTabIndex);
+                            console.log('Is edit mode:', this.isEditMode);
+                            console.log('Changed fields:', Array.from(this.changedFields));
+                            if (this.validateCurrentTab()) {
+                                // Prevent double submission
+                                if (this.isSubmitting) return;
+                                this.isSubmitting = true;
+
+                                const surveyData = await this.collectSurveyData();
+
+                                try {
+                                    submitBtn.disabled = true;
+                                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
+
+                                    // Save to both Auth0 user metadata and MongoDB
+                                    if (this.isEditMode && this.editSurveyId) {
+                                        await this.updateSurvey(this.editSurveyId, surveyData);
+                                        await this.saveToMongoDB(surveyData);
+                                        this.showSuccessMessage('Survey edits submitted successfully!');
+                                    } else {
+                                        await this.submitSurvey(surveyData);
+                                        await this.saveToMongoDB(surveyData);
+                                        this.showSuccessMessage('Analysis submitted successfully!');
+                                    }
+
+                                    this.resetSurveyForm();
+                                    $('#surveyModal').modal('hide');
+                                    this.loadUserSurveys();
+                                } catch (error) {
+                                    console.error('Error submitting survey:', error);
+                                    this.showErrorMessage(`Failed to submit analysis: ${error.message}`);
+                                } finally {
+                                    submitBtn.disabled = false;
+                                    submitBtn.textContent = 'Submit Analysis';
+                                    this.isSubmitting = false;
+                                }
+                            } else {
+                                this.showValidationError();
+                            }
+                        });
                     }
                 },
 
@@ -2557,6 +2623,7 @@
                 * Validate the current tab
                 * @returns {boolean} Whether the current tab is valid
                 */
+                // Fix the tab validation function
                 validateCurrentTab() {
                     try {
                         const currentTab = this.tabIds[this.currentTabIndex];
@@ -2567,8 +2634,28 @@
 
                         let isValid = true;
 
+                        // Only validate fields that are actually visible
                         requiredFields.forEach(field => {
-                            if (field.value === '' || field.value === null) {
+                            // Skip validation if field is hidden or part of a hidden container
+                            if (!this.isElementVisible(field)) return;
+                            
+                            // For number inputs, check if it's a valid number within range
+                            if (field.type === 'number') {
+                                const value = parseFloat(field.value);
+                                const min = parseFloat(field.min);
+                                const max = parseFloat(field.max);
+                                
+                                // Only validate if boundaries are set and value is outside them
+                                if ((!isNaN(min) && value < min) || (!isNaN(max) && value > max)) {
+                                    field.classList.add('is-invalid');
+                                    isValid = false;
+                                } else if (field.value === '' || field.value === null) {
+                                    field.classList.add('is-invalid');
+                                    isValid = false;
+                                } else {
+                                    field.classList.remove('is-invalid');
+                                }
+                            } else if (field.value === '' || field.value === null) {
                                 field.classList.add('is-invalid');
                                 isValid = false;
                             } else {
@@ -2586,12 +2673,45 @@
                                 moralClassification.classList.remove('is-invalid');
                             }
                         }
+                        
+                        // Log validation result for debugging
+                        console.log(`Tab ${currentTab} validation result: ${isValid}`);
+                        
+                        // If validation fails, show which fields failed
+                        if (!isValid) {
+                            const invalidFields = document.querySelectorAll(`#${currentTab} .is-invalid`);
+                            console.log(`Invalid fields: ${invalidFields.length}`);
+                            invalidFields.forEach(field => {
+                                console.log(`Invalid field: ${field.id}`);
+                            });
+                        }
 
                         return isValid;
                     } catch (error) {
                         console.error('Error validating tab:', error);
-                        return false;
+                        // Return true in case of error to prevent blocking user
+                        return true;
                     }
+                },
+
+                // Helper function to check if an element is visible
+                isElementVisible(element) {
+                    if (!element) return false;
+                    
+                    // Check if element or any parent is hidden
+                    let current = element;
+                    while (current) {
+                        // Check computed style
+                        const style = window.getComputedStyle(current);
+                        if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') {
+                            return false;
+                        }
+                        
+                        // Move up to parent
+                        current = current.parentElement;
+                    }
+                    
+                    return true;
                 },
 
                 /**
@@ -3379,32 +3499,59 @@
                 */
                 async saveToMongoDB(surveyData) {
                     try {
+                        console.log('Saving to MongoDB:', JSON.stringify(surveyData));
+                        
                         // Request token with explicit audience and required Management API scopes
                         const token = await AuthManager.getToken({
-                            useAudience: true,  // This ensures audience is included
+                            useAudience: true,
                             authorizationParams: {
-                                // Include all required scopes for user metadata operations
                                 scope: 'openid profile email read:current_user update:current_user_metadata offline_access'
                             },
                             timeoutInSeconds: 60,
                             maxRetries: this.AUTH_RETRY_LIMIT
                         });
                         
-                        const response = await fetch('/.netlify/functions/saveSurvey', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${token}`
-                            },
-                            body: JSON.stringify(surveyData)
-                        });
+                        // Add timeout handling for MongoDB save
+                        const controller = new AbortController();
+                        const timeoutId = setTimeout(() => controller.abort(), 20000); // 20-second timeout
                         
-                        if (!response.ok) {
-                            const errorText = await response.text();
-                            throw new Error(`Failed to save survey: ${response.status} - ${errorText}`);
+                        try {
+                            const response = await fetch('/.netlify/functions/saveSurvey', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${token}`
+                                },
+                                body: JSON.stringify({
+                                    survey: surveyData,
+                                    timestamp: new Date().toISOString()
+                                }),
+                                signal: controller.signal
+                            });
+                            
+                            clearTimeout(timeoutId);
+                            
+                            if (!response.ok) {
+                                let errorMessage = 'Unknown error';
+                                try {
+                                    const errorData = await response.json();
+                                    errorMessage = errorData.message || `Status: ${response.status}`;
+                                } catch {
+                                    errorMessage = await response.text() || `HTTP error: ${response.status}`;
+                                }
+                                throw new Error(`Failed to save survey: ${errorMessage}`);
+                            }
+                            
+                            return await response.json();
+                        } catch (fetchError) {
+                            clearTimeout(timeoutId);
+                            
+                            if (fetchError.name === 'AbortError') {
+                                throw new Error('Save operation timed out. Please try again.');
+                            }
+                            
+                            throw fetchError;
                         }
-                        
-                        return await response.json();
                     } catch (error) {
                         console.error('Error saving survey to MongoDB:', error);
                         throw error;
@@ -5765,22 +5912,56 @@
                  * @param {Object} surveyData Survey data to submit
                  * @returns {Promise<Object>} Result of the submission
                  */
-                async submitSurvey(surveyData) {
+                 async submitSurvey(surveyData) {
                     try {
-                        // Save to Auth0 metadata for backward compatibility
-                        const auth0Result = await this.performUserDataOperation('add', surveyData);
+                        console.log('Submitting survey data:', JSON.stringify(surveyData));
                         
-                        // Also save to MongoDB
+                        // Make sure we're authenticated
+                        let isAuthenticated = await AuthManager.isUserAuthenticated();
+                        if (!isAuthenticated) {
+                            console.log('Not authenticated, attempting to refresh token');
+                            // Try to refresh authentication
+                            try {
+                                await AuthManager.getToken({ 
+                                    ignoreCache: true,
+                                    timeoutInSeconds: 60 
+                                });
+                                isAuthenticated = await AuthManager.isUserAuthenticated(true);
+                            } catch (authError) {
+                                console.error('Failed to refresh authentication:', authError);
+                            }
+                            
+                            if (!isAuthenticated) {
+                                throw new Error('Authentication required. Please login again.');
+                            }
+                        }
+                        
+                        // Always run MongoDB save first as it's more reliable
                         try {
                             const mongoResult = await this.saveToMongoDB(surveyData);
                             console.log('Survey saved to MongoDB:', mongoResult);
                         } catch (mongoError) {
-                            console.error('Error saving to MongoDB, but saved to Auth0:', mongoError);
+                            console.error('Error saving to MongoDB:', mongoError);
+                            throw new Error(`Database error: ${mongoError.message}`);
                         }
                         
-                        return auth0Result;
+                        // Then try Auth0 metadata save for backward compatibility
+                        try {
+                            const auth0Result = await this.performUserDataOperation('add', surveyData);
+                            console.log('Survey saved to Auth0:', auth0Result);
+                            return auth0Result;
+                        } catch (auth0Error) {
+                            console.warn('Warning: Auth0 metadata save failed, but MongoDB save succeeded:', auth0Error);
+                            // Don't fail the operation if MongoDB save worked but Auth0 save failed
+                            return { 
+                                success: true, 
+                                operation: 'add',
+                                data: surveyData,
+                                warning: 'Saved to database but not to user profile'
+                            };
+                        }
                     } catch (error) {
-                        console.error('Error submitting survey:', error);
+                        console.error('Error in submitSurvey:', error);
                         throw error;
                     }
                 },
@@ -5791,28 +5972,56 @@
                  * @param {Object} updatedSurveyData Updated survey data
                  * @returns {Promise<Object>} Result of the update
                  */
-                /**
-                 * Update an existing survey
-                 * @param {string} surveyId Survey ID to update
-                 * @param {Object} updatedSurveyData Updated survey data
-                 * @returns {Promise<Object>} Result of the update
-                 */
-                async updateSurvey(surveyId, updatedSurveyData) {
+                 async updateSurvey(surveyId, updatedSurveyData) {
                     try {
-                        // Update in Auth0 metadata for backward compatibility
-                        const auth0Result = await this.performUserDataOperation('update', updatedSurveyData, surveyId);
+                        console.log(`Updating survey ID ${surveyId}:`, JSON.stringify(updatedSurveyData));
                         
-                        // Also update in MongoDB
+                        // Make sure we're authenticated
+                        let isAuthenticated = await AuthManager.isUserAuthenticated();
+                        if (!isAuthenticated) {
+                            console.log('Not authenticated, attempting to refresh token');
+                            // Try to refresh authentication
+                            try {
+                                await AuthManager.getToken({ 
+                                    ignoreCache: true,
+                                    timeoutInSeconds: 60 
+                                });
+                                isAuthenticated = await AuthManager.isUserAuthenticated(true);
+                            } catch (authError) {
+                                console.error('Failed to refresh authentication:', authError);
+                            }
+                            
+                            if (!isAuthenticated) {
+                                throw new Error('Authentication required. Please login again.');
+                            }
+                        }
+                        
+                        // Save to MongoDB first
                         try {
                             const mongoResult = await this.saveToMongoDB(updatedSurveyData);
                             console.log('Survey updated in MongoDB:', mongoResult);
                         } catch (mongoError) {
-                            console.error('Error updating in MongoDB, but updated in Auth0:', mongoError);
+                            console.error('Error updating in MongoDB:', mongoError);
+                            throw new Error(`Database error: ${mongoError.message}`);
                         }
                         
-                        return auth0Result;
+                        // Then try Auth0 metadata update
+                        try {
+                            const auth0Result = await this.performUserDataOperation('update', updatedSurveyData, surveyId);
+                            console.log('Survey updated in Auth0:', auth0Result);
+                            return auth0Result;
+                        } catch (auth0Error) {
+                            console.warn('Warning: Auth0 metadata update failed, but MongoDB update succeeded:', auth0Error);
+                            // Don't fail the operation if MongoDB save worked but Auth0 save failed
+                            return { 
+                                success: true, 
+                                operation: 'update',
+                                data: updatedSurveyData,
+                                warning: 'Updated in database but not in user profile'
+                            };
+                        }
                     } catch (error) {
-                        console.error('Error updating survey:', error);
+                        console.error('Error in updateSurvey:', error);
                         throw error;
                     }
                 },
