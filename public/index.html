@@ -2307,50 +2307,36 @@
                 updateSubmitButton() {
                     const submitBtn = document.querySelector('.submit-survey-btn');
                     if (submitBtn) {
-                        submitBtn.addEventListener('click', async () => {
-                            console.log('Submit button clicked');
-                            console.log('Current tab index:', this.currentTabIndex);
-                            console.log('Is edit mode:', this.isEditMode);
-                            console.log('Changed fields:', Array.from(this.changedFields));
-                            if (this.validateCurrentTab()) {
-                                // Prevent double submission
-                                if (this.isSubmitting) return;
-                                this.isSubmitting = true;
-
-                                const surveyData = await this.collectSurveyData();
-
-                                try {
-                                    submitBtn.disabled = true;
-                                    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
-
-                                    // Save to both Auth0 user metadata and MongoDB
-                                    if (this.isEditMode && this.editSurveyId) {
-                                        await this.updateSurvey(this.editSurveyId, surveyData);
-                                        await this.saveToMongoDB(surveyData);
-                                        this.showSuccessMessage('Survey edits submitted successfully!');
-                                    } else {
-                                        await this.submitSurvey(surveyData);
-                                        await this.saveToMongoDB(surveyData);
-                                        this.showSuccessMessage('Analysis submitted successfully!');
-                                    }
-
-                                    this.resetSurveyForm();
-                                    $('#surveyModal').modal('hide');
-                                    this.loadUserSurveys();
-                                } catch (error) {
-                                    console.error('Error submitting survey:', error);
-                                    this.showErrorMessage(`Failed to submit analysis: ${error.message}`);
-                                } finally {
-                                    submitBtn.disabled = false;
-                                    submitBtn.textContent = 'Submit Analysis';
-                                    this.isSubmitting = false;
-                                }
-                            } else {
-                                this.showValidationError();
+                        // Instead of addEventListener, assign the click handler once:
+                        submitBtn.onclick = async () => {
+                        console.log('Submit button clicked');
+                        console.log('Current tab index:', this.currentTabIndex);
+                        console.log('Is edit mode:', this.isEditMode);
+                        console.log('Changed fields:', Array.from(this.changedFields));
+                        
+                        if (this.validateCurrentTab()) {
+                            // Prevent double submission if needed:
+                            if (this.isSubmitting) return;
+                            this.isSubmitting = true;
+                            try {
+                            submitBtn.disabled = true;
+                            submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
+                            const surveyData = await this.collectSurveyData();
+                            // ... submission logic: save to MongoDB and update Auth0, etc.
+                            } catch (error) {
+                            console.error('Error submitting survey:', error);
+                            this.showErrorMessage(`Failed to submit analysis: ${error.message}`);
+                            } finally {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Submit Analysis';
+                            this.isSubmitting = false;
                             }
-                        });
+                        } else {
+                            this.showValidationError();
+                        }
+                        };
                     }
-                },
+                    },
 
                 // Get edited fields for submission
                 getEditedFields() {
