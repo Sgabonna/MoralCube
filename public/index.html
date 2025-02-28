@@ -1726,8 +1726,10 @@
                                     ...(options.useAudience ? {
                                         audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/'
                                     } : {}),
-                                    // Simplified scope
-                                    scope: 'openid profile email offline_access'
+                                    // When using audience for Management API, include all required scopes
+                                    scope: options.useAudience ? 
+                                        'openid profile email read:current_user update:current_user_metadata offline_access' : 
+                                        'openid profile email offline_access'
                                 },
                                 timeoutInSeconds: options.timeoutInSeconds || 60,
                                 cacheMode: options.ignoreCache ? 'off' : 'on',
@@ -1754,21 +1756,21 @@
              * Try to get a token silently (without UI) to restore session
              * @returns {Promise<string>} Token if successful
              */
-            async getTokenSilently() {
+             async getTokenSilently() {
                 try {
-                const client = await this.getClient();
-                return await client.getTokenSilently({
-                    authorizationParams: {
-                    audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/',
-                    scope: 'openid profile email read:current_user update:current_user_metadata'
-                    },
-                    timeoutInSeconds: 10,
-                    detailedResponse: false
-                });
+                    const client = await this.getClient();
+                    return await client.getTokenSilently({
+                        authorizationParams: {
+                            audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/',
+                            scope: 'openid profile email read:current_user update:current_user_metadata offline_access'
+                        },
+                        timeoutInSeconds: 10,
+                        detailedResponse: false
+                    });
                 } catch (error) {
-                // Don't log this as an error since it's expected in many cases
-                console.log('Silent authentication failed:', error.message);
-                throw error;
+                    // Don't log this as an error since it's expected in many cases
+                    console.log('Silent authentication failed:', error.message);
+                    throw error;
                 }
             },
             
@@ -1798,23 +1800,19 @@
              * @param {boolean} isSignup Whether this is a signup or login
              * @returns {Promise<void>}
              */
-            async login(isSignup = false) {
+             async login() {
                 try {
-                const client = await this.getClient();
-                
-                await client.loginWithRedirect({
-                    authorizationParams: {
-                    audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/',
-                    // Add offline_access to get refresh tokens for persistent sessions
-                    scope: 'openid profile email read:current_user update:current_user_metadata offline_access',
-                    // Optionally specify screen_hint for signup vs login
-                    screen_hint: isSignup ? 'signup' : undefined
-                    }
-                });
+                    const client = await this.getClient();
+                    
+                    await client.loginWithRedirect({
+                        authorizationParams: {
+                            audience: 'https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/',
+                            scope: 'openid profile email read:current_user update:current_user_metadata offline_access'
+                        }
+                    });
                 } catch (error) {
-                console.error('Login redirect error:', error);
-                alert('Unable to redirect to login. Please try again.');
-                throw error;
+                    console.error('Login redirect error:', error);
+                    alert('Unable to redirect to login. Please try again.');
                 }
             },
             
@@ -2735,13 +2733,20 @@
                  * @param {Object} surveyData Survey data to save
                  * @returns {Promise<Object>} Result of the operation
                  */
-                async saveToMongoDB(surveyData) {
+                 async saveToMongoDB(surveyData) {
                     try {
+                        // Request token with explicit audience and required Management API scopes
                         const token = await AuthManager.getToken({
+                            useAudience: true,  // This ensures audience is included
+                            authorizationParams: {
+                                // Include all required scopes for user metadata operations
+                                scope: 'openid profile email read:current_user update:current_user_metadata offline_access'
+                            },
                             timeoutInSeconds: 60,
                             maxRetries: this.AUTH_RETRY_LIMIT
                         });
                         
+                        // The rest of your method remains the same
                         const response = await fetch('/.netlify/functions/saveSurvey', {
                             method: 'POST',
                             headers: {
