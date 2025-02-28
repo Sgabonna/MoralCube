@@ -2392,42 +2392,145 @@
                     if (submitBtn) {
                         submitBtn.addEventListener('click', async () => {
                             if (this.validateCurrentTab()) {
+                                // Check authentication state first
+                                const isAuthenticated = await AuthManager.isUserAuthenticated(true);
+                                if (!isAuthenticated) {
+                                    this.showErrorMessage('Your session has expired. Please log in again to submit your analysis.');
+                                    setTimeout(() => AuthManager.login(), 2000);
+                                    return;
+                                }
+                                
                                 // Prevent double submission
                                 if (this.isSubmitting) return;
                                 this.isSubmitting = true;
 
-                                const surveyData = await this.collectSurveyData();
+                                // Initialize variables outside try block for access in catch/finally
+                                let surveyData = null;
 
                                 try {
+                                    // Update button state
                                     submitBtn.disabled = true;
                                     submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
 
-                                    // Save to both Auth0 user metadata and MongoDB
+                                    // Collect form data
+                                    console.log('Collecting survey data...');
+                                    surveyData = await this.collectSurveyData();
+                                    console.log('Survey data collected successfully');
+
+                                    // Save based on mode (edit vs new)
                                     if (this.isEditMode && this.editSurveyId) {
+                                        console.log(`Updating existing survey (ID: ${this.editSurveyId})...`);
+                                        
+                                        // Save to MongoDB first (more reliable)
+                                        console.log('Saving to MongoDB...');
+                                        const mongoResult = await this.saveToMongoDB(surveyData);
+                                        console.log('MongoDB save result:', mongoResult);
+                                        
+                                        // Then update Auth0 metadata
+                                        console.log('Updating survey in Auth0...');
                                         await this.updateSurvey(this.editSurveyId, surveyData);
-                                        await this.saveToMongoDB(surveyData);
+                                        
                                         this.showSuccessMessage('Survey edits submitted successfully!');
                                     } else {
+                                        console.log('Submitting new survey...');
+                                        
+                                        // Save to MongoDB first (more reliable)
+                                        console.log('Saving to MongoDB...');
+                                        const mongoResult = await this.saveToMongoDB(surveyData);
+                                        console.log('MongoDB save result:', mongoResult);
+                                        
+                                        // Then save to Auth0 metadata
+                                        console.log('Saving survey to Auth0...');
                                         await this.submitSurvey(surveyData);
-                                        await this.saveToMongoDB(surveyData);
+                                        
                                         this.showSuccessMessage('Analysis submitted successfully!');
                                     }
 
+                                    // Reset form and close modal
                                     this.resetSurveyForm();
                                     $('#surveyModal').modal('hide');
+                                    
+                                    // Refresh user surveys list
                                     this.loadUserSurveys();
+                                    
                                 } catch (error) {
+                                    // Enhanced error logging
                                     console.error('Error submitting survey:', error);
-                                    this.showErrorMessage(`Failed to submit analysis: ${error.message}`);
+                                    
+                                    if (surveyData) {
+                                        // Log the data that failed, but truncate to avoid console flooding
+                                        const dataStr = JSON.stringify(surveyData);
+                                        console.error('Survey data that failed submission (truncated):', 
+                                            dataStr.length > 500 ? dataStr.substring(0, 500) + '...' : dataStr);
+                                    }
+                                    
+                                    // Show friendly error message
+                                    this.showErrorMessage(`Failed to submit analysis: ${error.message || 'Unknown error'}`);
+                                    
+                                    // If authentication error, trigger login
+                                    if (error.message && (
+                                        error.message.includes('token') || 
+                                        error.message.includes('auth') || 
+                                        error.message.includes('unauthenticated')
+                                    )) {
+                                        console.log('Authentication error detected, will prompt to log in');
+                                        setTimeout(() => {
+                                            if (confirm('Your session may have expired. Would you like to log in again?')) {
+                                                AuthManager.login();
+                                            }
+                                        }, 1000);
+                                    }
                                 } finally {
+                                    // Always reset button state
                                     submitBtn.disabled = false;
                                     submitBtn.textContent = 'Submit Analysis';
                                     this.isSubmitting = false;
                                 }
                             } else {
+                                // Form validation failed
                                 this.showValidationError();
                             }
                         });
+                        
+                        // Add debug button event listener
+                        const debugBtn = document.getElementById('debug-survey-btn');
+                        if (debugBtn) {
+                            debugBtn.addEventListener('click', async () => {
+                                try {
+                                    console.log('---- SURVEY DEBUG INFO ----');
+                                    const isAuth = await AuthManager.isUserAuthenticated(true);
+                                    console.log('Is authenticated:', isAuth);
+                                    
+                                    if (isAuth) {
+                                        const token = await AuthManager.getToken({
+                                            timeoutInSeconds: 10,
+                                            ignoreCache: false
+                                        });
+                                        const tokenInfo = this.parseJwt ? this.parseJwt(token) : null;
+                                        console.log('Token scopes:', tokenInfo?.scope);
+                                        console.log('Token expires in:', 
+                                            Math.round((tokenInfo?.exp * 1000 - Date.now()) / 1000 / 60), 'minutes');
+                                    }
+                                    
+                                    console.log('Form validation state:', this.validateCurrentTab());
+                                    console.log('Current tab index:', this.currentTabIndex);
+                                    console.log('Is edit mode:', this.isEditMode);
+                                    console.log('Changed fields:', Array.from(this.changedFields || []));
+                                    
+                                    // Try to collect form data without submitting
+                                    const formData = await this.collectSurveyData().catch(e => ({error: e.message}));
+                                    console.log('Form data preview:', 
+                                        formData.id,
+                                        formData.metadata?.title,
+                                        formData.metadata?.classification?.type);
+                                    
+                                    alert('Debug info logged to console');
+                                } catch (error) {
+                                    console.error('Debug error:', error);
+                                    alert('Error during debugging: ' + error.message);
+                                }
+                            });
+                        }
                     }
                     
                     // Add input change listeners to track edits
@@ -3492,7 +3595,7 @@
                 */
                 async saveToMongoDB(surveyData) {
                     try {
-                        console.log('Saving to MongoDB:', JSON.stringify(surveyData));
+                        console.log('Saving to MongoDB:', JSON.stringify(surveyData).substring(0, 200) + '...');
                         
                         // Request token with explicit audience and required Management API scopes
                         const token = await AuthManager.getToken({
@@ -3504,11 +3607,17 @@
                             maxRetries: this.AUTH_RETRY_LIMIT
                         });
                         
+                        // Log token information for debugging (safely)
+                        const tokenInfo = this.parseJwt(token);
+                        console.log('Token obtained with scopes:', tokenInfo?.scope);
+                        console.log('Token expires at:', new Date(tokenInfo?.exp * 1000).toISOString());
+                        
                         // Add timeout handling for MongoDB save
                         const controller = new AbortController();
                         const timeoutId = setTimeout(() => controller.abort(), 20000); // 20-second timeout
                         
                         try {
+                            console.log('Sending survey data to Netlify function...');
                             const response = await fetch('/.netlify/functions/saveSurvey', {
                                 method: 'POST',
                                 headers: {
@@ -3524,25 +3633,34 @@
                             
                             clearTimeout(timeoutId);
                             
+                            // Log response status for debugging
+                            console.log('Netlify function response status:', response.status);
+                            
                             if (!response.ok) {
                                 let errorMessage = 'Unknown error';
                                 try {
                                     const errorData = await response.json();
                                     errorMessage = errorData.message || `Status: ${response.status}`;
-                                } catch {
+                                    console.error('Error response from server:', errorData);
+                                } catch (parseError) {
                                     errorMessage = await response.text() || `HTTP error: ${response.status}`;
+                                    console.error('Error text from server:', errorMessage);
                                 }
                                 throw new Error(`Failed to save survey: ${errorMessage}`);
                             }
                             
-                            return await response.json();
+                            const responseData = await response.json();
+                            console.log('Survey successfully saved to MongoDB:', responseData);
+                            return responseData;
                         } catch (fetchError) {
                             clearTimeout(timeoutId);
                             
                             if (fetchError.name === 'AbortError') {
+                                console.error('Save operation timed out');
                                 throw new Error('Save operation timed out. Please try again.');
                             }
                             
+                            console.error('Fetch error:', fetchError);
                             throw fetchError;
                         }
                     } catch (error) {
@@ -6626,40 +6744,6 @@
                     return true;
                 }
             });
-
-            // Add event listener for Analyze Scenario button
-            document.addEventListener('DOMContentLoaded', () => {
-                const submitBtn = document.querySelector('.submit-survey-btn');
-                if (submitBtn) {
-                    // Attach the handler only once
-                    submitBtn.onclick = async () => {
-                    console.log('Submit button clicked');
-                    console.log('Current tab index:', UserSurveyManager.currentTabIndex);
-                    console.log('Is edit mode:', UserSurveyManager.isEditMode);
-                    console.log('Changed fields:', Array.from(UserSurveyManager.changedFields));
-                    
-                    if (UserSurveyManager.validateCurrentTab()) {
-                        if (UserSurveyManager.isSubmitting) return;
-                        UserSurveyManager.isSubmitting = true;
-                        try {
-                        submitBtn.disabled = true;
-                        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
-                        const surveyData = await UserSurveyManager.collectSurveyData();
-                        // Proceed with saving data...
-                        } catch (error) {
-                        console.error('Error submitting survey:', error);
-                        UserSurveyManager.showErrorMessage(`Failed to submit analysis: ${error.message}`);
-                        } finally {
-                        submitBtn.disabled = false;
-                        submitBtn.textContent = 'Submit Analysis';
-                        UserSurveyManager.isSubmitting = false;
-                        }
-                    } else {
-                        UserSurveyManager.showValidationError();
-                    }
-                    };
-                }
-                });
 
             // Enhanced Auth configuration with persistent session management
             async function initializeApplication() {
