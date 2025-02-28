@@ -3322,17 +3322,22 @@
                             const inputId = input.id;
                             const baseId = inputId.replace('-score', '');
                             
-                            // Create slider container
+                            // Check if a slider container for this input already exists.
+                            if (document.getElementById(`${baseId}-slider-container`)) {
+                                return; // Skip creating another slider if one is already present.
+                            }
+                            
+                            // Create the slider container
                             const sliderContainer = document.createElement('div');
                             sliderContainer.className = 'form-group mt-2';
                             sliderContainer.id = `${baseId}-slider-container`;
                             
-                            // Get min/max values from input
+                            // Get min, max, and step values from the original input
                             const min = parseFloat(input.min) || 0;
                             const max = parseFloat(input.max) || 4;
                             const step = parseFloat(input.step) || 0.1;
                             
-                            // Create slider
+                            // Create the slider element
                             const slider = document.createElement('input');
                             slider.type = 'range';
                             slider.className = 'form-control-range';
@@ -3340,40 +3345,38 @@
                             slider.min = min;
                             slider.max = max;
                             slider.step = step;
+                            // Ensure the slider is synchronized with the original input value.
                             slider.value = input.value || 0;
                             
-                            // Add slider label
+                            // Add a label for the slider (optional)
                             const sliderLabel = document.createElement('label');
                             sliderLabel.htmlFor = slider.id;
                             sliderLabel.className = 'd-flex justify-content-between';
                             sliderLabel.innerHTML = `
-                                <small class="text-left">${min}</small>
-                                <small class="text-center">Adjust Value</small>
-                                <small class="text-right">${max}</small>
+                                <small>${min}</small>
+                                <small>Adjust Value</small>
+                                <small>${max}</small>
                             `;
                             
-                            // Add event listeners
+                            // Add event listeners to keep the slider and input in sync
                             slider.addEventListener('input', () => {
                                 input.value = slider.value;
-                                // Trigger change event on input
-                                const event = new Event('change', { bubbles: true });
-                                input.dispatchEvent(event);
                             });
-                            
                             input.addEventListener('input', () => {
                                 slider.value = input.value;
                             });
                             
-                            // Add slider to container
+                            // Append the label and slider to the container
                             sliderContainer.appendChild(sliderLabel);
                             sliderContainer.appendChild(slider);
                             
-                            // Add slider after input's form group
+                            // Insert the slider container after the input's form group
                             const inputGroup = input.closest('.form-group');
-                            if (inputGroup && inputGroup.nextElementSibling) {
+                            if (inputGroup) {
                                 inputGroup.parentNode.insertBefore(sliderContainer, inputGroup.nextElementSibling);
                             }
-                        });
+                            });
+
                         
                         // Enhance the progress bar
                         this.updateProgressBar();
@@ -6626,36 +6629,38 @@
 
             // Add event listener for Analyze Scenario button
             document.addEventListener('DOMContentLoaded', () => {
-                const analyzeScenarioBtn = document.getElementById('analyze-scenario-btn');
-                if (analyzeScenarioBtn) {
-                    analyzeScenarioBtn.addEventListener('click', async () => {
+                const submitBtn = document.querySelector('.submit-survey-btn');
+                if (submitBtn) {
+                    // Attach the handler only once
+                    submitBtn.onclick = async () => {
+                    console.log('Submit button clicked');
+                    console.log('Current tab index:', UserSurveyManager.currentTabIndex);
+                    console.log('Is edit mode:', UserSurveyManager.isEditMode);
+                    console.log('Changed fields:', Array.from(UserSurveyManager.changedFields));
+                    
+                    if (UserSurveyManager.validateCurrentTab()) {
+                        if (UserSurveyManager.isSubmitting) return;
+                        UserSurveyManager.isSubmitting = true;
                         try {
-                            const isAuthenticated = await AuthManager.isUserAuthenticated();
-                            if (isAuthenticated) {
-                                await UserSurveyManager.loadAvailableScenarios();
-                                $('#scenarioSelectModal').modal('show');
-                            } else {
-                                // Show login prompt
-                                alert('Please log in to analyze scenarios');
-                                AuthManager.login();
-                            }
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...';
+                        const surveyData = await UserSurveyManager.collectSurveyData();
+                        // Proceed with saving data...
                         } catch (error) {
-                            console.error('Error handling analyze scenario click:', error);
-                            alert('An error occurred. Please try again.');
+                        console.error('Error submitting survey:', error);
+                        UserSurveyManager.showErrorMessage(`Failed to submit analysis: ${error.message}`);
+                        } finally {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Submit Analysis';
+                        UserSurveyManager.isSubmitting = false;
                         }
-                    });
-                }
-                
-                // Login link in user surveys preview
-                document.querySelector('.user-surveys-section').addEventListener('click', (e) => {
-                    if (e.target.classList.contains('login-link')) {
-                        AuthManager.login();
+                    } else {
+                        UserSurveyManager.showValidationError();
                     }
+                    };
+                }
                 });
-                
-                // Initialize user surveys preview
-                VisualizationManager.updateUserSurveysPreview();
-            });
+
             // Enhanced Auth configuration with persistent session management
             async function initializeApplication() {
                 try {
