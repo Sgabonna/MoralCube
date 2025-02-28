@@ -2306,6 +2306,7 @@
                         }
                     });
                 },
+
                 /**
                 * Initialize survey controls with event listeners
                 */
@@ -2488,7 +2489,6 @@
                 /**
                 * Update the progress bar based on form completion
                 */
-                // Replace the existing updateProgressBar method with this improved version
                 updateProgressBar() {
                     try {
                         const progressBar = document.querySelector('.progress-bar');
@@ -2593,53 +2593,7 @@
                         return false;
                     }
                 },
-                initializeChangeTracking() {
-                    // Clear previous state
-                    this.initialFormState = {};
-                    this.changedFields = new Set();
-                    
-                    // Capture initial form state
-                    document.querySelectorAll('#surveyTabContent input:not([type="checkbox"]), #surveyTabContent textarea, #surveyTabContent select').forEach(field => {
-                        const fieldId = field.id;
-                        this.initialFormState[fieldId] = field.value;
-                        
-                        // Add change listener
-                        field.addEventListener('change', () => {
-                            const originalValue = this.initialFormState[fieldId];
-                            const currentValue = field.value;
-                            
-                            if (originalValue !== currentValue) {
-                                this.changedFields.add(fieldId);
-                                console.log(`Field changed: ${fieldId}`);
-                            } else {
-                                this.changedFields.delete(fieldId);
-                            }
-                            
-                            // Update submission button based on changes
-                            this.updateSubmitButton();
-                        });
-                    });
-                    
-                    // Initialize submit button state
-                    this.updateSubmitButton();
-                },
-                // Add function to update submit button
-                updateSubmitButton() {
-                    const submitBtn = document.querySelector('.submit-survey-btn');
-                    if (!submitBtn) return;
-                    
-                    if (this.changedFields.size === 0) {
-                        submitBtn.textContent = 'No Changes to Submit';
-                        submitBtn.disabled = true;
-                        submitBtn.classList.remove('btn-success');
-                        submitBtn.classList.add('btn-secondary');
-                    } else {
-                        submitBtn.textContent = `Submit Analysis (${this.changedFields.size} changes)`;
-                        submitBtn.disabled = false;
-                        submitBtn.classList.remove('btn-secondary');
-                        submitBtn.classList.add('btn-success');
-                    }
-                },
+
                 /**
                 * Filter the scenarios list based on search input
                 * @param {string} searchText Text to search for
@@ -2672,20 +2626,523 @@
                         console.error('Error filtering scenarios list:', error);
                     }
                 },
-                
-                // Minimal implementation of required methods to prevent errors
+
+                /**
+                * Validate score is within expected range for a dimension and question
+                * @param {string} dimensionId Dimension ID (e.g., 'Ends', 'Means', 'Character')
+                * @param {string} questionId Question ID
+                * @param {number} score Score value to validate
+                * @throws {Error} If score is outside valid range
+                */
+                validateScoreRange(dimensionId, questionId, score) {
+                    // Define valid ranges for each dimension/question
+                    const rangeMap = {
+                        'Ends': {
+                            'Societal Needs': { min: 0, max: 4 },
+                            'Others Needs': { min: 0, max: 4 },
+                            'Others Wants': { min: 0, max: 4 },
+                            'Personal Needs': { min: -4, max: 0 },
+                            'Personal Wants': { min: -4, max: 0 }
+                        },
+                        'Means': {
+                            'Future Self-Sacrifice': { min: -4, max: 0 },
+                            'Number of Individuals Affected': { min: -6, max: 0 },
+                            'Type of Sacrifice': { min: -4, max: 0 },
+                            'Duration of Sacrifice': { min: -4, max: 0 },
+                            'Magnitude of Life Impacted': { min: 0.01, max: 1.2 }
+                        },
+                        'Character': {
+                            'Unconscious vs Conscious': { min: 0, max: 1 },
+                            'Present Self-Sacrifice': { min: 0, max: 2 },
+                            'Habit vs Will Power': { min: 0, max: 4 },
+                            'Unintentional vs Intentional': { min: 0, max: 1 }
+                        },
+                        'PhilosophicalAnalysis': {
+                            // Philosophical questions don't need numeric validation as they use text values
+                        }
+                    };
+                    
+                    // Skip validation for dimensions or questions without defined ranges
+                    if (!rangeMap[dimensionId] || !rangeMap[dimensionId][questionId]) {
+                        return true;
+                    }
+                    
+                    const range = rangeMap[dimensionId][questionId];
+                    
+                    // Check if score is within range
+                    if (score < range.min || score > range.max) {
+                        throw new Error(`Score for ${questionId} must be between ${range.min} and ${range.max}`);
+                    }
+                    
+                    return true;
+                },
+
+                /**
+                * Process form data for a question
+                * @param {string} questionId Base ID of the question (without -score or -justification)
+                * @param {boolean} noScore Whether this question doesn't have a score field
+                * @returns {Object} Processed question data
+                */
+                processQuestionData(questionId, noScore = false) {
+                    const scoreField = document.getElementById(`${questionId}-score`);
+                    const justField = document.getElementById(`${questionId}-justification`);
+                    
+                    const question = {
+                        question: questionId.split('-').map(word => 
+                            word.charAt(0).toUpperCase() + word.slice(1)
+                        ).join(' '),
+                        justification: justField?.value || ''
+                    };
+                    
+                    if (!noScore && scoreField) {
+                        // Convert score to appropriate type (number or string)
+                        if (scoreField.tagName.toLowerCase() === 'select') {
+                            question.score = scoreField.value;
+                        } else {
+                            question.score = parseFloat(scoreField.value) || 0;
+                        }
+                    }
+                    
+                    return question;
+                },
+
+                /**
+                * Calculate final x/y/z position from form values
+                * @returns {Object} Position coordinates
+                */
+                calculateFinalPosition() {
+                    try {
+                        // Calculate X axis (Ends)
+                        const societalNeedsScore = parseFloat(document.getElementById('societal-needs-score')?.value) || 0;
+                        const othersNeedsScore = parseFloat(document.getElementById('others-needs-score')?.value) || 0;
+                        const othersWantsScore = parseFloat(document.getElementById('others-wants-score')?.value) || 0;
+                        const personalNeedsScore = parseFloat(document.getElementById('personal-needs-score')?.value) || 0;
+                        const personalWantsScore = parseFloat(document.getElementById('personal-wants-score')?.value) || 0;
+                        
+                        // Calculate Y axis (Means)
+                        const futureSacrificeScore = parseFloat(document.getElementById('future-sacrifice-score')?.value) || 0;
+                        const individualsAffectedScore = parseFloat(document.getElementById('individuals-affected-score')?.value) || 0;
+                        const sacrificeTypeScore = parseFloat(document.getElementById('sacrifice-type-score')?.value) || 0;
+                        const sacrificeDurationScore = parseFloat(document.getElementById('sacrifice-duration-score')?.value) || 0;
+                        const lifeMagnitudeScore = parseFloat(document.getElementById('life-magnitude-score')?.value) || 0;
+                        
+                        // Calculate Z axis (Character)
+                        const consciousnessScore = parseFloat(document.getElementById('consciousness-score')?.value) || 0;
+                        const presentSacrificeScore = parseFloat(document.getElementById('present-sacrifice-score')?.value) || 0;
+                        const willpowerScore = parseFloat(document.getElementById('willpower-score')?.value) || 0;
+                        const intentionalityScore = parseFloat(document.getElementById('intentionality-score')?.value) || 0;
+                        
+                        // Final calculations
+                        const x = ((societalNeedsScore + othersNeedsScore + othersWantsScore) - 
+                                Math.abs(personalNeedsScore) - Math.abs(personalWantsScore));
+                                
+                        const y = ((futureSacrificeScore + individualsAffectedScore + 
+                                sacrificeTypeScore + sacrificeDurationScore) * -1) * 
+                                lifeMagnitudeScore;
+                                
+                        const z = consciousnessScore + presentSacrificeScore + 
+                                willpowerScore + intentionalityScore;
+                        
+                        return {
+                            x: parseFloat(x.toFixed(2)),
+                            y: parseFloat(y.toFixed(2)),
+                            z: parseFloat(z.toFixed(2))
+                        };
+                    } catch (error) {
+                        console.error('Error calculating final position:', error);
+                        return { x: 0, y: 0, z: 0 };
+                    }
+                },
+
+                /**
+                * Populate model answers in the form
+                * @param {Object} scenario Scenario data
+                */
+                populateModelAnswers(scenario) {
+                    try {
+                        if (!scenario.dimensions) return;
+                        
+                        // Map of dimension IDs to tab IDs
+                        const dimensionTabMap = {
+                            'Ends': 'ends',
+                            'Means': 'means',
+                            'Character': 'character',
+                            'PhilosophicalAnalysis': 'philosophy'
+                        };
+                        
+                        // Map of question IDs to form field IDs
+                        const questionFieldMap = {
+                            'Societal Needs': 'societal-needs',
+                            'Others Needs': 'others-needs',
+                            'Others Wants': 'others-wants',
+                            'Personal Needs': 'personal-needs',
+                            'Personal Wants': 'personal-wants',
+                            'Future Self-Sacrifice': 'future-sacrifice',
+                            'Number of Individuals Affected': 'individuals-affected',
+                            'Type of Sacrifice': 'sacrifice-type',
+                            'Duration of Sacrifice': 'sacrifice-duration',
+                            'Magnitude of Life Impacted': 'life-magnitude',
+                            'Unconscious vs Conscious': 'consciousness',
+                            'Present Self-Sacrifice': 'present-sacrifice',
+                            'Habit vs Will Power': 'willpower',
+                            'Unintentional vs Intentional': 'intentionality',
+                            'Wills at Play': 'wills',
+                            'Deontology': 'deontology',
+                            'Utilitarianism': 'utilitarianism',
+                            'Virtue Ethics': 'virtue-ethics'
+                        };
+                        
+                        // Process each dimension and its questions
+                        scenario.dimensions.forEach(dimension => {
+                            const tabId = dimensionTabMap[dimension.id];
+                            if (!tabId) return;
+                            
+                            // Find the philosophical analysis dimension
+                            if (dimension.id === 'PhilosophicalAnalysis') {
+                                (dimension.questions || []).forEach(question => {
+                                    const fieldBase = questionFieldMap[question.question];
+                                    if (!fieldBase) return;
+                                    
+                                    // Handle philosophy questions with select elements
+                                    const select = document.getElementById(`${fieldBase}-score`);
+                                    const justification = document.getElementById(`${fieldBase}-justification`);
+                                    
+                                    // Set dropdown value for philosophy questions
+                                    if (select && question.score) {
+                                        // Convert any type to string for comparison with option values
+                                        const scoreValue = String(question.score);
+                                        
+                                        // Find matching option
+                                        let optionFound = false;
+                                        Array.from(select.options).forEach(option => {
+                                            if (option.value === scoreValue) {
+                                                option.selected = true;
+                                                optionFound = true;
+                                            }
+                                        });
+                                        
+                                        // If no direct match, try to find close match
+                                        if (!optionFound && select.options.length > 0) {
+                                            // Default to first non-disabled option
+                                            for (let i = 0; i < select.options.length; i++) {
+                                                if (!select.options[i].disabled) {
+                                                    select.options[i].selected = true;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                    // Set justification
+                                    if (justification && question.justification) {
+                                        justification.value = question.justification;
+                                    }
+                                });
+                            } else {
+                                // Handle regular questions
+                                (dimension.questions || []).forEach(question => {
+                                    const fieldBase = questionFieldMap[question.question];
+                                    if (!fieldBase) return;
+                                    
+                                    // Set score field
+                                    const scoreField = document.getElementById(`${fieldBase}-score`);
+                                    if (scoreField && question.score !== undefined) {
+                                        scoreField.value = question.score;
+                                        
+                                        // Update slider if it exists
+                                        const slider = document.getElementById(`${fieldBase}-slider`);
+                                        if (slider) {
+                                            slider.value = question.score;
+                                        }
+                                    }
+                                    
+                                    // Set justification field
+                                    const justField = document.getElementById(`${fieldBase}-justification`);
+                                    if (justField && question.justification) {
+                                        justField.value = question.justification;
+                                    }
+                                });
+                            }
+                        });
+                        
+                        // Set classification justification if available
+                        if (scenario.metadata?.classification?.justification) {
+                            const justField = document.getElementById('classification-justification');
+                            if (justField) {
+                                justField.value = scenario.metadata.classification.justification;
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error populating model answers:', error);
+                    }
+                },
+
+                /**
+                * Generate a unique ID
+                * @returns {string} Unique ID
+                */
+                generateId() {
+                    return `survey_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+                },
+
+                /**
+                * Collect survey data from form
+                * @returns {Promise<Object>} Collected survey data
+                */
+                async collectSurveyData() {
+                    try {
+                        // Ensure user is authenticated
+                        const isAuthenticated = await AuthManager.isUserAuthenticated();
+                        if (!isAuthenticated) {
+                            throw new Error('User is not authenticated');
+                        }
+                        
+                        // Get user information
+                        const user = await AuthManager.getUser();
+                        
+                        // Validate required fields
+                        const scenarioId = document.getElementById('scenario-id')?.value;
+                        const scenarioTitle = document.getElementById('scenario-title-display')?.value;
+                        const moralClassification = document.getElementById('moral-classification')?.value;
+                        
+                        if (!scenarioId || !scenarioTitle || !moralClassification) {
+                            throw new Error('Missing required fields: scenario ID, title, or classification');
+                        }
+                        
+                        // Create survey data with proper structure
+                        const surveyData = {
+                            id: scenarioId || this.generateId(),
+                            type: document.getElementById('scenario-type')?.value || 'base',
+                            parentId: document.getElementById('scenario-parent-id')?.value || null,
+                            metadata: {
+                                title: scenarioTitle,
+                                description: document.getElementById('scenario-description-display')?.value || '',
+                                category: document.getElementById('scenario-category-display')?.value || '',
+                                llmSource: {
+                                    model: "Human",
+                                    version: "1.0",
+                                    provider: "Human"
+                                },
+                                classification: {
+                                    type: moralClassification,
+                                    justification: document.getElementById('classification-justification')?.value || ''
+                                },
+                                url: document.getElementById('scenario-url')?.value || ''
+                            },
+                            survey: {
+                                dimensions: [
+                                    {
+                                        id: "Ends",
+                                        axis: "x",
+                                        label: "Motivation",
+                                        questions: [
+                                            this.processQuestionData('societal-needs'),
+                                            this.processQuestionData('others-needs'),
+                                            this.processQuestionData('others-wants'),
+                                            this.processQuestionData('personal-needs'),
+                                            this.processQuestionData('personal-wants')
+                                        ]
+                                    },
+                                    {
+                                        id: "Means",
+                                        axis: "y",
+                                        label: "Sacrifice",
+                                        questions: [
+                                            this.processQuestionData('future-sacrifice'),
+                                            this.processQuestionData('individuals-affected'),
+                                            this.processQuestionData('sacrifice-type'),
+                                            this.processQuestionData('sacrifice-duration'),
+                                            this.processQuestionData('life-magnitude')
+                                        ]
+                                    },
+                                    {
+                                        id: "Character",
+                                        axis: "z",
+                                        label: "Habit > Will Power",
+                                        questions: [
+                                            this.processQuestionData('consciousness'),
+                                            this.processQuestionData('present-sacrifice'),
+                                            this.processQuestionData('willpower'),
+                                            this.processQuestionData('intentionality'),
+                                            this.processQuestionData('wills', true) // No score
+                                        ]
+                                    },
+                                    {
+                                        id: "PhilosophicalAnalysis",
+                                        axis: null,
+                                        label: "Philosophical Perspectives",
+                                        questions: [
+                                            this.processQuestionData('deontology'),
+                                            this.processQuestionData('utilitarianism'),
+                                            this.processQuestionData('virtue-ethics')
+                                        ]
+                                    }
+                                ],
+                                finalPosition: this.calculateFinalPosition()
+                            },
+                            edits: {
+                                editedBy: user?.sub || null,
+                                editDate: new Date().toISOString(),
+                                editedFields: this.getEditedFields()
+                            },
+                            created: new Date().toISOString(),
+                            lastModified: new Date().toISOString()
+                        };
+                        
+                        return surveyData;
+                    } catch (error) {
+                        console.error('Error collecting survey data:', error);
+                        throw error;
+                    }
+                },
+
+                /**
+                * Enhance the survey UI with better user experience
+                */
+                enhanceSurveyUI() {
+                    document.querySelectorAll('[id$="-slider-container"]').forEach(container => {
+                        container.remove();
+                    });
+                    try {
+                        // Make modal scrollable and larger
+                        const modalDialog = document.querySelector('#surveyModal .modal-dialog');
+                        if (modalDialog) {
+                            modalDialog.classList.add('modal-dialog-scrollable');
+                            
+                            // Remove any existing max-height style
+                            const modalBody = document.querySelector('#surveyModal .modal-body');
+                            if (modalBody) {
+                                modalBody.style.maxHeight = 'none';
+                                modalBody.style.overflow = 'initial';
+                            }
+                        }
+                        
+                        // Add sliders for numeric inputs
+                        document.querySelectorAll('#surveyTabContent input[type="number"]').forEach(input => {
+                            const inputId = input.id;
+                            const baseId = inputId.replace('-score', '');
+                            
+                            // Create slider container
+                            const sliderContainer = document.createElement('div');
+                            sliderContainer.className = 'form-group mt-2';
+                            sliderContainer.id = `${baseId}-slider-container`;
+                            
+                            // Get min/max values from input
+                            const min = parseFloat(input.min) || 0;
+                            const max = parseFloat(input.max) || 4;
+                            const step = parseFloat(input.step) || 0.1;
+                            
+                            // Create slider
+                            const slider = document.createElement('input');
+                            slider.type = 'range';
+                            slider.className = 'form-control-range';
+                            slider.id = `${baseId}-slider`;
+                            slider.min = min;
+                            slider.max = max;
+                            slider.step = step;
+                            slider.value = input.value || 0;
+                            
+                            // Add slider label
+                            const sliderLabel = document.createElement('label');
+                            sliderLabel.htmlFor = slider.id;
+                            sliderLabel.className = 'd-flex justify-content-between';
+                            sliderLabel.innerHTML = `
+                                <small class="text-left">${min}</small>
+                                <small class="text-center">Adjust Value</small>
+                                <small class="text-right">${max}</small>
+                            `;
+                            
+                            // Add event listeners
+                            slider.addEventListener('input', () => {
+                                input.value = slider.value;
+                                // Trigger change event on input
+                                const event = new Event('change', { bubbles: true });
+                                input.dispatchEvent(event);
+                            });
+                            
+                            input.addEventListener('input', () => {
+                                slider.value = input.value;
+                            });
+                            
+                            // Add slider to container
+                            sliderContainer.appendChild(sliderLabel);
+                            sliderContainer.appendChild(slider);
+                            
+                            // Add slider after input's form group
+                            const inputGroup = input.closest('.form-group');
+                            if (inputGroup && inputGroup.nextElementSibling) {
+                                inputGroup.parentNode.insertBefore(sliderContainer, inputGroup.nextElementSibling);
+                            }
+                        });
+                        
+                        // Enhance the progress bar
+                        this.updateProgressBar();
+                        
+                    } catch (error) {
+                        console.error('Error enhancing survey UI:', error);
+                    }
+                },
+
+                /**
+                * Reset the survey form
+                */
+                resetSurveyForm() {
+                    try {
+                        this.isEditMode = false;
+                        this.editSurveyId = null;
+                        
+                        // Reset all input fields
+                        document.querySelectorAll('#surveyTabContent input:not([type="checkbox"]), #surveyTabContent textarea, #surveyTabContent select').forEach(input => {
+                            if (input.tagName.toLowerCase() === 'select') {
+                                input.selectedIndex = 0;
+                            } else {
+                                input.value = '';
+                            }
+                        });
+                        
+                        // Uncheck all checkboxes
+                        document.querySelectorAll('#surveyTabContent input[type="checkbox"]').forEach(checkbox => {
+                            checkbox.checked = false;
+                        });
+                        
+                        // Remove any existing sliders
+                        document.querySelectorAll('[id$="-slider-container"]').forEach(container => {
+                            container.remove();
+                        });
+                        
+                        // Reset tabs
+                        this.currentTabIndex = 0;
+                        this.updateTabDisplay();
+                        
+                        // Clear scenario data
+                        this.scenarioData = null;
+                        this.originalScenarioData = null;
+                        
+                        // Reset progress bar
+                        const progressBar = document.querySelector('.progress-bar');
+                        if (progressBar) {
+                            progressBar.style.width = '0%';
+                            progressBar.setAttribute('aria-valuenow', 0);
+                            progressBar.textContent = '0%';
+                        }
+
+                        // Clear changed fields
+                        this.changedFields.clear();
+                        this.initialFormState = {};
+                    } catch (error) {
+                        console.error('Error resetting survey form:', error);
+                    }
+                },
+
+                // Placeholder methods to be implemented later
                 loadUserSurveys() {
                     console.log('Loading user surveys...');
                     // Implementation will be added later
+                    return Promise.resolve([]);
                 },
                 
                 loadAvailableScenarios() {
                     console.log('Loading available scenarios...');
-                    // Implementation will be added later
-                },
-                
-                resetSurveyForm() {
-                    console.log('Resetting survey form...');
                     // Implementation will be added later
                 },
                 
@@ -2719,21 +3176,16 @@
                     return { success: true };
                 },
                 
-                async collectSurveyData() {
-                    // Return empty object to prevent errors
-                    return {};
-                },
-                
                 async checkAuthentication() {
-                    // Always return true to prevent errors
-                    return true;
+                    return await AuthManager.isUserAuthenticated();
                 },
+
                 /**
-                 * Save survey data to MongoDB via Netlify function
-                 * @param {Object} surveyData Survey data to save
-                 * @returns {Promise<Object>} Result of the operation
-                 */
-                 async saveToMongoDB(surveyData) {
+                * Save survey data to MongoDB via Netlify function
+                * @param {Object} surveyData Survey data to save
+                * @returns {Promise<Object>} Result of the operation
+                */
+                async saveToMongoDB(surveyData) {
                     try {
                         // Request token with explicit audience and required Management API scopes
                         const token = await AuthManager.getToken({
@@ -2746,7 +3198,6 @@
                             maxRetries: this.AUTH_RETRY_LIMIT
                         });
                         
-                        // The rest of your method remains the same
                         const response = await fetch('/.netlify/functions/saveSurvey', {
                             method: 'POST',
                             headers: {
