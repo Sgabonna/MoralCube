@@ -3204,19 +3204,23 @@
                         // Ensure user is authenticated
                         const isAuthenticated = await AuthManager.isUserAuthenticated();
                         if (!isAuthenticated) {
-                            throw new Error('User is not authenticated');
+                        throw new Error('User is not authenticated');
                         }
                         
                         // Get user information
                         const user = await AuthManager.getUser();
                         
-                        // Validate required fields
+                        // Get and log required fields
                         const scenarioId = document.getElementById('scenario-id')?.value;
                         const scenarioTitle = document.getElementById('scenario-title-display')?.value;
                         const moralClassification = document.getElementById('moral-classification')?.value;
                         
+                        console.log("collectSurveyData: scenarioId:", scenarioId, 
+                                    "scenarioTitle:", scenarioTitle, 
+                                    "moralClassification:", moralClassification);
+                        
                         if (!scenarioId || !scenarioTitle || !moralClassification) {
-                            throw new Error('Missing required fields: scenario ID, title, or classification');
+                        throw new Error('Missing required fields: scenario ID, title, or classification');
                         }
                         
                         // Create survey data with proper structure
@@ -5027,7 +5031,11 @@
                                     
                                 } catch (error) {
                                     console.error('Error preparing scenario for analysis:', error);
-                                }
+                                    console.log("Scenario prepared:", {
+                                    scenarioId: document.getElementById('scenario-id')?.value,
+                                    scenarioTitle: document.getElementById('scenario-title-display')?.value,
+                                    moralClassification: document.getElementById('moral-classification')?.value
+                                })}
                             };
                             
                             // Add helper method to populate model answers
