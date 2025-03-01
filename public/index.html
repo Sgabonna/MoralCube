@@ -4365,76 +4365,93 @@
              viewUserSurvey: async function(surveyId) {
                 try {
                     console.log('Viewing user survey:', surveyId);
-                    // Use UserSurveyManager.getUserSurveys() explicitly
+                    
+                    // Get all user surveys
                     const userSurveys = await UserSurveyManager.getUserSurveys();
+                    console.log(`Retrieved ${userSurveys.length} user surveys`);
+                    
                     if (!userSurveys || userSurveys.length === 0) {
                         this.showErrorMessage('No surveys found');
                         return;
                     }
                     
-                    const survey = userSurveys.find(s => s.id === surveyId);
+                    // Find survey by either id or _id
+                    const survey = userSurveys.find(s => {
+                        const surveyObjectId = s._id?.$oid || s._id;
+                        const surveyStringId = s.id;
+                        return surveyStringId === surveyId || surveyObjectId === surveyId;
+                    });
+                    
                     if (!survey) {
+                        console.error(`Survey with ID ${surveyId} not found in user surveys`);
                         this.showErrorMessage(`Survey with ID ${surveyId} not found`);
                         return;
                     }
                     
                     console.log('Found survey:', survey.metadata?.title);
-
-                    // If the survey isn't already added, convert and push it as a display point
-                    const existingPoint = ScenarioDataProcessor.dataPoints.find(p => p.id === survey.id);
-                    if (!existingPoint) {
-                        const displayPoint = {
-                            id: survey.id,
-                            scenarioTitle: survey.metadata.title,
-                            scenarioDescription: survey.metadata.description,
-                            llmName: "Your Analysis",
-                            category: survey.metadata.category,
-                            overallCategory: survey.metadata.classification.type,
-                            url: survey.metadata.url,
-                            dimensions: survey.survey.dimensions,
-                            x: survey.survey.finalPosition.x,
-                            y: survey.survey.finalPosition.y,
-                            z: survey.survey.finalPosition.z,
-                            isParent: true,
-                            parentId: survey.parentId || null,
-                            relationToBase: null,
-                            isUserSurvey: true
-                        };
-                        
-                        console.log('Adding survey to dataPoints:', displayPoint);
-                        ScenarioDataProcessor.dataPoints.push(displayPoint);
-                        ScenarioDataProcessor.displayPoints.push(displayPoint);
-                    } else {
-                        console.log('Survey already exists in dataPoints');
-                    }
-
-                    // Set the selected scenario based on the survey title
-                    this.selectedScenarios = [survey.metadata.title];
-                    this.selectedComparison = [survey.id];
-
-                    // Refresh the visualization
-                    this.updateVisualization();
-
-                    // Explicitly populate the comparison details
-                    const compData = ScenarioDataProcessor.dataPoints.filter(point => point.id === survey.id);
-                    if (compData.length > 0) {
-                        this.populateScenarioDetails(compData);
-                    }
-
-                    // Highlight the survey's card in the overview
-                    document.querySelectorAll('.comparison-card').forEach(card => {
-                        const cardId = card.getAttribute('data-scenario-id');
-                        if (cardId === survey.id) {
-                            card.classList.add('selected-card');
-                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
+                    
+                    // Handle MongoDB NumberDouble values properly
+                    const getNumericValue = (value) => {
+                        if (value === undefined || value === null) return 0;
+                        if (typeof value === 'number') return value;
+                        if (value.$numberDouble !== undefined) return parseFloat(value.$numberDouble);
+                        if (value.$numberInt !== undefined) return parseInt(value.$numberInt);
+                        return parseFloat(value) || 0;
+                    };
+                    
+                    // Create a properly formatted display point
+                    const displayPoint = {
+                        id: survey.id || (survey._id?.$oid || survey._id),
+                        scenarioTitle: survey.metadata?.title || "Your Survey",
+                        scenarioDescription: survey.metadata?.description || "",
+                        llmName: "Your Analysis",
+                        category: survey.metadata?.category || "Uncategorized",
+                        overallCategory: survey.metadata?.classification?.type || "unknown",
+                        url: survey.metadata?.url || "",
+                        dimensions: survey.survey?.dimensions || [],
+                        x: getNumericValue(survey.survey?.finalPosition?.x),
+                        y: getNumericValue(survey.survey?.finalPosition?.y),
+                        z: getNumericValue(survey.survey?.finalPosition?.z),
+                        isParent: true,
+                        isUserSurvey: true
+                    };
+                    
+                    console.log('Transformed display point:', {
+                        id: displayPoint.id,
+                        title: displayPoint.scenarioTitle,
+                        x: displayPoint.x,
+                        y: displayPoint.y,
+                        z: displayPoint.z
                     });
+                    
+                    // Remove existing versions of this survey
+                    ScenarioDataProcessor.dataPoints = ScenarioDataProcessor.dataPoints.filter(p => 
+                        p.id !== displayPoint.id
+                    );
+                    
+                    // Add new version
+                    ScenarioDataProcessor.dataPoints.push(displayPoint);
+                    ScenarioDataProcessor.displayPoints.push(displayPoint);
+                    
+                    // Set selected scenarios and comparison
+                    this.selectedScenarios = [displayPoint.scenarioTitle];
+                    this.selectedComparison = [displayPoint.id];
 
-                    // Close the modal displaying user surveys
+                    // Update visualization
+                    this.updateVisualization();
+                    
+                    // Populate details panel
+                    const compData = [displayPoint];
+                    this.populateScenarioDetails(compData);
+                    
+                    // Close any open modals
                     $('#userSurveysModal').modal('hide');
+                    
+                    return true;
                 } catch (error) {
                     console.error('Error viewing user survey:', error);
                     this.showErrorMessage('Error viewing survey: ' + error.message);
+                    return false;
                 }
             },
             /**
