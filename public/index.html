@@ -4378,7 +4378,7 @@
                     }
                     console.log('Found survey:', survey.metadata?.title);
 
-                    // If this survey isn’t already added, convert and push it as a display point
+                    // If the survey isn’t already added, convert and push it as a display point
                     if (!ScenarioDataProcessor.dataPoints.some(p => p.id === survey.id)) {
                     const displayPoint = {
                         id: survey.id,
@@ -4401,21 +4401,21 @@
                     ScenarioDataProcessor.displayPoints.push(displayPoint);
                     }
 
-                    // Set the selected scenario based on the survey title
+                    // Set the selected scenario based on the survey title,
+                    // and add the survey to the comparison selection so details appear.
                     VisualizationManager.selectedScenarios = [survey.metadata.title];
-                    // Also add the survey to the comparison selection so details appear
                     VisualizationManager.selectedComparison = [survey.id];
 
-                    // Update the visualization (cube plot, overview cards, media, etc.)
+                    // Refresh the visualization (cube plot, overview cards, media, etc.)
                     VisualizationManager.updateVisualization();
 
-                    // Explicitly populate the comparison (scenario details) with this survey’s data
+                    // Explicitly populate the comparison details with the survey’s data.
                     const compData = ScenarioDataProcessor.dataPoints.filter(point => point.id === survey.id);
                     if (compData.length > 0) {
                     VisualizationManager.populateScenarioDetails(compData);
                     }
 
-                    // Highlight the survey's card (if it exists) so the user sees it
+                    // Highlight the survey’s card in the overview (if it exists)
                     document.querySelectorAll('.comparison-card').forEach(card => {
                     const cardId = card.getAttribute('data-scenario-id');
                     if (cardId === survey.id) {
@@ -4424,7 +4424,7 @@
                     }
                     });
 
-                    // Close the user surveys modal
+                    // Close the modal displaying user surveys
                     $('#userSurveysModal').modal('hide');
                 } catch (error) {
                     console.error('Error viewing user survey:', error);
@@ -6211,55 +6211,49 @@
                  * Get user surveys from Auth0
                  * @returns {Promise<Array>} User's surveys
                  */
-                async getUserSurveys() {
+                 async getUserSurveys() {
                     try {
                         // Get authenticated user
                         const user = await AuthManager.getUser();
                         if (!user || !user.sub) {
-                            throw new Error('User is not authenticated or missing user ID');
+                        throw new Error('User is not authenticated or missing user ID');
                         }
                         
-                        // Get authentication token
+                        // Attempt to get a token (this should include offline_access)
                         const token = await AuthManager.getToken({
-                            timeoutInSeconds: 60,
-                            maxRetries: this.AUTH_RETRY_LIMIT
+                        timeoutInSeconds: 60,
+                        maxRetries: this.AUTH_RETRY_LIMIT
                         });
                         
-                        // Add request timeout handling
+                        // Proceed with your API call to fetch surveys (e.g., via a Netlify function)
                         const controller = new AbortController();
-                        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15-second timeout
+                        const timeoutId = setTimeout(() => controller.abort(), 15000);
                         
-                        try {
-                            // Fetch user data with proper error handling
-                            const response = await fetch(`https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/users/${user.sub}`, {
-                            headers: {
-                                'Authorization': `Bearer ${token}`
-                            },
-                            signal: controller.signal
-                            });
-                            
-                            clearTimeout(timeoutId);
-                            
-                            if (!response.ok) {
-                            const errorText = await response.text();
-                            throw new Error(`Failed to fetch user data: ${response.status} - ${errorText}`);
-                            }
-                            
-                            const userData = await response.json();
-                            return userData.user_metadata?.surveys || [];
-                        } catch (error) {
-                            clearTimeout(timeoutId);
-                            
-                            if (error.name === 'AbortError') {
-                            throw new Error('Request timed out. Please try again.');
-                            }
-                            throw error;
+                        const response = await fetch(`https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/users/${user.sub}`, {
+                        headers: { 'Authorization': `Bearer ${token}` },
+                        signal: controller.signal
+                        });
+                        
+                        clearTimeout(timeoutId);
+                        
+                        if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`Failed to fetch user data: ${response.status} - ${errorText}`);
                         }
+                        
+                        const userData = await response.json();
+                        return userData.user_metadata?.surveys || [];
+                        
                     } catch (error) {
                         console.error('Error fetching user surveys:', error);
+                        // If the error indicates a missing refresh token, prompt the user to re-login.
+                        if (error.message.includes('Missing Refresh Token')) {
+                        alert('Your session has expired or is missing a refresh token. Please log in again.');
+                        AuthManager.login();
+                        }
                         throw error;
                     }
-                },
+                    },
                 
                 /**
                  * Submit a new survey
