@@ -3828,32 +3828,61 @@
              * Handle scenario filter changes.
              * @param {Event} e Change event.
              */
+            // Modified handleScenarioFilterChange to update category and available models
             handleScenarioFilterChange(e) {
                 if (this.isUpdatingVisuals) return;
+
+                // Clear models and alternate selections
                 this.selectedModels = [];
                 this.selectedAlternateOutcomes = [];
                 const modelFilter = document.getElementById('modelFilter');
                 if (modelFilter) {
-                Array.from(modelFilter.options).forEach(opt => { opt.selected = false; });
+                    Array.from(modelFilter.options).forEach(opt => { opt.selected = false; });
                 }
                 const alternateOutcomes = document.getElementById('alternateOutcomes');
                 if (alternateOutcomes) {
-                alternateOutcomes.innerHTML = '<option disabled>Select a model first</option>';
-                alternateOutcomes.disabled = true;
+                    alternateOutcomes.innerHTML = '<option disabled>Select a model first</option>';
+                    alternateOutcomes.disabled = true;
                 }
+
+                // Get the selected scenarios (by title)
                 this.selectedScenarios = Array.from(e.target.selectedOptions).map(option => option.value);
                 if (this.selectedScenarios.length > this.MAX_SELECTIONS) {
-                this.showWarningMessage(`Please select a maximum of ${this.MAX_SELECTIONS} scenarios for comparison`);
-                this.selectedScenarios = this.selectedScenarios.slice(0, this.MAX_SELECTIONS);
-                this.updateSelectionUI(e.target, this.selectedScenarios);
+                    this.showWarningMessage(`Please select a maximum of ${this.MAX_SELECTIONS} scenarios for comparison`);
+                    this.selectedScenarios = this.selectedScenarios.slice(0, this.MAX_SELECTIONS);
+                    this.updateSelectionUI(e.target, this.selectedScenarios);
                 }
-                const options = Array.from(e.target.options);
-                options.forEach(option => {
-                option.style.display = this.selectedScenarios.length < this.MAX_SELECTIONS || this.selectedScenarios.includes(option.value)
-                    ? 'block'
-                    : 'none';
+
+                // Hide non‐selected scenario options to reduce confusion
+                Array.from(e.target.options).forEach(option => {
+                    option.style.display =
+                        this.selectedScenarios.length < this.MAX_SELECTIONS ||
+                        this.selectedScenarios.includes(option.value)
+                        ? 'block'
+                        : 'none';
                 });
+
+                // NEW: If exactly one scenario is selected, update the category filter to show only that scenario's category.
+                if (this.selectedScenarios.length === 1) {
+                    const selectedScenarioTitle = this.selectedScenarios[0];
+                    const scenario = ScenarioDataProcessor.dataPoints.find(p => p.scenarioTitle === selectedScenarioTitle);
+                    if (scenario && scenario.category) {
+                        const categoryFilter = document.getElementById('categoryFilter');
+                        if (categoryFilter) {
+                            Array.from(categoryFilter.options).forEach(option => {
+                                // Show only the option that matches the scenario’s category
+                                option.style.display = (option.value === scenario.category) ? 'block' : 'none';
+                                option.selected = (option.value === scenario.category);
+                            });
+                            this.selectedCategories = [scenario.category];
+                        }
+                    }
+                }
+
+                // Update the models dropdown to include only models for the selected scenario(s)
                 this.updateAvailableModels();
+
+                // Refresh the visualization based on the new filters
                 this.updateVisualization();
             },
             showModelSelectionModal: function(scenarioId, scenarioTitle) {
@@ -4024,10 +4053,29 @@
              * Handle category filter changes.
              * @param {Event} e Change event.
              */
+            // Modified handleCategoryFilterChange to update the scenario filter options
             handleCategoryFilterChange(e) {
                 if (this.isUpdatingVisuals) return;
+
+                // Capture the selected categories
                 this.selectedCategories = Array.from(e.target.selectedOptions).map(option => option.value);
-                this.resetFilters(['scenarios', 'models', 'alternates']);
+
+                // Filter the scenario dropdown: only show scenarios whose category matches a selected category
+                const scenarioFilter = document.getElementById('scenarioFilter');
+                if (scenarioFilter) {
+                    Array.from(scenarioFilter.options).forEach(option => {
+                        // Look up the scenario's category via data points (assuming each option value is the scenario title)
+                        const scenario = ScenarioDataProcessor.dataPoints.find(p => p.scenarioTitle === option.value);
+                        if (scenario) {
+                            option.style.display = this.selectedCategories.includes(scenario.category) ? 'block' : 'none';
+                        }
+                    });
+                }
+
+                // Optionally reset models and alternate outcomes
+                this.resetFilters(['models', 'alternates']);
+
+                // Refresh the visualization with the new filters
                 this.updateVisualization();
             },
             
