@@ -4365,13 +4365,12 @@
              viewUserSurvey: async function(surveyId) {
                 try {
                     console.log('Viewing user survey:', surveyId);
-                    // Use UserSurveyManager.getUserSurveys() instead of this.getUserSurveys()
+                    // Use UserSurveyManager.getUserSurveys() explicitly
                     const userSurveys = await UserSurveyManager.getUserSurveys();
                     if (!userSurveys || userSurveys.length === 0) {
                     this.showErrorMessage('No surveys found');
                     return;
                     }
-                    // Find the specific survey by its id
                     const survey = userSurveys.find(s => s.id === surveyId);
                     if (!survey) {
                     this.showErrorMessage(`Survey with ID ${surveyId} not found`);
@@ -4379,7 +4378,7 @@
                     }
                     console.log('Found survey:', survey.metadata?.title);
 
-                    // If this survey isn’t already in your display points, convert and add it
+                    // If this survey isn’t already added, convert and push it as a display point
                     if (!ScenarioDataProcessor.dataPoints.some(p => p.id === survey.id)) {
                     const displayPoint = {
                         id: survey.id,
@@ -4398,16 +4397,25 @@
                         relationToBase: null,
                         isUserSurvey: true
                     };
-
                     ScenarioDataProcessor.dataPoints.push(displayPoint);
                     ScenarioDataProcessor.displayPoints.push(displayPoint);
-                    VisualizationManager.updateVisualization();
                     }
-                    // Set the selected scenario to the survey's title
+
+                    // Set the selected scenario based on the survey title
                     VisualizationManager.selectedScenarios = [survey.metadata.title];
+                    // Also add the survey to the comparison selection so details appear
+                    VisualizationManager.selectedComparison = [survey.id];
+
+                    // Update the visualization (cube plot, overview cards, media, etc.)
                     VisualizationManager.updateVisualization();
 
-                    // Highlight the survey's card in the overview
+                    // Explicitly populate the comparison (scenario details) with this survey’s data
+                    const compData = ScenarioDataProcessor.dataPoints.filter(point => point.id === survey.id);
+                    if (compData.length > 0) {
+                    VisualizationManager.populateScenarioDetails(compData);
+                    }
+
+                    // Highlight the survey's card (if it exists) so the user sees it
                     document.querySelectorAll('.comparison-card').forEach(card => {
                     const cardId = card.getAttribute('data-scenario-id');
                     if (cardId === survey.id) {
@@ -4415,7 +4423,8 @@
                         card.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
                     });
-                    // Close the modal displaying user surveys
+
+                    // Close the user surveys modal
                     $('#userSurveysModal').modal('hide');
                 } catch (error) {
                     console.error('Error viewing user survey:', error);
