@@ -4362,76 +4362,66 @@
              * View a user's submitted survey
              * @param {string} surveyId - The ID of the survey to view
              */
-            viewUserSurvey: async function(surveyId) {
-            try {
-                console.log('Viewing user survey:', surveyId);
-                
-                // Get all user surveys
-                const userSurveys = await this.getUserSurveys();
-                if (!userSurveys || userSurveys.length === 0) {
-                this.showErrorMessage('No surveys found');
-                return;
+             viewUserSurvey: async function(surveyId) {
+                try {
+                    console.log('Viewing user survey:', surveyId);
+                    // Use UserSurveyManager.getUserSurveys() instead of this.getUserSurveys()
+                    const userSurveys = await UserSurveyManager.getUserSurveys();
+                    if (!userSurveys || userSurveys.length === 0) {
+                    this.showErrorMessage('No surveys found');
+                    return;
+                    }
+                    // Find the specific survey by its id
+                    const survey = userSurveys.find(s => s.id === surveyId);
+                    if (!survey) {
+                    this.showErrorMessage(`Survey with ID ${surveyId} not found`);
+                    return;
+                    }
+                    console.log('Found survey:', survey.metadata?.title);
+
+                    // If this survey isn’t already in your display points, convert and add it
+                    if (!ScenarioDataProcessor.dataPoints.some(p => p.id === survey.id)) {
+                    const displayPoint = {
+                        id: survey.id,
+                        scenarioTitle: survey.metadata.title,
+                        scenarioDescription: survey.metadata.description,
+                        llmName: "Your Analysis",
+                        category: survey.metadata.category,
+                        overallCategory: survey.metadata.classification.type,
+                        url: survey.metadata.url,
+                        dimensions: survey.survey.dimensions,
+                        x: survey.survey.finalPosition.x,
+                        y: survey.survey.finalPosition.y,
+                        z: survey.survey.finalPosition.z,
+                        isParent: true,
+                        parentId: survey.parentId || null,
+                        relationToBase: null,
+                        isUserSurvey: true
+                    };
+
+                    ScenarioDataProcessor.dataPoints.push(displayPoint);
+                    ScenarioDataProcessor.displayPoints.push(displayPoint);
+                    VisualizationManager.updateVisualization();
+                    }
+                    // Set the selected scenario to the survey's title
+                    VisualizationManager.selectedScenarios = [survey.metadata.title];
+                    VisualizationManager.updateVisualization();
+
+                    // Highlight the survey's card in the overview
+                    document.querySelectorAll('.comparison-card').forEach(card => {
+                    const cardId = card.getAttribute('data-scenario-id');
+                    if (cardId === survey.id) {
+                        card.classList.add('selected-card');
+                        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    });
+                    // Close the modal displaying user surveys
+                    $('#userSurveysModal').modal('hide');
+                } catch (error) {
+                    console.error('Error viewing user survey:', error);
+                    this.showErrorMessage('Error viewing survey: ' + error.message);
                 }
-                
-                // Find the specific survey by ID
-                const survey = userSurveys.find(s => s.id === surveyId);
-                if (!survey) {
-                this.showErrorMessage(`Survey with ID ${surveyId} not found`);
-                return;
-                }
-                
-                console.log('Found survey:', survey.metadata?.title);
-                
-                // Add the survey to ScenarioDataProcessor data
-                if (!ScenarioDataProcessor.dataPoints.some(p => p.id === survey.id)) {
-                // Convert survey to display point format
-                const displayPoint = {
-                    id: survey.id,
-                    scenarioTitle: survey.metadata.title,
-                    scenarioDescription: survey.metadata.description,
-                    llmName: "Your Analysis",
-                    category: survey.metadata.category,
-                    overallCategory: survey.metadata.classification.type,
-                    url: survey.metadata.url,
-                    dimensions: survey.survey.dimensions,
-                    x: survey.survey.finalPosition.x,
-                    y: survey.survey.finalPosition.y,
-                    z: survey.survey.finalPosition.z,
-                    isParent: true,
-                    parentId: survey.parentId || null,
-                    relationToBase: null,
-                    isUserSurvey: true
-                };
-                
-                // Add to data points
-                ScenarioDataProcessor.dataPoints.push(displayPoint);
-                ScenarioDataProcessor.displayPoints.push(displayPoint);
-                
-                // Update visualization
-                VisualizationManager.updateVisualization();
-                }
-                
-                // Select this survey in the visualization
-                VisualizationManager.selectedScenarios = [survey.metadata.title];
-                VisualizationManager.updateVisualization();
-                
-                // Highlight the survey in the cards
-                document.querySelectorAll('.comparison-card').forEach(card => {
-                const cardId = card.getAttribute('data-scenario-id');
-                if (cardId === survey.id) {
-                    card.classList.add('selected-card');
-                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-                });
-                
-                // Close any open modals
-                $('#userSurveysModal').modal('hide');
-                
-            } catch (error) {
-                console.error('Error viewing user survey:', error);
-                this.showErrorMessage('Error viewing survey: ' + error.message);
-            }
-            },
+                },
             /**
              * Master update visualization function.
              */
