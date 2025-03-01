@@ -1847,366 +1847,382 @@
             };
             // ScenarioDataProcessor - Handles fetching, processing, and validating scenario data
             const ScenarioDataProcessor = {
-            // State
-            dataPoints: [],
-            displayPoints: [],
-            scenarioRelationships: new Map(),
-            isProcessing: false,
-            lastFetchTime: 0,
-            
-            // Constants
-            FETCH_COOLDOWN: 5000, // 5 seconds between fetch attempts
-            MAX_RETRIES: 3,
-            
-            /**
-             * Fetch scenarios from the API with retry logic
-             * @returns {Promise<Array>} Processed scenario data
-             */
-            async fetchScenarios() {
-                if (this.isProcessing) {
-                console.warn('Already fetching scenarios, request queued');
-                return new Promise(resolve => {
-                    const checkInterval = setInterval(() => {
-                    if (!this.isProcessing) {
-                        clearInterval(checkInterval);
-                        resolve(this.dataPoints);
+                // State
+                dataPoints: [],
+                displayPoints: [],
+                scenarioRelationships: new Map(),
+                isProcessing: false,
+                lastFetchTime: 0,
+                
+                // Constants
+                FETCH_COOLDOWN: 5000, // 5 seconds between fetch attempts
+                MAX_RETRIES: 3,
+                
+                /**
+                * Helper: Check if a data point represents a user survey
+                * @param {Object} point Data point to check
+                * @returns {boolean} Whether the point represents a user survey
+                */
+                isUserSurvey(point) {
+                    return (point.isUserSurvey === true || point.llmName === "Your Analysis");
+                },
+                
+                /**
+                * Fetch scenarios from the API with retry logic
+                * @returns {Promise<Array>} Processed scenario data
+                */
+                async fetchScenarios() {
+                    if (this.isProcessing) {
+                        console.warn('Already fetching scenarios, request queued');
+                        return new Promise(resolve => {
+                            const checkInterval = setInterval(() => {
+                                if (!this.isProcessing) {
+                                    clearInterval(checkInterval);
+                                    resolve(this.dataPoints);
+                                }
+                            }, 100);
+                        });
                     }
-                    }, 100);
-                });
-                }
-                
-                try {
-                this.isProcessing = true;
-                
-                // Enforce cooldown between fetch attempts
-                const now = Date.now();
-                if (now - this.lastFetchTime < this.FETCH_COOLDOWN) {
-                    await new Promise(resolve => setTimeout(resolve, this.FETCH_COOLDOWN));
-                }
-                
-                this.lastFetchTime = Date.now();
-                
-                // Perform fetch with retries
-                let retries = 0;
-                let response = null;
-                
-                while (retries <= this.MAX_RETRIES) {
+                    
                     try {
-                    console.log(`Fetching scenarios (attempt ${retries + 1}/${this.MAX_RETRIES + 1})`);
-                    
-                    // Add timeout to fetch
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15-second timeout
-                    
-                    response = await fetch('/.netlify/functions/fetchscenarios', {
-                        signal: controller.signal
-                    });
-                    
-                    clearTimeout(timeoutId);
-                    
-                    if (!response.ok) {
-                        throw new Error(`API response error: ${response.status} ${response.statusText}`);
-                    }
-                    
-                    const data = await response.json();
-                    console.log("Raw API response received:", { 
-                        responseType: typeof data,
-                        isArray: Array.isArray(data),
-                        topLevelKeys: data ? Object.keys(data) : 'no keys'
-                    });
-                    
-                    await this.processJsonData(data);
-                    return this.dataPoints;
-                    } catch (error) {
-                    retries++;
-                    console.warn(`Fetch attempt ${retries} failed:`, error);
-                    
-                    if (error.name === 'AbortError') {
-                        console.error('Fetch timeout exceeded');
-                    }
-                    
-                    if (retries <= this.MAX_RETRIES) {
-                        // Exponential backoff for retries
-                        const backoffTime = Math.min(1000 * Math.pow(2, retries), 8000);
-                        await new Promise(resolve => setTimeout(resolve, backoffTime));
-                    } else {
-                        throw error;
-                    }
-                    }
-                }
-                } catch (error) {
-                console.error('Error fetching scenarios:', error);
-                
-                // Process empty data to ensure UI updates even in error case
-                await this.processJsonData([]);
-                
-                // Rethrow for caller to handle
-                throw error;
-                } finally {
-                this.isProcessing = false;
-                }
-            },
-            
-            /**
-             * Process raw scenario data into structured format
-             * @param {Object|Array} data Raw scenario data from API
-             */
-            async processJsonData(data) {
-                console.log("Processing JSON data");
-                
-                // Reset state
-                this.dataPoints = [];
-                this.displayPoints = [];
-                this.scenarioRelationships.clear();
-                
-                // Extract scenarios array from response
-                let scenarios = [];
-                
-                try {
-                if (Array.isArray(data)) {
-                    scenarios = data;
-                } else if (data && Array.isArray(data.scenarios)) {
-                    scenarios = data.scenarios;
-                } else if (data && typeof data === 'object') {
-                    // Try to find scenarios at any level
-                    const extractScenarios = (obj) => {
-                    if (Array.isArray(obj.scenarios)) {
-                        return obj.scenarios;
-                    }
-                    
-                    for (const key in obj) {
-                        if (typeof obj[key] === 'object' && obj[key] !== null) {
-                        const result = extractScenarios(obj[key]);
-                        if (result.length > 0) return result;
-                        }
-                    }
-                    
-                    return [];
-                    };
-                    
-                    scenarios = extractScenarios(data);
-                    
-                    // If we still don't have scenarios, treat the whole object as a single scenario
-                    if (scenarios.length === 0 && data.id) {
-                    scenarios = [data];
-                    }
-                }
-                } catch (error) {
-                console.error("Error extracting scenarios:", error);
-                scenarios = [];
-                }
-                
-                console.log(`Found ${scenarios.length} scenarios`);
-                // Flatten and deduplicate scenarios
-                let flattenedScenarios = [];
-                const processedIds = new Set();
-                
-                scenarios.forEach(scenario => {
-                if (scenario && typeof scenario === 'object') {
-                    // If scenario has nested scenarios, process them
-                    if (scenario.scenarios && Array.isArray(scenario.scenarios)) {
-                    scenario.scenarios.forEach(nestedScenario => {
-                        if (nestedScenario && nestedScenario.id && !processedIds.has(nestedScenario.id)) {
-                        processedIds.add(nestedScenario.id);
-                        flattenedScenarios.push(nestedScenario);
-                        }
-                    });
-                    } else if (scenario.id && !processedIds.has(scenario.id)) {
-                    // Process top-level scenario
-                    processedIds.add(scenario.id);
-                    flattenedScenarios.push(scenario);
-                    }
-                }
-                });
-                
-                console.log(`Processing ${flattenedScenarios.length} unique scenarios`);
-                
-                // Process each scenario
-                flattenedScenarios.forEach((scenario, index) => {
-                try {
-                    if (!scenario || typeof scenario !== 'object') {
-                    console.warn(`Invalid scenario at index ${index}`);
-                    return;
-                    }
-                    
-                    // Validate required fields
-                    if (!scenario.id) {
-                    console.warn(`Scenario at index ${index} is missing ID`);
-                    return;
-                    }
-                    
-                    // Use defaults for missing properties with defensive coding
-                    const metadata = scenario.metadata || {};
-                    const survey = scenario.survey || {};
-                    
-                    // Create point object with comprehensive validation
-                    const point = {
-                    id: scenario.id,
-                    scenarioTitle: this.validateStringField(metadata.title, 'Untitled Scenario'),
-                    scenarioDescription: this.validateStringField(metadata.description, ''),
-                    llmName: metadata.llmSource ? this.validateStringField(metadata.llmSource.model, 'Unknown Model') : 'Unknown Model',
-                    category: this.validateStringField(metadata.category, 'Uncategorized'),
-                    overallCategory: metadata.classification ? 
-                        this.normalizeCategory(this.validateStringField(metadata.classification.type, 'unknown')) : 'unknown',
-                    url: this.validateStringField(metadata.url, ''),
-                    dimensions: Array.isArray(survey.dimensions) ? survey.dimensions : [],
-                    x: this.validateNumberField(survey.finalPosition?.x, 0),
-                    y: this.validateNumberField(survey.finalPosition?.y, 0),
-                    z: this.validateNumberField(survey.finalPosition?.z, 0),
-                    isParent: scenario.type === 'base',
-                    parentId: scenario.parentId || null,
-                    relationToBase: metadata.relationToBase || null,
-                    // Add ethics scores with validation
-                    deontologyScore: this.validateStringField(survey.deontologyScore, 'N/A'),
-                    utilitarianismScore: this.validateStringField(survey.utilitarianismScore, 'N/A'),
-                    virtueEthicsScore: this.validateStringField(survey.virtueEthicsScore, 'N/A')
-                    };
-                    
-                    // Add to dataPoints and build relationships
-                    this.dataPoints.push(point);
-                    
-                    if (point.isParent) {
-                        this.displayPoints.push(point);
-                    } else if (point.parentId) {
-                    // Find parent scenario
-                        const parent = this.dataPoints.find(p => p.id === point.parentId);
-                    if (parent) {
-                        // Create relationship mapping
-                        if (!this.scenarioRelationships.has(parent.scenarioTitle)) {
-                        this.scenarioRelationships.set(parent.scenarioTitle, []);
+                        this.isProcessing = true;
+                        
+                        // Enforce cooldown between fetch attempts
+                        const now = Date.now();
+                        if (now - this.lastFetchTime < this.FETCH_COOLDOWN) {
+                            await new Promise(resolve => setTimeout(resolve, this.FETCH_COOLDOWN));
                         }
                         
-                        this.scenarioRelationships.get(parent.scenarioTitle).push({
-                        childId: point.scenarioTitle,
-                        relationshipType: point.relationToBase,
-                        model: point.llmName,
-                        data: point
-                        });
-                    } else {
-                        console.warn(`Parent scenario not found for child ${point.id} (parent ID: ${point.parentId})`);
+                        this.lastFetchTime = Date.now();
+                        
+                        // Perform fetch with retries
+                        let retries = 0;
+                        let response = null;
+                        
+                        while (retries <= this.MAX_RETRIES) {
+                            try {
+                                console.log(`Fetching scenarios (attempt ${retries + 1}/${this.MAX_RETRIES + 1})`);
+                                
+                                // Add timeout to fetch
+                                const controller = new AbortController();
+                                const timeoutId = setTimeout(() => controller.abort(), 15000); // 15-second timeout
+                                
+                                response = await fetch('/.netlify/functions/fetchscenarios', {
+                                    signal: controller.signal
+                                });
+                                
+                                clearTimeout(timeoutId);
+                                
+                                if (!response.ok) {
+                                    throw new Error(`API response error: ${response.status} ${response.statusText}`);
+                                }
+                                
+                                const data = await response.json();
+                                console.log("Raw API response received:", { 
+                                    responseType: typeof data,
+                                    isArray: Array.isArray(data),
+                                    topLevelKeys: data ? Object.keys(data) : 'no keys'
+                                });
+                                
+                                await this.processJsonData(data);
+                                return this.dataPoints;
+                            } catch (error) {
+                                retries++;
+                                console.warn(`Fetch attempt ${retries} failed:`, error);
+                                
+                                if (error.name === 'AbortError') {
+                                    console.error('Fetch timeout exceeded');
+                                }
+                                
+                                if (retries <= this.MAX_RETRIES) {
+                                    // Exponential backoff for retries
+                                    const backoffTime = Math.min(1000 * Math.pow(2, retries), 8000);
+                                    await new Promise(resolve => setTimeout(resolve, backoffTime));
+                                } else {
+                                    throw error;
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error fetching scenarios:', error);
+                        
+                        // Process empty data to ensure UI updates even in error case
+                        await this.processJsonData([]);
+                        
+                        // Rethrow for caller to handle
+                        throw error;
+                    } finally {
+                        this.isProcessing = false;
                     }
-                    }
-                } catch (error) {
-                    console.error(`Error processing scenario at index ${index}:`, error);
-                }
-                });
+                },
                 
-                console.log(`Processing complete: ${this.dataPoints.length} data points, ${this.displayPoints.length} display points`);
-                
-                // Update UI filters
-                await this.updateFilters();
-                
-                return this.dataPoints;
-            },
-            
-            /**
-             * Update UI filters based on processed data
-             */
-            async updateFilters() {
-                try {
-                // Extract unique values for filters
-                const uniqueScenarios = [...new Set(this.displayPoints.map(p => p.scenarioTitle))];
-                const uniqueModels = [...new Set(this.displayPoints.map(p => p.llmName))];
-                const uniqueCategories = [...new Set(this.displayPoints.map(p => p.category))];
-                
-                console.log("Updating filters with:", {
-                    scenarios: uniqueScenarios.length,
-                    models: uniqueModels.length,
-                    categories: uniqueCategories.length
-                });
-                
-                // Update model filter dropdown
-                const modelFilter = document.getElementById('modelFilter');
-                if (modelFilter) {
-                    modelFilter.innerHTML = uniqueModels.map(model =>
-                    `<option value="${this.escapeHTML(model)}">${this.escapeHTML(model)}</option>`
-                    ).join('');
-                }
-                
-                // Update scenario filter dropdown
-                const scenarioFilter = document.getElementById('scenarioFilter');
-                if (scenarioFilter) {
-                    scenarioFilter.innerHTML = uniqueScenarios.map(scenario =>
-                    `<option value="${this.escapeHTML(scenario)}">${this.escapeHTML(scenario)}</option>`
-                    ).join('');
-                }
-                
-                // Update category filter dropdown
-                const categoryFilter = document.getElementById('categoryFilter');
-                if (categoryFilter) {
-                    categoryFilter.innerHTML = uniqueCategories.map(category =>
-                    `<option value="${this.escapeHTML(category)}">${this.escapeHTML(category)}</option>`
-                    ).join('');
-                }
-                
-                // Update alternate outcomes dropdown
-                const alternateOutcomes = document.getElementById('alternateOutcomes');
-                if (alternateOutcomes) {
-                    alternateOutcomes.innerHTML = '<option disabled>Select a scenario and model to see alternates</option>';
-                }
-                
-                // Update category badges
-                const activeCategories = new Set([...new Set(this.displayPoints.map(point => 
-                    this.normalizeCategory(point.overallCategory)))]);
-                
-                document.querySelectorAll('.filter-badge').forEach(badge => {
-                    const category = badge.dataset.category.toLowerCase();
-                    const exists = this.displayPoints.some(point => 
-                    this.normalizeCategory(point.overallCategory) === category);
+                /**
+                * Process raw scenario data into structured format
+                * @param {Object|Array} data Raw scenario data from API
+                */
+                async processJsonData(data) {
+                    console.log("Processing JSON data");
                     
-                    badge.style.display = exists ? 'inline-block' : 'none';
-                    badge.classList.toggle('active', activeCategories.has(category));
-                });
-                } catch (error) {
-                console.error("Error updating filters:", error);
+                    // Reset state
+                    this.dataPoints = [];
+                    this.displayPoints = [];
+                    this.scenarioRelationships.clear();
+                    
+                    // Extract scenarios array from response
+                    let scenarios = [];
+                    
+                    try {
+                        if (Array.isArray(data)) {
+                            scenarios = data;
+                        } else if (data && Array.isArray(data.scenarios)) {
+                            scenarios = data.scenarios;
+                        } else if (data && typeof data === 'object') {
+                            // Try to find scenarios at any level
+                            const extractScenarios = (obj) => {
+                                if (Array.isArray(obj.scenarios)) {
+                                    return obj.scenarios;
+                                }
+                                
+                                for (const key in obj) {
+                                    if (typeof obj[key] === 'object' && obj[key] !== null) {
+                                        const result = extractScenarios(obj[key]);
+                                        if (result.length > 0) return result;
+                                    }
+                                }
+                                
+                                return [];
+                            };
+                            
+                            scenarios = extractScenarios(data);
+                            
+                            // If we still don't have scenarios, treat the whole object as a single scenario
+                            if (scenarios.length === 0 && data.id) {
+                                scenarios = [data];
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Error extracting scenarios:", error);
+                        scenarios = [];
+                    }
+                    
+                    console.log(`Found ${scenarios.length} scenarios`);
+                    // Flatten and deduplicate scenarios
+                    let flattenedScenarios = [];
+                    const processedIds = new Set();
+                    
+                    scenarios.forEach(scenario => {
+                        if (scenario && typeof scenario === 'object') {
+                            // If scenario has nested scenarios, process them
+                            if (scenario.scenarios && Array.isArray(scenario.scenarios)) {
+                                scenario.scenarios.forEach(nestedScenario => {
+                                    if (nestedScenario && nestedScenario.id && !processedIds.has(nestedScenario.id)) {
+                                        processedIds.add(nestedScenario.id);
+                                        flattenedScenarios.push(nestedScenario);
+                                    }
+                                });
+                            } else if (scenario.id && !processedIds.has(scenario.id)) {
+                                // Process top-level scenario
+                                processedIds.add(scenario.id);
+                                flattenedScenarios.push(scenario);
+                            }
+                        }
+                    });
+                    
+                    console.log(`Processing ${flattenedScenarios.length} unique scenarios`);
+                    
+                    // Process each scenario
+                    flattenedScenarios.forEach((scenario, index) => {
+                        try {
+                            if (!scenario || typeof scenario !== 'object') {
+                                console.warn(`Invalid scenario at index ${index}`);
+                                return;
+                            }
+                            
+                            // Validate required fields
+                            if (!scenario.id) {
+                                console.warn(`Scenario at index ${index} is missing ID`);
+                                return;
+                            }
+                            
+                            // Use defaults for missing properties with defensive coding
+                            const metadata = scenario.metadata || {};
+                            const survey = scenario.survey || {};
+                            
+                            // Create point object with comprehensive validation
+                            const point = {
+                                id: scenario.id,
+                                scenarioTitle: this.validateStringField(metadata.title, 'Untitled Scenario'),
+                                scenarioDescription: this.validateStringField(metadata.description, ''),
+                                llmName: metadata.llmSource ? this.validateStringField(metadata.llmSource.model, 'Unknown Model') : 'Unknown Model',
+                                category: this.validateStringField(metadata.category, 'Uncategorized'),
+                                overallCategory: metadata.classification ? 
+                                    this.normalizeCategory(this.validateStringField(metadata.classification.type, 'unknown')) : 'unknown',
+                                url: this.validateStringField(metadata.url, ''),
+                                dimensions: Array.isArray(survey.dimensions) ? survey.dimensions : [],
+                                x: this.validateNumberField(survey.finalPosition?.x, 0),
+                                y: this.validateNumberField(survey.finalPosition?.y, 0),
+                                z: this.validateNumberField(survey.finalPosition?.z, 0),
+                                isParent: scenario.type === 'base',
+                                parentId: scenario.parentId || null,
+                                relationToBase: metadata.relationToBase || null,
+                                // Add ethics scores with validation
+                                deontologyScore: this.validateStringField(survey.deontologyScore, 'N/A'),
+                                utilitarianismScore: this.validateStringField(survey.utilitarianismScore, 'N/A'),
+                                virtueEthicsScore: this.validateStringField(survey.virtueEthicsScore, 'N/A'),
+                                // Ensure user survey properties are consistently set if present
+                                isUserSurvey: scenario.isUserSurvey === true || scenario.llmName === "Your Analysis" || false
+                            };
+
+                            // Ensure llmName is "Your Analysis" if isUserSurvey is true for consistency
+                            if (point.isUserSurvey === true && point.llmName !== "Your Analysis") {
+                                point.llmName = "Your Analysis";
+                            }
+                            
+                            // Add to dataPoints and build relationships
+                            this.dataPoints.push(point);
+                            
+                            if (point.isParent) {
+                                this.displayPoints.push(point);
+                            } else if (point.parentId) {
+                                // Find parent scenario
+                                const parent = this.dataPoints.find(p => p.id === point.parentId);
+                                if (parent) {
+                                    // Create relationship mapping
+                                    if (!this.scenarioRelationships.has(parent.scenarioTitle)) {
+                                        this.scenarioRelationships.set(parent.scenarioTitle, []);
+                                    }
+                                    
+                                    this.scenarioRelationships.get(parent.scenarioTitle).push({
+                                        childId: point.scenarioTitle,
+                                        relationshipType: point.relationToBase,
+                                        model: point.llmName,
+                                        data: point
+                                    });
+                                } else {
+                                    console.warn(`Parent scenario not found for child ${point.id} (parent ID: ${point.parentId})`);
+                                }
+                            }
+                        } catch (error) {
+                            console.error(`Error processing scenario at index ${index}:`, error);
+                        }
+                    });
+                    
+                    console.log(`Processing complete: ${this.dataPoints.length} data points, ${this.displayPoints.length} display points`);
+                    
+                    // Update UI filters
+                    await this.updateFilters();
+                    
+                    return this.dataPoints;
+                },
+                
+                /**
+                * Update UI filters based on processed data
+                */
+                async updateFilters() {
+                    try {
+                        // Extract unique values for filters
+                        const uniqueScenarios = [...new Set(this.displayPoints.map(p => p.scenarioTitle))];
+                        const uniqueModels = [...new Set(this.displayPoints.map(p => p.llmName))];
+                        const uniqueCategories = [...new Set(this.displayPoints.map(p => p.category))];
+                        
+                        console.log("Updating filters with:", {
+                            scenarios: uniqueScenarios.length,
+                            models: uniqueModels.length,
+                            categories: uniqueCategories.length
+                        });
+                        
+                        // Update model filter dropdown
+                        const modelFilter = document.getElementById('modelFilter');
+                        if (modelFilter) {
+                            modelFilter.innerHTML = uniqueModels.map(model =>
+                                `<option value="${this.escapeHTML(model)}">${this.escapeHTML(model)}</option>`
+                            ).join('');
+                        }
+                        
+                        // Update scenario filter dropdown
+                        const scenarioFilter = document.getElementById('scenarioFilter');
+                        if (scenarioFilter) {
+                            scenarioFilter.innerHTML = uniqueScenarios.map(scenario =>
+                                `<option value="${this.escapeHTML(scenario)}">${this.escapeHTML(scenario)}</option>`
+                            ).join('');
+                        }
+                        
+                        // Update category filter dropdown
+                        const categoryFilter = document.getElementById('categoryFilter');
+                        if (categoryFilter) {
+                            categoryFilter.innerHTML = uniqueCategories.map(category =>
+                                `<option value="${this.escapeHTML(category)}">${this.escapeHTML(category)}</option>`
+                            ).join('');
+                        }
+                        
+                        // Update alternate outcomes dropdown
+                        const alternateOutcomes = document.getElementById('alternateOutcomes');
+                        if (alternateOutcomes) {
+                            alternateOutcomes.innerHTML = '<option disabled>Select a scenario and model to see alternates</option>';
+                        }
+                        
+                        // Update category badges
+                        const activeCategories = new Set([...new Set(this.displayPoints.map(point => 
+                            this.normalizeCategory(point.overallCategory)))]);
+                        
+                        document.querySelectorAll('.filter-badge').forEach(badge => {
+                            const category = badge.dataset.category.toLowerCase();
+                            const exists = this.displayPoints.some(point => 
+                                this.normalizeCategory(point.overallCategory) === category);
+                            
+                            badge.style.display = exists ? 'inline-block' : 'none';
+                            badge.classList.toggle('active', activeCategories.has(category));
+                        });
+                    } catch (error) {
+                        console.error("Error updating filters:", error);
+                    }
+                },
+                
+                /**
+                * Helper: Normalize a category string
+                * @param {string} category Category to normalize
+                * @returns {string} Normalized category
+                */
+                normalizeCategory(category) {
+                    if (typeof category !== 'string') return 'unknown';
+                    return category.toLowerCase().replace(/\s+/g, '_');
+                },
+                
+                /**
+                * Helper: Validate a string field with fallback
+                * @param {*} value Value to validate
+                * @param {string} fallback Fallback value
+                * @returns {string} Validated string
+                */
+                validateStringField(value, fallback) {
+                    return (value && typeof value === 'string') ? value : fallback;
+                },
+                
+                /**
+                * Helper: Validate a number field with fallback
+                * @param {*} value Value to validate
+                * @param {number} fallback Fallback value
+                * @returns {number} Validated number
+                */
+                validateNumberField(value, fallback) {
+                    return (value !== undefined && value !== null && !isNaN(parseFloat(value))) ? 
+                        parseFloat(value) : fallback;
+                },
+                
+                /**
+                * Helper: Escape HTML to prevent XSS
+                * @param {string} str String to escape
+                * @returns {string} Escaped string
+                */
+                escapeHTML(str) {
+                    if (!str) return '';
+                    return String(str)
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#039;');
                 }
-            },
-            
-            /**
-             * Helper: Normalize a category string
-             * @param {string} category Category to normalize
-             * @returns {string} Normalized category
-             */
-            normalizeCategory(category) {
-                if (typeof category !== 'string') return 'unknown';
-                return category.toLowerCase().replace(/\s+/g, '_');
-            },
-            
-            /**
-             * Helper: Validate a string field with fallback
-             * @param {*} value Value to validate
-             * @param {string} fallback Fallback value
-             * @returns {string} Validated string
-             */
-            validateStringField(value, fallback) {
-                return (value && typeof value === 'string') ? value : fallback;
-            },
-            
-            /**
-             * Helper: Validate a number field with fallback
-             * @param {*} value Value to validate
-             * @param {number} fallback Fallback value
-             * @returns {number} Validated number
-             */
-            validateNumberField(value, fallback) {
-                return (value !== undefined && value !== null && !isNaN(parseFloat(value))) ? 
-                parseFloat(value) : fallback;
-            },
-            
-            /**
-             * Helper: Escape HTML to prevent XSS
-             * @param {string} str String to escape
-             * @returns {string} Escaped string
-             */
-            escapeHTML(str) {
-                if (!str) return '';
-                return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
-            }
             };
             const UserSurveyManager = {
                 // State
@@ -2267,6 +2283,98 @@
                     console.error('VisualizationManager.viewUserSurvey is not available');
                     this.showErrorMessage('Unable to view survey at this time');
                 }
+                },
+                prepareScenarioForAnalysis: function(scenario, useModelAnswers) {
+                    try {
+                        console.log('Preparing scenario for analysis:', scenario.scenarioTitle);
+                        
+                        // Try to reset form first
+                        if (typeof this.resetSurveyForm === 'function') {
+                            this.resetSurveyForm();
+                        }
+                        
+                        // Generate a new ID for this analysis (always create a new ID)
+                        const newSurveyId = this.generateId();
+                        
+                        // Set scenario data in form
+                        document.getElementById('scenario-id').value = newSurveyId;
+                        document.getElementById('scenario-title-display').value = scenario.scenarioTitle;
+                        document.getElementById('scenario-description-display').value = scenario.scenarioDescription || '';
+                        document.getElementById('scenario-category-display').value = scenario.category || '';
+                        
+                        // Configure the analysis type and maintain relationship to original
+                        document.getElementById('scenario-type').value = 'analysis';
+                        document.getElementById('scenario-parent-id').value = useModelAnswers ? scenario.id : null;
+                        document.getElementById('scenario-url').value = scenario.url || '';
+                        
+                        // Set classification if available
+                        if (scenario.overallCategory && document.getElementById('moral-classification')) {
+                            const classSelect = document.getElementById('moral-classification');
+                            const normalizedCategory = scenario.overallCategory.toLowerCase().replace(/\s+/g, '_');
+                            
+                            // Find matching option
+                            Array.from(classSelect.options).forEach(option => {
+                                if (option.value.toLowerCase() === normalizedCategory) {
+                                    option.selected = true;
+                                }
+                            });
+                        }
+                        
+                        // Add hidden fields for marking as user survey if they exist
+                        const userSurveyField = document.getElementById('is-user-survey');
+                        if (userSurveyField) {
+                            userSurveyField.value = 'true';
+                        }
+                        const llmNameField = document.getElementById('llm-name');
+                        if (llmNameField) {
+                            llmNameField.value = 'Your Analysis';
+                        }
+                        
+                        // If using model answers, populate form with those values
+                        if (useModelAnswers && scenario.dimensions) {
+                            this.populateModelAnswers(scenario);
+                        }
+                        
+                        // Reset tab to first tab if possible
+                        if (typeof this.currentTabIndex !== 'undefined' && typeof this.updateTabDisplay === 'function') {
+                            this.currentTabIndex = 0;
+                            this.updateTabDisplay();
+                        }
+                        
+                        // Update UI to show we're analyzing an existing scenario
+                        const modalTitle = document.getElementById('surveyModalLabel');
+                        if (modalTitle) {
+                            modalTitle.textContent = useModelAnswers ? 
+                                `New Analysis Based on ${scenario.llmName}: ${scenario.scenarioTitle}` : 
+                                `New Analysis: ${scenario.scenarioTitle}`;
+                        }
+                        
+                        // Add helper text if using model answers
+                        if (useModelAnswers) {
+                            const headerNotice = document.createElement('div');
+                            headerNotice.className = 'alert alert-info mb-3';
+                            headerNotice.innerHTML = `
+                                <i class="fas fa-info-circle mr-2"></i> 
+                                You're creating a new analysis based on ${scenario.llmName}'s evaluation. 
+                                All changes will be saved as your own analysis with ID ${newSurveyId}.
+                            `;
+                            
+                            const modalBody = document.querySelector('#surveyModal .modal-body');
+                            if (modalBody && modalBody.firstChild) {
+                                modalBody.insertBefore(headerNotice, modalBody.firstChild);
+                            }
+                        }
+                        
+                        console.log('Scenario prepared for analysis:', scenario.scenarioTitle);
+                        
+                        // Enhance survey UI with sliders and better scrolling
+                        this.enhanceSurveyUI();
+                        this.removeEditCheckboxes();
+                        this.initializeChangeTracking();
+                        this.ensureFormFieldsEditable();
+                    } catch (error) {
+                        console.error('Error preparing scenario for analysis:', error);
+                    }
                 },
                 // Initialize change tracking
                 initializeChangeTracking() {
@@ -3343,7 +3451,7 @@
                         // Ensure user is authenticated
                         const isAuthenticated = await AuthManager.isUserAuthenticated();
                         if (!isAuthenticated) {
-                        throw new Error('User is not authenticated');
+                            throw new Error('User is not authenticated');
                         }
                         
                         // Get user information
@@ -3359,7 +3467,7 @@
                                     "moralClassification:", moralClassification);
                         
                         if (!scenarioId || !scenarioTitle || !moralClassification) {
-                        throw new Error('Missing required fields: scenario ID, title, or classification');
+                            throw new Error('Missing required fields: scenario ID, title, or classification');
                         }
                         
                         // Create survey data with proper structure
@@ -3367,6 +3475,10 @@
                             id: scenarioId || this.generateId(),
                             type: document.getElementById('scenario-type')?.value || 'base',
                             parentId: document.getElementById('scenario-parent-id')?.value || null,
+                            // ADD THESE TWO PROPERTIES
+                            isUserSurvey: true,
+                            llmName: "Your Analysis",
+                            // END ADDITIONS
                             metadata: {
                                 title: scenarioTitle,
                                 description: document.getElementById('scenario-description-display')?.value || '',
@@ -3645,7 +3757,14 @@
                 */
                 async saveToMongoDB(surveyData) {
                     try {
-                        console.log('Saving to MongoDB:', JSON.stringify(surveyData).substring(0, 200) + '...');
+                        // Ensure both identification properties are consistently set
+                        const enhancedSurveyData = {
+                            ...surveyData,
+                            isUserSurvey: true,
+                            llmName: "Your Analysis"
+                        };
+                        
+                        console.log('Saving to MongoDB:', JSON.stringify(enhancedSurveyData).substring(0, 200) + '...');
                         
                         // Request token with explicit audience and required Management API scopes
                         const token = await AuthManager.getToken({
@@ -3658,7 +3777,6 @@
                         });
                         
                         // Log token information for debugging (safely)
-                        // Use AuthManager.parseJwt instead of this.parseJwt
                         const tokenInfo = AuthManager.parseJwt ? AuthManager.parseJwt(token) : null;
                         if (tokenInfo) {
                             console.log('Token obtained with scopes:', tokenInfo.scope);
@@ -3680,7 +3798,7 @@
                                     'Authorization': `Bearer ${token}`
                                 },
                                 body: JSON.stringify({
-                                    survey: surveyData,
+                                    survey: enhancedSurveyData,
                                     timestamp: new Date().toISOString()
                                 }),
                                 signal: controller.signal
@@ -4457,63 +4575,70 @@
             /**
              * Master update visualization function.
              */
-            updateVisualization() {
+             updateVisualization() {
                 if (this.isUpdatingVisuals) return;
+                
                 // Always include user surveys in the visualization
                 try {
-                // Find existing user surveys in dataPoints
-                const userSurveyPoints = ScenarioDataProcessor.dataPoints.filter(point => 
-                    point.isUserSurvey === true || point.llmName === "Your Analysis"
-                );
-                
-                if (userSurveyPoints.length > 0) {
-                    console.log(`Found ${userSurveyPoints.length} user surveys in dataPoints`);
-                } else {
-                    // Try to get user surveys if authenticated - without async/await
-                    AuthManager.isUserAuthenticated().then(isAuthenticated => {
-                        if (isAuthenticated) {
-                            UserSurveyManager.getUserSurveys().then(userSurveys => {
-                                console.log(`Retrieved ${userSurveys.length} user surveys`);
-                                
-                                // Add user surveys to dataPoints if not already there
-                                userSurveys.forEach(survey => {
-                                    if (!ScenarioDataProcessor.dataPoints.some(p => p.id === survey.id)) {
-                                        const displayPoint = {
-                                            id: survey.id,
-                                            scenarioTitle: survey.metadata.title,
-                                            scenarioDescription: survey.metadata.description,
-                                            llmName: "Your Analysis",
-                                            category: survey.metadata.category,
-                                            overallCategory: survey.metadata.classification.type,
-                                            url: survey.metadata.url,
-                                            dimensions: survey.survey.dimensions,
-                                            x: survey.survey.finalPosition.x,
-                                            y: survey.survey.finalPosition.y,
-                                            z: survey.survey.finalPosition.z,
-                                            isParent: true,
-                                            parentId: survey.parentId || null,
-                                            relationToBase: null,
-                                            isUserSurvey: true
-                                        };
-                                        
-                                        ScenarioDataProcessor.dataPoints.push(displayPoint);
-                                        ScenarioDataProcessor.displayPoints.push(displayPoint);
-                                        
-                                        // Trigger visualization update
-                                        VisualizationManager.updateVisualization();
-                                    }
+                    // Find existing user surveys in dataPoints using standardized method
+                    const userSurveyPoints = ScenarioDataProcessor.dataPoints.filter(point => 
+                        ScenarioDataProcessor.isUserSurvey(point)
+                    );
+                    
+                    // Preserve original dataPoints before any modifications
+                    const originalDataPoints = [...ScenarioDataProcessor.dataPoints];
+                    console.log("Original data points count:", originalDataPoints.length);
+                    console.log("Models available:", [...new Set(originalDataPoints.map(p => p.llmName))]);
+                    
+                    if (userSurveyPoints.length > 0) {
+                        console.log(`Found ${userSurveyPoints.length} user surveys in dataPoints`);
+                    } else {
+                        // Try to get user surveys if authenticated
+                        AuthManager.isUserAuthenticated().then(isAuthenticated => {
+                            if (isAuthenticated) {
+                                UserSurveyManager.getUserSurveys().then(userSurveys => {
+                                    console.log(`Retrieved ${userSurveys.length} user surveys`);
+                                    
+                                    // Add user surveys to dataPoints if not already there
+                                    userSurveys.forEach(survey => {
+                                        if (!ScenarioDataProcessor.dataPoints.some(p => p.id === survey.id)) {
+                                            const displayPoint = {
+                                                id: survey.id,
+                                                scenarioTitle: survey.metadata.title,
+                                                scenarioDescription: survey.metadata.description,
+                                                llmName: "Your Analysis",
+                                                isUserSurvey: true, // Set both properties consistently
+                                                category: survey.metadata.category,
+                                                overallCategory: survey.metadata.classification.type,
+                                                url: survey.metadata.url,
+                                                dimensions: survey.survey.dimensions,
+                                                x: survey.survey.finalPosition.x,
+                                                y: survey.survey.finalPosition.y,
+                                                z: survey.survey.finalPosition.z,
+                                                isParent: true,
+                                                parentId: survey.parentId || null,
+                                                relationToBase: null
+                                            };
+                                            
+                                            ScenarioDataProcessor.dataPoints.push(displayPoint);
+                                            ScenarioDataProcessor.displayPoints.push(displayPoint);
+                                            
+                                            // Trigger visualization update
+                                            VisualizationManager.updateVisualization();
+                                        }
+                                    });
+                                }).catch(error => {
+                                    console.error('Error getting user surveys in updateVisualization:', error);
                                 });
-                            }).catch(error => {
-                                console.error('Error getting user surveys in updateVisualization:', error);
-                            });
-                        }
-                    }).catch(error => {
-                        console.error('Error checking authentication:', error);
-                    });
+                            }
+                        }).catch(error => {
+                            console.error('Error checking authentication:', error);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error including user surveys in visualization:', error);
                 }
-            } catch (error) {
-                console.error('Error including user surveys in visualization:', error);
-            }
+
                 this.isUpdatingVisuals = true;
                 try {
                 let filteredPoints = [...ScenarioDataProcessor.dataPoints];
@@ -4586,10 +4711,34 @@
                     );
                     this.populateScenarioDetails(compData);
                 }
-                // Make sure user surveys are always included regardless of filters
+                // Make sure user surveys and GPT models are included
                 const userSurveys = ScenarioDataProcessor.dataPoints.filter(point => 
                     point.isUserSurvey === true || point.llmName === "Your Analysis"
                 );
+
+                // Check for GPT models
+                const gptModels = ScenarioDataProcessor.dataPoints.filter(point => 
+                    point.llmName === "GPT" || point.llmName?.includes("GPT")
+                );
+
+                console.log(`Found ${userSurveys.length} user surveys and ${gptModels.length} GPT models`);
+
+                // If no GPT models in filtered points, add them back
+                const hasGptInFiltered = filteredPoints.some(p => p.llmName === "GPT" || p.llmName?.includes("GPT"));
+                if (gptModels.length > 0 && !hasGptInFiltered) {
+                    console.log("Adding GPT models back to filtered points");
+                    filteredPoints = [...filteredPoints, ...gptModels];
+                }
+
+                // Add user surveys if any exist
+                if (userSurveys.length > 0) {
+                    console.log("Adding user surveys to filtered points");
+                    userSurveys.forEach(survey => {
+                        if (!filteredPoints.some(p => p.id === survey.id)) {
+                            filteredPoints.push(survey);
+                        }
+                    });
+                }
                 if (userSurveys.length > 0) {
                     console.log(`Adding ${userSurveys.length} user surveys to filtered points`);
                     // Use Set to avoid duplicates
@@ -4873,6 +5022,11 @@
                     aspectratio: { x: 1, y: 1, z: 1 }
                     }
                 };
+                // Add right before the Plotly.newPlot call in createPlot function:
+                console.log("Points being plotted:", points.length);
+                console.log("Models in plot:", [...new Set(points.map(p => p.llmName))]);
+                console.log("User surveys in plot:", points.filter(p => p.isUserSurvey || p.llmName === "Your Analysis").length);
+                console.log("GPT models in plot:", points.filter(p => p.llmName === "GPT" || p.llmName?.includes("GPT")).length);
                 Plotly.newPlot('cube-plot', plotData, layout, {
                     displayModeBar: false,
                     responsive: true
