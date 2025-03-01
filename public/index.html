@@ -2255,6 +2255,19 @@
                         return null;
                     }
                 },
+                /**
+                 * View a user submitted survey (wrapper function)
+                 * @param {string} surveyId Survey ID to view
+                 */
+                viewUserSurvey: function(surveyId) {
+                // Call the existing implementation in VisualizationManager
+                if (VisualizationManager && VisualizationManager.viewUserSurvey) {
+                    return VisualizationManager.viewUserSurvey(surveyId);
+                } else {
+                    console.error('VisualizationManager.viewUserSurvey is not available');
+                    this.showErrorMessage('Unable to view survey at this time');
+                }
+                },
                 // Initialize change tracking
                 initializeChangeTracking() {
                     // Clear previous state
@@ -6049,6 +6062,14 @@
                         }
                     });
                 }
+                  // Force visualization update after a short delay
+                setTimeout(() => {
+                    if (ScenarioDataProcessor.dataPoints.length > 0 && VisualizationManager.createPlot) {
+                    console.log("Force refreshing cube visualization");
+                    const parentScenarios = ScenarioDataProcessor.dataPoints.filter(point => point.isParent);
+                    VisualizationManager.createPlot(parentScenarios);
+                    }
+                }, 1500);
             });
 
             // Wait for document to be ready
@@ -6193,6 +6214,22 @@
                     } catch (error) {
                         console.error('Error in submitSurvey:', error);
                         throw error;
+                    }
+                    try {
+                    // After successful submission
+                    console.log("Survey submitted successfully, refreshing visualization");
+                    
+                    // First add this survey to the visualization
+                    if (VisualizationManager.viewUserSurvey) {
+                        VisualizationManager.viewUserSurvey(surveyData.id);
+                    }
+                    
+                    // Then update the user surveys preview
+                    if (VisualizationManager.updateUserSurveysPreview) {
+                        VisualizationManager.updateUserSurveysPreview();
+                    }
+                    } catch (refreshError) {
+                    console.error("Error refreshing visualization:", refreshError);
                     }
                 },
                 
