@@ -2235,7 +2235,26 @@
                     this.attachModalListeners();
                     console.log('Survey manager initialized');
                 },
-
+                /**
+                 * Parse JWT token to get claims
+                 * @param {string} token JWT token
+                 * @returns {Object|null} Parsed claims or null on failure
+                 */
+                parseJwt(token) {
+                    try {
+                        if (!token) return null;
+                        const base64Url = token.split('.')[1];
+                        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                        }).join(''));
+                        
+                        return JSON.parse(jsonPayload);
+                    } catch (error) {
+                        console.error('Error parsing JWT:', error);
+                        return null;
+                    }
+                },
                 // Initialize change tracking
                 initializeChangeTracking() {
                     // Clear previous state
@@ -3621,9 +3640,14 @@
                         });
                         
                         // Log token information for debugging (safely)
-                        const tokenInfo = this.parseJwt(token);
-                        console.log('Token obtained with scopes:', tokenInfo?.scope);
-                        console.log('Token expires at:', new Date(tokenInfo?.exp * 1000).toISOString());
+                        // Use AuthManager.parseJwt instead of this.parseJwt
+                        const tokenInfo = AuthManager.parseJwt ? AuthManager.parseJwt(token) : null;
+                        if (tokenInfo) {
+                            console.log('Token obtained with scopes:', tokenInfo.scope);
+                            console.log('Token expires at:', new Date(tokenInfo.exp * 1000).toISOString());
+                        } else {
+                            console.log('Token obtained, but unable to parse token details');
+                        }
                         
                         // Add timeout handling for MongoDB save
                         const controller = new AbortController();
