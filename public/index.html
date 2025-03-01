@@ -4368,60 +4368,66 @@
                     // Use UserSurveyManager.getUserSurveys() explicitly
                     const userSurveys = await UserSurveyManager.getUserSurveys();
                     if (!userSurveys || userSurveys.length === 0) {
-                    this.showErrorMessage('No surveys found');
-                    return;
+                        this.showErrorMessage('No surveys found');
+                        return;
                     }
+                    
                     const survey = userSurveys.find(s => s.id === surveyId);
                     if (!survey) {
-                    this.showErrorMessage(`Survey with ID ${surveyId} not found`);
-                    return;
+                        this.showErrorMessage(`Survey with ID ${surveyId} not found`);
+                        return;
                     }
+                    
                     console.log('Found survey:', survey.metadata?.title);
 
-                    // If the survey isn’t already added, convert and push it as a display point
-                    if (!ScenarioDataProcessor.dataPoints.some(p => p.id === survey.id)) {
-                    const displayPoint = {
-                        id: survey.id,
-                        scenarioTitle: survey.metadata.title,
-                        scenarioDescription: survey.metadata.description,
-                        llmName: "Your Analysis",
-                        category: survey.metadata.category,
-                        overallCategory: survey.metadata.classification.type,
-                        url: survey.metadata.url,
-                        dimensions: survey.survey.dimensions,
-                        x: survey.survey.finalPosition.x,
-                        y: survey.survey.finalPosition.y,
-                        z: survey.survey.finalPosition.z,
-                        isParent: true,
-                        parentId: survey.parentId || null,
-                        relationToBase: null,
-                        isUserSurvey: true
-                    };
-                    ScenarioDataProcessor.dataPoints.push(displayPoint);
-                    ScenarioDataProcessor.displayPoints.push(displayPoint);
+                    // If the survey isn't already added, convert and push it as a display point
+                    const existingPoint = ScenarioDataProcessor.dataPoints.find(p => p.id === survey.id);
+                    if (!existingPoint) {
+                        const displayPoint = {
+                            id: survey.id,
+                            scenarioTitle: survey.metadata.title,
+                            scenarioDescription: survey.metadata.description,
+                            llmName: "Your Analysis",
+                            category: survey.metadata.category,
+                            overallCategory: survey.metadata.classification.type,
+                            url: survey.metadata.url,
+                            dimensions: survey.survey.dimensions,
+                            x: survey.survey.finalPosition.x,
+                            y: survey.survey.finalPosition.y,
+                            z: survey.survey.finalPosition.z,
+                            isParent: true,
+                            parentId: survey.parentId || null,
+                            relationToBase: null,
+                            isUserSurvey: true
+                        };
+                        
+                        console.log('Adding survey to dataPoints:', displayPoint);
+                        ScenarioDataProcessor.dataPoints.push(displayPoint);
+                        ScenarioDataProcessor.displayPoints.push(displayPoint);
+                    } else {
+                        console.log('Survey already exists in dataPoints');
                     }
 
-                    // Set the selected scenario based on the survey title,
-                    // and add the survey to the comparison selection so details appear.
-                    VisualizationManager.selectedScenarios = [survey.metadata.title];
-                    VisualizationManager.selectedComparison = [survey.id];
+                    // Set the selected scenario based on the survey title
+                    this.selectedScenarios = [survey.metadata.title];
+                    this.selectedComparison = [survey.id];
 
-                    // Refresh the visualization (cube plot, overview cards, media, etc.)
-                    VisualizationManager.updateVisualization();
+                    // Refresh the visualization
+                    this.updateVisualization();
 
-                    // Explicitly populate the comparison details with the survey’s data.
+                    // Explicitly populate the comparison details
                     const compData = ScenarioDataProcessor.dataPoints.filter(point => point.id === survey.id);
                     if (compData.length > 0) {
-                    VisualizationManager.populateScenarioDetails(compData);
+                        this.populateScenarioDetails(compData);
                     }
 
-                    // Highlight the survey’s card in the overview (if it exists)
+                    // Highlight the survey's card in the overview
                     document.querySelectorAll('.comparison-card').forEach(card => {
-                    const cardId = card.getAttribute('data-scenario-id');
-                    if (cardId === survey.id) {
-                        card.classList.add('selected-card');
-                        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
+                        const cardId = card.getAttribute('data-scenario-id');
+                        if (cardId === survey.id) {
+                            card.classList.add('selected-card');
+                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
                     });
 
                     // Close the modal displaying user surveys
@@ -4430,12 +4436,67 @@
                     console.error('Error viewing user survey:', error);
                     this.showErrorMessage('Error viewing survey: ' + error.message);
                 }
-                },
+            },
             /**
              * Master update visualization function.
              */
             updateVisualization() {
                 if (this.isUpdatingVisuals) return;
+                // Always include user surveys in the visualization
+                try {
+                // Find existing user surveys in dataPoints
+                const userSurveyPoints = ScenarioDataProcessor.dataPoints.filter(point => 
+                    point.isUserSurvey === true || point.llmName === "Your Analysis"
+                );
+                
+                if (userSurveyPoints.length > 0) {
+                    console.log(`Found ${userSurveyPoints.length} user surveys in dataPoints`);
+                } else {
+                    // Try to get user surveys if authenticated - without async/await
+                    AuthManager.isUserAuthenticated().then(isAuthenticated => {
+                        if (isAuthenticated) {
+                            UserSurveyManager.getUserSurveys().then(userSurveys => {
+                                console.log(`Retrieved ${userSurveys.length} user surveys`);
+                                
+                                // Add user surveys to dataPoints if not already there
+                                userSurveys.forEach(survey => {
+                                    if (!ScenarioDataProcessor.dataPoints.some(p => p.id === survey.id)) {
+                                        const displayPoint = {
+                                            id: survey.id,
+                                            scenarioTitle: survey.metadata.title,
+                                            scenarioDescription: survey.metadata.description,
+                                            llmName: "Your Analysis",
+                                            category: survey.metadata.category,
+                                            overallCategory: survey.metadata.classification.type,
+                                            url: survey.metadata.url,
+                                            dimensions: survey.survey.dimensions,
+                                            x: survey.survey.finalPosition.x,
+                                            y: survey.survey.finalPosition.y,
+                                            z: survey.survey.finalPosition.z,
+                                            isParent: true,
+                                            parentId: survey.parentId || null,
+                                            relationToBase: null,
+                                            isUserSurvey: true
+                                        };
+                                        
+                                        ScenarioDataProcessor.dataPoints.push(displayPoint);
+                                        ScenarioDataProcessor.displayPoints.push(displayPoint);
+                                        
+                                        // Trigger visualization update
+                                        VisualizationManager.updateVisualization();
+                                    }
+                                });
+                            }).catch(error => {
+                                console.error('Error getting user surveys in updateVisualization:', error);
+                            });
+                        }
+                    }).catch(error => {
+                        console.error('Error checking authentication:', error);
+                    });
+                }
+            } catch (error) {
+                console.error('Error including user surveys in visualization:', error);
+            }
                 this.isUpdatingVisuals = true;
                 try {
                 let filteredPoints = [...ScenarioDataProcessor.dataPoints];
@@ -4507,6 +4568,18 @@
                     this.selectedComparison.includes(point.id)
                     );
                     this.populateScenarioDetails(compData);
+                }
+                // Make sure user surveys are always included regardless of filters
+                const userSurveys = ScenarioDataProcessor.dataPoints.filter(point => 
+                    point.isUserSurvey === true || point.llmName === "Your Analysis"
+                );
+                if (userSurveys.length > 0) {
+                    console.log(`Adding ${userSurveys.length} user surveys to filtered points`);
+                    // Use Set to avoid duplicates
+                    const combinedPointsSet = new Set([...filteredPoints.map(p => p.id), ...userSurveys.map(p => p.id)]);
+                    filteredPoints = [...combinedPointsSet].map(id => 
+                        ScenarioDataProcessor.dataPoints.find(p => p.id === id)
+                    ).filter(Boolean);
                 }
                 this.createPlot(filteredPoints);
                 this.updateSelectedMedia();
@@ -4747,20 +4820,28 @@
                     z: points.map(p => p.y),
                     mode: 'markers',
                     marker: {
-                    size: points.map(p => p.isParent ? 8 : 6),
-                    color: points.map(p => this.getColorByCategory(p.overallCategory)),
-                    opacity: 0.8,
-                    line: {
-                        color: points.map(p => (this.scenarioColorMapping && this.scenarioColorMapping[p.scenarioTitle + '_' + p.llmName]) || '#000'),
-                        width: points.map(p => p.isParent ? 6 : 4)
-                    }
+                        // Replace this entire marker block with:
+                        size: points.map(p => p.isUserSurvey || p.llmName === "Your Analysis" ? 12 : (p.isParent ? 8 : 6)),
+                        color: points.map(p => p.isUserSurvey || p.llmName === "Your Analysis" ? '#2ca02c' : this.getColorByCategory(p.overallCategory)),
+                        opacity: points.map(p => p.isUserSurvey || p.llmName === "Your Analysis" ? 1 : 0.8),
+                        line: {
+                            color: points.map(p => p.isUserSurvey || p.llmName === "Your Analysis" ? 
+                                '#228B22' : 
+                                (this.scenarioColorMapping && this.scenarioColorMapping[p.scenarioTitle + '_' + p.llmName]) || '#000'),
+                            width: points.map(p => p.isUserSurvey || p.llmName === "Your Analysis" ? 8 : (p.isParent ? 6 : 4))
+                        }
                     },
-                    text: points.map(p => `
-                    <b>${p.scenarioTitle}</b><br>
-                    <b>Category:</b> ${p.overallCategory}<br>
-                    <b>Model:</b> ${p.llmName}<br>
-                    ${p.isParent ? '<b>Type:</b> Parent' : '<b>Type:</b> Alternative'}
-                    `),
+                    // Replace this text block with:
+                    text: points.map(p => {
+                        const isUserSurvey = p.isUserSurvey || p.llmName === "Your Analysis";
+                        return `
+                        <b>${p.scenarioTitle}</b><br>
+                        <b>Category:</b> ${p.overallCategory}<br>
+                        <b>Model:</b> ${isUserSurvey ? '<strong>Your Analysis</strong>' : p.llmName}<br>
+                        ${isUserSurvey ? '<b>Type:</b> Your Survey' : (p.isParent ? '<b>Type:</b> Parent' : '<b>Type:</b> Alternative')}
+                        <br><b>Position:</b> (${p.x.toFixed(2)}, ${p.y.toFixed(2)}, ${p.z.toFixed(2)})
+                        `;
+                    }),
                     hoverinfo: 'text',
                     showlegend: false
                 });
@@ -5099,13 +5180,19 @@
                             const scores = getEthicsScores(item);
                             const borderColor = this.scenarioColorMapping[item.scenarioTitle + '_' + item.llmName] || '#000';
                             
+                            // Add this right here, before the return statement
+                            const isUserSurvey = item.isUserSurvey || item.llmName === "Your Analysis";
+                            const borderStyle = isUserSurvey ? 
+                                `border: 2px solid #2ca02c; background-color: #f0fff4;` : 
+                                `border: 2px solid ${borderColor};`;
+                            
                             return `
                                 <div class="comparison-card" 
                                     data-scenario-id="${ScenarioDataProcessor.escapeHTML(item.id)}" 
-                                    style="border: 2px solid ${borderColor};">
+                                    style="${borderStyle}">
                                     <h4>
                                         ${getScenarioTitle(item)}
-                                        <small>(${ScenarioDataProcessor.escapeHTML(item.llmName)} ${getCategoryBadge(item.overallCategory)})</small>
+                                        <small>(${isUserSurvey ? '<strong>Your Analysis</strong>' : ScenarioDataProcessor.escapeHTML(item.llmName)} ${getCategoryBadge(item.overallCategory)})</small>
                                     </h4>
                                     <div class="scenario-description">
                                         <span class="description-text">
