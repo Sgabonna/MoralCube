@@ -4169,80 +4169,136 @@
              * Reset specified filters.
              * @param {Array<string>} filters Filters to reset.
              */
-            resetFilters(filters) {
+             resetFilters(filters) {
                 this.isUpdatingVisuals = true;
                 try {
-                if (filters.includes('scenarios')) {
-                    this.selectedScenarios = [];
-                    const scenarioFilter = document.getElementById('scenarioFilter');
-                    if (scenarioFilter) scenarioFilter.selectedIndex = -1;
-                }
-                if (filters.includes('models')) {
-                    this.selectedModels = [];
-                    const modelFilter = document.getElementById('modelFilter');
-                    if (modelFilter) modelFilter.selectedIndex = -1;
-                }
-                if (filters.includes('categories')) {
-                    this.selectedCategories = [];
-                    const categoryFilter = document.getElementById('categoryFilter');
-                    if (categoryFilter) categoryFilter.selectedIndex = -1;
-                }
-                if (filters.includes('alternates')) {
-                    this.selectedAlternateOutcomes = [];
-                    const alternateOutcomes = document.getElementById('alternateOutcomes');
-                    if (alternateOutcomes) {
-                    alternateOutcomes.innerHTML = '<option disabled>Select one scenario and one model</option>';
-                    alternateOutcomes.disabled = true;
+                    if (filters.includes('scenarios')) {
+                        this.selectedScenarios = [];
+                        const scenarioFilter = document.getElementById('scenarioFilter');
+                        if (scenarioFilter) {
+                            scenarioFilter.selectedIndex = -1;
+                            // Make all options visible
+                            Array.from(scenarioFilter.options).forEach(option => {
+                                option.style.display = 'block';
+                            });
+                        }
                     }
-                }
+                    if (filters.includes('models')) {
+                        this.selectedModels = [];
+                        const modelFilter = document.getElementById('modelFilter');
+                        if (modelFilter) {
+                            modelFilter.selectedIndex = -1;
+                            Array.from(modelFilter.options).forEach(option => {
+                                option.style.display = 'block';
+                            });
+                        }
+                    }
+                    if (filters.includes('categories')) {
+                        this.selectedCategories = [];
+                        const categoryFilter = document.getElementById('categoryFilter');
+                        if (categoryFilter) {
+                            categoryFilter.selectedIndex = -1;
+                            Array.from(categoryFilter.options).forEach(option => {
+                                option.style.display = 'block';
+                            });
+                        }
+                    }
+                    if (filters.includes('alternates')) {
+                        this.selectedAlternateOutcomes = [];
+                        const alternateOutcomes = document.getElementById('alternateOutcomes');
+                        if (alternateOutcomes) {
+                            alternateOutcomes.innerHTML = '<option disabled>Select one scenario and one model</option>';
+                            alternateOutcomes.disabled = true;
+                        }
+                    }
+                    // Reset filter badges to their default active state
+                    document.querySelectorAll('.filter-badge').forEach(badge => {
+                        badge.classList.add('active');
+                        badge.style.opacity = '1';
+                    });
                 } finally {
-                this.isUpdatingVisuals = false;
+                    this.isUpdatingVisuals = false;
                 }
             },
             
             /**
              * Clear all filters and reset to initial state.
              */
-            clearAllFilters() {
+             clearAllFilters() {
                 this.isUpdatingVisuals = true;
                 try {
-                this.selectedModels = [];
-                this.selectedScenarios = [];
-                this.selectedCategories = [];
-                this.selectedAlternateOutcomes = [];
-                this.selectedComparison = [];
-                this.activeCategories = new Set(['evil', 'virtue', 'vice', 'sin', 'morally_grey', 'world_building']);
-                document.getElementById('modelFilter').selectedIndex = -1;
-                document.getElementById('scenarioFilter').selectedIndex = -1;
-                document.getElementById('categoryFilter').selectedIndex = -1;
-                const alternateOutcomes = document.getElementById('alternateOutcomes');
-                if (alternateOutcomes) {
-                    alternateOutcomes.innerHTML = '<option disabled>Select one scenario and one model</option>';
-                    alternateOutcomes.disabled = true;
-                }
-                document.querySelectorAll('.filter-badge').forEach(badge => {
-                    badge.classList.add('active');
-                    badge.style.opacity = '1';
-                });
-                document.querySelectorAll('.comparison-card').forEach(card => {
-                    card.classList.remove('selected-card');
-                });
-                const scenarioAccordion = document.getElementById('scenarioAccordion');
-                if (scenarioAccordion) {
-                    scenarioAccordion.innerHTML = `
-                    <div class="text-center text-muted p-3">
-                        Select two scenario cards above to compare details
-                    </div>
-                    `;
-                }
-                const parentScenarios = ScenarioDataProcessor.dataPoints.filter(point => point.isParent);
-                this.createPlot(parentScenarios);
-                this.populateOverview(parentScenarios.slice(0, 4));
-                this.updateSelectedMedia();
+                    // Clear internal state arrays and reset active categories
+                    this.selectedModels = [];
+                    this.selectedScenarios = [];
+                    this.selectedCategories = [];
+                    this.selectedAlternateOutcomes = [];
+                    this.selectedComparison = [];
+                    this.activeCategories = new Set(['evil', 'virtue', 'vice', 'sin', 'morally_grey', 'world_building']);
+
+                    // Reset Model filter dropdown
+                    const modelFilter = document.getElementById('modelFilter');
+                    if (modelFilter) {
+                        modelFilter.selectedIndex = -1;
+                        Array.from(modelFilter.options).forEach(option => {
+                            option.style.display = 'block';
+                        });
+                    }
+
+                    // Reset Scenario filter dropdown
+                    const scenarioFilter = document.getElementById('scenarioFilter');
+                    if (scenarioFilter) {
+                        scenarioFilter.selectedIndex = -1;
+                        Array.from(scenarioFilter.options).forEach(option => {
+                            option.style.display = 'block';
+                        });
+                    }
+
+                    // Reset Category filter dropdown
+                    const categoryFilter = document.getElementById('categoryFilter');
+                    if (categoryFilter) {
+                        categoryFilter.selectedIndex = -1;
+                        Array.from(categoryFilter.options).forEach(option => {
+                            option.style.display = 'block';
+                        });
+                    }
+
+                    // Reset Alternate Outcomes dropdown
+                    const alternateOutcomes = document.getElementById('alternateOutcomes');
+                    if (alternateOutcomes) {
+                        alternateOutcomes.innerHTML = '<option disabled>Select one scenario and one model</option>';
+                        alternateOutcomes.disabled = true;
+                    }
+
+                    // Reset filter badges (set them back to active with full opacity)
+                    document.querySelectorAll('.filter-badge').forEach(badge => {
+                        badge.classList.add('active');
+                        badge.style.opacity = '1';
+                    });
+
+                    // Clear any selected comparison cards
+                    document.querySelectorAll('.comparison-card').forEach(card => {
+                        card.classList.remove('selected-card');
+                    });
+
+                    // Reset the scenario details accordion to the default placeholder
+                    const scenarioAccordion = document.getElementById('scenarioAccordion');
+                    if (scenarioAccordion) {
+                        scenarioAccordion.innerHTML = `
+                            <div class="text-center text-muted p-3">
+                                Select two scenario cards above to compare details
+                            </div>
+                        `;
+                    }
+
+                    // Update the plot and overview using the parent scenarios
+                    const parentScenarios = ScenarioDataProcessor.dataPoints.filter(point => point.isParent);
+                    this.createPlot(parentScenarios);
+                    this.populateOverview(parentScenarios.slice(0, 4));
+                    this.updateSelectedMedia();
                 } catch (error) {
-                console.error('Error clearing filters:', error);
+                    console.error('Error clearing filters:', error);
                 } finally {
-                this.isUpdatingVisuals = false;
+                    this.isUpdatingVisuals = false;
                 }
             },
             
