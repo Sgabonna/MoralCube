@@ -2844,6 +2844,11 @@
                 * @throws {Error} If score is outside valid range
                 */
                 validateScoreRange(dimensionId, questionId, score) {
+                    // Skip validation for philosophical questions that use string values
+                    if (dimensionId === 'PhilosophicalAnalysis') {
+                        return true;
+                    }
+                    
                     // Define valid ranges for each dimension/question
                     const rangeMap = {
                         'Ends': {
@@ -2876,10 +2881,18 @@
                         return true;
                     }
                     
+                    // Ensure score is treated as a number for comparison
+                    const numericScore = parseFloat(score);
+                    
+                    // Check if score is a valid number
+                    if (isNaN(numericScore)) {
+                        throw new Error(`Score for ${questionId} must be a number`);
+                    }
+                    
                     const range = rangeMap[dimensionId][questionId];
                     
                     // Check if score is within range
-                    if (score < range.min || score > range.max) {
+                    if (numericScore < range.min || numericScore > range.max) {
                         throw new Error(`Score for ${questionId} must be between ${range.min} and ${range.max}`);
                     }
                     
@@ -6716,13 +6729,40 @@
                             
                             // Validate scores for all questions except 'Wills at Play'
                             if (reqQuestion !== 'Wills at Play') {
-                                if (foundQuestion.score === null || foundQuestion.score === undefined || 
-                                    typeof foundQuestion.score !== 'number' || isNaN(foundQuestion.score)) {
-                                    throw new Error(`Question "${reqQuestion}" requires a numeric score`);
-                                }
+                                // Replace this entire if-block with the following code:
                                 
-                                // Validate score ranges based on dimension and question
-                                this.validateScoreRange(dimName, reqQuestion, foundQuestion.score);
+                                // Check if this is a philosophical question that uses string values
+                                const isPhilosophicalQuestion = dimName === 'PhilosophicalAnalysis';
+                                
+                                if (isPhilosophicalQuestion) {
+                                    // For philosophical questions, verify that score is a non-empty string
+                                    if (foundQuestion.score === null || foundQuestion.score === undefined || 
+                                        foundQuestion.score.trim() === '') {
+                                        throw new Error(`Question "${reqQuestion}" requires a valid answer`);
+                                    }
+                                    
+                                    // Optional: Validate that philosophical scores are from allowed values
+                                    if (reqQuestion === 'Deontology' || reqQuestion === 'Utilitarianism') {
+                                        const validScores = ['Right', 'Wrong', 'Neutral', 'Complex'];
+                                        if (!validScores.includes(foundQuestion.score)) {
+                                            throw new Error(`Question "${reqQuestion}" must have one of these values: ${validScores.join(', ')}`);
+                                        }
+                                    } else if (reqQuestion === 'Virtue Ethics') {
+                                        const validScores = ['Virtuous', 'Vicious', 'Mixed', 'Neutral'];
+                                        if (!validScores.includes(foundQuestion.score)) {
+                                            throw new Error(`Question "${reqQuestion}" must have one of these values: ${validScores.join(', ')}`);
+                                        }
+                                    }
+                                } else {
+                                    // For numeric questions, verify it's a valid number
+                                    if (foundQuestion.score === null || foundQuestion.score === undefined || 
+                                        typeof foundQuestion.score !== 'number' || isNaN(foundQuestion.score)) {
+                                        throw new Error(`Question "${reqQuestion}" requires a numeric score`);
+                                    }
+                                    
+                                    // Validate score ranges based on dimension and question
+                                    this.validateScoreRange(dimName, reqQuestion, foundQuestion.score);
+                                }
                             }
                             
                             // Validate justification text
