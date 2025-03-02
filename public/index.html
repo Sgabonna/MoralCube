@@ -2272,108 +2272,158 @@
                     }
                 },
                 /**
-                 * View a user submitted survey (wrapper function)
-                 * @param {string} surveyId Survey ID to view
+                 * View a user's submitted survey
+                 * @param {string} surveyId - The ID of the survey to view
                  */
-                viewUserSurvey: function(surveyId) {
-                // Call the existing implementation in VisualizationManager
-                if (VisualizationManager && VisualizationManager.viewUserSurvey) {
-                    return VisualizationManager.viewUserSurvey(surveyId);
-                } else {
-                    console.error('VisualizationManager.viewUserSurvey is not available');
-                    this.showErrorMessage('Unable to view survey at this time');
-                }
-                },
-                prepareScenarioForAnalysis: function(scenario, useModelAnswers) {
+                viewUserSurvey: async function(surveyId) {
                     try {
-                        console.log('Preparing scenario for analysis:', scenario.scenarioTitle);
+                        console.log('Viewing user survey:', surveyId);
                         
-                        // Try to reset form first
-                        if (typeof this.resetSurveyForm === 'function') {
-                            this.resetSurveyForm();
+                        // Get all user surveys
+                        const userSurveys = await UserSurveyManager.getUserSurveys();
+                        console.log(`Retrieved ${userSurveys.length} user surveys`);
+                        
+                        if (!userSurveys || userSurveys.length === 0) {
+                            this.showErrorMessage('No surveys found');
+                            return;
                         }
                         
-                        // Generate a new ID for this analysis (always create a new ID)
-                        const newSurveyId = this.generateId();
+                        // Find survey by either id or _id
+                        const survey = userSurveys.find(s => {
+                            const surveyObjectId = s._id?.$oid || s._id;
+                            const surveyStringId = s.id;
+                            return surveyStringId === surveyId || surveyObjectId === surveyId;
+                        });
                         
-                        // Set scenario data in form
-                        document.getElementById('scenario-id').value = newSurveyId;
-                        document.getElementById('scenario-title-display').value = scenario.scenarioTitle;
-                        document.getElementById('scenario-description-display').value = scenario.scenarioDescription || '';
-                        document.getElementById('scenario-category-display').value = scenario.category || '';
-                        
-                        // Configure the analysis type and maintain relationship to original
-                        document.getElementById('scenario-type').value = 'analysis';
-                        document.getElementById('scenario-parent-id').value = useModelAnswers ? scenario.id : null;
-                        document.getElementById('scenario-url').value = scenario.url || '';
-                        
-                        // Set classification if available
-                        if (scenario.overallCategory && document.getElementById('moral-classification')) {
-                            const classSelect = document.getElementById('moral-classification');
-                            const normalizedCategory = scenario.overallCategory.toLowerCase().replace(/\s+/g, '_');
-                            
-                            // Find matching option
-                            Array.from(classSelect.options).forEach(option => {
-                                if (option.value.toLowerCase() === normalizedCategory) {
-                                    option.selected = true;
-                                }
-                            });
+                        if (!survey) {
+                            console.error(`Survey with ID ${surveyId} not found in user surveys`);
+                            this.showErrorMessage(`Survey with ID ${surveyId} not found`);
+                            return;
                         }
                         
-                        // Add hidden fields for marking as user survey if they exist
-                        const userSurveyField = document.getElementById('is-user-survey');
-                        if (userSurveyField) {
-                            userSurveyField.value = 'true';
-                        }
-                        const llmNameField = document.getElementById('llm-name');
-                        if (llmNameField) {
-                            llmNameField.value = 'Your Analysis';
-                        }
+                        console.log('Found survey:', survey.metadata?.title);
                         
-                        // If using model answers, populate form with those values
-                        if (useModelAnswers && scenario.dimensions) {
-                            this.populateModelAnswers(scenario);
-                        }
+                        // Handle MongoDB NumberDouble values properly
+                        const getNumericValue = (value) => {
+                            if (value === undefined || value === null) return 0;
+                            if (typeof value === 'number') return value;
+                            if (value.$numberDouble !== undefined) return parseFloat(value.$numberDouble);
+                            if (value.$numberInt !== undefined) return parseInt(value.$numberInt);
+                            return parseFloat(value) || 0;
+                        };
                         
-                        // Reset tab to first tab if possible
-                        if (typeof this.currentTabIndex !== 'undefined' && typeof this.updateTabDisplay === 'function') {
-                            this.currentTabIndex = 0;
-                            this.updateTabDisplay();
-                        }
+                        // Create a properly formatted display point
+                        const displayPoint = {
+                            id: survey.id || (survey._id?.$oid || survey._id),
+                            scenarioTitle: survey.metadata?.title || "Your Survey",
+                            scenarioDescription: survey.metadata?.description || "",
+                            llmName: "Your Analysis",
+                            category: survey.metadata?.category || "Uncategorized",
+                            overallCategory: survey.metadata?.classification?.type || "unknown",
+                            url: survey.metadata?.url || "",
+                            dimensions: survey.survey?.dimensions || [],
+                            x: getNumericValue(survey.survey?.finalPosition?.x),
+                            y: getNumericValue(survey.survey?.finalPosition?.y),
+                            z: getNumericValue(survey.survey?.finalPosition?.z),
+                            isParent: true,
+                            isUserSurvey: true
+                        };
                         
-                        // Update UI to show we're analyzing an existing scenario
-                        const modalTitle = document.getElementById('surveyModalLabel');
-                        if (modalTitle) {
-                            modalTitle.textContent = useModelAnswers ? 
-                                `New Analysis Based on ${scenario.llmName}: ${scenario.scenarioTitle}` : 
-                                `New Analysis: ${scenario.scenarioTitle}`;
-                        }
+                        console.log('Transformed display point:', {
+                            id: displayPoint.id,
+                            title: displayPoint.scenarioTitle,
+                            x: displayPoint.x,
+                            y: displayPoint.y,
+                            z: displayPoint.z
+                        });
                         
-                        // Add helper text if using model answers
-                        if (useModelAnswers) {
-                            const headerNotice = document.createElement('div');
-                            headerNotice.className = 'alert alert-info mb-3';
-                            headerNotice.innerHTML = `
-                                <i class="fas fa-info-circle mr-2"></i> 
-                                You're creating a new analysis based on ${scenario.llmName}'s evaluation. 
-                                All changes will be saved as your own analysis with ID ${newSurveyId}.
-                            `;
-                            
-                            const modalBody = document.querySelector('#surveyModal .modal-body');
-                            if (modalBody && modalBody.firstChild) {
-                                modalBody.insertBefore(headerNotice, modalBody.firstChild);
-                            }
-                        }
+                        // Remove existing versions of this survey
+                        ScenarioDataProcessor.dataPoints = ScenarioDataProcessor.dataPoints.filter(p => 
+                            p.id !== displayPoint.id
+                        );
                         
-                        console.log('Scenario prepared for analysis:', scenario.scenarioTitle);
+                        // Add new version
+                        ScenarioDataProcessor.dataPoints.push(displayPoint);
+                        ScenarioDataProcessor.displayPoints.push(displayPoint);
                         
-                        // Enhance survey UI with sliders and better scrolling
-                        this.enhanceSurveyUI();
-                        this.removeEditCheckboxes();
-                        this.initializeChangeTracking();
-                        this.ensureFormFieldsEditable();
+                        // Set selected scenarios and comparison
+                        this.selectedScenarios = [displayPoint.scenarioTitle];
+                        this.selectedComparison = [displayPoint.id];
+
+                        // Update visualization
+                        this.updateVisualization();
+                        
+                        // Populate details panel
+                        const compData = [displayPoint];
+                        this.populateScenarioDetails(compData);
+                        
+                        // Close any open modals
+                        $('#userSurveysModal').modal('hide');
+                        
+                        return true;
                     } catch (error) {
-                        console.error('Error preparing scenario for analysis:', error);
+                        console.error('Error viewing user survey:', error);
+                        this.showErrorMessage('Error viewing survey: ' + error.message);
+                        return false;
+                    }
+                },
+                /**
+                 * Normalize user survey data to ensure consistent properties
+                 * @param {Object} survey Survey data to normalize
+                 * @returns {Object} Normalized survey data
+                 */
+                normalizeUserSurvey(survey) {
+                    if (!survey) return null;
+                    
+                    try {
+                        // Create a copy to avoid modifying the original
+                        const normalizedSurvey = {...survey};
+                        
+                        // Ensure identification properties are consistently set
+                        normalizedSurvey.isUserSurvey = true;
+                        normalizedSurvey.llmName = "Your Analysis";
+                        
+                        // Handle MongoDB ObjectId
+                        if (normalizedSurvey._id && !normalizedSurvey.id) {
+                            normalizedSurvey.id = normalizedSurvey._id.$oid || normalizedSurvey._id;
+                        }
+                        
+                        // Ensure finalPosition exists and has proper values
+                        if (!normalizedSurvey.survey || !normalizedSurvey.survey.finalPosition) {
+                            if (!normalizedSurvey.survey) normalizedSurvey.survey = {};
+                            normalizedSurvey.survey.finalPosition = { x: 0, y: 0, z: 0 };
+                        } else {
+                            // Ensure numeric values
+                            const pos = normalizedSurvey.survey.finalPosition;
+                            normalizedSurvey.survey.finalPosition = {
+                                x: typeof pos.x === 'number' ? pos.x : parseFloat(pos.x) || 0,
+                                y: typeof pos.y === 'number' ? pos.y : parseFloat(pos.y) || 0,
+                                z: typeof pos.z === 'number' ? pos.z : parseFloat(pos.z) || 0
+                            };
+                        }
+                        
+                        // Ensure metadata exists
+                        if (!normalizedSurvey.metadata) {
+                            normalizedSurvey.metadata = {
+                                title: 'Untitled Survey',
+                                category: 'Uncategorized',
+                                classification: { type: 'unknown' }
+                            };
+                        }
+                        
+                        // Add timestamps if missing
+                        if (!normalizedSurvey.created) {
+                            normalizedSurvey.created = new Date().toISOString();
+                        }
+                        
+                        if (!normalizedSurvey.lastModified) {
+                            normalizedSurvey.lastModified = new Date().toISOString();
+                        }
+                        
+                        return normalizedSurvey;
+                    } catch (error) {
+                        console.error('Error normalizing survey:', error);
+                        return survey; // Return original on error
                     }
                 },
                 // Initialize change tracking
@@ -4641,120 +4691,112 @@
 
                 this.isUpdatingVisuals = true;
                 try {
-                let filteredPoints = [...ScenarioDataProcessor.dataPoints];
-                if (this.activeCategories.size !== 6) {
-                    filteredPoints = filteredPoints.filter(point =>
-                    this.activeCategories.has(ScenarioDataProcessor.normalizeCategory(point.overallCategory))
-                    );
-                    this.updateFilterRelevance(filteredPoints);
-                }
-                if (this.selectedCategories.length > 0) {
-                    filteredPoints = filteredPoints.filter(point =>
-                    this.selectedCategories.includes(point.category)
-                    );
-                }
-                if (this.selectedScenarios.length > 0) {
-                    filteredPoints = filteredPoints.filter(point =>
-                    this.selectedScenarios.includes(point.scenarioTitle)
-                    );
-                    this.updateModelRelevance(filteredPoints);
-                }
-                if (this.selectedModels.length > 0) {
-                    filteredPoints = filteredPoints.filter(point =>
-                    this.selectedModels.includes(point.llmName)
-                    );
-                    this.updateScenarioRelevance(filteredPoints);
-                }
-                if (filteredPoints.length === 0) {
-                    this.showWarningMessage('No data points match the current filters.');
-                    return;
-                }
-                if (this.selectedScenarios.length === 1 && this.selectedModels.length === 1 &&
-                    this.selectedAlternateOutcomes.length > 0) {
-                    const parentScenarioTitle = this.selectedScenarios[0];
-                    const selModel = this.selectedModels[0];
-                    const parentPoint = filteredPoints.find(p =>
-                    p.scenarioTitle === parentScenarioTitle &&
-                    p.llmName === selModel &&
-                    p.isParent
-                    );
-                    if (parentPoint) {
-                    let points = [parentPoint];
-                    const rels = ScenarioDataProcessor.scenarioRelationships.get(parentScenarioTitle) || [];
-                    const alternatePoints = rels
-                        .filter(child =>
-                        child.model === selModel &&
-                        this.selectedAlternateOutcomes.includes(child.childId)
-                        )
-                        .map(child => child.data);
-                    filteredPoints = [...points, ...alternatePoints];
+                    let filteredPoints = [...ScenarioDataProcessor.dataPoints];
+                    if (this.activeCategories.size !== 6) {
+                        filteredPoints = filteredPoints.filter(point =>
+                        this.activeCategories.has(ScenarioDataProcessor.normalizeCategory(point.overallCategory))
+                        );
+                        this.updateFilterRelevance(filteredPoints);
                     }
-                }
-                this.updateScenarioColorMapping(filteredPoints);
-                if (this.selectedScenarios.length > 0) {
-                    const compData = filteredPoints.filter(point =>
-                    this.selectedScenarios.includes(point.scenarioTitle)
-                    );
-                    this.populateOverview(compData);
-                } else if (this.selectedModels.length === 2) {
-                    const compData = this.selectedModels.map(model =>
-                    filteredPoints.find(point => point.llmName === model)
-                    ).filter(Boolean);
-                    this.populateOverview(compData);
-                } else {
-                    const compData = filteredPoints.slice(0, 4);
-                    this.populateOverview(compData);
-                }
-                if (this.selectedComparison.length === 2) {
-                    const compData = ScenarioDataProcessor.dataPoints.filter(point =>
-                    this.selectedComparison.includes(point.id)
-                    );
-                    this.populateScenarioDetails(compData);
-                }
-                // Make sure user surveys and GPT models are included
-                const userSurveys = ScenarioDataProcessor.dataPoints.filter(point => 
-                    point.isUserSurvey === true || point.llmName === "Your Analysis"
-                );
-
-                // Check for GPT models
-                const gptModels = ScenarioDataProcessor.dataPoints.filter(point => 
-                    point.llmName === "GPT" || point.llmName?.includes("GPT")
-                );
-
-                console.log(`Found ${userSurveys.length} user surveys and ${gptModels.length} GPT models`);
-
-                // If no GPT models in filtered points, add them back
-                const hasGptInFiltered = filteredPoints.some(p => p.llmName === "GPT" || p.llmName?.includes("GPT"));
-                if (gptModels.length > 0 && !hasGptInFiltered) {
-                    console.log("Adding GPT models back to filtered points");
-                    filteredPoints = [...filteredPoints, ...gptModels];
-                }
-
-                // Add user surveys if any exist
-                if (userSurveys.length > 0) {
-                    console.log("Adding user surveys to filtered points");
-                    userSurveys.forEach(survey => {
-                        if (!filteredPoints.some(p => p.id === survey.id)) {
-                            filteredPoints.push(survey);
+                    if (this.selectedCategories.length > 0) {
+                        filteredPoints = filteredPoints.filter(point =>
+                        this.selectedCategories.includes(point.category)
+                        );
+                    }
+                    if (this.selectedScenarios.length > 0) {
+                        filteredPoints = filteredPoints.filter(point =>
+                        this.selectedScenarios.includes(point.scenarioTitle)
+                        );
+                        this.updateModelRelevance(filteredPoints);
+                    }
+                    if (this.selectedModels.length > 0) {
+                        filteredPoints = filteredPoints.filter(point =>
+                        this.selectedModels.includes(point.llmName)
+                        );
+                        this.updateScenarioRelevance(filteredPoints);
+                    }
+                    if (filteredPoints.length === 0) {
+                        this.showWarningMessage('No data points match the current filters.');
+                        return;
+                    }
+                    if (this.selectedScenarios.length === 1 && this.selectedModels.length === 1 &&
+                        this.selectedAlternateOutcomes.length > 0) {
+                        const parentScenarioTitle = this.selectedScenarios[0];
+                        const selModel = this.selectedModels[0];
+                        const parentPoint = filteredPoints.find(p =>
+                        p.scenarioTitle === parentScenarioTitle &&
+                        p.llmName === selModel &&
+                        p.isParent
+                        );
+                        if (parentPoint) {
+                        let points = [parentPoint];
+                        const rels = ScenarioDataProcessor.scenarioRelationships.get(parentScenarioTitle) || [];
+                        const alternatePoints = rels
+                            .filter(child =>
+                            child.model === selModel &&
+                            this.selectedAlternateOutcomes.includes(child.childId)
+                            )
+                            .map(child => child.data);
+                        filteredPoints = [...points, ...alternatePoints];
                         }
-                    });
-                }
-                if (userSurveys.length > 0) {
-                    console.log(`Adding ${userSurveys.length} user surveys to filtered points`);
-                    // Use Set to avoid duplicates
-                    const combinedPointsSet = new Set([...filteredPoints.map(p => p.id), ...userSurveys.map(p => p.id)]);
-                    filteredPoints = [...combinedPointsSet].map(id => 
-                        ScenarioDataProcessor.dataPoints.find(p => p.id === id)
-                    ).filter(Boolean);
-                }
-                this.createPlot(filteredPoints);
-                this.updateSelectedMedia();
-                this.updateUserSurveysPreview();
+                    }
+                    this.updateScenarioColorMapping(filteredPoints);
+                    if (this.selectedScenarios.length > 0) {
+                        const compData = filteredPoints.filter(point =>
+                        this.selectedScenarios.includes(point.scenarioTitle)
+                        );
+                        this.populateOverview(compData);
+                    } else if (this.selectedModels.length === 2) {
+                        const compData = this.selectedModels.map(model =>
+                        filteredPoints.find(point => point.llmName === model)
+                        ).filter(Boolean);
+                        this.populateOverview(compData);
+                    } else {
+                        const compData = filteredPoints.slice(0, 4);
+                        this.populateOverview(compData);
+                    }
+                    if (this.selectedComparison.length === 2) {
+                        const compData = ScenarioDataProcessor.dataPoints.filter(point =>
+                        this.selectedComparison.includes(point.id)
+                        );
+                        this.populateScenarioDetails(compData);
+                    }
+                    // Make sure user surveys and GPT models are included
+                    const userSurveys = ScenarioDataProcessor.dataPoints.filter(point => 
+                        point.isUserSurvey === true || point.llmName === "Your Analysis"
+                    );
+
+                    // Check for GPT models
+                    const gptModels = ScenarioDataProcessor.dataPoints.filter(point => 
+                        point.llmName === "GPT" || point.llmName?.includes("GPT")
+                    );
+
+                    console.log(`Found ${userSurveys.length} user surveys and ${gptModels.length} GPT models`);
+
+                    // If no GPT models in filtered points, add them back
+                    const hasGptInFiltered = filteredPoints.some(p => p.llmName === "GPT" || p.llmName?.includes("GPT"));
+                    if (gptModels.length > 0 && !hasGptInFiltered) {
+                        console.log("Adding GPT models back to filtered points");
+                        filteredPoints = [...filteredPoints, ...gptModels];
+                    }
+
+                    // Add user surveys if any exist
+                    if (userSurveys.length > 0) {
+                        console.log(`Adding ${userSurveys.length} user surveys to filtered points`);
+                        // Use Set to avoid duplicates
+                        const combinedPointsSet = new Set([...filteredPoints.map(p => p.id), ...userSurveys.map(p => p.id)]);
+                        filteredPoints = [...combinedPointsSet].map(id => 
+                            ScenarioDataProcessor.dataPoints.find(p => p.id === id)
+                        ).filter(Boolean);
+                    }
+                    this.createPlot(filteredPoints);
+                    this.updateSelectedMedia();
+                    this.updateUserSurveysPreview();
                 } catch (error) {
-                console.error('Error updating visualization:', error);
-                this.showErrorMessage('Error updating visualization. Please try refreshing the page.');
+                    console.error('Error updating visualization:', error);
+                    this.showErrorMessage('Error updating visualization. Please try refreshing the page.');
                 } finally {
-                this.isUpdatingVisuals = false;
+                    this.isUpdatingVisuals = false;
                 }
             },
             
@@ -4946,101 +4988,101 @@
             
             createPlot(points) {
                 try {
-                const meshData = {
-                    type: 'mesh3d',
-                    x: [-8, 12, 12, -8, -8, 12, 12, -8],
-                    y: [0, 0, 0, 0, 8, 8, 8, 8],
-                    z: [-21.6, -21.6, 0, 0, -21.6, -21.6, 0, 0],
-                    i: [0, 0, 4, 4, 0, 0, 2, 2, 0, 1],
-                    j: [1, 2, 5, 6, 1, 5, 3, 7, 0, 2],
-                    k: [2, 3, 6, 7, 5, 4, 7, 6, 3, 3],
-                    opacity: 0.1,
-                    color: 'lightblue',
-                    showlegend: false,
-                    hoverinfo: 'none'
-                };
+                    const meshData = {
+                        type: 'mesh3d',
+                        x: [-8, 12, 12, -8, -8, 12, 12, -8],
+                        y: [0, 0, 0, 0, 8, 8, 8, 8],
+                        z: [-21.6, -21.6, 0, 0, -21.6, -21.6, 0, 0],
+                        i: [0, 0, 4, 4, 0, 0, 2, 2, 0, 1],
+                        j: [1, 2, 5, 6, 1, 5, 3, 7, 0, 2],
+                        k: [2, 3, 6, 7, 5, 4, 7, 6, 3, 3],
+                        opacity: 0.1,
+                        color: 'lightblue',
+                        showlegend: false,
+                        hoverinfo: 'none'
+                    };
 
-                let plotData = [meshData];
-                const parentPoints = points.filter(p => p.isParent);
-                const childPoints = points.filter(p => !p.isParent);
-                parentPoints.forEach(parentPoint => {
-                    const childrenOfParent = childPoints.filter(p => p.parentId === parentPoint.id);
-                    childrenOfParent.forEach(childPoint => {
+                    let plotData = [meshData];
+                    const parentPoints = points.filter(p => p.isParent);
+                    const childPoints = points.filter(p => !p.isParent);
+                    parentPoints.forEach(parentPoint => {
+                        const childrenOfParent = childPoints.filter(p => p.parentId === parentPoint.id);
+                        childrenOfParent.forEach(childPoint => {
+                        plotData.push({
+                            type: 'scatter3d',
+                            x: [parentPoint.x, childPoint.x],
+                            y: [parentPoint.z, childPoint.z],
+                            z: [parentPoint.y, childPoint.y],
+                            mode: 'lines',
+                            line: { color: '#666', width: 2, dash: 'dash' },
+                            hoverinfo: 'text',
+                            hovertext: `${parentPoint.scenarioTitle} → ${childPoint.scenarioTitle}`,
+                            showlegend: false
+                        });
+                        });
+                    });
                     plotData.push({
                         type: 'scatter3d',
-                        x: [parentPoint.x, childPoint.x],
-                        y: [parentPoint.z, childPoint.z],
-                        z: [parentPoint.y, childPoint.y],
-                        mode: 'lines',
-                        line: { color: '#666', width: 2, dash: 'dash' },
+                        x: points.map(p => p.x),
+                        y: points.map(p => p.z),
+                        z: points.map(p => p.y),
+                        mode: 'markers',
+                        marker: {
+                            size: points.map(p => p.isUserSurvey || p.llmName === "Your Analysis" ? 12 : (p.isParent ? 8 : 6)),
+                            color: points.map(p => p.isUserSurvey || p.llmName === "Your Analysis" ? '#2ca02c' : this.getColorByCategory(p.overallCategory)),
+                            opacity: points.map(p => p.isUserSurvey || p.llmName === "Your Analysis" ? 1 : 0.8),
+                            line: {
+                                color: points.map(p => p.isUserSurvey || p.llmName === "Your Analysis" ? 
+                                    '#228B22' : 
+                                    (this.scenarioColorMapping && this.scenarioColorMapping[p.scenarioTitle + '_' + p.llmName]) || '#000'),
+                                width: points.map(p => p.isUserSurvey || p.llmName === "Your Analysis" ? 8 : (p.isParent ? 6 : 4))
+                            }
+                        },
+                        text: points.map(p => {
+                            const isUserSurvey = p.isUserSurvey || p.llmName === "Your Analysis";
+                            return `
+                            <b>${p.scenarioTitle}</b><br>
+                            <b>Category:</b> ${p.overallCategory}<br>
+                            <b>Model:</b> ${isUserSurvey ? '<strong>Your Analysis</strong>' : p.llmName}<br>
+                            ${isUserSurvey ? '<b>Type:</b> Your Survey' : (p.isParent ? '<b>Type:</b> Parent' : '<b>Type:</b> Alternative')}
+                            <br><b>Position:</b> (${p.x.toFixed(2)}, ${p.y.toFixed(2)}, ${p.z.toFixed(2)})
+                            `;
+                        }),
                         hoverinfo: 'text',
-                        hovertext: `${parentPoint.scenarioTitle} → ${childPoint.scenarioTitle}`,
                         showlegend: false
                     });
-                    });
-                });
-                plotData.push({
-                    type: 'scatter3d',
-                    x: points.map(p => p.x),
-                    y: points.map(p => p.z),
-                    z: points.map(p => p.y),
-                    mode: 'markers',
-                    marker: {
-                        // Replace this entire marker block with:
-                        size: points.map(p => p.isUserSurvey || p.llmName === "Your Analysis" ? 12 : (p.isParent ? 8 : 6)),
-                        color: points.map(p => p.isUserSurvey || p.llmName === "Your Analysis" ? '#2ca02c' : this.getColorByCategory(p.overallCategory)),
-                        opacity: points.map(p => p.isUserSurvey || p.llmName === "Your Analysis" ? 1 : 0.8),
-                        line: {
-                            color: points.map(p => p.isUserSurvey || p.llmName === "Your Analysis" ? 
-                                '#228B22' : 
-                                (this.scenarioColorMapping && this.scenarioColorMapping[p.scenarioTitle + '_' + p.llmName]) || '#000'),
-                            width: points.map(p => p.isUserSurvey || p.llmName === "Your Analysis" ? 8 : (p.isParent ? 6 : 4))
+                    const layout = {
+                        margin: { l: 0, r: 0, b: 0, t: 0 },
+                        scene: {
+                        xaxis: { title: 'Altruistic - Self Motivated', range: [-8, 12], titlefont: { size: 10 } },
+                        yaxis: { title: 'Habit/Instinct - Will Power', range: [0, 8], titlefont: { size: 10 } },
+                        zaxis: { title: 'Small Sacrifice - Large sacrifice', range: [-21.6, 0], titlefont: { size: 10 } },
+                        camera: { eye: { x: 1.5, y: 1.5, z: 1.5 } },
+                        aspectmode: 'cube',
+                        aspectratio: { x: 1, y: 1, z: 1 }
                         }
-                    },
-                    // Replace this text block with:
-                    text: points.map(p => {
-                        const isUserSurvey = p.isUserSurvey || p.llmName === "Your Analysis";
-                        return `
-                        <b>${p.scenarioTitle}</b><br>
-                        <b>Category:</b> ${p.overallCategory}<br>
-                        <b>Model:</b> ${isUserSurvey ? '<strong>Your Analysis</strong>' : p.llmName}<br>
-                        ${isUserSurvey ? '<b>Type:</b> Your Survey' : (p.isParent ? '<b>Type:</b> Parent' : '<b>Type:</b> Alternative')}
-                        <br><b>Position:</b> (${p.x.toFixed(2)}, ${p.y.toFixed(2)}, ${p.z.toFixed(2)})
-                        `;
-                    }),
-                    hoverinfo: 'text',
-                    showlegend: false
-                });
-                const layout = {
-                    margin: { l: 0, r: 0, b: 0, t: 0 },
-                    scene: {
-                    xaxis: { title: 'Altruistic - Self Motivated', range: [-8, 12], titlefont: { size: 10 } },
-                    yaxis: { title: 'Habit/Instinct - Will Power', range: [0, 8], titlefont: { size: 10 } },
-                    zaxis: { title: 'Small Sacrifice - Large sacrifice', range: [-21.6, 0], titlefont: { size: 10 } },
-                    camera: { eye: { x: 1.5, y: 1.5, z: 1.5 } },
-                    aspectmode: 'cube',
-                    aspectratio: { x: 1, y: 1, z: 1 }
-                    }
-                };
-                // Add right before the Plotly.newPlot call in createPlot function:
-                console.log("Points being plotted:", points.length);
-                console.log("Models in plot:", [...new Set(points.map(p => p.llmName))]);
-                console.log("User surveys in plot:", points.filter(p => p.isUserSurvey || p.llmName === "Your Analysis").length);
-                console.log("GPT models in plot:", points.filter(p => p.llmName === "GPT" || p.llmName?.includes("GPT")).length);
-                Plotly.newPlot('cube-plot', plotData, layout, {
-                    displayModeBar: false,
-                    responsive: true
-                });
+                    };
+
+                    // Add logging for debugging
+                    console.log("Points being plotted:", points.length);
+                    console.log("Models in plot:", [...new Set(points.map(p => p.llmName))]);
+                    console.log("User surveys in plot:", points.filter(p => p.isUserSurvey || p.llmName === "Your Analysis").length);
+                    console.log("GPT models in plot:", points.filter(p => p.llmName === "GPT" || p.llmName?.includes("GPT")).length);
+
+                    Plotly.newPlot('cube-plot', plotData, layout, {
+                        displayModeBar: false,
+                        responsive: true
+                    });
                 } catch (error) {
-                console.error('Error creating plot:', error);
-                const plotElement = document.getElementById('cube-plot');
-                if (plotElement) {
-                    plotElement.innerHTML = `
-                    <div class="alert alert-danger">
-                        Error creating visualization. Please try refreshing the page.
-                    </div>
-                    `;
-                }
+                    console.error('Error creating plot:', error);
+                    const plotElement = document.getElementById('cube-plot');
+                    if (plotElement) {
+                        plotElement.innerHTML = `
+                        <div class="alert alert-danger">
+                            Error creating visualization. Please try refreshing the page.
+                        </div>
+                        `;
+                    }
                 }
             },
             
@@ -5347,6 +5389,7 @@
                             return ScenarioDataProcessor.escapeHTML(item.scenarioTitle);
                         };
                         
+                        // Add this to the cards generation in populateOverview
                         const cards = data.map(item => {
                             const scores = getEthicsScores(item);
                             const borderColor = this.scenarioColorMapping[item.scenarioTitle + '_' + item.llmName] || '#000';
@@ -6474,13 +6517,13 @@
                         // Get authenticated user
                         const user = await AuthManager.getUser();
                         if (!user || !user.sub) {
-                        throw new Error('User is not authenticated or missing user ID');
+                            throw new Error('User is not authenticated or missing user ID');
                         }
                         
                         // Attempt to get a token (this should include offline_access)
                         const token = await AuthManager.getToken({
-                        timeoutInSeconds: 60,
-                        maxRetries: this.AUTH_RETRY_LIMIT
+                            timeoutInSeconds: 60,
+                            maxRetries: this.AUTH_RETRY_LIMIT
                         });
                         
                         // Proceed with your API call to fetch surveys (e.g., via a Netlify function)
@@ -6488,30 +6531,31 @@
                         const timeoutId = setTimeout(() => controller.abort(), 15000);
                         
                         const response = await fetch(`https://dev-10xzf0prvka6p40y.us.auth0.com/api/v2/users/${user.sub}`, {
-                        headers: { 'Authorization': `Bearer ${token}` },
-                        signal: controller.signal
+                            headers: { 'Authorization': `Bearer ${token}` },
+                            signal: controller.signal
                         });
                         
                         clearTimeout(timeoutId);
                         
                         if (!response.ok) {
-                        const errorText = await response.text();
-                        throw new Error(`Failed to fetch user data: ${response.status} - ${errorText}`);
+                            const errorText = await response.text();
+                            throw new Error(`Failed to fetch user data: ${response.status} - ${errorText}`);
                         }
                         
                         const userData = await response.json();
-                        return userData.user_metadata?.surveys || [];
+                        const surveys = userData.user_metadata?.surveys || [];
                         
+                        // Normalize each survey
+                        return surveys.map(survey => this.normalizeUserSurvey(survey));
                     } catch (error) {
                         console.error('Error fetching user surveys:', error);
-                        // If the error indicates a missing refresh token, prompt the user to re-login.
                         if (error.message.includes('Missing Refresh Token')) {
-                        alert('Your session has expired or is missing a refresh token. Please log in again.');
-                        AuthManager.login();
+                            alert('Your session has expired or is missing a refresh token. Please log in again.');
+                            AuthManager.login();
                         }
                         throw error;
                     }
-                    },
+                },
                 
                 /**
                  * Submit a new survey
@@ -6520,6 +6564,10 @@
                  */
                  async submitSurvey(surveyData) {
                     try {
+                        // Make sure survey is identified as user survey
+                        surveyData.isUserSurvey = true;
+                        surveyData.llmName = "Your Analysis";
+
                         console.log('Submitting survey data:', JSON.stringify(surveyData));
                         
                         // Make sure we're authenticated
@@ -6555,6 +6603,53 @@
                         try {
                             const auth0Result = await this.performUserDataOperation('add', surveyData);
                             console.log('Survey saved to Auth0:', auth0Result);
+                            
+                            try {
+                                console.log("Survey submitted successfully, refreshing visualization");
+                                
+                                // First add this survey to the visualization data store
+                                const normalizedSurvey = this.normalizeUserSurvey(surveyData);
+                                
+                                // Create a display point
+                                const displayPoint = {
+                                    id: normalizedSurvey.id,
+                                    scenarioTitle: normalizedSurvey.metadata.title,
+                                    scenarioDescription: normalizedSurvey.metadata.description,
+                                    llmName: "Your Analysis",
+                                    isUserSurvey: true, 
+                                    category: normalizedSurvey.metadata.category,
+                                    overallCategory: normalizedSurvey.metadata.classification.type,
+                                    url: normalizedSurvey.metadata.url,
+                                    dimensions: normalizedSurvey.survey.dimensions,
+                                    x: normalizedSurvey.survey.finalPosition.x,
+                                    y: normalizedSurvey.survey.finalPosition.y,
+                                    z: normalizedSurvey.survey.finalPosition.z,
+                                    isParent: true,
+                                    parentId: normalizedSurvey.parentId || null,
+                                    relationToBase: null
+                                };
+                                
+                                // Add to data stores
+                                if (!ScenarioDataProcessor.dataPoints.some(p => p.id === displayPoint.id)) {
+                                    ScenarioDataProcessor.dataPoints.push(displayPoint);
+                                    ScenarioDataProcessor.displayPoints.push(displayPoint);
+                                }
+                                
+                                // Update visualization
+                                if (VisualizationManager.viewUserSurvey) {
+                                    VisualizationManager.viewUserSurvey(surveyData.id);
+                                } else if (VisualizationManager.updateVisualization) {
+                                    VisualizationManager.updateVisualization();
+                                }
+                                
+                                // Then update the user surveys preview
+                                if (VisualizationManager.updateUserSurveysPreview) {
+                                    VisualizationManager.updateUserSurveysPreview();
+                                }
+                            } catch (refreshError) {
+                                console.error("Error refreshing visualization:", refreshError);
+                            }
+                            
                             return auth0Result;
                         } catch (auth0Error) {
                             console.warn('Warning: Auth0 metadata save failed, but MongoDB save succeeded:', auth0Error);
@@ -6569,22 +6664,6 @@
                     } catch (error) {
                         console.error('Error in submitSurvey:', error);
                         throw error;
-                    }
-                    try {
-                    // After successful submission
-                    console.log("Survey submitted successfully, refreshing visualization");
-                    
-                    // First add this survey to the visualization
-                    if (VisualizationManager.viewUserSurvey) {
-                        VisualizationManager.viewUserSurvey(surveyData.id);
-                    }
-                    
-                    // Then update the user surveys preview
-                    if (VisualizationManager.updateUserSurveysPreview) {
-                        VisualizationManager.updateUserSurveysPreview();
-                    }
-                    } catch (refreshError) {
-                    console.error("Error refreshing visualization:", refreshError);
                     }
                 },
                 
