@@ -2288,7 +2288,7 @@
                         console.log(`Retrieved ${userSurveys.length} user surveys`);
                         
                         if (!userSurveys || userSurveys.length === 0) {
-                            this.showErrorMessage('No surveys found');
+                            VisualizationManager.showErrorMessage('No surveys found');
                             return;
                         }
                         
@@ -2301,7 +2301,7 @@
                         
                         if (!survey) {
                             console.error(`Survey with ID ${surveyId} not found in user surveys`);
-                            this.showErrorMessage(`Survey with ID ${surveyId} not found`);
+                            VisualizationManager.showErrorMessage(`Survey with ID ${surveyId} not found`);
                             return;
                         }
                         
@@ -2350,16 +2350,16 @@
                         ScenarioDataProcessor.dataPoints.push(displayPoint);
                         ScenarioDataProcessor.displayPoints.push(displayPoint);
                         
-                        // Set selected scenarios and comparison
-                        this.selectedScenarios = [displayPoint.scenarioTitle];
-                        this.selectedComparison = [displayPoint.id];
+                        // Set selected scenarios and comparison in VisualizationManager
+                        VisualizationManager.selectedScenarios = [displayPoint.scenarioTitle];
+                        VisualizationManager.selectedComparison = [displayPoint.id];
 
                         // Use the VisualizationManager explicitly instead of 'this'
                         VisualizationManager.updateVisualization();
                         
                         // Populate details panel
                         const compData = [displayPoint];
-                        this.populateScenarioDetails(compData);
+                        VisualizationManager.populateScenarioDetails(compData);
                         
                         // Close any open modals
                         $('#userSurveysModal').modal('hide');
@@ -2367,7 +2367,7 @@
                         return true;
                     } catch (error) {
                         console.error('Error viewing user survey:', error);
-                        this.showErrorMessage('Error viewing survey: ' + error.message);
+                        VisualizationManager.showErrorMessage('Error viewing survey: ' + error.message);
                         return false;
                     }
                 },
@@ -4181,43 +4181,68 @@
              */
             updateAvailableModels() {
                 try {
-                const modelFilter = document.getElementById('modelFilter');
-                if (!modelFilter) return;
-                if (this.selectedScenarios.length === 0) {
-                    const allModels = [...new Set(ScenarioDataProcessor.dataPoints.map(p => p.llmName))];
-                    modelFilter.innerHTML = allModels.map(model =>
-                    `<option value="${ScenarioDataProcessor.escapeHTML(model)}">${ScenarioDataProcessor.escapeHTML(model)}</option>`
-                    ).join('');
-                    modelFilter.disabled = false;
-                    return;
-                }
-                const availableModels = new Set();
-                let isFirstScenario = true;
-                this.selectedScenarios.forEach(scenario => {
-                    const scenarioData = ScenarioDataProcessor.dataPoints.filter(point => point.scenarioTitle === scenario);
-                    const scenarioModels = new Set(scenarioData.map(data => data.llmName));
-                    if (isFirstScenario) {
-                    scenarioModels.forEach(model => availableModels.add(model));
-                    isFirstScenario = false;
-                    } else {
-                    [...availableModels].forEach(model => {
-                        if (!scenarioModels.has(model)) {
-                        availableModels.delete(model);
+                    const modelFilter = document.getElementById('modelFilter');
+                    if (!modelFilter) return;
+                    
+                    if (this.selectedScenarios.length === 0) {
+                        // When no scenarios are selected, show ALL available models including user surveys
+                        const allModels = [...new Set(ScenarioDataProcessor.dataPoints.map(p => p.llmName))];
+                        modelFilter.innerHTML = allModels.map(model =>
+                            `<option value="${ScenarioDataProcessor.escapeHTML(model)}">${ScenarioDataProcessor.escapeHTML(model)}</option>`
+                        ).join('');
+                        modelFilter.disabled = false;
+                        return;
+                    }
+                    
+                    // Create a set to accumulate available models
+                    const availableModels = new Set();
+                    let isFirstScenario = true;
+                    
+                    this.selectedScenarios.forEach(scenario => {
+                        // Find all data points matching this scenario
+                        const scenarioData = ScenarioDataProcessor.dataPoints.filter(point => point.scenarioTitle === scenario);
+                        
+                        // Extract all models for this scenario
+                        const scenarioModels = new Set(scenarioData.map(data => data.llmName));
+                        
+                        if (isFirstScenario) {
+                            // For first scenario, add all models
+                            scenarioModels.forEach(model => availableModels.add(model));
+                            isFirstScenario = false;
+                        } else {
+                            // For subsequent scenarios, keep only models that exist for all selected scenarios
+                            availableModels.forEach(model => {
+                                if (!scenarioModels.has(model)) {
+                                    availableModels.delete(model);
+                                }
+                            });
                         }
                     });
+                    
+                    // Always include "Your Analysis" if user has submitted a survey for any selected scenario
+                    const userHasAnalysisForScenario = this.selectedScenarios.some(scenario => {
+                        return ScenarioDataProcessor.dataPoints.some(point => 
+                            point.scenarioTitle === scenario && 
+                            (point.isUserSurvey || point.llmName === "Your Analysis")
+                        );
+                    });
+                    
+                    if (userHasAnalysisForScenario) {
+                        availableModels.add("Your Analysis");
                     }
-                });
-                if (availableModels.size > 0) {
-                    modelFilter.innerHTML = [...availableModels].map(model =>
-                    `<option value="${ScenarioDataProcessor.escapeHTML(model)}">${ScenarioDataProcessor.escapeHTML(model)}</option>`
-                    ).join('');
-                    modelFilter.disabled = false;
-                } else {
-                    modelFilter.innerHTML = '<option disabled>No models available for selected scenarios</option>';
-                    modelFilter.disabled = true;
-                }
+                    
+                    // Update the model dropdown
+                    if (availableModels.size > 0) {
+                        modelFilter.innerHTML = [...availableModels].map(model =>
+                            `<option value="${ScenarioDataProcessor.escapeHTML(model)}">${ScenarioDataProcessor.escapeHTML(model)}</option>`
+                        ).join('');
+                        modelFilter.disabled = false;
+                    } else {
+                        modelFilter.innerHTML = '<option disabled>No models available for selected scenarios</option>';
+                        modelFilter.disabled = true;
+                    }
                 } catch (error) {
-                console.error('Error updating available models:', error);
+                    console.error('Error updating available models:', error);
                 }
             },
             
@@ -4847,9 +4872,9 @@
                         // Sort by date (newest first)
                         const sortedSurveys = [...userSurveys].sort((a, b) => {
                             const dateA = a.edits?.editDate ? new Date(a.edits.editDate) : 
-                                         a.created ? new Date(a.created) : new Date(0);
+                                        a.created ? new Date(a.created) : new Date(0);
                             const dateB = b.edits?.editDate ? new Date(b.edits.editDate) : 
-                                         b.created ? new Date(b.created) : new Date(0);
+                                        b.created ? new Date(b.created) : new Date(0);
                             return dateB - dateA;
                         });
                         
@@ -4874,12 +4899,13 @@
                             </ul>
                         `;
                         
-                        // Add click event listeners
+                        // Add click event listeners with proper context binding
                         document.querySelectorAll('.user-surveys-list li').forEach(item => {
                             item.addEventListener('click', () => {
                                 const surveyId = item.getAttribute('data-survey-id');
                                 if (surveyId) {
-                                    UserSurveyManager.viewUserSurvey(surveyId);
+                                    // Use full reference to ensure proper context
+                                    VisualizationManager.viewUserSurvey(surveyId);
                                 }
                             });
                         });
