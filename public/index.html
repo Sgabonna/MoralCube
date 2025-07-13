@@ -42,12 +42,7 @@
         .page-header {
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
-        .navbar-nav .nav-link {
-            font-family: 'Inter', sans-serif !important;
-            font-weight: 500;
-            font-size: 1.2rem;
-        }
-        
+
         .navbar-nav .nav-link {
             padding: 0.7rem 1.2rem;
             transition: all 0.2s ease;
@@ -778,13 +773,11 @@
         <div class="page-header" style="background-color: #D7E8FF; padding: 20px 20px 0 20px; position: relative;">
             <div class="container-fluid">
                 <!-- Logo and Title Section -->
-                <div class="d-flex align-items-center position-relative" style="margin-bottom: 1.5rem;">
-                    <a href="/" class="position-absolute" style="left: 0;">
-                      <img src="./MoralCubeLogo.png" … />
+                <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 1.5rem;">
+                    <a href="/" style="flex: 0 0 auto;">
+                        <img src="./MoralCubeLogo.png" alt="Moral Cube Logo" style="height: 140px; width: auto; object-fit: contain;"/>
                     </a>
-                    <h1 class="w-100 text-center" style="font-family:'Playfair Display', serif; font-size:5.5rem; font-weight:600;">
-                      The Moral Cube
-                    </h1>
+                    <h1 class="text-center mx-auto" style="font-family: 'Playfair Display', serif; font-size: 5.5rem; font-weight: 600; margin-right: 140px;">The Moral Cube</h1>
                     <div style="flex: 0 0 140px;"></div>
                 </div>
                 
@@ -1908,9 +1901,9 @@
             const cards = data.map(item => {
                 const scores = getEthicsScores(item);
                 return `
-                    <div class="comparison-card category-${item.overallCategory}" 
+                    <div class="comparison-card" 
                         data-scenario-id="${item.id}" 
-                        style="border: 2px solid ${getColorByCategory(item.overallCategory)};">
+                        style="border: 2px solid ${scenarioColorMapping[item.scenarioTitle + '_' + item.llmName] || '#000'};">
                         <h4>
                             ${getScenarioTitle(item)}
                             <small>(${item.llmName} ${getCategoryBadge(item.overallCategory)})</small>
@@ -2147,7 +2140,7 @@
                 'morally_grey': '#6610f2',
                 'world_building': '#17a2b8'
             };
-            return colorMap[category] || '#000';
+            return colorMap[category] || 'gray';
             }
         // Helper function: normalize a category string.
         function normalizeCategory(category) {
