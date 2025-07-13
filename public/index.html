@@ -12,18 +12,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <style>
         body {
-            padding: 20px;
+            padding: 0; /* Remove the 20px padding */
+            margin: 0;
             background-color: #f8f9fa;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            width: 100%;
         }
         
         .main-container {
-            max-width: 1200px;    /* or whatever “reading width” you prefer */
-            margin: 0 auto;       /* this will center it horizontally */
-            padding: 20px;        /* inner padding so content doesn’t butt right up to the edges */
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
             background: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,.1);
-            }
+            width: 100%; /* Ensure it takes full width up to max-width */
+        }
 
         .plot-container {
             background-color: white;
@@ -270,20 +274,28 @@
             display: flex;
             width: 100%;
             box-sizing: border-box;
-        }  
-
-        /* Left Column (Cube) – 40% width remains */
-        #cube-column {
-            width: 40%;
-            }
-        #cards-column {
-        width: 15%;
+            gap: 10px; /* Add gap for better spacing */
         }
 
-        /* Middle Column (Placeholder Overview) – 45% width */
+        #cube-column {
+            width: 37%;
+            min-width: 0; /* Prevent overflow */
+        }
+
+        #cards-column {
+            width: 18%;
+            padding: 0 10px;
+            min-width: 0;
+        }
+
         #placeholder-overview-column {
             width: 45%;
-            }
+            padding: 0 10px;
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+            min-width: 0;
+        }
 
         /* Right Column (Stacked Overview Cards) – 15% width */
         
