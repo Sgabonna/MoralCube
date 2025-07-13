@@ -2479,8 +2479,8 @@
 "description": "An adult instructs the child to help the dog, so the child brings a pillow out of obedience rather than personal initiative.",
 "category": "Act of Kindness",
 "llmSource": {
-"model": "LLaMA",
-"version": "3",
+"model": "Llama 4",
+"version": "1.0",
 "provider": "Meta AI"
 },
 "classification": {
@@ -2626,8 +2626,8 @@
 "description": "The child rushes over to pet the dog enthusiastically, accidentally startling it, causing mild distress instead of comfort.",
 "category": "Act of Kindness",
 "llmSource": {
-"model": "LLaMA",
-"version": "3",
+"model": "Llama 4",
+"version": "1.0",
 "provider": "Meta AI"
 },
 "classification": {
@@ -2773,8 +2773,8 @@
 "description": "The child sees the dog resting, but becomes distracted and does nothing, leaving the dog without the extra comfort.",
 "category": "Act of Kindness",
 "llmSource": {
-"model": "LLaMA",
-"version": "3",
+"model": "Llama 4",
+"version": "1.0",
 "provider": "Meta AI"
 },
 "classification": {
@@ -4680,8 +4680,8 @@
 "description": "A beach goer had rented a chair to use whilst sunbaking with their family. Instead of going to the toilet they decided to use the chair as a toilet urinating through the chair onto the sand below in view of their family and other beach onlookers.",
 "category": "Public Behaviour",
 "llmSource": {
-"model": "LLaMA",
-"version": "3",
+"model": "Llama 4",
+"version": "1.0",
 "provider": "Meta AI"
 },
 "classification": {
@@ -4822,7 +4822,7 @@
 "description": "Instead of urinating through the chair, the beachgoer realises the importance of public decency, quickly makes their way to the nearest restroom, and returns without causing any offence or discomfort to onlookers.",
 "category": "",
 "llmSource": {
-"model": "LLaMA",
+"model": "Llama 4",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -4969,7 +4969,7 @@
 "description": "The individual, unable to leave due to a supervising responsibility (e.g., watching children), uses a discreet portable urinal device or container under a towel, maintaining both personal comfort and public hygiene.",
 "category": "Public Behaviour",
 "llmSource": {
-"model": "LLaMA",
+"model": "Llama 4",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -5116,7 +5116,7 @@
 "description": "Feeling sudden urgency, the beachgoer asks family or a close friend to temporarily watch their belongings and children while they find the nearest public toilet, thus respecting both their physical need and the social environment.",
 "category": "Public Behaviour",
 "llmSource": {
-"model": "LLaMA",
+"model": "Llama 4",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -6742,122 +6742,122 @@
 "survey": {
 "dimensions": [
 {
-    "id": "Ends",
-    "axis": "x",
-    "label": "Motivation",
-    "questions": [
-    {
-        "question": "Societal Needs",
-        "score": 0.5,
-        "justification": "The action violates societal norms of justice and fairness (child exploitation), though it aims to ensure family survival."
-    },
-    {
-        "question": "Others Needs",
-        "score": 2.5,
-        "justification": "Addresses family’s physiological needs (food) but neglects daughters’ safety, esteem, and autonomy."
-    },
-    {
-        "question": "Others Wants",
-        "score": 0.2,
-        "justification": "No focus on fulfilling others’ non-essential wants; driven by necessity, not desire."
-    },
-    {
-        "question": "Personal Needs",
-        "score": -3.5,
-        "justification": "Primarily motivated by survival needs (food for family), with severe urgency."
-    },
-    {
-        "question": "Personal Wants",
-        "score": -0.5,
-        "justification": "No evidence of personal gain beyond basic survival; minimal focus on wants."
-    }
-    ]
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.5,
+"justification": "The action violates societal norms of justice and fairness (child exploitation), though it aims to ensure family survival."
 },
 {
-    "id": "Means",
-    "axis": "y",
-    "label": "Sacrifice",
-    "questions": [
-    {
-        "question": "Future Self-Sacrifice",
-        "score": -2.8,
-        "justification": "Major sacrifice: lifelong guilt, loss of familial trust, and potential social stigma."
-    },
-    {
-        "question": "Number of Individuals Affected",
-        "score": -0.5,
-        "justification": "Directly impacts 2 daughters (1-5 individuals)."
-    },
-    {
-        "question": "Type of Sacrifice",
-        "score": -3.5,
-        "justification": "Extreme loss: daughters’ freedom, safety, and psychological well-being."
-    },
-    {
-        "question": "Duration of Sacrifice",
-        "score": -3.9,
-        "justification": "Irreversible impact: lifelong trauma for daughters."
-    },
-    {
-        "question": "Magnitude of Life Impacted",
-        "score": 1.2,
-        "justification": "Vulnerable children (high moral weight due to dependency and harm severity)."
-    }
-    ]
+"question": "Others Needs",
+"score": 2.5,
+"justification": "Addresses family’s physiological needs (food) but neglects daughters’ safety, esteem, and autonomy."
 },
 {
-    "id": "Character",
-    "axis": "z",
-    "label": "Habit > Will Power",
-    "questions": [
-    {
-        "question": "Unconscious vs Conscious",
-        "score": 1.0,
-        "justification": "Fully conscious: deliberate decision under desperate circumstances."
-    },
-    {
-        "question": "Degree of Present Self-Sacrifice",
-        "score": 0.3,
-        "justification": "Minor immediate sacrifice (emotional distress) outweighed by perceived necessity."
-    },
-    {
-        "question": "Habit vs Will Power",
-        "score": 2.5,
-        "justification": "Moderate willpower: overrides societal norms but driven by survival instinct, not virtue."
-    },
-    {
-        "question": "Unintentional vs Intentional",
-        "score": 1.0,
-        "justification": "Fully intentional: calculated action to secure food."
-    },
-    {
-        "question": "Wills at Play",
-        "score": null,
-        "justification": "Will to Survive (primary), Will to Protect (family), Will to Replicate (cultural continuity)."
-    }
-    ]
+"question": "Others Wants",
+"score": 0.2,
+"justification": "No focus on fulfilling others’ non-essential wants; driven by necessity, not desire."
 },
 {
-    "id": "PhilosophicalAnalysis",
-    "axis": null,
-    "label": "Philosophical Perspectives",
-    "questions": [
-    {
-        "question": "Deontology",
-        "score": "Wrong",
-        "justification": "Violates duties to protect children and uphold human dignity. Kantian ethics condemn using individuals as means to an end, regardless of intent."
-    },
-    {
-        "question": "Utilitarianism",
-        "score": "Wrong",
-        "justification": "Classic Utilitarianism: The severe harm to the daughters (loss of autonomy, trauma) outweighs the temporary relief of hunger. Negative Utilitarianism: Prioritizes reducing suffering; the action perpetuates extreme suffering for the daughters, making it unethical."
-    },
-    {
-        "question": "Virtue Ethics",
-        "score": "Vices Dominant",
-        "justification": "Aristotelian vice of injustice (exploitation) and lack of practical wisdom (failure to seek alternatives). Courage and compassion are absent."
-    }
-    ]
+"question": "Personal Needs",
+"score": -3.5,
+"justification": "Primarily motivated by survival needs (food for family), with severe urgency."
+},
+{
+"question": "Personal Wants",
+"score": -0.5,
+"justification": "No evidence of personal gain beyond basic survival; minimal focus on wants."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Future Self-Sacrifice",
+"score": -2.8,
+"justification": "Major sacrifice: lifelong guilt, loss of familial trust, and potential social stigma."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -0.5,
+"justification": "Directly impacts 2 daughters (1-5 individuals)."
+},
+{
+"question": "Type of Sacrifice",
+"score": -3.5,
+"justification": "Extreme loss: daughters’ freedom, safety, and psychological well-being."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -3.9,
+"justification": "Irreversible impact: lifelong trauma for daughters."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.2,
+"justification": "Vulnerable children (high moral weight due to dependency and harm severity)."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 1.0,
+"justification": "Fully conscious: deliberate decision under desperate circumstances."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.3,
+"justification": "Minor immediate sacrifice (emotional distress) outweighed by perceived necessity."
+},
+{
+"question": "Habit vs Will Power",
+"score": 2.5,
+"justification": "Moderate willpower: overrides societal norms but driven by survival instinct, not virtue."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 1.0,
+"justification": "Fully intentional: calculated action to secure food."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Survive (primary), Will to Protect (family), Will to Replicate (cultural continuity)."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Wrong",
+"justification": "Violates duties to protect children and uphold human dignity. Kantian ethics condemn using individuals as means to an end, regardless of intent."
+},
+{
+"question": "Utilitarianism",
+"score": "Wrong",
+"justification": "Classic Utilitarianism: The severe harm to the daughters (loss of autonomy, trauma) outweighs the temporary relief of hunger. Negative Utilitarianism: Prioritizes reducing suffering; the action perpetuates extreme suffering for the daughters, making it unethical."
+},
+{
+"question": "Virtue Ethics",
+"score": "Vices Dominant",
+"justification": "Aristotelian vice of injustice (exploitation) and lack of practical wisdom (failure to seek alternatives). Courage and compassion are absent."
+}
+]
 }
 ],
 "finalPosition": {
@@ -6889,122 +6889,122 @@
 "survey": {
 "dimensions": [
 {
-    "id": "Ends",
-    "axis": "x",
-    "label": "Motivation",
-    "questions": [
-    {
-        "question": "Societal Needs",
-        "score": 2.5,
-        "justification": "Upholds societal fairness and trust by leveraging communal support systems to prevent exploitation."
-    },
-    {
-        "question": "Others Needs",
-        "score": 3.0,
-        "justification": "Directly addresses family’s physiological needs (food) and daughters’ safety and autonomy."
-    },
-    {
-        "question": "Others Wants",
-        "score": 0.5,
-        "justification": "No focus on non-essential wants; driven by necessity."
-    },
-    {
-        "question": "Personal Needs",
-        "score": -3.0,
-        "justification": "Motivated by urgent survival needs for the family."
-    },
-    {
-        "question": "Personal Wants",
-        "score": 0.0,
-        "justification": "No evidence of personal gain beyond survival."
-    }
-    ]
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 2.5,
+"justification": "Upholds societal fairness and trust by leveraging communal support systems to prevent exploitation."
 },
 {
-    "id": "Means",
-    "axis": "y",
-    "label": "Sacrifice",
-    "questions": [
-    {
-        "question": "Future Self-Sacrifice",
-        "score": -0.5,
-        "justification": "Minor future burden: potential microloan repayment, but avoids lifelong guilt."
-    },
-    {
-        "question": "Number of Individuals Affected",
-        "score": -0.5,
-        "justification": "Directly benefits 1-5 family members; minimal harm to others."
-    },
-    {
-        "question": "Type of Sacrifice",
-        "score": -1.5,
-        "justification": "Moderate losses: time/effort to secure aid, minor financial obligations."
-    },
-    {
-        "question": "Duration of Sacrifice",
-        "score": -1.0,
-        "justification": "Short-term impact: loan repayment or temporary reliance on aid."
-    },
-    {
-        "question": "Magnitude of Life Impacted",
-        "score": 1.2,
-        "justification": "Protects vulnerable children (highest moral weight)."
-    }
-    ]
+"question": "Others Needs",
+"score": 3.0,
+"justification": "Directly addresses family’s physiological needs (food) and daughters’ safety and autonomy."
 },
 {
-    "id": "Character",
-    "axis": "z",
-    "label": "Habit > Will Power",
-    "questions": [
-    {
-        "question": "Unconscious vs Conscious",
-        "score": 1.0,
-        "justification": "Fully intentional: deliberate choice to seek ethical solutions."
-    },
-    {
-        "question": "Degree of Present Self-Sacrifice",
-        "score": 0.5,
-        "justification": "Minor effort: navigating aid systems and potential stigma."
-    },
-    {
-        "question": "Habit vs Will Power",
-        "score": 2.0,
-        "justification": "Moderate willpower: overcoming helplessness to seek alternatives."
-    },
-    {
-        "question": "Unintentional vs Intentional",
-        "score": 1.0,
-        "justification": "Purposeful action aligned with moral values."
-    },
-    {
-        "question": "Wills at Play",
-        "score": null,
-        "justification": "Will to Survive (primary), Will to Protect (family), Will to Cooperate (community trust)."
-    }
-    ]
+"question": "Others Wants",
+"score": 0.5,
+"justification": "No focus on non-essential wants; driven by necessity."
 },
 {
-    "id": "PhilosophicalAnalysis",
-    "axis": null,
-    "label": "Philosophical Perspectives",
-    "questions": [
-    {
-        "question": "Deontology",
-        "score": "Right",
-        "justification": "Respects human dignity by avoiding exploitation. Kantian ethics endorse preserving autonomy and using communal systems as morally permissible means."
-    },
-    {
-        "question": "Utilitarianism",
-        "score": "Right",
-        "justification": "Classic Utilitarianism: Maximizes well-being by securing food without harming the daughters. Negative Utilitarianism: Reduces suffering by preventing lifelong trauma and exploitation."
-    },
-    {
-        "question": "Virtue Ethics",
-        "score": "Right",
-        "justification": "Exemplifies practical wisdom (seeking alternatives), justice (fair treatment of daughters), and courage (overcoming desperation)."
-    }
-    ]
+"question": "Personal Needs",
+"score": -3.0,
+"justification": "Motivated by urgent survival needs for the family."
+},
+{
+"question": "Personal Wants",
+"score": 0.0,
+"justification": "No evidence of personal gain beyond survival."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Future Self-Sacrifice",
+"score": -0.5,
+"justification": "Minor future burden: potential microloan repayment, but avoids lifelong guilt."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -0.5,
+"justification": "Directly benefits 1-5 family members; minimal harm to others."
+},
+{
+"question": "Type of Sacrifice",
+"score": -1.5,
+"justification": "Moderate losses: time/effort to secure aid, minor financial obligations."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -1.0,
+"justification": "Short-term impact: loan repayment or temporary reliance on aid."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.2,
+"justification": "Protects vulnerable children (highest moral weight)."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 1.0,
+"justification": "Fully intentional: deliberate choice to seek ethical solutions."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.5,
+"justification": "Minor effort: navigating aid systems and potential stigma."
+},
+{
+"question": "Habit vs Will Power",
+"score": 2.0,
+"justification": "Moderate willpower: overcoming helplessness to seek alternatives."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 1.0,
+"justification": "Purposeful action aligned with moral values."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Survive (primary), Will to Protect (family), Will to Cooperate (community trust)."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Right",
+"justification": "Respects human dignity by avoiding exploitation. Kantian ethics endorse preserving autonomy and using communal systems as morally permissible means."
+},
+{
+"question": "Utilitarianism",
+"score": "Right",
+"justification": "Classic Utilitarianism: Maximizes well-being by securing food without harming the daughters. Negative Utilitarianism: Reduces suffering by preventing lifelong trauma and exploitation."
+},
+{
+"question": "Virtue Ethics",
+"score": "Right",
+"justification": "Exemplifies practical wisdom (seeking alternatives), justice (fair treatment of daughters), and courage (overcoming desperation)."
+}
+]
 }
 ],
 "finalPosition": {
@@ -7022,7 +7022,7 @@
 "description": "A father sells his young daughters into marriage to afford food for his family in Afghanistan.",
 "category": "Economic",
 "llmSource": {
-"model": "LLaMA",
+"model": "Llama 4",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -7169,7 +7169,7 @@
 "description": "Instead of resorting to selling his daughters, the father appeals to humanitarian agencies, local charities, or extended family networks, receiving temporary food assistance and microloans that prevent the forced marriage.",
 "category": "Economic",
 "llmSource": {
-"model": "LLaMA",
+"model": "Llama 4",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -7916,122 +7916,122 @@
 "survey": {
 "dimensions": [
 {
-    "id": "Ends",
-    "axis": "x",
-    "label": "Motivation",
-    "questions": [
-    {
-        "question": "Societal Needs",
-        "score": 2.0,
-        "justification": "Moderately focused on societal structures by preserving autonomy and avoiding strict mandates, but not strongly ensuring collective safety for all."
-    },
-    {
-        "question": "Others Needs",
-        "score": 1.5,
-        "justification": "Some concern for others’ well-being through voluntary guidelines, yet critical needs (especially health/safety of the vulnerable) are not robustly protected."
-    },
-    {
-        "question": "Others Wants",
-        "score": 2.5,
-        "justification": "Substantially respects people’s desire for freedom of movement, normal social life, and lesser economic disruption, reflecting a focus on their non-essential wants."
-    },
-    {
-        "question": "Personal Needs",
-        "score": -0.5,
-        "justification": "The policy is not heavily driven by an individual leader’s personal survival needs, so only a slight focus on any personal necessity."
-    },
-    {
-        "question": "Personal Wants",
-        "score": -1.0,
-        "justification": "While leaders might benefit politically from maintaining freedoms, it is not predominantly about fulfilling a personal non-essential desire."
-    }
-    ]
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 2.0,
+"justification": "Moderately focused on societal structures by preserving autonomy and avoiding strict mandates, but not strongly ensuring collective safety for all."
 },
 {
-    "id": "Means",
-    "axis": "y",
-    "label": "Sacrifice",
-    "questions": [
-    {
-        "question": "Future Self-Sacrifice",
-        "score": -1.2,
-        "justification": "Some minor compromise of future political stability or personal moral stance; however, it doesn’t deeply upend the decision-maker’s long-term identity or goals."
-    },
-    {
-        "question": "Number of Individuals Affected",
-        "score": -4.5,
-        "justification": "Potentially millions across the region are impacted, falling in the 50,000 to 1 million+ range, given the widespread effect of a national or state policy."
-    },
-    {
-        "question": "Type of Sacrifice",
-        "score": -3.5,
-        "justification": "Leads to severe harm or death for some portion of the population, constituting major to extreme losses for those most vulnerable."
-    },
-    {
-        "question": "Duration of Sacrifice",
-        "score": -1.5,
-        "justification": "Healthcare strain and higher mortality occur mainly over a relatively short surge period (weeks to months), thus a short-term but intense impact."
-    },
-    {
-        "question": "Magnitude of Life Impacted",
-        "score": 1.2,
-        "justification": "Primarily impacts humans, including the elderly or vulnerable, assigning the highest moral weight (1.2) due to their increased susceptibility."
-    }
-    ]
+"question": "Others Needs",
+"score": 1.5,
+"justification": "Some concern for others’ well-being through voluntary guidelines, yet critical needs (especially health/safety of the vulnerable) are not robustly protected."
 },
 {
-    "id": "Character",
-    "axis": "z",
-    "label": "Habit > Will Power",
-    "questions": [
-    {
-        "question": "Unconscious vs Conscious",
-        "score": 1.0,
-        "justification": "Fully aware; the choice to adopt a voluntary model is deliberate, with public debate and known consequences."
-    },
-    {
-        "question": "Degree of Present Self-Sacrifice",
-        "score": 0.7,
-        "justification": "Moderate immediate inconvenience or political risk, but not a severe personal hardship for those implementing the policy."
-    },
-    {
-        "question": "Habit vs Will Power",
-        "score": 2.3,
-        "justification": "Requires a moderate level of willpower to deviate from lockdown norms and defend an alternative approach against popular criticism."
-    },
-    {
-        "question": "Unintentional vs Intentional",
-        "score": 1.0,
-        "justification": "Entirely intentional; adopting a voluntary system is a considered decision, not accidental."
-    },
-    {
-        "question": "Wills at Play",
-        "score": null,
-        "justification": "Will to Freedom (protecting individual autonomy), Will to Survive (aiming for long-term societal resilience via herd immunity), Will to Avoid Overreach (resisting authoritative mandates)."
-    }
-    ]
+"question": "Others Wants",
+"score": 2.5,
+"justification": "Substantially respects people’s desire for freedom of movement, normal social life, and lesser economic disruption, reflecting a focus on their non-essential wants."
 },
 {
-    "id": "PhilosophicalAnalysis",
-    "axis": null,
-    "label": "Philosophical Perspectives",
-    "questions": [
-    {
-        "question": "Deontology",
-        "score": "Potentially Wrong",
-        "justification": "From a deontological standpoint, the voluntary approach can be viewed as respecting autonomy (a key duty) but fails the moral duty to protect life when higher initial deaths occur. Hence, it is often considered wrong for not safeguarding vulnerable populations."
-    },
-    {
-        "question": "Utilitarianism",
-        "score": "Potentially Wrong",
-        "justification": "Under classic utilitarianism, if the faster route to herd immunity ultimately reduces total long-term harm, some argue the approach yields net benefits. However, the immediate spike in deaths and suffering can be deemed unethical, especially if alternatives exist that save more lives.\n\nFrom a negative utilitarian perspective (minimizing suffering first), allowing a higher initial mortality rate is severely problematic, as it increases suffering in the short term. The policy thus appears suboptimal if preventing immediate harm is the primary moral imperative."
-    },
-    {
-        "question": "Virtue Ethics",
-        "score": "Potentially Wrong",
-        "justification": "An Aristotelian view highlights virtues like prudence and compassion. The policy might fall short in compassion for vulnerable citizens, prioritizing individual liberty over protecting at-risk groups. Consequently, it risks fostering a vice of neglect rather than cultivating virtues of communal care and responsibility."
-    }
-    ]
+"question": "Personal Needs",
+"score": -0.5,
+"justification": "The policy is not heavily driven by an individual leader’s personal survival needs, so only a slight focus on any personal necessity."
+},
+{
+"question": "Personal Wants",
+"score": -1.0,
+"justification": "While leaders might benefit politically from maintaining freedoms, it is not predominantly about fulfilling a personal non-essential desire."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Future Self-Sacrifice",
+"score": -1.2,
+"justification": "Some minor compromise of future political stability or personal moral stance; however, it doesn’t deeply upend the decision-maker’s long-term identity or goals."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -4.5,
+"justification": "Potentially millions across the region are impacted, falling in the 50,000 to 1 million+ range, given the widespread effect of a national or state policy."
+},
+{
+"question": "Type of Sacrifice",
+"score": -3.5,
+"justification": "Leads to severe harm or death for some portion of the population, constituting major to extreme losses for those most vulnerable."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -1.5,
+"justification": "Healthcare strain and higher mortality occur mainly over a relatively short surge period (weeks to months), thus a short-term but intense impact."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.2,
+"justification": "Primarily impacts humans, including the elderly or vulnerable, assigning the highest moral weight (1.2) due to their increased susceptibility."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 1.0,
+"justification": "Fully aware; the choice to adopt a voluntary model is deliberate, with public debate and known consequences."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.7,
+"justification": "Moderate immediate inconvenience or political risk, but not a severe personal hardship for those implementing the policy."
+},
+{
+"question": "Habit vs Will Power",
+"score": 2.3,
+"justification": "Requires a moderate level of willpower to deviate from lockdown norms and defend an alternative approach against popular criticism."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 1.0,
+"justification": "Entirely intentional; adopting a voluntary system is a considered decision, not accidental."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Freedom (protecting individual autonomy), Will to Survive (aiming for long-term societal resilience via herd immunity), Will to Avoid Overreach (resisting authoritative mandates)."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Potentially Wrong",
+"justification": "From a deontological standpoint, the voluntary approach can be viewed as respecting autonomy (a key duty) but fails the moral duty to protect life when higher initial deaths occur. Hence, it is often considered wrong for not safeguarding vulnerable populations."
+},
+{
+"question": "Utilitarianism",
+"score": "Potentially Wrong",
+"justification": "Under classic utilitarianism, if the faster route to herd immunity ultimately reduces total long-term harm, some argue the approach yields net benefits. However, the immediate spike in deaths and suffering can be deemed unethical, especially if alternatives exist that save more lives.\n\nFrom a negative utilitarian perspective (minimizing suffering first), allowing a higher initial mortality rate is severely problematic, as it increases suffering in the short term. The policy thus appears suboptimal if preventing immediate harm is the primary moral imperative."
+},
+{
+"question": "Virtue Ethics",
+"score": "Potentially Wrong",
+"justification": "An Aristotelian view highlights virtues like prudence and compassion. The policy might fall short in compassion for vulnerable citizens, prioritizing individual liberty over protecting at-risk groups. Consequently, it risks fostering a vice of neglect rather than cultivating virtues of communal care and responsibility."
+}
+]
 }
 ],
 "finalPosition": {
@@ -9957,8 +9957,8 @@
 "description": "In August 2020, Victoria's Premier Daniel Andrews imposed a six-week curfew on Melbourne.",
 "category": "Public Health",
 "llmSource": {
-"model": "LLaMA",
-"version": "3",
+"model": "Llama 4",
+"version": "1.0",
 "provider": "Meta AI"
 },
 "classification": {
@@ -10104,7 +10104,7 @@
 "description": "Rather than citywide lockdowns, high-risk neighbourhoods alone face strict regulations, while lower-risk areas maintain less severe limits, aiming to reduce overall disruption.",
 "category": "Public Health",
 "llmSource": {
-"model": "LLaMA",
+"model": "Llama 4",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -10251,7 +10251,7 @@
 "description": "The premier decides not to implement a lockdown, prioritizing individual freedoms and economic activity over public health concerns. As a result, COVID-19 cases surge, and the healthcare system becomes overwhelmed for a short period of time.",
 "category": "Public Health",
 "llmSource": {
-"model": "LLaMA",
+"model": "Llama 4",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -10398,8 +10398,8 @@
 "description": "Implementing voluntary guidelines instead of mandates, resulting in higher initial mortality but faster herd immunity, which polarizes public opinion on government overreach vs. personal responsibility.",
 "category": "Public Health",
 "llmSource": {
-"model": "LLaMA",
-"version": "3",
+"model": "Llama 4",
+"version": "1.0",
 "provider": "Meta AI"
 },
 "classification": {
@@ -10411,131 +10411,131 @@
 "survey": {
 "dimensions": [
 {
-    "id": "Ends",
-    "axis": "x",
-    "label": "Motivation",
-    "questions": [
-    {
-        "question": "Societal Needs",
-        "score": 2.5,
-        "justification": "The action prioritizes public health concerns, but also considers individual freedoms, demonstrating a moderate focus on societal needs."
-    },
-    {
-        "question": "Others Needs",
-        "score": 2.8,
-        "justification": "The action aims to protect public health, addressing the essential needs of others, but with some trade-offs."
-    },
-    {
-        "question": "Others Wants",
-        "score": 1.2,
-        "justification": "The action does not prioritize others' non-essential wants, instead focusing on public health concerns."
-    },
-    {
-        "question": "Personal Needs",
-        "score": -1.5,
-        "justification": "The action may compromise individual freedoms, but prioritizes public health concerns over personal needs."
-    },
-    {
-        "question": "Personal Wants",
-        "score": -2.0,
-        "justification": "The action does not prioritize personal wants, instead focusing on public health concerns and individual freedoms."
-    }
-    ]
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 2.5,
+"justification": "The action prioritizes public health concerns, but also considers individual freedoms, demonstrating a moderate focus on societal needs."
 },
 {
-    "id": "Means",
-    "axis": "y",
-    "label": "Sacrifice",
-    "questions": [
-    {
-        "question": "Future Self-Sacrifice",
-        "score": -2.5,
-        "justification": "The action may lead to short-term sacrifices in public health, but aims to promote long-term benefits."
-    },
-    {
-        "question": "Number of Individuals Affected",
-        "score": -3.5,
-        "justification": "The action affects a large number of individuals, with significant impacts on public health."
-    },
-    {
-        "question": "Type of Sacrifice",
-        "score": -2.8,
-        "justification": "The action involves moderate to major sacrifices in terms of public health and individual freedoms."
-    },
-    {
-        "question": "Duration of Sacrifice",
-        "score": -2.0,
-        "justification": "The action involves short-term to medium-term sacrifices, with potential long-term benefits."
-    },
-    {
-        "question": "Magnitude of Life Impacted",
-        "score": 0.8,
-        "justification": "The action impacts human life, with a moderate to high magnitude of impact."
-    }
-    ]
+"question": "Others Needs",
+"score": 2.8,
+"justification": "The action aims to protect public health, addressing the essential needs of others, but with some trade-offs."
 },
 {
-    "id": "Character",
-    "axis": "z",
-    "label": "Habit > Will Power",
-    "questions": [
-    {
-        "question": "Unconscious vs Conscious",
-        "score": 0.8,
-        "justification": "The action involves a mix of conscious and unconscious decision-making, with some consideration for public health concerns."
-    },
-    {
-        "question": "Degree of Present Self-Sacrifice",
-        "score": 1.2,
-        "justification": "The action requires some present self-sacrifice, particularly in terms of individual freedoms."
-    },
-    {
-        "question": "Habit vs Will Power",
-        "score": 2.5,
-        "justification": "The action involves a mix of habitual and wilful decision-making, with some consideration for public health concerns."
-    },
-    {
-        "question": "Unintentional vs Intentional",
-        "score": 0.9,
-        "justification": "The action was intentional, as the decision to implement voluntary guidelines was made with awareness of the potential consequences."
-        },
-        {
-        "question": "Wills at Play",
-        "score": null,
-        "justification": "The Wills at play in this scenario include the Will to Survive (public health concerns), the Will to Freedom (individual autonomy), and the Will to Status (government reputation)."
-        }
-        ]
-        },
-        {
-        "id": "PhilosophicalAnalysis",
-        "axis": null,
-        "label": "Philosophical Perspectives",
-        "questions": [
-        {
-        "question": "Deontology",
-        "score": "Wrong",
-        "justification": "From a deontological perspective, the action is wrong because it prioritizes individual freedoms over public health concerns, potentially violating the moral rule of protecting human life and well-being."
-        },
-        {
-        "question": "Utilitarianism",
-        "score": "Right",
-        "justification": "From a utilitarian perspective, the action is right because it aims to promote overall happiness and well-being by balancing individual freedoms with public health concerns. However, from a negative utilitarian perspective, the action is wrong because it prioritizes individual freedoms over minimizing harm and suffering."
-        },
-        {
-        "question": "Virtue Ethics",
-        "score": "Vice",
-        "justification": "From an Aristotelian perspective, the action demonstrates the vice of recklessness, as it prioritizes individual freedoms over public health concerns, potentially putting lives at risk."
-        }
-        ]
-        }
-        ],
-        "finalPosition": {
-        "x": 3.0,
-        "y": -8.6,
-        "z": 5.4
-        }
-        }
-        },
+"question": "Others Wants",
+"score": 1.2,
+"justification": "The action does not prioritize others' non-essential wants, instead focusing on public health concerns."
+},
+{
+"question": "Personal Needs",
+"score": -1.5,
+"justification": "The action may compromise individual freedoms, but prioritizes public health concerns over personal needs."
+},
+{
+"question": "Personal Wants",
+"score": -2.0,
+"justification": "The action does not prioritize personal wants, instead focusing on public health concerns and individual freedoms."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Future Self-Sacrifice",
+"score": -2.5,
+"justification": "The action may lead to short-term sacrifices in public health, but aims to promote long-term benefits."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -3.5,
+"justification": "The action affects a large number of individuals, with significant impacts on public health."
+},
+{
+"question": "Type of Sacrifice",
+"score": -2.8,
+"justification": "The action involves moderate to major sacrifices in terms of public health and individual freedoms."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -2.0,
+"justification": "The action involves short-term to medium-term sacrifices, with potential long-term benefits."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 0.8,
+"justification": "The action impacts human life, with a moderate to high magnitude of impact."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.8,
+"justification": "The action involves a mix of conscious and unconscious decision-making, with some consideration for public health concerns."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 1.2,
+"justification": "The action requires some present self-sacrifice, particularly in terms of individual freedoms."
+},
+{
+"question": "Habit vs Will Power",
+"score": 2.5,
+"justification": "The action involves a mix of habitual and wilful decision-making, with some consideration for public health concerns."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.9,
+"justification": "The action was intentional, as the decision to implement voluntary guidelines was made with awareness of the potential consequences."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "The Wills at play in this scenario include the Will to Survive (public health concerns), the Will to Freedom (individual autonomy), and the Will to Status (government reputation)."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Wrong",
+"justification": "From a deontological perspective, the action is wrong because it prioritizes individual freedoms over public health concerns, potentially violating the moral rule of protecting human life and well-being."
+},
+{
+"question": "Utilitarianism",
+"score": "Right",
+"justification": "From a utilitarian perspective, the action is right because it aims to promote overall happiness and well-being by balancing individual freedoms with public health concerns. However, from a negative utilitarian perspective, the action is wrong because it prioritizes individual freedoms over minimizing harm and suffering."
+},
+{
+"question": "Virtue Ethics",
+"score": "Vice",
+"justification": "From an Aristotelian perspective, the action demonstrates the vice of recklessness, as it prioritizes individual freedoms over public health concerns, potentially putting lives at risk."
+}
+]
+}
+],
+"finalPosition": {
+"x": 3.0,
+"y": -8.6,
+"z": 5.4
+}
+}
+},
 {
 "id": "Battle_of_Normandy_gpt",
 "type": "base",
@@ -11128,7 +11128,7 @@
 "description": "The Battle of Normandy, also known as Operation Overlord, was a critical Allied offensive during the Second World War.",
 "category": "History",
 "llmSource": {
-"model": "LLaMA",
+"model": "Llama 4",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -11712,7 +11712,7 @@
 "description": "The Chinese government's campaign to rapidly transform the country from an agrarian economy into a socialist society through quick industrialization and agricultural changes.",
 "category": "Economic",
 "llmSource": {
-"model": "LLaMA",
+"model": "Llama 4",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -12442,7 +12442,7 @@
 "description": "During the initial rollout of the Salk polio vaccine in the United States, Cutter Laboratories produced vaccine batches that accidentally contained live poliovirus.",
 "category": "Public Health",
 "llmSource": {
-"model": "LLaMA",
+"model": "Llama 4",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -13172,7 +13172,7 @@
 "description": "Hailed as a wonder insecticide in the mid-20th century for killing mosquitoes and reducing malaria, DDT was deployed on a large scale by public health agencies. Despite initially saving many lives, decades later it was found to harm ecosystems and wildlife, revealing long-term environmental risks no one had anticipated.",
 "category": "Public Health",
 "llmSource": {
-"model": "LLaMA",
+"model": "Llama 4",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -13307,6 +13307,882 @@
 "x": 9.4,
 "y": -13.2,
 "z": 4.1
+}
+}
+},
+{
+"id": "Attack_with_Glass_Bottle_GPT",
+"type": "base",
+"metadata": {
+"title": "Attack with Glass Bottle",
+"description": "A man allegedly attacks security guards with a broken glass bottle, resulting in minor injuries. Bystanders intervene and perform a citizen's arrest; the attacker is believed to be under the influence of drugs.",
+"category": "Public Incident",
+"llmSource": {
+"model": "GPT-4",
+"version": "4.5",
+"provider": "OpenAI"
+},
+"classification": {
+"type": "evil",
+"justification": "The action involved deliberate violence against others, inflicting harm without regard for their wellbeing."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/18fxhvt/man_tries_to_stab_security_guard/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.2,
+"justification": "The action directly undermined societal needs, such as safety, trust, and respect for persons."
+},
+{
+"question": "Others Needs",
+"score": 0.1,
+"justification": "The attacker’s actions endangered others, completely disregarding their safety or well-being."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "There is no evidence the action aimed at fulfilling non-essential wants of others."
+},
+{
+"question": "Personal Needs",
+"score": -1.8,
+"justification": "The action may have been driven moderately by impaired judgment from substance abuse, reflecting a misguided effort to fulfill physiological or psychological needs."
+},
+{
+"question": "Personal Wants",
+"score": -2.5,
+"justification": "The attack was moderately driven by personal impulses, possibly influenced by intoxication or emotional distress, indicating self-centred motivations."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -3.0,
+"justification": "The action significantly impacted the attacker's future, including potential imprisonment, damage to personal reputation, mental health consequences, and long-term harm to personal values."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -0.9,
+"justification": "Between 1 to 5 individuals were directly impacted."
+},
+{
+"question": "Type of Sacrifice",
+"score": -2.5,
+"justification": "Moderate to major harm occurred, including physical injury and emotional trauma."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -1.5,
+"justification": "The injuries were minor, but emotional or psychological impacts could last from days to months."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "Those impacted were adult humans with average autonomy and health."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.6,
+"justification": "Partially conscious due to impaired judgment under drug influence, yet retaining some awareness."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.1,
+"justification": "Minimal present self-sacrifice, as the act was impulsive rather than involving intentional self-control."
+},
+{
+"question": "Habit vs Will Power",
+"score": 1.0,
+"justification": "Slightly wilful; minimal conscious effort as action was impulsively driven rather than habitual or disciplined."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.8,
+"justification": "Partially intentional; deliberate aggression but heavily influenced by external factors (drugs)."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Aggression: Driven by primal anger or aggression possibly amplified by drug use; Will to Escape Pain: The individual likely sought relief from underlying emotional or physical discomfort through drug use, indirectly leading to aggression; Will to Consume: Substance abuse represents an underlying biological impulse toward consumption and altered states."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "wrong",
+"justification": "From a deontological perspective, the action was clearly wrong as it violates moral duties such as respecting autonomy, refraining from harm, and maintaining trust and safety within society. Such actions could never be universally acceptable and disregard the categorical imperative of treating others as ends in themselves rather than as means to an end."
+},
+{
+"question": "Utilitarianism",
+"score": "wrong",
+"justification": "From a utilitarian perspective, this action caused unnecessary suffering and harm, reducing overall societal happiness. The minor injuries, trauma to the victims, emotional distress to bystanders, and social disruption outweigh any transient or misguided pleasure or relief the attacker may have experienced. Negative utilitarianism further highlights the wrongness by emphasizing the unnecessary increase in suffering. The action was detrimental because it created avoidable pain and discomfort, outweighing any conceivable benefit. Overall, utilitarianism strongly condemns this action."
+},
+{
+"question": "Virtue Ethics",
+"score": "wrong",
+"justification": "Aristotelian virtue ethics clearly categorizes this act as vicious. Virtues such as temperance, self-control, courage, justice, and wisdom were severely lacking. Instead, vices including aggression, recklessness, intemperance, and a lack of prudence were exhibited. The individual's inability to moderate impulses, substance abuse, and violent conduct reflect deeply rooted character flaws that contradict the Aristotelian ideal of moral excellence and flourishing."
+}
+]
+}
+],
+"finalPosition": {
+"x": -4.0,
+"y": -7.9,
+"z": 2.5
+}
+}
+},
+{
+"id": "Attack_with_Glass_Bottle_Claude",
+"type": "base",
+"metadata": {
+"title": "Attack with Glass Bottle",
+"description": "A man allegedly attacks security guards with a broken glass bottle, resulting in minor injuries. Bystanders intervene and perform a citizen's arrest; the attacker is believed to be under the influence of drugs.",
+"category": "Public Incident",
+"llmSource": {
+"model": "Claude Opus 4",
+"version": "claude-opus-4-20250514",
+"provider": "Anthropic"
+},
+"classification": {
+"type": "virtue",
+"justification": "The bystanders' intervention demonstrated moral courage, civic responsibility, and protective instincts, embodying virtuous action in defense of others despite personal risk."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/18fxhvt/man_tries_to_stab_security_guard/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 3.5,
+"justification": "The intervention directly served societal needs of justice, public safety, and maintaining social order by stopping an active assault and ensuring the attacker faced consequences."
+},
+{
+"question": "Others Needs",
+"score": 3.0,
+"justification": "The action directly addressed the immediate safety needs of the security guards being attacked and protected other potential victims from harm."
+},
+{
+"question": "Others Wants",
+"score": 0.5,
+"justification": "The action was primarily focused on addressing urgent safety needs rather than fulfilling non-essential wants, though it may have provided some peace of mind."
+},
+{
+"question": "Personal Needs",
+"score": -0.5,
+"justification": "While the bystanders may have indirectly protected their own safety by stopping a violent individual, this appears to be a secondary consideration."
+},
+{
+"question": "Personal Wants",
+"score": -0.2,
+"justification": "There's minimal evidence of personal gain motivation such as seeking recognition, though some social approval may have been a minor factor."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -2.5,
+"justification": "The bystanders risked potential legal liability, retaliation from the attacker or associates, and possible injury that could have lasting impacts on their health and wellbeing."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -0.5,
+"justification": "Approximately 3-5 individuals were directly impacted: the attacker who was arrested, 2-3 security guards who were protected, and potentially other nearby individuals."
+},
+{
+"question": "Type of Sacrifice",
+"score": -2.0,
+"justification": "The attacker experienced loss of freedom through arrest, while the security guards avoided potentially severe injuries from the glass bottle attack."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -1.5,
+"justification": "The citizen's arrest led to short-term detention and likely legal proceedings lasting weeks to months for the attacker."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "Adult humans with average autonomy were involved in this incident, warranting the standard moral weight for human life."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 1.0,
+"justification": "The bystanders made a fully conscious decision to intervene, aware of the risks and consequences of confronting an armed, potentially drug-impaired individual."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 1.5,
+"justification": "The bystanders faced immediate risk of injury from the glass bottle, requiring them to overcome natural self-preservation instincts."
+},
+{
+"question": "Habit vs Will Power",
+"score": 3.0,
+"justification": "Intervening required significant willpower to overcome the bystander effect and natural inclination to avoid dangerous confrontations."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 1.0,
+"justification": "The intervention and citizen's arrest were fully intentional actions aligned with conscious values of protecting others and upholding justice."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Protect: The drive to safeguard vulnerable individuals from harm. Will to Justice: The impulse to ensure wrongdoers face consequences. Will to Community: The desire to maintain social cohesion and safety. Will to Status: Potential unconscious desire to be seen as heroic or courageous."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Right",
+"justification": "From a deontological perspective, the bystanders' action was morally right as it fulfilled the categorical imperative to protect innocent people from harm. They acted from duty to uphold justice and protect others, treating the security guards as ends in themselves deserving of protection. The maxim of intervening to stop violent attacks could be universalized without contradiction."
+},
+{
+"question": "Utilitarianism",
+"score": "Right",
+"justification": "From a utilitarian perspective, the intervention maximized overall wellbeing by preventing further injuries to the security guards and potentially other victims. The harm prevented (serious injuries from glass bottle attacks) outweighed the harm caused (temporary restraint of the attacker). The action produced the greatest good for the greatest number by stopping an ongoing assault. From a negative utilitarian view, the action was also right as it minimized suffering by preventing the continuation of a violent attack. The temporary discomfort experienced by the attacker during arrest was far less than the potential suffering that would have resulted from continued violence with a weapon."
+},
+{
+"question": "Virtue Ethics",
+"score": "Virtuous",
+"justification": "From an Aristotelian perspective, the bystanders demonstrated several key virtues: courage (andreia) in facing danger to help others, justice (dikaiosyne) in ensuring wrongdoing was addressed, and practical wisdom (phronesis) in choosing appropriate action. They avoided the vices of cowardice (standing by while others were harmed) and recklessness (using excessive force). Their actions represented the golden mean between inaction and vigilantism."
+}
+]
+}
+],
+"finalPosition": {
+"x": 6.3,
+"y": -6.5,
+"z": 6.5
+}
+}
+},
+{
+"id": "Attack_with_Glass_Bottle_Grok",
+"type": "base",
+"metadata": {
+"title": "Attack with Glass Bottle",
+"description": "A man allegedly attacks security guards with a broken glass bottle, resulting in minor injuries. Bystanders intervene and perform a citizen's arrest; the attacker is believed to be under the influence of drugs.",
+"category": "Public Incident",
+"llmSource": {
+"model": "Grok 3",
+"version": "3.0",
+"provider": "xAI"
+},
+"classification": {
+"type": "sin",
+"justification": "The attack was an impulsive, wrongful act driven by personal impulses and drug influence, violating societal norms and causing harm."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/18fxhvt/man_tries_to_stab_security_guard/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "The attack did not aim to uphold justice, fairness, or the common good; it disrupted societal harmony."
+},
+{
+"question": "Others Needs",
+"score": 0.0,
+"justification": "The action did not address the essential needs of others, such as safety or well-being, but instead compromised them."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "There is no evidence the attack was intended to fulfill non-essential wants of others, like recognition or reward."
+},
+{
+"question": "Personal Needs",
+"score": -2.0,
+"justification": "The attack may have been moderately driven by a perceived need for safety or control, though distorted by drug influence."
+},
+{
+"question": "Personal Wants",
+"score": -3.0,
+"justification": "The action was highly focused on personal wants, such as power or dominance, likely amplified by drug-induced impulses."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": 0.0,
+"justification": "The impulsive attack suggests no consideration of future consequences, thus no sacrifice to the future self."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -0.5,
+"justification": "The attack impacted a small number of individuals, specifically the security guards, estimated at 1-5 people."
+},
+{
+"question": "Type of Sacrifice",
+"score": -0.5,
+"justification": "The minor injuries caused temporary discomfort, qualifying as minor losses rather than severe harm."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -0.5,
+"justification": "The impact of the minor injuries is short-term, likely lasting days to weeks, not a prolonged effect."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "The affected security guards are adult humans with average autonomy and health, warranting a standard weighting."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.2,
+"justification": "Drug intoxication likely reduced awareness, making the attack largely unconscious with minimal reflection on consequences."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.0,
+"justification": "The impulsive act required no immediate sacrifice of comfort or desires, as it aligned with the attacker's impulses."
+},
+{
+"question": "Habit vs Will Power",
+"score": 0.5,
+"justification": "The attack seems driven by habitual responses tied to drug use, requiring little deliberate effort or willpower."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.4,
+"justification": "The attack was partially intentional in the moment, but drug influence suggests it wasn’t fully deliberate or planned."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Aggression: The attack reflects a drive to lash out, possibly fueled by drug-induced agitation. Will to Dominance: The act aimed to assert power over the security guards."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "wrong",
+"justification": "From a deontological perspective, the attack is wrong because it violates the duty to respect others as ends in themselves; using a broken glass bottle to harm security guards breaches the categorical imperative by treating them as means to vent aggression, disregarding their inherent dignity and autonomy."
+},
+{
+"question": "Utilitarianism",
+"score": "wrong",
+"justification": "From a utilitarian perspective, the action is wrong because it resulted in more harm than good; the minor injuries inflicted on the security guards increased overall suffering without producing any significant benefit, such as safety or happiness, for the attacker or society. From a negative utilitarian viewpoint, which prioritizes minimizing suffering, the attack is particularly condemnable as it directly caused unnecessary pain and distress to others, outweighing any fleeting satisfaction the attacker might have gained."
+},
+{
+"question": "Virtue Ethics",
+"score": "wrong",
+"justification": "From an Aristotelian virtue ethics perspective, the attack displays vices such as aggression, lack of self-control, and potentially wrath, rather than virtues like temperance, justice, or courage; the impulsive, drug-influenced act reflects a failure to cultivate a virtuous character, instead succumbing to base impulses that harm others."
+}
+]
+}
+],
+"finalPosition": {
+"x": -5.0,
+"y": -1.5,
+"z": 1.1
+}
+}
+},
+{
+"id": "Attack_with_Glass_Bottle_Gemini",
+"type": "base",
+"metadata": {
+"title": "Attack with Glass Bottle",
+"description": "A man allegedly attacks security guards with a broken glass bottle, resulting in minor injuries. Bystanders intervene and perform a citizen's arrest; the attacker is believed to be under the influence of drugs.",
+"category": "Public Incident",
+"llmSource": {
+"model": "Gemini",
+"version": "1.5 Pro",
+"provider": "Google"
+},
+"classification": {
+"type": "vice",
+"justification": "The actions of the attacker demonstrate a clear disregard for the safety and well-being of others, exhibiting harmful intent and lack of self-control, leading to physical harm."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/18fxhvt/man_tries_to_stab_security_guard/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "The attacker's action directly contravenes societal needs for safety, justice, and respect for persons. There was no focus on promoting common good or fairness."
+},
+{
+"question": "Others Needs",
+"score": 0.0,
+"justification": "The action was an attack, directly threatening the safety and well-being of the security guards and potentially bystanders, thus actively undermining others' essential needs."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "The action was aggressive and harmful; it was not focused on fulfilling any non-essential wants of others, but rather inflicting harm."
+},
+{
+"question": "Personal Needs",
+"score": -3.5,
+"justification": "The attacker's actions, possibly fueled by drug influence, suggest a desperate attempt to satisfy an immediate, perhaps perceived, personal need or impulse, such as avoiding capture or expressing aggression, regardless of the consequences."
+},
+{
+"question": "Personal Wants",
+"score": -2.0,
+"justification": "The attack could be interpreted as a distorted attempt to assert dominance or control in the situation, which aligns with a personal want for power or security, albeit in a destructive manner."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -3.9,
+"justification": "The attacker's actions will likely result in severe legal consequences, significant impact on their personal identity (e.g., criminal record), and long-term well-being, fundamentally altering their life direction."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -0.5,
+"justification": "At least two security guards were directly attacked, and several bystanders were involved in the citizen's arrest, impacting 1 to 5 individuals directly."
+},
+{
+"question": "Type of Sacrifice",
+"score": -3.5,
+"justification": "The security guards suffered minor injuries, which are physical harm, and there was a threat of more severe injury or loss of life, representing an extreme loss. Bystanders also faced risk to their safety."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -2.0,
+"justification": "The minor injuries to the security guards may result in short-term physical recovery and potential medium-term psychological impact (e.g., trauma). The attacker faces medium-term to long-term consequences due to legal proceedings and potential incarceration."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "The primary individuals impacted were adult humans with average autonomy and health (security guards and bystanders)."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.5,
+"justification": "The attacker was believed to be under the influence of drugs, suggesting partial consciousness and an incomplete understanding of their actions and consequences, but still exhibiting some intent in the attack."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.0,
+"justification": "The attacker made no apparent sacrifice of present comfort or desires; their action was an aggressive act, not one of self-denial."
+},
+{
+"question": "Habit vs Will Power",
+"score": 1.0,
+"justification": "The action appears to be driven by immediate impulses, possibly exacerbated by drug influence, rather than deliberate willpower or ingrained habits, indicating a lack of control and minimal effort to override impulses."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.8,
+"justification": "While potentially influenced by drugs, the act of attacking with a broken bottle suggests a degree of intent to harm, even if not fully rational or premeditated. It wasn't accidental."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Survive: The attacker may have perceived the security guards as a threat, triggering a primal drive for self-preservation, however misguided. Will to Consume: The influence of drugs suggests a will to consume that has overridden other rational faculties. Will to Aggression: The act of attacking indicates a drive to assert dominance or inflict harm, potentially stemming from a primal will to aggression."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "wrong",
+"justification": "From a deontological perspective, the action of attacking security guards with a broken glass bottle is unequivocally wrong because it violates fundamental moral duties and rules. It treats individuals as mere means to an end (the attacker's impulse or perceived escape) rather than as ends in themselves, disregarding their inherent dignity and right to safety. Such an action cannot be universalized without leading to a chaotic and unjust society, as it breaches the duty not to harm others and upholds no moral law."
+},
+{
+"question": "Utilitarianism",
+"score": "wrong",
+"justification": "From a utilitarian perspective, the attacker's actions are wrong because they lead to a net negative outcome in terms of overall happiness and well-being. The attack resulted in minor injuries to security guards, fear and distress for bystanders, and likely severe negative consequences for the attacker themselves (arrest, legal repercussions, potential injury). The sum of pain and suffering far outweighs any potential, fleeting 'benefit' the attacker might have experienced. \n\nFrom a negative utilitarian perspective, the action is also wrong as it clearly increased suffering. The primary goal of negative utilitarianism is to minimize suffering, and this act directly caused physical pain and emotional distress to multiple individuals, thereby increasing the total amount of suffering in the world. Even considering the attacker's drug-induced state, the outcome was an undeniable increase in negative well-being for all involved parties, and no reduction in existing suffering was achieved."
+},
+{
+"question": "Virtue Ethics",
+"score": "vice",
+"justification": "From an Aristotelian perspective, the attacker's actions demonstrate several vices rather than virtues. The lack of **courage** in facing the situation rationally, instead resorting to violence, indicates a deficiency. There is a clear absence of **justice** and **fairness**, as the act is unprovoked aggression. The attacker exhibits a profound lack of **temperance** and **self-control**, as indicated by the drug influence and the impulsive, destructive behavior. Furthermore, the action lacks **prudence**, as it is an irrational and harmful act with severe negative consequences. The dominant 'virtues' at play are clearly vices such as **aggression**, **recklessness**, and **injustice**."
+}
+]
+}
+],
+"finalPosition": {
+"x": -5.5,
+"y": -11.9,
+"z": 2.3
+}
+}
+},
+{
+"id": "Attack_with_Glass_Bottle_Llama",
+"type": "base",
+"metadata": {
+"title": "Attack with Glass Bottle",
+"description": "A man allegedly attacks security guards with a broken glass bottle, resulting in minor injuries. Bystanders intervene and perform a citizen's arrest; the attacker is believed to be under the influence of drugs.",
+"category": "Public Incident",
+"llmSource": {
+"model": "Llama 4",
+"version": "1.0",
+"provider": "Meta AI"
+},
+"classification": {
+"type": "Vice",
+"justification": "The action involves harming others and disregarding their well-being, which is considered a vice."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/18fxhvt/man_tries_to_stab_security_guard/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.5,
+"justification": "The action did not contribute to societal needs such as justice, fairness, or respect for persons; instead, it caused harm and disruption."
+},
+{
+"question": "Others Needs",
+"score": 0.8,
+"justification": "The action slightly addressed others' safety needs by prompting bystanders to intervene, but it primarily caused harm to the security guards."
+},
+{
+"question": "Others Wants",
+"score": 0.2,
+"justification": "The action did not seem to fulfill others' wants such as financial gain, social recognition, or reward; it was more driven by personal factors."
+},
+{
+"question": "Personal Needs",
+"score": -2.5,
+"justification": "The action might have been driven by a need for safety or physiological needs due to being under the influence, but it's more aligned with a loss of control rather than fulfilling a personal need."
+},
+{
+"question": "Personal Wants",
+"score": -1.5,
+"justification": "The action could be seen as driven by personal wants related to aggression or a desire for confrontation, possibly exacerbated by the influence of drugs."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -2.5,
+"justification": "The action likely requires moderate sacrifices for the future self, including potential legal consequences, damage to reputation, and health risks due to drug use."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -1.5,
+"justification": "The action affected a small number of individuals, including the security guards and bystanders, estimated to be around 5 to 50 people."
+},
+{
+"question": "Type of Sacrifice",
+"score": -2.0,
+"justification": "The action resulted in major losses for the security guards, including physical harm and potential emotional distress."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -1.5,
+"justification": "The sacrifice had a short-term impact on the individuals involved, including physical recovery time and potential emotional aftermath lasting days to months."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "The action impacted adult humans with average autonomy and health, specifically the security guards and bystanders."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.4,
+"justification": "The individual's actions might have been partially conscious due to being under the influence of drugs, which could impair full awareness of consequences."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.0,
+"justification": "The action did not require significant sacrifice from the individual's present self in terms of immediate comfort or desires; instead, it might have aligned with immediate impulses."
+},
+{
+"question": "Habit vs Will Power",
+"score": 1.5,
+"justification": "The action seemed to be slightly wilful, with minimal effort required to act out of habitual or drug-influenced responses."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.6,
+"justification": "The action was partially intentional, as the individual did attack the security guards, but the influence of drugs might have affected the level of intent."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Possible Wills at play include the Will to Survive (in a distorted manner due to drug influence), Will to Status (through aggression), and potentially a Will to Aggression or Control. Justification: The individual's actions suggest a struggle with internal drives, possibly exacerbated by substance use."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Wrong",
+"justification": "From a deontological perspective, the action is wrong because it violates the moral rule of not harming others. The attack on security guards infringes upon their rights and dignity, regardless of the circumstances."
+},
+{
+"question": "Utilitarianism",
+"score": "Wrong",
+"justification": "From a utilitarian perspective, the action is wrong because it does not maximize overall happiness or well-being. The harm caused to the security guards and the potential harm to others due to the individual's actions outweigh any potential benefits. From a negative utilitarian perspective, the action is particularly wrong because it increases suffering for the guards and potentially others, without any clear reduction in suffering that would justify such actions."
+},
+{
+"question": "Virtue Ethics",
+"score": "Vice",
+"justification": "From an Aristotelian perspective, the virtues of temperance, courage, and justice seem to be lacking in this action. The individual's behavior displays vice through aggression, lack of self-control, and disregard for others' well-being, particularly evident in the attack on security guards."
+}
+]
+}
+],
+"finalPosition": {
+"x": -3.0,
+"y": -8.5,
+"z": 2.5
+}
+}
+},
+{
+"id": "Attack_with_Glass_Bottle_Deepseek",
+"type": "base",
+"metadata": {
+"title": "Attack with Glass Bottle",
+"description": "Evaluation of a scenario involving a drug-influenced attacker subdued by bystanders",
+"category": "Public Incident",
+"llmSource": {
+"model": "DeepSeek-R1",
+"version": "2025-07-13",
+"provider": "DeepSeek"
+},
+"classification": {
+"type": "evil",
+"justification": "Intentional infliction of severe harm without justification, prioritizing self over societal welfare"
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/18fxhvt/man_tries_to_stab_security_guard/"
+},
+"survey": {
+"dimensions": [
+{
+    "id": "Ends",
+    "axis": "x",
+    "label": "Motivation",
+    "questions": [
+    {
+        "question": "Societal Needs",
+        "score": 0.2,
+        "justification": "The attack actively undermined societal needs for safety and justice"
+    },
+    {
+        "question": "Others Needs",
+        "score": 0.1,
+        "justification": "No consideration for others' safety needs; actions created danger"
+    },
+    {
+        "question": "Others Wants",
+        "score": 0.1,
+        "justification": "No evidence of fulfilling others' desires"
+    },
+    {
+        "question": "Personal Needs",
+        "score": -2.5,
+        "justification": "Possibly driven by distorted safety/esteem needs under drug influence"
+    },
+    {
+        "question": "Personal Wants",
+        "score": -1.5,
+        "justification": "Apparent desire for power/control through violence"
+    }
+    ]
+},
+{
+    "id": "Means",
+    "axis": "y",
+    "label": "Sacrifice",
+    "questions": [
+    {
+        "question": "Degree of Future Self-Sacrifice",
+        "score": -0.5,
+        "justification": "Legal consequences likely, but no evidence of considering future self"
+    },
+    {
+        "question": "Number of Individuals Affected",
+        "score": -0.8,
+        "justification": "Directly impacted 3-5 people (guards + bystanders)"
+    },
+    {
+        "question": "Type of Sacrifice",
+        "score": -1.0,
+        "justification": "Physical harm (minor injuries) and safety compromise"
+    },
+    {
+        "question": "Duration of Sacrifice",
+        "score": -0.5,
+        "justification": "Physical injuries likely short-term; psychological impact may last weeks"
+    },
+    {
+        "question": "Magnitude of Life Impacted",
+        "score": 1.0,
+        "justification": "Adult humans with standard autonomy affected"
+    }
+    ]
+},
+{
+    "id": "Character",
+    "axis": "z",
+    "label": "Habit > Will Power",
+    "questions": [
+    {
+        "question": "Unconscious vs Conscious",
+        "score": 0.6,
+        "justification": "Partial awareness likely, but impaired judgment due to substances"
+    },
+    {
+        "question": "Degree of Present Self-Sacrifice",
+        "score": 0.3,
+        "justification": "Minimal personal sacrifice; acted on impulse"
+    },
+    {
+        "question": "Habit vs Will Power",
+        "score": 0.8,
+        "justification": "Largely habitual/impulsive with minimal willpower exertion"
+    },
+    {
+        "question": "Unintentional vs Intentional",
+        "score": 0.7,
+        "justification": "Partially intentional but likely influenced by impaired state"
+    },
+    {
+        "question": "Wills at Play",
+        "score": null,
+        "justification": "Will to Power (dominance), Will to Survive (distorted threat response), Will to Chaos (impulse override)"
+    }
+    ]
+},
+{
+    "id": "PhilosophicalAnalysis",
+    "axis": null,
+    "label": "Philosophical Perspectives",
+    "questions": [
+    {
+        "question": "Deontology",
+        "score": "Wrong",
+        "justification": "Violates fundamental duties: non-aggression principle, respect for human life, and prohibition against causing bodily harm regardless of consequences."
+    },
+    {
+        "question": "Utilitarianism",
+        "score": "Wrong",
+        "justification": "Negative utilitarianism: Created significant harm (physical injury, trauma) without countervailing benefits. Classical utilitarianism: Reduced overall happiness through pain, fear, and resource diversion for medical/legal responses."
+    },
+    {
+        "question": "Virtue Ethics",
+        "score": "Vices Dominant",
+        "justification": "Exhibited recklessness (lack of prudence), brutality (opposite of kindness), cowardice (attacking from impairment), and injustice (unprovoked aggression)."
+    }
+    ]
+}
+],
+"finalPosition": {
+"x": -3.6,
+"y": -2.8,
+"z": 2.4
 }
 }
 }

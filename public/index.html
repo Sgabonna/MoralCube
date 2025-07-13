@@ -201,21 +201,10 @@
             margin-bottom: 15px;
         }
 
-        .filter-group select {
-            width: 100%;
-            min-height: 150px; /* Ensures consistent height across all filter boxes */
-        }
-
         /* Specific styling for the alternate outcomes select */
         #alternateOutcomes {
             width: 100%;
             min-height: 150px;
-        }
-
-        /* Add consistent padding and text size */
-        .filter-group select option {
-            padding: 8px 12px;
-            font-size: 14px;
         }
 
         /* Add consistent label styling */
@@ -500,6 +489,10 @@
             padding: 20px;
             background-color: #f8f9fa;
             border-radius: 6px;
+            font-size: 0.8rem;
+        }
+        .scenario-section .compact-table th {
+            font-size: 0.8rem;
         }
         .scenario-table-container {
             margin-bottom: 10px;
@@ -843,11 +836,6 @@
             </div>
             <div class="filter-group model-filter-group">
                 <label for="modelFilter">
-                    AI Models
-                    <span class="tooltip">
-                        <i class="fas fa-info-circle info-icon"></i>
-                        <span class="tooltiptext">Hold Ctrl (Cmd on Mac) to select multiple models</span>
-                    </span>
                 </label>
                 <select id="modelFilter" class="form-control model-select" multiple size="6"></select>
             </div>
@@ -2226,9 +2214,9 @@
                     if (isPhilosophical) {
                         return {
                             colgroup: `
-                                <col style="width:25%;">
-                                <col style="width:25%;">
-                                <col style="width:50%;">
+                                <col style="width:20%;">
+                                <col style="width:20%;">
+                                <col style="width:60%;">
                             `,
                             header: `
                                 <tr>
