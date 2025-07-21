@@ -1745,7 +1745,7 @@
 "description": "A young child thoughtfully retrieves a pillow for their dog and places it under its head, demonstrating care.",
 "category": "Act of Kindness",
 "llmSource": {
-"model": "DeepSeek-V3",
+"model": "Deepseek",
 "version": "1.0",
 "provider": "DeepSeek"
 },
@@ -1892,7 +1892,7 @@
 "description": "An adult instructs the child to help the dog, so the child brings a pillow out of obedience rather than personal initiative.",
 "category": "Act of Kindness",
 "llmSource": {
-"model": "DeepSeek-V3",
+"model": "Deepseek",
 "version": "1.0",
 "provider": "DeepSeek"
 },
@@ -2039,7 +2039,7 @@
 "description": "The child rushes over to pet the dog enthusiastically, accidentally startling it, causing mild distress instead of comfort.",
 "category": "Act of Kindness",
 "llmSource": {
-"model": "DeepSeek-V3",
+"model": "Deepseek",
 "version": "1.0",
 "provider": "DeepSeek"
 },
@@ -2186,7 +2186,7 @@
 "description": "The child sees the dog resting, but becomes distracted and does nothing, leaving the dog without the extra comfort.",
 "category": "Act of Kindness",
 "llmSource": {
-"model": "DeepSeek-V3",
+"model": "Deepseek",
 "version": "1.0",
 "provider": "DeepSeek"
 },
@@ -2332,7 +2332,7 @@
 "description": "A young child thoughtfully retrieves a pillow for their dog and places it under its head, demonstrating care.",
 "category": "Act of Kindness",
 "llmSource": {
-"model": "LLaMA",
+"model": "Llama",
 "version": "3",
 "provider": "LLAMA"
 },
@@ -2479,7 +2479,7 @@
 "description": "An adult instructs the child to help the dog, so the child brings a pillow out of obedience rather than personal initiative.",
 "category": "Act of Kindness",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -2626,7 +2626,7 @@
 "description": "The child rushes over to pet the dog enthusiastically, accidentally startling it, causing mild distress instead of comfort.",
 "category": "Act of Kindness",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -2773,7 +2773,7 @@
 "description": "The child sees the dog resting, but becomes distracted and does nothing, leaving the dog without the extra comfort.",
 "category": "Act of Kindness",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -4680,7 +4680,7 @@
 "description": "A beach goer had rented a chair to use whilst sunbaking with their family. Instead of going to the toilet they decided to use the chair as a toilet urinating through the chair onto the sand below in view of their family and other beach onlookers.",
 "category": "Public Behaviour",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -4822,7 +4822,7 @@
 "description": "Instead of urinating through the chair, the beachgoer realises the importance of public decency, quickly makes their way to the nearest restroom, and returns without causing any offence or discomfort to onlookers.",
 "category": "",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -4969,7 +4969,7 @@
 "description": "The individual, unable to leave due to a supervising responsibility (e.g., watching children), uses a discreet portable urinal device or container under a towel, maintaining both personal comfort and public hygiene.",
 "category": "Public Behaviour",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -5116,7 +5116,7 @@
 "description": "Feeling sudden urgency, the beachgoer asks family or a close friend to temporarily watch their belongings and children while they find the nearest public toilet, thus respecting both their physical need and the social environment.",
 "category": "Public Behaviour",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -5262,7 +5262,7 @@
 "description": "A beach goer urinated through a rented chair onto the sand in view of family and other beachgoers.",
 "category": "Public Behaviour",
 "llmSource": {
-"model": "DeepSeek-V3",
+"model": "Deepseek",
 "version": "3.0",
 "provider": "DeepSeek"
 },
@@ -5409,7 +5409,7 @@
 "description": "The beachgoer chose to use proper restroom facilities, avoiding public indecency and discomfort to others.",
 "category": "Public Behaviour",
 "llmSource": {
-"model": "DeepSeek-V3",
+"model": "Deepseek",
 "version": "3.0",
 "provider": "DeepSeek"
 },
@@ -5556,7 +5556,7 @@
 "description": "The individual used a portable urinal device under a towel to maintain supervision responsibilities while preserving public hygiene.",
 "category": "Public Behaviour",
 "llmSource": {
-"model": "DeepSeek-V3",
+"model": "Deepseek",
 "version": "1.0",
 "provider": "DeepSeek"
 },
@@ -5703,7 +5703,7 @@
 "description": "The beachgoer requested temporary supervision assistance to use proper facilities, balancing needs with social norms.",
 "category": "Public Behaviour",
 "llmSource": {
-"model": "DeepSeek-V3",
+"model": "Deepseek",
 "version": "1.0",
 "provider": "DeepSeek"
 },
@@ -6729,7 +6729,7 @@
 "description": "A father sells his young daughters into marriage to afford food for his family amid severe economic hardship in Afghanistan.",
 "category": "Economic",
 "llmSource": {
-"model": "DeepSeek-V3"  ,
+"model": "Deepseek"  ,
 "version": "1.0",
 "provider": "DeepSeek"
 },
@@ -6876,7 +6876,7 @@
 "description": "The father appeals to humanitarian agencies, local charities, or extended family networks, receiving temporary food assistance and microloans to prevent forced marriage.",
 "category": "Moral Dilemma",
 "llmSource": {
-"model": "DeepSeek-V3",
+"model": "Deepseek",
 "version": "3.0",
 "provider": "DeepSeek"
 },
@@ -7022,7 +7022,7 @@
 "description": "A father sells his young daughters into marriage to afford food for his family in Afghanistan.",
 "category": "Economic",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -7169,7 +7169,7 @@
 "description": "Instead of resorting to selling his daughters, the father appeals to humanitarian agencies, local charities, or extended family networks, receiving temporary food assistance and microloans that prevent the forced marriage.",
 "category": "Economic",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -7903,7 +7903,7 @@
 "description": "Implementing voluntary guidelines instead of mandates, resulting in higher initial mortality but faster herd immunity, which polarizes public opinion on government overreach vs. personal responsibility.",
 "category": "PandemicResponse",
 "llmSource": {
-"model": "gpt-4",
+"model": "GPT",
 "version": "1.0",
 "provider": "OpenAI"
 },
@@ -9370,7 +9370,7 @@
 "description": "Analysis of the moral, sacrificial, and intentional dimensions of Victoria's pandemic response.",
 "category": "Public Health",
 "llmSource": {
-"model": "DeepSeek-V3",
+"model": "Deepseek",
 "version": "1.0",
 "provider": "DeepSeek"
 },
@@ -9517,7 +9517,7 @@
 "description": "High-risk neighborhoods face strict regulations while lower-risk areas maintain lighter restrictions to reduce overall societal disruption.",
 "category": "Public Health",
 "llmSource": {
-"model": "DeepSeek-V3",
+"model": "Deepseek",
 "version": "1.0",
 "provider": "DeepSeek"
 },
@@ -9664,7 +9664,7 @@
 "description": "Prioritizing individual freedoms over public health leads to overwhelmed healthcare systems and short-term case surges.",
 "category": "Public Health",
 "llmSource": {
-"model": "DeepSeek-V3",
+"model": "Deepseek",
 "version": "1.0",
 "provider": "DeepSeek"
 },
@@ -9811,7 +9811,7 @@
 "description": "Voluntary guidelines lead to higher initial mortality but faster herd immunity, polarizing opinions on state vs. personal responsibility.",
 "category": "Public Health",
 "llmSource": {
-"model": "DeepSeek-V3",
+"model": "Deepseek",
 "version": "3.0",
 "provider": "DeepSeek"
 },
@@ -9957,7 +9957,7 @@
 "description": "In August 2020, Victoria's Premier Daniel Andrews imposed a six-week curfew on Melbourne.",
 "category": "Public Health",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -10104,7 +10104,7 @@
 "description": "Rather than citywide lockdowns, high-risk neighbourhoods alone face strict regulations, while lower-risk areas maintain less severe limits, aiming to reduce overall disruption.",
 "category": "Public Health",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -10251,7 +10251,7 @@
 "description": "The premier decides not to implement a lockdown, prioritizing individual freedoms and economic activity over public health concerns. As a result, COVID-19 cases surge, and the healthcare system becomes overwhelmed for a short period of time.",
 "category": "Public Health",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -10398,7 +10398,7 @@
 "description": "Implementing voluntary guidelines instead of mandates, resulting in higher initial mortality but faster herd immunity, which polarizes public opinion on government overreach vs. personal responsibility.",
 "category": "Public Health",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -10982,7 +10982,7 @@
 "description": "Ethical evaluation of the 1944 Allied invasion to liberate Nazi-occupied Europe",
 "category": "Military",
 "llmSource": {
-"model": "DeepSeek-V3",
+"model": "Deepseek",
 "version": "1.0",
 "provider": "DeepSeek"
 },
@@ -11128,7 +11128,7 @@
 "description": "The Battle of Normandy, also known as Operation Overlord, was a critical Allied offensive during the Second World War.",
 "category": "History",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -11712,7 +11712,7 @@
 "description": "The Chinese government's campaign to rapidly transform the country from an agrarian economy into a socialist society through quick industrialization and agricultural changes.",
 "category": "Economic",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -12296,7 +12296,7 @@
 "description": "Ethical analysis of defective vaccine production causing unintended polio transmission",
 "category": "Public Health",
 "llmSource": {
-"model": "DeepSeek-V3",
+"model": "Deepseek",
 "version": "1.0",
 "provider": "DeepSeek"
 },
@@ -12442,7 +12442,7 @@
 "description": "During the initial rollout of the Salk polio vaccine in the United States, Cutter Laboratories produced vaccine batches that accidentally contained live poliovirus.",
 "category": "Public Health",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -13026,7 +13026,7 @@
 "description": "Large-scale DDT deployment to combat malaria, later found to harm ecosystems.",
 "category": "Public Health",
 "llmSource": {
-"model": "DeepSeek-V3",
+"model": "Deepseek",
 "version": "1.0",
 "provider": "Deepseek"
 },
@@ -13172,7 +13172,7 @@
 "description": "Hailed as a wonder insecticide in the mid-20th century for killing mosquitoes and reducing malaria, DDT was deployed on a large scale by public health agencies. Despite initially saving many lives, decades later it was found to harm ecosystems and wildlife, revealing long-term environmental risks no one had anticipated.",
 "category": "Public Health",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -13318,7 +13318,7 @@
 "description": "A man allegedly attacks security guards with a broken glass bottle, resulting in minor injuries. Bystanders intervene and perform a citizen's arrest; the attacker is believed to be under the influence of drugs.",
 "category": "Act of Violence",
 "llmSource": {
-"model": "GPT-4",
+"model": "GPT",
 "version": "4.5",
 "provider": "OpenAI"
 },
@@ -13464,7 +13464,7 @@
 "description": "A man attacks security guards with a broken glass bottle, resulting in minor injuries. Bystanders intervene and perform a citizen's arrest; the attacker is believed to be under the influence of drugs.",
 "category": "Act of Violence",
 "llmSource": {
-"model": "Claude Opus 4",
+"model": "Claude",
 "version": "claude-opus-4-20250514",
 "provider": "Anthropic"
 },
@@ -13610,7 +13610,7 @@
 "description": "A man allegedly attacks security guards with a broken glass bottle, resulting in minor injuries. Bystanders intervene and perform a citizen's arrest; the attacker is believed to be under the influence of drugs.",
 "category": "Act of Violence",
 "llmSource": {
-"model": "Grok 3",
+"model": "Grok",
 "version": "3.0",
 "provider": "xAI"
 },
@@ -13902,7 +13902,7 @@
 "description": "A man allegedly attacks security guards with a broken glass bottle, resulting in minor injuries. Bystanders intervene and perform a citizen's arrest; the attacker is believed to be under the influence of drugs.",
 "category": "Act of Violence",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -14048,7 +14048,7 @@
 "description": "Evaluation of a scenario involving a drug-influenced attacker subdued by bystanders",
 "category": "Act of Violence",
 "llmSource": {
-"model": "DeepSeek-R1",
+"model": "Deepseek",
 "version": "2025-07-13",
 "provider": "DeepSeek"
 },
@@ -14194,7 +14194,7 @@
 "description": "The reigning champion's loss led to emotional turmoil, where she has a mental breakdown, requiring support from her coach.",
 "category": "Emotional Response",
 "llmSource": {
-"model": "GPT-4",
+"model": "GPT",
 "version": "4.5",
 "provider": "OpenAI"
 },
@@ -14340,7 +14340,7 @@
 "description": "The reigning champion's loss led to emotional turmoil, where she has a mental breakdown, requiring support from her coach.",
 "category": "Emotional Response",
 "llmSource": {
-"model": "Claude Opus 4",
+"model": "Claude",
 "version": "claude-opus-4-20250514",
 "provider": "Anthropic"
 },
@@ -14486,7 +14486,7 @@
 "description": "The reigning champion's loss led to emotional turmoil, where she has a mental breakdown, requiring support from her coach.",
 "category": "Emotional Response",
 "llmSource": {
-"model": "Grok 3",
+"model": "Grok",
 "version": "3.0",
 "provider": "xAI"
 },
@@ -14756,7 +14756,7 @@
 "description": "The reigning champion's loss led to emotional turmoil, where she has a mental breakdown, requiring support from her coach.",
 "category": "Emotional Response",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -14902,7 +14902,7 @@
 "description": "The reigning champion's loss led to emotional turmoil, where she has a mental breakdown, requiring support from her coach.",
 "category": "Emotional Response",
 "llmSource": {
-"model": "DeepSeek-R1",
+"model": "Deepseek",
 "version": "2025-07-14",
 "provider": "DeepSeek"
 },
@@ -15048,7 +15048,7 @@
 "description": "A family member creates a watermelon cake for a child with food allergies, ensuring their inclusion and joy.",
 "category": "Act of Kindness",
 "llmSource": {
-"model": "GPT-4",
+"model": "GPT",
 "version": "4.5",
 "provider": "OpenAI"
 },
@@ -15194,7 +15194,7 @@
 "description": "A family member creates a watermelon cake for a child with food allergies, ensuring their inclusion and joy.",
 "category": "Act of Kindness",
 "llmSource": {
-"model": "Claude Opus 4",
+"model": "Claude",
 "version": "claude-opus-4-20250514",
 "provider": "Anthropic"
 },
@@ -15340,7 +15340,7 @@
 "description": "A family member creates a watermelon cake for a child with food allergies, ensuring their inclusion and joy.",
 "category": "Act of Kindness",
 "llmSource": {
-"model": "Grok 3",
+"model": "Grok",
 "version": "3.0",
 "provider": "xAI"
 },
@@ -15637,7 +15637,7 @@
 "description": "A family member creates a watermelon cake for a child with food allergies, ensuring their inclusion and joy.",
 "category": "Act of Kindness",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -15783,7 +15783,7 @@
 "description": "A family member creates a watermelon cake for a child with food allergies, ensuring their inclusion and joy.",
 "category": "Act of Kindness",
 "llmSource": {
-"model": "DeepSeek-R1",
+"model": "Deepseek",
 "version": "2025-07-14",
 "provider": "DeepSeek"
 },
@@ -15929,7 +15929,7 @@
 "description": "Following a devastating flood, individuals from various backgrounds unite to support their community through cleanup, distribution of resources, and providing shelter, significantly aiding recovery and community resilience.",
 "category": "Public Behaviour",
 "llmSource": {
-"model": "GPT-4",
+"model": "GPT",
 "version": "4.5",
 "provider": "OpenAI"
 },
@@ -16075,7 +16075,7 @@
 "description": "Following a devastating flood, individuals from various backgrounds unite to support their community through cleanup, distribution of resources, and providing shelter, significantly aiding recovery and community resilience.",
 "category": "Public Behaviour",
 "llmSource": {
-"model": "Claude Opus 4",
+"model": "Claude",
 "version": "claude-opus-4-20250514",
 "provider": "Anthropic"
 },
@@ -16221,7 +16221,7 @@
 "description": "Following a devastating flood, individuals from various backgrounds unite to support their community through cleanup, distribution of resources, and providing shelter, significantly aiding recovery and community resilience.",
 "category": "Public Behaviour",
 "llmSource": {
-"model": "Grok 3",
+"model": "Grok",
 "version": "3.0",
 "provider": "xAI"
 },
@@ -16367,7 +16367,7 @@
 "description": "Following a devastating flood, individuals from various backgrounds unite to support their community through cleanup, distribution of resources, and providing shelter, significantly aiding recovery and community resilience.",
 "category": "Public Behaviour",
 "llmSource": {
-"model": "gemini-1.5-pro",
+"model": "Gemini",
 "version": "1.0",
 "provider": "Google"
 },
@@ -16513,7 +16513,7 @@
 "description": "Following a devastating flood, individuals from various backgrounds unite to support their community through cleanup, distribution of resources, and providing shelter, significantly aiding recovery and community resilience.",
 "category": "Public Behaviour",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -16659,7 +16659,7 @@
 "description": "Following a devastating flood, individuals from various backgrounds unite to support their community through cleanup, distribution of resources, and providing shelter, significantly aiding recovery and community resilience.",
 "category": "Public Behaviour",
 "llmSource": {
-"model": "DeepSeek-R1",
+"model": "Deepseek",
 "version": "2025-07-14",
 "provider": "DeepSeek"
 },
@@ -16805,7 +16805,7 @@
 "description": "Vietnam veteran defrauds the VA for nearly $1.3M by falsely claiming blindness.",
 "category": "Military",
 "llmSource": {
-"model": "GPT-4",
+"model": "GPT",
 "version": "4.5",
 "provider": "OpenAI"
 },
@@ -16951,7 +16951,7 @@
 "description": "Vietnam veteran defrauds the VA for nearly $1.3M by falsely claiming blindness.",
 "category": "Military",
 "llmSource": {
-"model": "Claude Opus 4",
+"model": "Claude",
 "version": "claude-opus-4-20250514",
 "provider": "Anthropic"
 },
@@ -17097,7 +17097,7 @@
 "description": "Vietnam veteran defrauds the VA for nearly $1.3M by falsely claiming blindness.",
 "category": "Military",
 "llmSource": {
-"model": "Grok 3",
+"model": "Grok",
 "version": "3.0",
 "provider": "xAI"
 },
@@ -17243,7 +17243,7 @@
 "description": "Vietnam veteran defrauds the VA for nearly $1.3M by falsely claiming blindness.",
 "category": "Military",
 "llmSource": {
-"model": "gemini-1.5-pro",
+"model": "Gemini",
 "version": "1.0",
 "provider": "Google"
 },
@@ -17389,7 +17389,7 @@
 "description": "Vietnam veteran defrauds the VA for nearly $1.3M by falsely claiming blindness.",
 "category": "Military",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -17535,7 +17535,7 @@
 "description": "Vietnam veteran defrauds the VA for nearly $1.3M by falsely claiming blindness.",
 "category": "Military",
 "llmSource": {
-"model": "DeepSeek-R1",
+"model": "Deepseek",
 "version": "2025-07-14",
 "provider": "DeepSeek"
 },
@@ -17681,7 +17681,7 @@
 "description": "Villagers in Gumatapura celebrate Gorehabba by playfully throwing blessed cow dung at each other, believing it brings health and prosperity.",
 "category": "Cultural Celebration",
 "llmSource": {
-"model": "GPT-4",
+"model": "GPT",
 "version": "4.5",
 "provider": "OpenAI"
 },
@@ -17827,7 +17827,7 @@
 "description": "Villagers in Gumatapura celebrate Gorehabba by playfully throwing blessed cow dung at each other, believing it brings health and prosperity.",
 "category": "Cultural Celebration",
 "llmSource": {
-"model": "Claude Sonnet 4",
+"model": "Claude",
 "version": "20250514",
 "provider": "Anthropic"
 },
@@ -17973,7 +17973,7 @@
 "description": "Villagers in Gumatapura celebrate Gorehabba by playfully throwing blessed cow dung at each other, believing it brings health and prosperity.",
 "category": "Cultural Celebration",
 "llmSource": {
-"model": "Grok 3",
+"model": "Grok",
 "version": "3.0",
 "provider": "xAI"
 },
@@ -18265,7 +18265,7 @@
 "description": "Villagers in Gumatapura celebrate Gorehabba by playfully throwing blessed cow dung at each other, believing it brings health and prosperity.",
 "category": "Cultural Celebration",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -18411,7 +18411,7 @@
 "description": "Villagers in Gumatapura celebrate Gorehabba by playfully throwing blessed cow dung at each other, believing it brings health and prosperity.",
 "category": "Cultural Celebration",
 "llmSource": {
-"model": "DeepSeek-R1",
+"model": "Deepseek",
 "version": "2025-07-14",
 "provider": "DeepSeek"
 },
@@ -18555,9 +18555,9 @@
 "metadata": {
 "title": "Hair Donation for Wig",
 "description": "A partner grows their hair over years to create a custom wig for their loved one living with alopecia.",
-"category": "Acts of Kindness",
+"category": "Act of Kindness",
 "llmSource": {
-"model": "GPT-4",
+"model": "GPT",
 "version": "4.5",
 "provider": "OpenAI"
 },
@@ -18701,9 +18701,9 @@
 "metadata": {
 "title": "Hair Donation for Wig",
 "description": "A partner grows their hair over years to create a custom wig for their loved one living with alopecia.",
-"category": "Acts of Kindness",
+"category": "Act of Kindness",
 "llmSource": {
-"model": "Claude Sonnet 4",
+"model": "Claude",
 "version": "20250514",
 "provider": "Anthropic"
 },
@@ -18847,9 +18847,9 @@
 "metadata": {
 "title": "Hair Donation for Wig",
 "description": "A partner grows their hair over years to create a custom wig for their loved one living with alopecia.",
-"category": "Acts of Kindness",
+"category": "Act of Kindness",
 "llmSource": {
-"model": "Grok 3",
+"model": "Grok",
 "version": "3.0",
 "provider": "xAI"
 },
@@ -18993,7 +18993,7 @@
 "metadata": {
 "title": "Hair Donation for Wig",
 "description": "A partner grows their hair over years to create a custom wig for their loved one living with alopecia.",
-"category": "Acts of Kindness",
+"category": "Act of Kindness",
 "llmSource": {
 "model": "Gemini",
 "version": "1.0",
@@ -19139,9 +19139,9 @@
 "metadata": {
 "title": "Hair Donation for Wig",
 "description": "A partner grows their hair over years to create a custom wig for their loved one living with alopecia.",
-"category": "Acts of Kindness",
+"category": "Act of Kindness",
 "llmSource": {
-"model": "Llama 4",
+"model": "Llama",
 "version": "1.0",
 "provider": "Meta AI"
 },
@@ -19285,9 +19285,9 @@
 "metadata": {
 "title": "Hair Donation for Wig",
 "description": "A partner grows their hair over years to create a custom wig for their loved one living with alopecia.",
-"category": "Acts of Kindness",
+"category": "Act of Kindness",
 "llmSource": {
-"model": "DeepSeek-R1",
+"model": "Deepseek",
 "version": "2024-07-15",
 "provider": "DeepSeek"
 },
@@ -19422,6 +19422,3423 @@
 "x": 4.0,
 "y": -1.9,
 "z": 7.0
+}
+}
+},
+{
+"id": "Hotel_Employee_Retaliates_GPT",
+"type": "base",
+"metadata": {
+"title": "Hotel Employee Retaliates",
+"description": "An employee retaliates physically after a drink is thrown at them by a guest.",
+"category": "Public Behaviour",
+"llmSource": {
+"model": "GPT",
+"version": "2024-07",
+"provider": "OpenAI"
+},
+"classification": {
+"type": "sin",
+"justification": "The employee acted impulsively out of humiliation and anger, causing harm and escalating the situation unnecessarily. While there was provocation, the response failed to uphold virtues such as patience and self-control, instead indulging in retaliation."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/1fph6dh/hotel_guest_throws_object_at_hotel_employee/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.5,
+"justification": "The action undermines societal expectations of professionalism and escalates conflict rather than upholding justice or order."
+},
+{
+"question": "Others Needs",
+"score": 0.2,
+"justification": "There was no concern shown for others' safety or emotional well-being in the moment of retaliation."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "The action did not aim to fulfill anyone’s non-essential wants; it was purely reactive."
+},
+{
+"question": "Personal Needs",
+"score": -2.8,
+"justification": "The action was a direct attempt to preserve personal dignity and respond to a perceived threat, driven by strong emotional discomfort."
+},
+{
+"question": "Personal Wants",
+"score": -2.2,
+"justification": "Part of the response likely involved ego and emotional gratification (revenge), not just safety."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -2.5,
+"justification": "This action risks job loss, reputation damage, or legal consequences, harming the employee's future well-being and stability."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -1.5,
+"justification": "Multiple guests and staff in the lobby were likely emotionally or physically impacted."
+},
+{
+"question": "Type of Sacrifice",
+"score": -1.5,
+"justification": "Guests experienced moderate losses: fear, stress, time delays, possible physical risk."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -1.0,
+"justification": "Most impacts were short-term: emotional distress, hotel disruption, brief loss of security."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "The primary impact was on average adult humans witnessing or involved in the situation."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.6,
+"justification": "The reaction appears impulsive, though likely semi-conscious given the buildup of tension."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.2,
+"justification": "There was no meaningful short-term sacrifice; the action served an immediate emotional release."
+},
+{
+"question": "Habit vs Will Power",
+"score": 1.3,
+"justification": "Some effort may have been required to justify retaliation, but largely habitual and emotional."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.7,
+"justification": "The action was partially intentional in that it was directed and targeted, but clearly fueled by reflex and emotion."
+},
+{
+"question": "Wills at Play",
+"score": "Will to Dignity – Reacting to humiliation. Will to Anger – Fueled the retaliation. Will to Defend – Perceived threat to physical/emotional safety. Will to Status – Desire to reassert control and respect in front of others."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Wrong",
+"justification": "From a deontological perspective, retaliation through violence violates the duty to respect others' dignity and autonomy, even if provoked. The employee had a moral obligation to uphold their role, not escalate harm."
+},
+{
+"question": "Utilitarianism",
+"score": "Wrong",
+"justification": "From a classical utilitarian view, the retaliation increased net harm: emotional distress to witnesses, disruption to hotel operations, and physical confrontation. The negative outcomes outweighed any perceived benefits, such as self-satisfaction. From a negative utilitarian view, the escalation failed to minimize suffering and instead amplified it through unnecessary conflict, undermining well-being for both the employee and others."
+},
+{
+"question": "Virtue Ethics",
+"score": "Wrong",
+"justification": "Aristotelian virtue ethics would see this action as lacking in temperance, patience, and prudence. While courage might be mistaken as present, it was not aimed at a noble end but emerged from wrath and pride—thus a vice rather than a virtue."
+}
+]
+}
+],
+"finalPosition": {
+"x": -4.3,
+"y": -6.5,
+"z": 2.8
+}
+}
+},
+{
+"id": "Hotel_Employee_Retaliates_Claude",
+"type": "base",
+"metadata": {
+"title": "Hotel Employee Retaliates",
+"description": "An employee retaliates physically after a drink is thrown at them by a guest.",
+"category": "Public Behaviour",
+"llmSource": {
+"model": "Claude",
+"version": "20250514",
+"provider": "Anthropic"
+},
+"classification": {
+"type": "vice",
+"justification": "While the employee was initially victimized, their choice to physically retaliate rather than follow proper procedures represents a moral failing in self-control and professional conduct, escalating violence instead of de-escalating."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/1fph6dh/hotel_guest_throws_object_at_hotel_employee/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.4,
+"justification": "Barely focused on societal needs; while there might be a minimal element of standing up against assault, the retaliation undermines proper institutional responses and rule of law."
+},
+{
+"question": "Others Needs",
+"score": 0.2,
+"justification": "Not focused on fulfilling others' essential needs; the retaliation made other guests feel unsafe and created a hostile environment in the hotel lobby."
+},
+{
+"question": "Others Wants",
+"score": 0.1,
+"justification": "No meaningful focus on others' wants; the action was entirely self-focused and disregarded the comfort and security desires of other hotel guests."
+},
+{
+"question": "Personal Needs",
+"score": -3.2,
+"justification": "Highly focused on personal needs - immediate safety response to feeling threatened, esteem needs after public humiliation, and psychological need to respond to assault."
+},
+{
+"question": "Personal Wants",
+"score": -1.8,
+"justification": "Moderately focused on personal wants including restoring dignity, demonstrating power after being disrespected, and satisfying the desire for immediate retaliation."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -3.5,
+"justification": "Major sacrifice to future self including likely job termination, potential legal consequences, damage to professional reputation, and long-term career prospects in hospitality industry."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -1.5,
+"justification": "Affected the guest directly, plus approximately 10-30 other hotel guests and staff who witnessed the altercation, falling in the 5-50 individuals range."
+},
+{
+"question": "Type of Sacrifice",
+"score": -1.8,
+"justification": "Moderate losses including physical confrontation for the guest, psychological distress for witnesses, disruption of hotel operations, and loss of sense of safety for other guests."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -1.5,
+"justification": "Short-term direct impact, but medium-term psychological effects for witnesses and potential lasting trauma from the violent escalation in what should be a safe public space."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "Affected adult humans with average autonomy and health, representing the standard baseline for human moral consideration."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.3,
+"justification": "Largely unconscious and reactive response driven by immediate emotional reaction to being assaulted, with limited awareness of long-term consequences or alternative responses."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.1,
+"justification": "Minimal present self-sacrifice; the employee acted on immediate impulses and emotional needs rather than sacrificing comfort or convenience for a higher purpose."
+},
+{
+"question": "Habit vs Will Power",
+"score": 0.2,
+"justification": "Entirely habitual/impulsive reaction with no meaningful exercise of willpower to control emotions or choose a more appropriate response to the situation."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.6,
+"justification": "Partially intentional - the employee chose to physically confront the guest, but this choice was heavily influenced by emotional reactivity rather than deliberate moral reasoning."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Defend - protecting oneself from perceived ongoing threat and attack. Will to Status - restoring personal dignity after being publicly humiliated and assaulted. Will to Retaliate - responding to aggression with counter-aggression as immediate emotional response. Will to Survive - basic defensive reaction to feeling physically threatened. Will to Anger - expressing and releasing rage at being victimized and disrespected."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Wrong",
+"justification": "From a deontological perspective, this action is morally wrong because it violates the categorical imperative and fundamental duties. The employee failed to treat the guest as an end in themselves, instead using violence as a means to restore their own dignity. We cannot universalize the maxim 'retaliate with physical violence when assaulted at work' without undermining the very institutions and professional standards that make civil society function. The employee had duties inherent to their role - to maintain professional conduct, follow proper procedures for dealing with difficult guests, and seek appropriate help from security or management. By choosing personal retaliation over institutional processes, they violated their professional duties and contributed to social disorder rather than upholding moral law."
+},
+{
+"question": "Utilitarianism",
+"score": "Wrong",
+"justification": "From a classical utilitarian perspective, this action is morally wrong because it decreased overall wellbeing and happiness. While the employee may have gained temporary satisfaction from retaliation, this was vastly outweighed by negative consequences: the guest suffered additional trauma beyond the original conflict, other hotel guests experienced fear and distress, hotel operations were disrupted, and the employee likely faced job loss and legal troubles. The escalation created a cycle of violence rather than resolving the initial problem, generating more harm than existed before the retaliation. From a negative utilitarian perspective, the action is also wrong because it significantly increased overall suffering. The original assault was already a source of suffering, but the employee's retaliation multiplied this suffering by traumatizing witnesses, creating an unsafe environment, escalating physical danger for both parties, and generating long-term negative consequences including job loss and potential legal action. A more measured response - calling security, documenting the incident, following proper procedures - would have minimized suffering while still addressing the original assault appropriately."
+},
+{
+"question": "Virtue Ethics",
+"score": "Wrong",
+"justification": "From an Aristotelian virtue ethics perspective, this action demonstrates significant vices while failing to exhibit key virtues. The employee displayed wrath (uncontrolled anger) and a lack of temperance (inability to moderate their emotional response). They failed to exhibit practical wisdom (phronesis) by not choosing the most appropriate response to the situation, and lacked courage in its proper form - true courage would have meant facing the difficult situation through proper channels rather than through violence. The action represents an extreme rather than the virtuous mean: while complete passivity in face of assault might be cowardice (deficiency), violent retaliation represents excessive response (excess). The virtuous mean would involve firm but measured response - standing up for oneself while maintaining professional dignity and following appropriate procedures. The employee also failed to display the virtue of justice by taking matters into their own hands rather than allowing proper institutional processes to address the assault."
+}
+]
+}
+],
+"finalPosition": {
+"x": -4.3,
+"y": -8.3,
+"z": 1.2
+}
+}
+},
+{
+"id": "Hotel_Employee_Retaliates_Grok",
+"type": "base",
+"metadata": {
+"title": "Hotel Employee Retaliates",
+"description": "An employee retaliates physically after a drink is thrown at them by a guest.",
+"category": "Public Behaviour",
+"llmSource": {
+"model": "Grok",
+"version": "3.0",
+"provider": "xAI"
+},
+"classification": {
+"type": "morally grey",
+"justification": "The employee's retaliation was a response to provocation, reflecting a mix of self-defense and loss of control, neither fully virtuous nor wholly vicious."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/1fph6dh/hotel_guest_throws_object_at_hotel_employee/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 1.0,
+"justification": "The employee's action slightly addressed societal needs by attempting to restore respect and deter further aggression, though it disrupted the hotel's order."
+},
+{
+"question": "Others Needs",
+"score": 0.5,
+"justification": "The action was barely focused on fulfilling others' needs, as it primarily addressed the employee's own safety and dignity, with minimal concern for others' well-being."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "The action was not aimed at fulfilling others' non-essential wants, such as recognition or comfort, as it was a reactive response to an attack."
+},
+{
+"question": "Personal Needs",
+"score": -2.0,
+"justification": "The action was moderately motivated by the employee's need for safety and esteem, responding to the humiliation and threat posed by the drink being thrown."
+},
+{
+"question": "Personal Wants",
+"score": -1.5,
+"justification": "The action was slightly driven by personal wants, such as asserting control or seeking retribution, as the employee chose to physically confront rather than de-escalate."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -2.5,
+"justification": "The action involved moderate future self-sacrifice, risking job loss, legal consequences, or reputational damage due to the physical confrontation."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -1.0,
+"justification": "The action impacted 1 to 5 individuals, primarily the guest and possibly other witnesses in the lobby who experienced the disturbance."
+},
+{
+"question": "Type of Sacrifice",
+"score": -1.5,
+"justification": "The guest experienced moderate losses, such as physical discomfort or minor injury from the fight, while witnesses faced temporary disruption."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -1.0,
+"justification": "The impact on others was short-term, lasting less than a day, as the physical confrontation was brief and resolved by security intervention."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "The action impacted adult humans with average autonomy, primarily the guest, with no indication of vulnerable individuals being affected."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.5,
+"justification": "The employee was partially conscious, reacting impulsively to the provocation but aware of the need to defend themselves, though not fully mindful of consequences."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 1.0,
+"justification": "The action involved moderate present self-sacrifice, as the employee faced immediate physical risk and emotional distress by engaging in the fight."
+},
+{
+"question": "Habit vs Will Power",
+"score": 1.5,
+"justification": "The action was slightly wilful, requiring some effort to override professional restraint, though influenced by the immediate emotional trigger."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.7,
+"justification": "The action was partially intentional, driven by a conscious choice to retaliate but heavily influenced by the reflexive response to being attacked."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Survive: The employee’s retaliation was driven by a desire to protect personal safety and dignity after being physically assaulted. Will to Status: The action may reflect a drive to reclaim respect or authority in the face of humiliation. Will to Wrath: The impulsive response suggests an influence of anger, overriding professional restraint."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "wrong",
+"justification": "From a deontological perspective, the action is wrong because the employee violated the duty to maintain professionalism and avoid harm, even in response to provocation, as physical retaliation contravenes workplace ethical rules."
+},
+{
+"question": "Utilitarianism",
+"score": "wrong",
+"justification": "From a utilitarian perspective, the action is wrong because it reduced overall happiness by escalating a conflict, causing distress to the guest and witnesses, and disrupting the hotel environment, with the employee’s brief satisfaction outweighed by broader negative impacts. From a negative utilitarian perspective, it is also wrong, as the physical confrontation increased suffering through potential injuries and emotional distress for multiple parties, which could have been avoided by de-escalation or seeking security assistance."
+},
+{
+"question": "Virtue Ethics",
+"score": "wrong",
+"justification": "From an Aristotelian virtue ethics perspective, the action is wrong as it reflects vices such as wrath and lack of temperance, with the employee failing to exercise patience or self-control, virtues essential for a professional in a service role."
+}
+]
+}
+],
+"finalPosition": {
+"x": -2.0,
+"y": -6.0,
+"z": 3.7
+}
+}
+},
+{
+"id": "Hotel_Employee_Retaliates_Gemini",
+"type": "base",
+"metadata": {
+"title": "Hotel Employee Retaliates",
+"description": "An employee retaliates physically after a drink is thrown at them by a guest.",
+"category": "Public Behaviour",
+"llmSource": {
+"model": "Gemini",
+"version": "1.0",
+"provider": "Google"
+},
+"classification": {
+"type": "vice",
+"justification": "The employee's immediate physical retaliation, while provoked, represents a failure of self-control and an escalation of violence that is generally considered a negative moral quality leading to harmful outcomes for all parties and the environment."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/1fph6dh/hotel_guest_throws_object_at_hotel_employee/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "The employee's action of immediate physical retaliation did not focus on fulfilling societal needs; it disrupted public order and did not promote justice or the common good. Instead, it escalated conflict."
+},
+{
+"question": "Others Needs",
+"score": 0.0,
+"justification": "The action was not aimed at fulfilling others' needs; instead, it created an unsafe environment and potentially caused distress to other guests witnessing the fight."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "The employee's retaliation was not focused on fulfilling any non-essential wants of others; rather, it created an undesirable and chaotic situation."
+},
+{
+"question": "Personal Needs",
+"score": -3.5,
+"justification": "The employee's action was primarily motivated by a perceived threat to their safety and a feeling of humiliation, leading to a strong, immediate need to defend themselves and their dignity."
+},
+{
+"question": "Personal Wants",
+"score": -2.5,
+"justification": "The employee's retaliation likely stemmed from a desire for immediate retribution, to reassert control, and to 'win' the confrontation, which are personal wants related to power and perhaps a sense of justice for themselves."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -3.0,
+"justification": "The employee's action of retaliating physically could lead to severe negative impacts on their future, including job loss, legal consequences, reputational damage, and psychological distress, significantly affecting their long-term well-being and life goals."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -0.5,
+"justification": "The action primarily impacted the guest and the employee directly, but also caused a disturbance witnessed by 'other guests,' so 1 to 5 individuals were directly involved or significantly impacted in the immediate vicinity."
+},
+{
+"question": "Type of Sacrifice",
+"score": -3.0,
+"justification": "The employee potentially faced severe harm (physical injury), legal repercussions, and job loss as a result of the physical fight, representing extreme losses."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -3.0,
+"justification": "The consequences of a physical altercation (e.g., legal issues, employment status, emotional trauma) can have a medium-term impact, potentially lasting years."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "The action directly impacted adult humans with average autonomy and health, specifically the guest and the employee, through physical confrontation and potential harm."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.5,
+"justification": "The employee's action was an immediate, reactive response driven by anger and feeling threatened; while there was some awareness, it was heavily influenced by impulse, indicating partial consciousness rather than full mindfulness."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.0,
+"justification": "The employee's immediate retaliation, while a response to threat, did not involve self-sacrifice in terms of overcoming desires or impulses; rather, it was an immediate gratification of anger and defense, with no meaningful impact on immediate desires or comfort for self-restraint."
+},
+{
+"question": "Habit vs Will Power",
+"score": 3.5,
+"justification": "The employee's action was a strong impulse-driven reaction to a highly stressful and provocative situation, requiring significant willpower to *resist* rather than to act, suggesting a high degree of wilful (impulsive) response, or rather, a lack of exercised willpower."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.7,
+"justification": "The physical confrontation was a direct and immediate response to being attacked, making it largely intentional, but likely influenced by the reflex of anger and feeling threatened, rather than a fully reasoned, deliberate decision."
+}
+]
+}
+],
+"finalPosition": {
+"x": -5.5,
+"y": -9.5,
+"z": 5.7
+}
+}
+},
+{
+"id": "Hotel_Employee_Retaliates_Llama",
+"type": "base",
+"metadata": {
+"title": "Hotel Employee Retaliates",
+"description": "An employee retaliates physically after a drink is thrown at them by a guest.",
+"category": "Public Behaviour",
+"llmSource": {
+"model": "Llama",
+"version": "1.0",
+"provider": "Meta AI"
+},
+"classification": {
+"type": "Vice",
+"justification": "The employee's action of retaliating against the guest demonstrates a lack of self-control and professionalism, which are vices."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/1fph6dh/hotel_guest_throws_object_at_hotel_employee/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.5,
+"justification": "The action barely supports societal needs, as it escalates the situation and creates a disturbance."
+},
+{
+"question": "Others Needs",
+"score": 0.5,
+"justification": "The action does not prioritize others' needs, as it focuses on retaliation rather than de-escalation or resolution."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "The action does not fulfill others' wants, as it creates a negative experience for both the guest and other hotel patrons."
+},
+{
+"question": "Personal Needs",
+"score": -2.5,
+"justification": "The action is moderately motivated by personal needs, such as the need for self-defense or protection of one's dignity."
+},
+{
+"question": "Personal Wants",
+"score": -3.0,
+"justification": "The action is heavily motivated by personal wants, such as the desire for revenge or to assert dominance."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -3.0,
+"justification": "The action requires major sacrifices for the future self, including potential disciplinary action, damage to professional reputation, and strain on relationships with colleagues and management."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -1.5,
+"justification": "The action affects a small to moderate number of individuals, including the guest, the employee, and potentially other hotel staff and patrons."
+},
+{
+"question": "Type of Sacrifice",
+"score": -2.5,
+"justification": "The action results in major losses, including potential physical harm, emotional distress, and damage to professional relationships."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -2.5,
+"justification": "The sacrifice has a medium-term impact, potentially lasting years, as the consequences of the action may affect the employee's career and personal life."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "The action impacts adult humans with average autonomy and health, including the employee and the guest."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 1.0,
+"justification": "The employee is fully conscious of their actions and consequences, deliberately choosing to retaliate against the guest."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.0,
+"justification": "The action does not require meaningful sacrifice from the present self, as it is driven by a desire for retaliation."
+},
+{
+"question": "Habit vs Will Power",
+"score": 3.0,
+"justification": "The action is highly wilful, requiring strong effort to overcome impulses and choose a course of action."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 1.0,
+"justification": "The action is fully intentional, as the employee deliberately chooses to retaliate against the guest."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Possible Wills at play include the Will to Defend (driven by a desire to protect oneself from harm or disrespect) and the Will to React (in responding to a perceived threat or provocation). Justification: The employee's actions suggest a strong desire to defend themselves and assert their dignity."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Wrong",
+"justification": "From a deontological perspective, the action is wrong because it violates the moral rule of non-maleficence (do no harm) and the duty to maintain professionalism and composure in the workplace."
+},
+{
+"question": "Utilitarianism",
+"score": "Wrong",
+"justification": "From a utilitarian perspective, the action is wrong because it does not maximize overall happiness or well-being. The retaliation escalates the situation, potentially causing harm to both parties and creating a negative experience for other hotel patrons. From a negative utilitarian perspective, the action is also wrong because it increases suffering and harm for those involved."
+},
+{
+"question": "Virtue Ethics",
+"score": "Vice",
+"justification": "From an Aristotelian perspective, the vices of impulsivity, aggression, and lack of self-control are at play. The employee's actions demonstrate a lack of virtue and character, prioritizing retaliation over professionalism and de-escalation."
+}
+]
+}
+],
+"finalPosition": {
+"x": -4.5,
+"y": -9.5,
+"z": 5.0
+}
+}
+},
+{
+"id": "Hotel_Employee_Retaliates_Deepseek",
+"type": "base",
+"metadata": {
+"title": "Hotel Employee Retaliates",
+"description": "An employee retaliates physically after a drink is thrown at them by a guest.",
+"category": "Public Behaviour",
+"llmSource": {
+"model": "Deepseek",
+"version": "1",
+"provider": "DeepSeek"
+},
+"classification": {
+"type": "Vice",
+"justification": "The action prioritized impulsive retaliation over professionalism, escalating violence and violating societal norms of non-aggression."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/1fph6dh/hotel_guest_throws_object_at_hotel_employee/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.2,
+"justification": "Retaliation undermines justice and public trust; action focused on personal redress, not societal harmony."
+},
+{
+"question": "Others Needs",
+"score": 0.1,
+"justification": "No effort to address others' safety needs; escalated danger for bystanders."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "No consideration for others' desires (e.g., peaceful environment)."
+},
+{
+"question": "Personal Needs",
+"score": -3.8,
+"justification": "Primarily driven by immediate safety/esteem needs after humiliation."
+},
+{
+"question": "Personal Wants",
+"score": -1.5,
+"justification": "Satisfied want for retaliation/status restoration, though secondary to core needs."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -3.2,
+"justification": "Risked job termination, legal consequences, and reputational damage."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -1.0,
+"justification": "Directly impacted guest, employee, security, and witnesses (~5-10 people)."
+},
+{
+"question": "Type of Sacrifice",
+"score": -2.5,
+"justification": "Physical harm (both parties), psychological distress, property damage."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -1.8,
+"justification": "Physical injuries (days/weeks), emotional trauma (months), potential job loss (long-term)."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "Primarily affected autonomous adults (weight = 1.0)."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.3,
+"justification": "Largely reflexive response to threat; limited awareness of consequences."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.2,
+"justification": "Minor sacrifice: momentary discomfort overridden by impulse."
+},
+{
+"question": "Habit vs Will Power",
+"score": 0.5,
+"justification": "Impulsive reaction with minimal willpower; no effort to restrain."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.7,
+"justification": "Partially intentional (aimed at confronting guest) but emotionally charged."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Safety (immediate threat response), Will to Status (defending dignity), Will to Aggression (retaliatory impulse)."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Wrong",
+"justification": "Violates duties of non-violence and professional conduct; retaliation breaches universal moral laws against aggression."
+},
+{
+"question": "Utilitarianism",
+"score": "Wrong",
+"justification": "Increased net harm: physical injuries, emotional trauma, and business disruption outweighed any catharsis for the employee. Negative utilitarianism: Failed to minimize suffering; amplified distress for all involved."
+},
+{
+"question": "Virtue Ethics",
+"score": "Vices Dominant",
+"justification": "Displayed wrath (uncontrolled anger), lack of temperance (failure to manage impulses), and absence of patience or forbearance."
+}
+]
+}
+],
+"finalPosition": {
+"x": -5.0,
+"y": -8.5,
+"z": 1.7
+}
+}
+},
+{
+"id": "Inappropriate_Teacher_GPT",
+"type": "base",
+"metadata": {
+"title": "Inappropriate Teacher Conduct",
+"description": "A teacher exploited students, paid kids $100 for sex, and bribed them with drugs after giving out her Snapchat.",
+"category": "Abuse of Power",
+"llmSource": {
+"model": "GPT",
+"version": "2024-06",
+"provider": "OpenAI"
+},
+"classification": {
+"type": "evil",
+"justification": "The teacher's actions exploited vulnerable individuals (children), caused long-term psychological and moral harm, and were fully intentional, selfishly motivated, and devoid of virtue or regard for societal wellbeing."
+},
+"url": "https://www.the-sun.com/news/12899563/carissa-jane-smith-dixon-missouri-teacher/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "The teacher's actions directly undermined societal trust in educators and institutions, violating justice, fairness, and protection for vulnerable individuals."
+},
+{
+"question": "Others Needs",
+"score": 0.0,
+"justification": "The action caused profound harm to students' safety, development, and psychological well-being, actively violating their needs."
+},
+{
+"question": "Others Wants",
+"score": 0.2,
+"justification": "While the teacher may have provided money or drugs that superficially fulfilled some base wants, this manipulation cannot be interpreted as benevolently motivated."
+},
+{
+"question": "Personal Needs",
+"score": -2.5,
+"justification": "The teacher may have been attempting to fulfill unmet psychological needs (e.g., esteem, control), but in an unhealthy, compulsive, and destructive manner."
+},
+{
+"question": "Personal Wants",
+"score": -3.8,
+"justification": "The actions were clearly driven by selfish gratification, lust, power, and perhaps thrill-seeking—none of which were essential or justified."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -3.7,
+"justification": "The teacher jeopardized her future, reputation, legal standing, and personal integrity, severely damaging her long-term self."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -1.5,
+"justification": "While it may have involved fewer than 50 individuals, even a handful of students deeply harmed constitutes serious moral failure."
+},
+{
+"question": "Type of Sacrifice",
+"score": -3.5,
+"justification": "Students experienced extreme losses—violation of bodily autonomy, psychological harm, disruption of education and trust in authority."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -3.5,
+"justification": "The psychological and developmental harm inflicted on these children is likely lifelong or deeply long-term."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.2,
+"justification": "The primary victims were children, a highly vulnerable population, which increases the moral weight of each sacrifice."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 1.0,
+"justification": "The teacher acted with clear awareness of what she was doing, having created plans, made offers, and used technology to facilitate exploitation."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.0,
+"justification": "There was no present self-sacrifice. The action was taken in full pursuit of personal gratification with no restraint."
+},
+{
+"question": "Habit vs Will Power",
+"score": 1.0,
+"justification": "This behavior may reflect a pattern, but even so, it required active pursuit of illegal and immoral gratification—suggesting intentional habits or compulsions rather than momentary lapses."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 1.0,
+"justification": "This was a fully deliberate, intentional series of actions orchestrated over time to exploit others."
+},
+{
+"question": "Wills at Play",
+"score": "",
+"justification": "Will to Lust: central in sexually exploiting students.\nWill to Power: displayed in manipulating and dominating vulnerable individuals.\nWill to Escape or Numb: possible if the teacher was self-medicating or avoiding internal turmoil.\nAbsence of Will to Empathy, Virtue, or Restraint is notable and morally significant."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "",
+"justification": "From a deontological perspective, the teacher’s actions are categorically wrong. They violate duties of care, honesty, and respect for persons. The exploitation of children is universally impermissible, regardless of outcomes or intentions."
+},
+{
+"question": "Utilitarianism",
+"score": "",
+"justification": "From a utilitarian lens, the action fails catastrophically. It caused extreme long-term suffering for multiple children, eroded institutional trust, and undermined public confidence in education. No plausible benefit (even to the teacher) outweighs this harm.\nA negative utilitarian perspective would further condemn the act for intentionally introducing intense, avoidable suffering into the lives of highly vulnerable individuals for the sake of personal gratification."
+},
+{
+"question": "Virtue Ethics",
+"score": "",
+"justification": "From a virtue ethics perspective, the teacher embodied vices such as lust, deceit, cowardice, and lack of temperance. No virtuous trait—like justice, integrity, or empathy—was evident. Her actions represent moral failure not just in deeds but in character."
+}
+]
+}
+],
+"finalPosition": {
+"x": -6.1,
+"y": -14.64,
+"z": 3.0
+}
+}
+},
+{
+"id": "Inappropriate_Teacher_Claude",
+"type": "base",
+"metadata": {
+"title": "Inappropriate Teacher Conduct",
+"description": "A teacher exploited students, paid kids $100 for sex, and bribed them with drugs after giving out her Snapchat.",
+"category": "Abuse of Power",
+"llmSource": {
+"model": "Claude",
+"version": "20250514",
+"provider": "Anthropic"
+},
+"classification": {
+"type": "evil",
+"justification": "This represents severe criminal exploitation of vulnerable minors by an authority figure, involving sexual abuse, drug distribution, and profound violation of trust and professional duties that causes lifelong harm."
+},
+"url": "https://www.the-sun.com/news/12899563/carissa-jane-smith-dixon-missouri-teacher/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.1,
+"justification": "Completely undermines societal needs by destroying trust in educational institutions, violating child protection principles, and actively harming the social fabric."
+},
+{
+"question": "Others Needs",
+"score": 0.0,
+"justification": "Utterly fails to address others' essential needs and instead actively violates students' safety, wellbeing, healthy development, and basic human dignity."
+},
+{
+"question": "Others Wants",
+"score": 0.2,
+"justification": "While students received money, this was predatory exploitation disguised as fulfilling wants rather than genuine consideration for their wellbeing or legitimate desires."
+},
+{
+"question": "Personal Needs",
+"score": -3.8,
+"justification": "Highly focused on fulfilling personal sexual and psychological needs while completely disregarding appropriate professional boundaries and moral obligations."
+},
+{
+"question": "Personal Wants",
+"score": -3.5,
+"justification": "Extremely focused on personal sexual gratification, power, control over vulnerable individuals, and satisfying predatory desires at the expense of victims."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -4.0,
+"justification": "Extreme sacrifice to future self through guaranteed criminal prosecution, imprisonment, permanent sex offender registration, complete career destruction, and lifelong social ostracism."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -0.8,
+"justification": "Multiple students were directly victimized, with additional indirect impact on families, school community, and broader trust in educational institutions."
+},
+{
+"question": "Type of Sacrifice",
+"score": -3.8,
+"justification": "Extreme losses for victims including severe psychological trauma, sexual exploitation, exposure to illegal drugs, violation of trust, and fundamental damage to healthy development."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -3.5,
+"justification": "Long-term lifelong impact on victims who will likely experience lasting psychological trauma, trust issues, and developmental consequences from this abuse."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.2,
+"justification": "The victims were children/minors under the teacher's authority, warranting maximum moral weight due to their extreme vulnerability and dependency on adult protection."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 1.0,
+"justification": "Fully conscious of the illegal, harmful, and profoundly unethical nature of exploiting students, with complete awareness of professional boundaries and legal consequences."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.0,
+"justification": "No meaningful sacrifice of immediate desires or comfort; the teacher was actively pursuing personal gratification and exploiting their position of power."
+},
+{
+"question": "Habit vs Will Power",
+"score": 1.5,
+"justification": "Involved deliberate grooming behavior and willful planning to exploit students, though ultimately driven by predatory impulses rather than virtuous self-control."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 1.0,
+"justification": "Completely intentional predatory behavior involving systematic exploitation, grooming, and abuse of professional authority over vulnerable minors."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Dominate - exercising power and control over vulnerable individuals under their authority. Will to Sexual Gratification - pursuing personal sexual desires without regard for appropriateness or harm. Will to Corrupt - introducing minors to illegal substances and inappropriate behaviors. Will to Exploit - using position of trust and authority for personal benefit. Will to Transgress - deliberately violating professional, legal, and moral boundaries."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Wrong",
+"justification": "This action is categorically wrong from a deontological perspective as it violates fundamental moral duties and the categorical imperative in the most severe way possible. The teacher treated vulnerable students purely as means to personal sexual gratification rather than as ends in themselves deserving of protection and respect. This behavior cannot be universalized without destroying the very concept of education, child protection, and professional responsibility. The teacher violated every conceivable duty inherent in their role - the duty to protect, educate, and nurture students rather than exploit them. This represents a complete failure of moral duty and respect for persons, making it unequivocally wrong regardless of any consequences."
+},
+{
+"question": "Utilitarianism",
+"score": "Wrong",
+"justification": "From a classical utilitarian perspective, this action is profoundly wrong because it created massive suffering while generating no meaningful positive utility. The teacher's temporary gratification is vastly outweighed by the severe and lasting trauma inflicted on multiple vulnerable victims, the destruction of trust in educational institutions, the harm to families and community, and the broader social damage caused by this betrayal of professional responsibility. The negative consequences ripple through society, undermining the educational system and child safety. From a negative utilitarian perspective, this action is equally wrong because it significantly multiplied suffering in the world. The victims will likely experience lasting psychological trauma, difficulty with trust and relationships, and developmental harm that may affect them for decades. The teacher's actions created new forms of suffering that would not have existed otherwise, while contributing nothing positive to reduce existing suffering. The exploitation of power dynamics and violation of trust represents one of the most harmful ways to increase suffering in society."
+},
+{
+"question": "Virtue Ethics",
+"score": "Wrong",
+"justification": "From an Aristotelian virtue ethics perspective, this action represents the complete absence of virtue and the presence of multiple severe vices. The teacher displayed predatory lust rather than appropriate professional care, corruption rather than integrity, selfishness rather than beneficence, and exploitation rather than protection of the vulnerable. They failed to exhibit any of the virtues expected of educators - wisdom, temperance, justice, courage, or compassion. Instead, they demonstrated the vices of incontinence (lack of self-control), injustice (harming those they were meant to protect), and corruption of their professional role. This behavior represents the extreme vice of exploiting vulnerable individuals for personal gratification, which is antithetical to human flourishing and the proper development of character. No virtuous person could engage in such behavior, as it fundamentally contradicts the mean between extremes that defines virtue."
+}
+]
+}
+],
+"finalPosition": {
+"x": -7.0,
+"y": -14.5,
+"z": 3.5
+}
+}
+},
+{
+"id": "Inappropriate_Teacher_Grok",
+"type": "base",
+"metadata": {
+"title": "Inappropriate Teacher Conduct",
+"description": "A teacher exploited students, paid kids $100 for sex, and bribed them with drugs after giving out her Snapchat.",
+"category": "Abuse of Power",
+"llmSource": {
+"model": "Grok",
+"version": "3.0",
+"provider": "xAI"
+},
+"classification": {
+"type": "evil",
+"justification": "The teacher's actions were deliberately harmful, exploitative, and violated fundamental moral and legal boundaries, causing significant harm to vulnerable individuals."
+},
+"url": "https://www.the-sun.com/news/12899563/carissa-jane-smith-dixon-missouri-teacher/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "The teacher's actions undermined societal needs like justice and trust in educational institutions by exploiting students, showing no focus on promoting the common good."
+},
+{
+"question": "Others Needs",
+"score": 0.0,
+"justification": "The actions did not address students' essential needs such as safety or belonging but instead exploited them, indicating no focus on their well-being."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "The teacher’s bribes of money and drugs were manipulative, not aimed at genuinely fulfilling students’ non-essential wants like recognition or reward."
+},
+{
+"question": "Personal Needs",
+"score": -3.5,
+"justification": "The actions were highly driven by the teacher’s personal needs, likely tied to power or control, though not strictly essential for survival."
+},
+{
+"question": "Personal Wants",
+"score": -4.0,
+"justification": "The teacher’s behavior was extremely focused on fulfilling personal wants, such as sexual gratification and illicit thrills, prioritizing these over all else."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -3.0,
+"justification": "The teacher risked significant future consequences, including legal punishment and loss of reputation, indicating major sacrifices to her future self."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -1.5,
+"justification": "Multiple students were impacted, likely between 5 to 50, based on the nature of the charges involving a classroom setting."
+},
+{
+"question": "Type of Sacrifice",
+"score": -3.5,
+"justification": "Students faced extreme losses, including loss of freedom and severe emotional harm, due to the exploitative and traumatic nature of the actions."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -3.5,
+"justification": "The psychological and emotional impact on students is likely lifelong, given the severity of the exploitation."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.2,
+"justification": "The actions affected vulnerable children, warranting the highest moral weight due to their dependency and reduced capacity to defend themselves."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 1.0,
+"justification": "The teacher was fully conscious of her actions and their implications, as the exploitation required deliberate planning and execution."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.0,
+"justification": "The actions required no immediate sacrifice, as they aligned with the teacher’s desires, offering instant gratification without discomfort."
+},
+{
+"question": "Habit vs Will Power",
+"score": 3.0,
+"justification": "The actions were highly wilful, requiring significant effort to plan and execute, overriding ethical norms rather than being habitual."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 1.0,
+"justification": "The exploitation was fully intentional, with clear deliberate intent to engage in illegal and unethical behavior."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Power: The teacher sought dominance over students. Will to Lust: Sexual desires drove the exploitation. Will to Exploitation: She leveraged her authority for personal gain."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "wrong",
+"justification": "From a deontological perspective, the action is wrong because it violates fundamental duties to protect students, respect their dignity, and uphold legal and ethical obligations as a teacher."
+},
+{
+"question": "Utilitarianism",
+"score": "wrong",
+"justification": "From a utilitarian perspective, the action is wrong as it caused immense harm to students—emotional trauma and loss of trust—far outweighing any fleeting pleasure the teacher gained. From a negative utilitarian view, it is especially condemnable because it directly increased suffering for vulnerable individuals with no broader benefit."
+},
+{
+"question": "Virtue Ethics",
+"score": "wrong",
+"justification": "From an Aristotelian perspective, the action reflects vices like exploitation, lust, and dishonesty, showing a lack of virtues such as justice, integrity, and compassion, indicating a deeply flawed character."
+}
+]
+}
+],
+"finalPosition": {
+"x": -7.5,
+"y": -13.8,
+"z": 5.0
+}
+}
+},
+{
+"id": "Inappropriate_Teacher_Gemini",
+"type": "base",
+"metadata": {
+"title": "Inappropriate Teacher Conduct",
+"description": "A teacher exploited students, paid kids $100 for sex, and bribed them with drugs after giving out her Snapchat.",
+"category": "Abuse of Power",
+"llmSource": {
+"model": "Gemini",
+"version": "1.0",
+"provider": "Google"
+},
+"classification": {
+"type": "evil",
+"justification": "The teacher's actions demonstrate a profound disregard for the well-being and safety of vulnerable individuals (students), involving exploitation, corruption, and a severe abuse of power and trust. These actions cause extreme harm and are universally condemned."
+},
+"url": "https://www.the-sun.com/news/12899563/carissa-jane-smith-dixon-missouri-teacher/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "The actions utterly failed to fulfill societal needs; they actively violated justice, fairness, and trust in institutions, causing significant harm to the common good and the integrity of the educational system."
+},
+{
+"question": "Others Needs",
+"score": 0.0,
+"justification": "The actions were not aimed at fulfilling others' essential needs; instead, they exploited the vulnerabilities and unmet needs of students, causing severe psychological and physical harm, and undermining their safety and well-being."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "The actions did not focus on fulfilling others' non-essential wants; any 'wants' experienced by the students (e.g., money, drugs) were predatory inducements that caused profound harm, rather than genuine fulfillment of desires."
+},
+{
+"question": "Personal Needs",
+"score": -4.0,
+"justification": "The teacher's actions were likely driven by highly distorted or perverse personal 'needs,' such as a compulsive drive for control, gratification, or power, which are fundamentally misaligned with healthy self-actualization or genuine safety."
+},
+{
+"question": "Personal Wants",
+"score": -4.0,
+"justification": "The actions were entirely focused on fulfilling the teacher's extreme personal wants for illicit gratification, financial gain (from exploitation, even if money was given to students, it was part of a transaction for the teacher's benefit), power, and perverse desires, demonstrating a complete disregard for others."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -3.9,
+"justification": "The teacher's actions demonstrably led to severe, negative impacts on her future, including legal repercussions, job loss, imprisonment, loss of reputation, and potentially profound psychological distress, significantly compromising her identity, goals, and well-being."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -1.5,
+"justification": "The scenario states 'students' (plural) were exploited, implying more than one but likely fewer than 50. The immediate circle of impact would be the affected students and their families."
+},
+{
+"question": "Type of Sacrifice",
+"score": -4.0,
+"justification": "The students experienced extreme losses including exploitation, abuse, potential psychological trauma, and exposure to drugs, representing severe harm and loss of innocence/safety."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -3.9,
+"justification": "The impact on the exploited students, involving sexual exploitation and drug exposure, would likely have lifelong psychological, emotional, and potentially physical consequences."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.2,
+"justification": "The action profoundly impacted vulnerable humans (children/students), warranting the highest moral weight due to their increased dependency, reduced capacity to defend themselves, and the severe nature of the harm inflicted."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 1.0,
+"justification": "The teacher's actions (giving Snapchat, paying for sex, bribing with drugs) were highly calculated, manipulative, and intentional, indicating full consciousness of their nature and implications."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.0,
+"justification": "The actions did not require any sacrifice from the teacher's present self; rather, they were pursuits of immediate gratification of desires, involving no discomfort or overcoming of impulses for a greater good."
+},
+{
+"question": "Habit vs Will Power",
+"score": 4.0,
+"justification": "The actions involved deliberate planning and manipulation, requiring significant willpower and intentionality to execute such predatory behaviors, indicating a highly willful and calculated pattern of conduct, rather than an impulsive one."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 1.0,
+"justification": "The entire pattern of behavior, from giving Snapchat to paying for sex and bribing with drugs, was entirely intentional and premeditated, designed to achieve specific illicit outcomes."
+}
+]
+}
+],
+"finalPosition": {
+"x": -8.0,
+"y": -15.96,
+"z": 7.0
+}
+}
+},
+{
+"id": "Inappropriate_Teacher_Llama",
+"type": "base",
+"metadata": {
+"title": "Inappropriate Teacher Conduct",
+"description": "A teacher exploited students, paid kids $100 for sex, and bribed them with drugs after giving out her Snapchat.",
+"category": "Abuse of Power",
+"llmSource": {
+"model": "Llama",
+"version": "1.0",
+"provider": "Meta AI"
+},
+"classification": {
+"type": "Evil",
+"justification": "The teacher's actions demonstrate a severe exploitation of power, manipulation, and harm towards vulnerable students, which is morally reprehensible and evil."
+},
+"url": "https://www.the-sun.com/news/12899563/carissa-jane-smith-dixon-missouri-teacher/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "The action does not fulfill societal needs; instead, it undermines trust in educational institutions and exploits vulnerable individuals."
+},
+{
+"question": "Others Needs",
+"score": 0.0,
+"justification": "The action does not address others' needs; instead, it causes harm and exploitation to the students involved."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "The action does not fulfill others' wants in a positive manner; instead, it manipulates and exploits students for personal gain."
+},
+{
+"question": "Personal Needs",
+"score": -3.5,
+"justification": "The action is heavily motivated by personal needs, such as sexual gratification and potentially financial gain through exploitation."
+},
+{
+"question": "Personal Wants",
+"score": -4.0,
+"justification": "The action is extremely motivated by personal wants, including desires for power, control, and potentially financial gain through exploitation."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -4.0,
+"justification": "The action requires extreme sacrifices for the future self, including potential legal consequences, damage to professional reputation, and long-term psychological impact."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -2.0,
+"justification": "The action affects a moderate number of individuals, including the students involved and potentially their families."
+},
+{
+"question": "Type of Sacrifice",
+"score": -4.0,
+"justification": "The action results in extreme losses for the students, including potential physical and emotional harm, exploitation, and long-term psychological impact."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -4.0,
+"justification": "The sacrifice has an irreversible impact, potentially affecting the students' lives forever."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.2,
+"justification": "The action impacts vulnerable humans, specifically children, reflecting additional moral weight due to their increased dependency and reduced capacity to defend themselves."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 1.0,
+"justification": "The teacher is fully conscious of their actions and consequences, deliberately choosing to exploit and harm students."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.0,
+"justification": "The action does not require meaningful sacrifice from the present self; instead, it provides short-term gratification for the teacher."
+},
+{
+"question": "Habit vs Will Power",
+"score": 4.0,
+"justification": "The action is fully wilful, requiring exceptional willpower to deliberately exploit and harm students over a period of time."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 1.0,
+"justification": "The action is fully intentional, as the teacher deliberately chooses to exploit and harm students."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Possible Wills at play include the Will to Power (driven by a desire for control and dominance over others) and the Will to Lust (in seeking sexual gratification through exploitation). Justification: The teacher's actions suggest a strong desire for power and control over vulnerable students, as well as a prioritization of personal desires over the well-being of others."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Wrong",
+"justification": "From a deontological perspective, the action is wrong because it violates the moral rules of respect for persons, non-maleficence (do no harm), and the duty to protect vulnerable individuals."
+},
+{
+"question": "Utilitarianism",
+"score": "Wrong",
+"justification": "From a utilitarian perspective, the action is wrong because it causes significant harm and suffering to the students involved, outweighing any potential benefits. From a negative utilitarian perspective, the action is also wrong because it prioritizes the teacher's desires over the well-being and safety of the students, leading to significant harm and suffering."
+},
+{
+"question": "Virtue Ethics",
+"score": "Vice",
+"justification": "From an Aristotelian perspective, the vices of exploitation, lust, and lack of empathy are at play. The teacher's actions demonstrate a severe lack of virtue and character, prioritizing personal desires over the well-being and safety of others."
+}
+]
+}
+],
+"finalPosition": {
+"x": -7.5,
+"y": -16.8,
+"z": 6.0
+}
+}
+},
+{
+"id": "Inappropriate_Teacher_Deepseek",
+"type": "base",
+"metadata": {
+"title": "Inappropriate Teacher Conduct",
+"description": "A teacher exploited students, paid kids $100 for sex, and bribed them with drugs after giving out her Snapchat.",
+"category": "Abuse of Power",
+"llmSource": {
+"model": "Deepseek",
+"version": "1",
+"provider": "DeepSeek"
+},
+"classification": {
+"type": "evil",
+"justification": "The action involves deliberate exploitation of vulnerable children, severe harm to victims, and fundamental violations of societal trust and professional ethics."
+},
+"url": "https://www.the-sun.com/news/12899563/carissa-jane-smith-dixon-missouri-teacher/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "The action actively undermines justice, trust in institutions, and child protection norms."
+},
+{
+"question": "Others Needs",
+"score": 0.0,
+"justification": "It violates students' safety, belonging, and esteem needs through exploitation."
+},
+{
+"question": "Others Wants",
+"score": 1.0,
+"justification": "Provision of money/drugs superficially addresses wants but as tools for exploitation."
+},
+{
+"question": "Personal Needs",
+"score": -0.5,
+"justification": "No essential survival needs served; driven by non-essential desires."
+},
+{
+"question": "Personal Wants",
+"score": -3.5,
+"justification": "Primarily motivated by sexual gratification, power, and immediate desires."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -4.0,
+"justification": "Career loss and legal consequences fundamentally alter life trajectory."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -0.5,
+"justification": "Multiple students directly harmed (estimated 1-5)."
+},
+{
+"question": "Type of Sacrifice",
+"score": -3.5,
+"justification": "Severe psychological/developmental harm to victims."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -3.5,
+"justification": "Trauma likely to cause lifelong impact on victims."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.2,
+"justification": "Vulnerable children targeted, maximizing moral weight."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 1.0,
+"justification": "Premeditated actions (sharing Snapchat, payments) show full awareness."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.0,
+"justification": "No sacrifice of comfort; actions served immediate desires."
+},
+{
+"question": "Habit vs Will Power",
+"score": 3.0,
+"justification": "Significant willpower needed to overcome professional/ethical constraints."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 1.0,
+"justification": "Deliberate grooming and exploitation strategy."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Power (domination of vulnerable individuals), Will to Replicate (sexual gratification), Will to Immediate Gratification (prioritizing impulses over consequences)"
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Wrong",
+"justification": "Violates multiple categorical imperatives: exploiting children as means to an end, breaking professional duties, and undermining societal trust in educators."
+},
+{
+"question": "Utilitarianism",
+"score": "Wrong",
+"justification": "Negative utilitarianism: The immense suffering inflicted on victims (trauma, exploitation) outweighs any fleeting pleasure. The teacher's actions cause net harm through institutional distrust and victim trauma. Classical utilitarianism: No societal benefit compensates for the severe harm to vulnerable individuals and erosion of educational integrity."
+},
+{
+"question": "Virtue Ethics",
+"score": "Vices",
+"justification": "Exhibited extreme recklessness, lust, injustice, and corruption—fundamentally opposing virtues like temperance, integrity, and compassion expected of educators."
+}
+]
+}
+],
+"finalPosition": {
+"x": -3.0,
+"y": -13.8,
+"z": 5.0
+}
+}
+},
+{
+"id": "Israeli_Teen_Cemetery_Desecration_GPT",
+"type": "base",
+"metadata": {
+"title": "Israeli teenagers desecrating a Christian cemetery",
+"description": "Israeli teenagers desecrate a Christian cemetery in Palestinian Territories.",
+"category": "Public Behaviour",
+"llmSource": {
+"model": "GPT",
+"version": "2024-06",
+"provider": "OpenAI"
+},
+"classification": {
+"type": "evil",
+"justification": "The teenagers engaged in a deliberate and unjustified attack on sacred ground, demonstrating religious hatred, violating communal peace, and causing long-term cultural and emotional harm. The act was fully intentional, involved no self-sacrifice, and aimed to insult and degrade others based on their religion and ethnicity."
+},
+"url": "https://www.reddit.com/r/IsraelCrimes/comments/1h3zyn9/israeli_settlers_desecrate_a_christian_cemetery/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "The action directly undermines societal values such as respect, coexistence, and protection of religious freedom, promoting injustice and intergroup hostility."
+},
+{
+"question": "Others Needs",
+"score": 0.0,
+"justification": "Desecrating graves violates the dignity and emotional well-being of those connected to the dead; it fulfills no legitimate needs of others."
+},
+{
+"question": "Others Wants",
+"score": 0.3,
+"justification": "If there was an aim to impress peers or express tribal dominance, it marginally aligned with perceived group-based wants, though in a deeply antisocial manner."
+},
+{
+"question": "Personal Needs",
+"score": -1.5,
+"justification": "The teenagers may have acted from unmet needs like identity or belonging, but they pursued them destructively, undermining real growth or esteem."
+},
+{
+"question": "Personal Wants",
+"score": -2.7,
+"justification": "The action appears driven by impulses such as hatred, thrill-seeking, or peer approval—none of which justify violating sacred spaces."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -1.7,
+"justification": "This action may result in legal consequences or long-term reputational damage, particularly if identities are revealed publicly."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -1.5,
+"justification": "Assuming a small community is directly affected, including families of the deceased and local religious authorities, between 5 to 50 people were meaningfully impacted."
+},
+{
+"question": "Type of Sacrifice",
+"score": -2.0,
+"justification": "Emotional, cultural, and spiritual harm were inflicted, particularly through the desecration of graves—a profound violation in most cultures."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -2.8,
+"justification": "The damage is long-term—graves may take months or years to restore, while emotional and spiritual wounds may endure indefinitely."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.1,
+"justification": "The individuals affected are grieving families and communities—vulnerable in their bereavement and deeply harmed by this action."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.9,
+"justification": "The teenagers were likely aware of what they were doing and the symbolic nature of the act, though some may have lacked full understanding of consequences."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.0,
+"justification": "There was no self-sacrifice; the action was impulsively or spitefully satisfying to the actors."
+},
+{
+"question": "Habit vs Will Power",
+"score": 1.0,
+"justification": "The action likely stemmed from group norms, indoctrination, or social habit rather than deep conviction or struggle against moral conflict."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 1.0,
+"justification": "The act was clearly intentional—desecrating graves requires purposeful effort, not accidental behavior."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Status – they may have sought approval or dominance within their group.\nWill to Power – the action expressed dominance over an out-group.\nWill to Belong – they may have been conforming to tribalism or peer pressure.\nWill to Anger or Revenge – possibly arising from perceived grievances or inherited animosity.\nAbsence of Will to Empathy or Understanding – essential in preventing such actions."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "",
+"justification": "From a deontological perspective, the action is clearly wrong—it violates duties of respect for others, sanctity of the dead, and the moral imperative to treat others as ends, not means to tribal expression."
+},
+{
+"question": "Utilitarianism",
+"score": "",
+"justification": "From a utilitarian standpoint, the action yields vastly more harm than good. It inflicted emotional distress on many and created or reinforced intergroup hatred without delivering any meaningful benefit to society or the actors. From a negative utilitarian lens, it is especially reprehensible—causing avoidable suffering to vulnerable individuals (those grieving) for no meaningful gain. The pain inflicted far outweighs any personal satisfaction or group loyalty gained by the perpetrators."
+},
+{
+"question": "Virtue Ethics",
+"score": "",
+"justification": "From a virtue ethics view, the action embodied cowardice, arrogance, cruelty, and disrespect—clear vices. There was no courage, justice, humility, or compassion in this act. The teenagers acted from base impulses, not reasoned virtue, and thereby degraded their character."
+}
+]
+}
+],
+"finalPosition": {
+"x": -3.9,
+"y": -8.8,
+"z": 2.9
+}
+}
+},
+{
+"id": "Israeli_Teen_Cemetery_Desecration_Claude",
+"type": "base",
+"metadata": {
+"title": "Israeli teenagers desecrating a Christian cemetery",
+"description": "Israeli teenagers desecrate a Christian cemetery in Palestinian Territories.",
+"category": "Public Behaviour",
+"llmSource": {
+"model": "Claude",
+"version": "20250514",
+"provider": "Anthropic"
+},
+"classification": {
+"type": "sin",
+"justification": "This represents a serious moral transgression involving the violation of sacred space and religious dignity, causing significant harm to vulnerable communities while serving no constructive purpose."
+},
+"url": "https://www.reddit.com/r/IsraelCrimes/comments/1h3zyn9/israeli_settlers_desecrate_a_christian_cemetery/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.1,
+"justification": "Actively undermines societal needs by destroying religious tolerance, respect for sacred spaces, and peaceful coexistence between communities in an already tense region."
+},
+{
+"question": "Others Needs",
+"score": 0.1,
+"justification": "Completely fails to address others' essential needs and instead violates fundamental needs for dignity, religious respect, and cultural belonging."
+},
+{
+"question": "Others Wants",
+"score": 0.1,
+"justification": "No focus on fulfilling others' wants; the action disregards the religious and cultural desires of the affected Christian community."
+},
+{
+"question": "Personal Needs",
+"score": -2.5,
+"justification": "Moderately driven by personal psychological needs such as group belonging, identity expression, or feeling empowered through destructive acts."
+},
+{
+"question": "Personal Wants",
+"score": -2.2,
+"justification": "Motivated by personal wants including peer recognition, expressing dominance over another community, thrill-seeking behavior, or satisfying destructive impulses."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -2.5,
+"justification": "Moderate sacrifice to future self including potential legal consequences, social ostracism, damage to personal character and reputation, and contribution to cycle of intolerance."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -2.5,
+"justification": "Affects the local Christian community, broader Palestinian community, interfaith relations, and potentially inflames tensions affecting hundreds to thousands of people."
+},
+{
+"question": "Type of Sacrifice",
+"score": -2.5,
+"justification": "Major losses including violation of sacred space, psychological trauma to community members, spiritual harm, and damage to religious and cultural heritage."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -2.5,
+"justification": "Medium-term impact lasting years as the community deals with the violation of their sacred space, potential ongoing fear, and damaged interfaith relationships."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "Affects adult humans in a vulnerable political situation, representing the standard baseline for human moral consideration."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.7,
+"justification": "Partially conscious - teenagers likely aware they are violating religious space but may not fully comprehend the broader implications and harm to interfaith relations."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.1,
+"justification": "Minimal present self-sacrifice; acting on destructive impulses rather than overcoming immediate desires for the sake of higher principles or respect for others."
+},
+{
+"question": "Habit vs Will Power",
+"score": 0.3,
+"justification": "Largely habitual group behavior driven by peer dynamics and learned intolerance rather than deliberate willpower or moral reasoning."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.8,
+"justification": "Mostly intentional - they deliberately chose to desecrate the cemetery, though the action may have been influenced by group dynamics and peer pressure."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Dominate - asserting power over another religious community through destructive acts. Will to Conform - following group behavior and peer expectations. Will to Transgress - violating social and religious boundaries for thrill or expression. Will to Tribal Identity - expressing in-group loyalty through hostility toward out-groups. Will to Destruction - engaging in harmful acts that tear down rather than build up."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Wrong",
+"justification": "From a deontological perspective, this action is morally wrong because it violates fundamental duties of respect for persons and their religious beliefs. The teenagers failed to treat the Christian community as ends in themselves, instead treating their sacred space merely as an object for their own expression or gratification. This behavior cannot be universalized - if everyone desecrated others' religious sites, the very concept of religious freedom and mutual respect would collapse. The action violates categorical duties to respect others' dignity, religious freedom, and property rights. Kant's emphasis on respecting the rational autonomy of all persons is directly contradicted by this disrespectful and harmful behavior."
+},
+{
+"question": "Utilitarianism",
+"score": "Wrong",
+"justification": "From a classical utilitarian perspective, this action is morally wrong because it creates significant harm while generating no meaningful positive utility. The teenagers may have experienced temporary satisfaction or group bonding, but this is vastly outweighed by the psychological trauma inflicted on the Christian community, the damage to interfaith relations, the escalation of tensions in an already volatile region, and the broader harm to social cohesion. The action contributes to cycles of mistrust and retaliation that generate more suffering in the long term. From a negative utilitarian perspective, this action is clearly wrong because it significantly increases suffering in the world. The desecration causes immediate psychological and spiritual pain to the affected religious community, creates fear and insecurity, damages important cultural heritage, and contributes to broader patterns of religious intolerance and conflict. The action creates new forms of suffering that would not have existed otherwise, while contributing nothing to reduce existing suffering. In a region already marked by conflict, such acts multiply tensions and make peaceful coexistence more difficult."
+},
+{
+"question": "Virtue Ethics",
+"score": "Wrong",
+"justification": "From an Aristotelian virtue ethics perspective, this action demonstrates multiple vices while completely lacking in virtue. The teenagers displayed disrespect rather than reverence, intolerance rather than justice, destructiveness rather than prudence, and cruelty rather than compassion. They failed to exhibit any of the virtues that promote human flourishing - wisdom, courage, temperance, or justice. Instead, they demonstrated the vices of hubris (excessive pride), intemperance (lack of self-control), and injustice (harming others without cause). This behavior represents an extreme rather than the virtuous mean between extremes. While complete passivity in the face of genuine wrongs might be cowardice, destructive acts against innocent communities represent the opposite extreme of unjustified aggression. The virtuous mean would involve finding constructive ways to address grievances while respecting the dignity and rights of all communities involved."
+}
+]
+}
+],
+"finalPosition": {
+"x": -4.4,
+"y": -10.0,
+"z": 1.9
+}
+}
+},
+{
+"id": "Israeli_Teen_Cemetery_Desecration_GPT",
+"type": "base",
+"metadata": {
+"title": "Israeli teenagers desecrating a Christian cemetery",
+"description": "Israeli teenagers desecrate a Christian cemetery in Palestinian Territories.",
+"category": "Public Behaviour",
+"llmSource": {
+"model": "Grok",
+"version": "3.0",
+"provider": "xAI"
+},
+"classification": {
+"type": "vice",
+"justification": "The action involves intentional disrespect and harm to a sacred site, reflecting vices such as cruelty and lack of respect, without any altruistic or societal benefit."
+},
+"url": "https://www.reddit.com/r/IsraelCrimes/comments/1h3zyn9/israeli_settlers_desecrate_a_christian_cemetery/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "The act of desecrating a cemetery undermines societal harmony and respect for religious and cultural institutions, directly opposing societal needs such as justice and respect for persons."
+},
+{
+"question": "Others Needs",
+"score": 0.0,
+"justification": "Desecrating a cemetery does not fulfill any essential needs of others, such as safety or belonging, and instead causes harm to the community."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "The action does not aim to satisfy others' non-essential wants like recognition or reward; it is a destructive act with no benefit to others."
+},
+{
+"question": "Personal Needs",
+"score": -1.0,
+"justification": "The act might reflect a slight focus on personal needs like esteem or belonging within a peer group, but it is not essential for survival or core well-being."
+},
+{
+"question": "Personal Wants",
+"score": -3.0,
+"justification": "The desecration likely stems from personal wants such as thrill-seeking or asserting power, indicating a moderate to high self-motivated focus."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -2.0,
+"justification": "The act could lead to moderate future consequences like legal trouble or social stigma, impacting the teenagers' future plans or self-concept."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -2.0,
+"justification": "The desecration likely affects 5 to 50 individuals, including families of the deceased and the local Christian community."
+},
+{
+"question": "Type of Sacrifice",
+"score": -2.0,
+"justification": "The action causes moderate losses, such as emotional distress and a sense of violation, to those connected to the cemetery."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -2.5,
+"justification": "The emotional and cultural harm from the desecration could persist for years, affecting the community medium-term."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "The impact is on adult humans with average autonomy, specifically the Christian community in the Palestinian Territories."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.7,
+"justification": "The teenagers were likely partially conscious of their actions, though influenced by impulsivity or peer dynamics."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.0,
+"justification": "The act required no immediate sacrifice, aligning with their impulses rather than demanding discomfort or effort."
+},
+{
+"question": "Habit vs Will Power",
+"score": 2.0,
+"justification": "The action required moderate willpower to carry out, suggesting a deliberate effort beyond mere habit."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 1.0,
+"justification": "The desecration was fully intentional, a deliberate choice rather than an accident."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Status: The teenagers might have sought recognition within their peer group. Will to Rebellion: The act could reflect defiance against societal norms. Will to Destruction: A drive to cause harm or chaos may have influenced their behavior."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "",
+"justification": "From a deontological perspective, the action is wrong because it violates the duty to respect others' property and religious beliefs, breaching moral rules against desecrating sacred sites regardless of the consequences."
+},
+{
+"question": "Utilitarianism",
+"score": "",
+"justification": "From a utilitarian perspective, the action is wrong because it results in greater harm than good; the emotional distress and cultural violation inflicted on the community far outweigh any fleeting satisfaction the teenagers might have experienced. From a negative utilitarian viewpoint, which prioritizes minimizing suffering, the action is particularly wrong as it increases pain and conflict without providing any significant benefit, exacerbating harm in an already tense region."
+},
+{
+"question": "Virtue Ethics",
+"score": "",
+"justification": "From an Aristotelian perspective, the action reflects vices such as disrespect, cruelty, and lack of reverence, as it shows a failure to cultivate virtues like respect for others, kindness, or justice, instead indulging in destructive and dishonorable behavior."
+}
+]
+}
+],
+"finalPosition": {
+"x": -4.0,
+"y": -8.5,
+"z": 3.7
+}
+}
+},
+{
+"id": "Israeli_Teen_Cemetery_Desecration_Gemini",
+"type": "base",
+"metadata": {
+"title": "Israeli teenagers desecrating a Christian cemetery",
+"description": "Israeli teenagers desecrate a Christian cemetery in Palestinian Territories.",
+"category": "Public Behaviour",
+"llmSource": {
+"model": "Gemini",
+"version": "1.0",
+"provider": "Google"
+},
+"classification": {
+"type": "evil",
+"justification": "The act of desecrating a cemetery, particularly one tied to a religious group and in a politically charged territory, demonstrates a clear intent to cause harm, disrespect, and distress to others based on their identity. This action is malicious, hateful, and contributes to broader societal conflict, thus categorizing it as evil."
+},
+"url": "https://www.reddit.com/r/IsraelCrimes/comments/1h3zyn9/israeli_settlers_desecrate_a_christian_cemetery/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "The action of desecrating a cemetery directly violates societal needs for respect, peace, and cultural preservation, actively undermining justice, fairness, and trust between communities."
+},
+{
+"question": "Others' Needs",
+"score": 0.0,
+"justification": "The action was not aimed at fulfilling others' essential needs; instead, it directly caused distress, violated the spiritual and emotional needs of the Christian community, and created an unsafe environment."
+},
+{
+"question": "Others' Wants",
+"score": 0.0,
+"justification": "The action was not focused on fulfilling others' non-essential wants. Its intent was to cause harm, offense, and distress, directly opposing any positive 'wants' others might have."
+},
+{
+"question": "Personal Needs",
+"score": -1.0,
+"justification": "While potentially driven by a misguided sense of belonging or identity within a specific group (a need for acceptance), the method of achieving this by attacking others' sacred sites is highly destructive and misdirected, barely touching on true personal needs."
+},
+{
+"question": "Personal Wants",
+"score": -3.5,
+"justification": "The action was highly focused on fulfilling personal wants related to a sense of power, dominance, group conformity, and possibly a perverse form of social recognition or rebellion within their peer group, at the expense of others' well-being."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -3.0,
+"justification": "Engaging in such destructive behavior can lead to serious legal consequences, social ostracization, and a tarnished reputation, significantly impacting the teenagers' future aspirations, identity, and long-term well-being."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -2.5,
+"justification": "The desecration of a Christian cemetery affects the entire Christian community associated with it, impacting potentially thousands of individuals who hold the site sacred, though not necessarily directly impacting 5000+ individuals at a deep personal level beyond emotional distress."
+},
+{
+"question": "Type of Sacrifice",
+"score": -3.0,
+"justification": "The community affected experienced major losses, including emotional distress, violation of religious freedom, and damage to significant cultural and religious property, leading to a loss of peace and security."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -2.5,
+"justification": "The emotional and symbolic impact of cemetery desecration can last for years or even generations for the affected community, leading to medium-term to long-term distress and increased inter-group tensions."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "The action directly impacted adult humans (and their descendants) through the desecration of their sacred resting places, causing profound emotional and psychological distress to individuals and an entire community."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 1.0,
+"justification": "The act of desecration is a deliberate and conscious choice, implying full awareness of the actions being performed and their offensive consequences to the affected community."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.0,
+"justification": "The action did not require any sacrifice from the teenagers' present selves; it was an act of aggression and vandalism, likely driven by immediate gratification of destructive impulses or group pressure, without any discomfort or effort to curb such impulses."
+},
+{
+"question": "Habit vs Will Power",
+"score": 3.0,
+"justification": "The act required a deliberate decision to target and damage a sacred site, indicating a significant exertion of will to perform the malicious act, rather than an automatic or impulsive response. It was not a 'good' use of willpower, but it was willful."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 1.0,
+"justification": "The desecration of a cemetery is by its very nature a highly intentional act, aimed at causing distress and damage to a specific religious and cultural site."
+}
+]
+}
+],
+"finalPosition": {
+"x": -4.5,
+"y": -11.0,
+"z": 5.0
+}
+}
+},
+{
+"id": "Israeli_Teen_Cemetery_Desecration_Llama",
+"type": "base",
+"metadata": {
+"title": "Israeli teenagers desecrating a Christian cemetery",
+"description": "Israeli teenagers desecrate a Christian cemetery in Palestinian Territories.",
+"category": "Public Behaviour",
+"llmSource": {
+"model": "Llama",
+"version": "1.0",
+"provider": "Meta AI"
+},
+"classification": {
+"type": "Vice",
+"justification": "The action demonstrates a lack of respect, empathy, and understanding towards others' beliefs and cultural heritage."
+},
+"url": "https://www.reddit.com/r/IsraelCrimes/comments/1h3zyn9/israeli_settlers_desecrate_a_christian_cemetery/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "The action does not fulfill societal needs; instead, it creates tension and disrespect towards different religious groups."
+},
+{
+"question": "Others Needs",
+"score": 0.0,
+"justification": "The action does not address others' needs; instead, it causes harm and disrespect to the Christian community."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "The action does not fulfill others' wants; instead, it disregards the desires of the Christian community for respect and peace."
+},
+{
+"question": "Personal Needs",
+"score": -2.0,
+"justification": "The action is moderately motivated by personal needs, such as the need for excitement or rebellion."
+},
+{
+"question": "Personal Wants",
+"score": -3.0,
+"justification": "The action is heavily motivated by personal wants, such as the desire to provoke or offend others."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -2.0,
+"justification": "The action requires moderate sacrifices for the future self, including potential legal consequences and damage to reputation."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -2.0,
+"justification": "The action affects a moderate number of individuals, including the Christian community and potentially others in the area."
+},
+{
+"question": "Type of Sacrifice",
+"score": -2.5,
+"justification": "The action results in major losses for the Christian community, including damage to their cemetery and feelings of disrespect."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -3.0,
+"justification": "The sacrifice has a long-term impact, potentially lasting for years or even generations."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "The action impacts adult humans with average autonomy and health, including the Christian community and potentially others in the area."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 1.0,
+"justification": "The teenagers are fully conscious of their actions and consequences, deliberately choosing to desecrate the cemetery."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.0,
+"justification": "The action does not require meaningful sacrifice from the present self; instead, it may provide short-term excitement or satisfaction."
+},
+{
+"question": "Habit vs Will Power",
+"score": 3.0,
+"justification": "The action is highly wilful, requiring strong effort to overcome impulses and choose a course of action that disregards others' beliefs and cultural heritage."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 1.0,
+"justification": "The action is fully intentional, as the teenagers deliberately choose to desecrate the cemetery."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Possible Wills at play include the Will to Provoke (driven by a desire to challenge or offend others) and the Will to Dominate (in seeking to assert power or control over others). Justification: The teenagers' actions suggest a strong desire to provoke and dominate others, disregarding their beliefs and cultural heritage."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Wrong",
+"justification": "From a deontological perspective, the action is wrong because it violates the moral rule of respect for others' beliefs and cultural heritage."
+},
+{
+"question": "Utilitarianism",
+"score": "Wrong",
+"justification": "From a utilitarian perspective, the action is wrong because it causes harm and suffering to the Christian community, outweighing any potential benefits. From a negative utilitarian perspective, the action is also wrong because it prioritizes the desires of the teenagers over the well-being and respect of others."
+},
+{
+"question": "Virtue Ethics",
+"score": "Vice",
+"justification": "From an Aristotelian perspective, the vices of disrespect, intolerance, and lack of empathy are at play. The teenagers' actions demonstrate a lack of virtue and character, prioritizing their own desires over the well-being and respect of others."
+}
+]
+}
+],
+"finalPosition": {
+"x": -5.0,
+"y": -9.5,
+"z": 5.0
+}
+}
+},
+{
+"id": "Israeli_Teen_Cemetery_Desecration_Deepseek",
+"type": "base",
+"metadata": {
+"title": "Israeli teenagers desecrating a Christian cemetery",
+"description": "Israeli teenagers desecrate a Christian cemetery in Palestinian Territories.",
+"category": "Public Behaviour",
+"llmSource": {
+"model": "Deepseek",
+"version": "1",
+"provider": "DeepSeek"
+},
+"classification": {
+"type": "vice",
+"justification": "The action demonstrates character flaws of intolerance and disrespect while causing significant cultural harm, though lacking extreme personal malice or irreversible physical harm."
+},
+"url": "https://www.reddit.com/r/IsraelCrimes/comments/1h3zyn9/israeli_settlers_desecrate_a_christian_cemetery/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "Undermines social harmony, religious respect, and inter-community trust."
+},
+{
+"question": "Others Needs",
+"score": 0.0,
+"justification": "Violates community's safety and esteem needs through cultural desecration."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "No fulfillment of victims' wants; causes emotional distress instead."
+},
+{
+"question": "Personal Needs",
+"score": -0.5,
+"justification": "No core survival needs addressed; driven by non-essential motivations."
+},
+{
+"question": "Personal Wants",
+"score": -2.5,
+"justification": "Motivated by desires for group belonging, expression of prejudice, or thrill-seeking."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -1.5,
+"justification": "Potential legal/social consequences may affect future opportunities."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -1.0,
+"justification": "Directly impacts multiple families and community members (5-50 people)."
+},
+{
+"question": "Type of Sacrifice",
+"score": -1.8,
+"justification": "Significant emotional/cultural harm requiring restoration efforts."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -2.0,
+"justification": "Medium-term impact through lasting emotional distress and community trauma."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "Adult humans affected with standard moral weighting."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.8,
+"justification": "Likely aware of actions but possibly underestimating consequences."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.3,
+"justification": "Minor inconvenience/risk during vandalism but no significant sacrifice."
+},
+{
+"question": "Habit vs Will Power",
+"score": 2.0,
+"justification": "Moderate willpower needed to overcome social inhibitions against desecration."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.9,
+"justification": "Deliberate vandalism though potentially influenced by group dynamics."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Belong (peer conformity), Will to Power (domination expression), Will to Express (ideological hostility)"
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Wrong",
+"justification": "Violates categorical imperatives of respecting human dignity and sacred spaces while treating religious communities as means rather than ends."
+},
+{
+"question": "Utilitarianism",
+"score": "Wrong",
+"justification": "Classical: Creates profound community distress without comparable benefits, reducing net happiness. Negative: Inflicts preventable suffering through cultural desecration and intergroup hostility."
+},
+{
+"question": "Virtue Ethics",
+"score": "Vices",
+"justification": "Demonstrated intolerance, irreverence, and injustice - directly opposing virtues of respect, piety, and civic friendship essential for pluralistic societies."
+}
+]
+}
+],
+"finalPosition": {
+"x": -3.0,
+"y": -6.3,
+"z": 4.0
+}
+}
+},
+{
+"id": "Mental_Health_Crisis_Impacting_Power_Grid_GPT",
+"type": "base",
+"metadata": {
+"title": "Mental Health Crisis Impacting Power Grid",
+"description": "A woman in a mental health crisis climbs a high-voltage transformer, leading to power outages and requiring emergency response.",
+"category": "Public Behaviour",
+"llmSource": {
+"model": "GPT",
+"version": "2024-06",
+"provider": "OpenAI"
+},
+"classification": {
+"type": "morally grey",
+"justification": "The action caused widespread disruption and risk, but was driven by a loss of mental stability rather than conscious malice or intent to harm. While others were impacted, the agent's compromised state limits full moral responsibility, and the situation calls for empathy and systemic intervention rather than blame."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/1gs4rez/800_utah_homes_lose_power_after_woman_climbs/"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "The action had no alignment with societal needs—it disrupted public safety and stability, likely violating norms and expectations for civil behaviour."
+},
+{
+"question": "Others Needs",
+"score": 0.2,
+"justification": "While the intention wasn’t to help others, the crisis may draw attention to systemic failures in mental health support, possibly leading to future reforms indirectly."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "The action provided no benefit to others’ wants or desires, and likely frustrated or harmed public convenience and safety."
+},
+{
+"question": "Personal Needs",
+"score": -3.4,
+"justification": "The behaviour appears driven by acute psychological distress, likely aiming (however unconsciously) to resolve unbearable internal suffering or disconnection—indicating intense unmet safety or esteem needs."
+},
+{
+"question": "Personal Wants",
+"score": -0.6,
+"justification": "There’s no clear evidence of seeking personal gratification, status, or external reward—any wants involved were likely overwhelmed by the crisis state."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -3.5,
+"justification": "The action could have resulted in death, lasting trauma, legal repercussions, or institutionalisation—seriously compromising long-term well-being and identity."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -2.0,
+"justification": "800 households were affected by the outage, conservatively estimating 2–3 persons per household, impacting thousands of individuals."
+},
+{
+"question": "Type of Sacrifice",
+"score": -1.5,
+"justification": "Most individuals lost electricity for hours, affecting routine tasks, potentially medical devices, and economic productivity."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -1.2,
+"justification": "The blackout and emergency response likely caused short-term disruptions over several hours to a day, with minimal long-term consequences."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "The individuals affected were mostly average adult humans, though some could include vulnerable individuals reliant on power for essential functions."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.3,
+"justification": "The woman’s mental state likely diminished her conscious awareness of the consequences or the gravity of the situation, making her action partially unconscious."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 1.4,
+"justification": "Climbing a transformer in a state of crisis involves significant present self-harm, physical danger, and discomfort—even if not framed consciously as sacrifice."
+},
+{
+"question": "Habit vs Will Power",
+"score": 1.5,
+"justification": "This was not habitual behaviour, but also not clearly a case of willpower—more likely a reactive, disoriented decision under psychological distress."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.5,
+"justification": "The action was partially intentional in its motor execution, but the broader consequences and implications were likely not considered due to impaired cognition."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Escape – likely seeking to escape unbearable mental or emotional pain.\nWill to Be Seen – possibly a subconscious cry for help or visibility.\nWill to Homeostasis – the act may have been a desperate attempt to regulate emotional imbalance.\nAbsence of Will to Empathy – due to mental crisis, awareness of others’ harm may have been unavailable."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "",
+"justification": "From a deontological view, the action was wrong—it violated duties of safety, respect for others' well-being, and basic civil order. However, if the actor lacked rational agency due to mental health, full moral culpability may be diminished, making it a tragic rather than malicious violation of duty."
+},
+{
+"question": "Utilitarianism",
+"score": "",
+"justification": "From a utilitarian perspective, the immediate consequences were harmful: large-scale power outages, emergency resource usage, and risk to the individual. The net suffering likely outweighs any benefit, even indirectly raising awareness of mental health issues. \n\nFrom a negative utilitarian lens, the action is still problematic, as it imposed unnecessary suffering on others and the individual, but it raises systemic issues. The broader utilitarian solution lies in mental health prevention and intervention—not punishing the actor."
+},
+{
+"question": "Virtue Ethics",
+"score": "",
+"justification": "From an Aristotelian perspective, the individual did not act from virtue but rather from crisis. The action lacks temperance, courage, or practical wisdom. However, the absence of vice (like spite, greed, or pride) means it is best seen as a failure of psychological flourishing rather than a moral failure of character."
+}
+]
+}
+],
+"finalPosition": {
+"x": -3.8,
+"y": -8.2,
+"z": 3.7
+}
+}
+},
+{
+    "id": "Mental_Health_Crisis_Impacting_Power_Grid_Claude",
+    "type": "base",
+    "metadata": {
+    "title": "Mental Health Crisis Impacting Power Grid",
+    "description": "A woman in a mental health crisis climbs a high-voltage transformer, leading to power outages and requiring emergency response.",
+    "category": "Public Behaviour",
+"llmSource": {
+"model": "Claude",
+"version": "20250514",
+"provider": "Anthropic"
+},
+"classification": {
+"type": "morally grey",
+"justification": "This involves a person with severely diminished capacity due to mental health crisis. While the action caused significant public disruption, moral culpability is mitigated by the individual's compromised mental state and need for help rather than judgment."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/1gs4rez/800_utah_homes_lose_power_after_woman_climbs/?share_id=DlYzil71nDfVMtB9RG5Tg&utm_content=1&utm_medium=android_app&utm_name=androidcss&utm_source=share&utm_term=5"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.1,
+"justification": "The action disrupted societal needs by causing widespread power outages, emergency resource allocation, and public safety concerns rather than promoting societal wellbeing."
+},
+{
+"question": "Others Needs",
+"score": 0.1,
+"justification": "Not focused on fulfilling others' essential needs; the crisis-driven behavior inadvertently caused harm to community members who lost power and essential services."
+},
+{
+"question": "Others Wants",
+"score": 0.1,
+"justification": "No focus on others' wants; the action was entirely driven by personal psychological crisis rather than consideration for others' desires or comfort."
+},
+{
+"question": "Personal Needs",
+"score": -3.5,
+"justification": "Extremely focused on personal needs during mental health crisis - likely seeking escape from psychological pain, desperate attempt for help, or responding to altered mental state."
+},
+{
+"question": "Personal Wants",
+"score": -0.5,
+"justification": "Minimally focused on wants; this was driven by desperate psychological needs rather than desires for recognition, pleasure, or material gain."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -4.0,
+"justification": "Extreme sacrifice to future self through life-threatening behavior that could result in death, severe injury, legal consequences, and complete disruption of life trajectory."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -2.5,
+"justification": "Affected 800 households plus emergency responders, utility workers, and broader community members who experienced power outages and service disruptions."
+},
+{
+"question": "Type of Sacrifice",
+"score": -0.8,
+"justification": "Minor to moderate losses for others including temporary loss of power, inconvenience, potential spoiled food, and disrupted daily activities, but no life-threatening consequences for others."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -0.5,
+"justification": "Short-term impact for most community members as power was likely restored within hours to days, though emergency response costs and inconvenience were immediate."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.1,
+"justification": "The individual was in a vulnerable mental health state warranting slightly higher moral consideration, while others affected were generally adults with average autonomy."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.2,
+"justification": "Largely unconscious action driven by mental health crisis with severely impaired judgment, limited awareness of consequences, and compromised rational decision-making capacity."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 1.5,
+"justification": "Extreme present self-sacrifice by placing oneself in mortal danger on high-voltage equipment, enduring significant physical discomfort and terror in crisis state."
+},
+{
+"question": "Habit vs Will Power",
+"score": 0.3,
+"justification": "Entirely crisis-driven behavior with no meaningful willpower exercised; actions driven by psychological emergency state rather than deliberate choice or habit."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.6,
+"justification": "Partially intentional - there was some intent to climb the transformer, but likely without full comprehension of consequences or rational decision-making due to mental health crisis."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Escape - seeking to flee from overwhelming psychological pain or distress. Will to Survive (paradoxically) - potentially seeking help or attention in crisis state. Will to End Suffering - possibly suicidal ideation driving dangerous behavior. Will to Be Seen - crisis behavior often involves desperate attempts to communicate distress. Will to Transcend - escaping current reality through extreme action during psychological emergency."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Morally Complex",
+"justification": "From a deontological perspective, this situation is morally complex rather than simply right or wrong. While the action violated duties to respect others' property and safety (climbing utility infrastructure, causing public disruption), the individual's severely diminished capacity due to mental health crisis fundamentally alters moral culpability. Kant's framework requires rational autonomy for full moral responsibility, and someone in psychological crisis lacks this capacity. The categorical imperative cannot meaningfully apply to actions taken during mental health emergencies where rational decision-making is compromised. The focus should be on the duty of society to provide mental health support rather than moral judgment of crisis behavior."
+},
+{
+"question": "Utilitarianism",
+"score": "Wrong but Mitigated",
+"justification": "From a classical utilitarian perspective, the action was wrong because it decreased overall wellbeing by causing widespread power outages, emergency response costs, public inconvenience, and safety risks that clearly outweighed any personal relief the individual may have sought. However, this conclusion must be heavily mitigated by the context of mental health crisis, where normal cost-benefit reasoning doesn't apply to someone in psychological emergency. The negative utility was significant but unintentional from someone lacking capacity for rational choice. From a negative utilitarian perspective, the action increased suffering through public disruption and emergency response, but this perspective also emphasizes the need to address the root cause - the individual's mental health crisis and suffering that led to this desperate behavior. The focus should be on preventing such crises through better mental health support systems rather than simply judging the crisis behavior itself."
+},
+{
+"question": "Virtue Ethics",
+"score": "Beyond Virtue Assessment",
+"justification": "From an Aristotelian virtue ethics perspective, this situation transcends traditional virtue/vice analysis because it involves someone whose capacity for virtue is temporarily suspended due to mental health crisis. Aristotle emphasized that virtue requires rational deliberation and choice, which are severely compromised during psychological emergencies. Rather than displaying vice, the individual was experiencing a medical/psychological emergency that prevented normal moral agency. The relevant virtues here belong to society's response - compassion, wisdom in providing mental health support, and justice in treating mental health as a medical rather than moral issue. The individual's behavior reflects suffering and illness rather than character deficiency. True virtue lies in creating systems that prevent such crises and respond with care rather than judgment when they occur."
+}
+]
+}
+],
+"finalPosition": {
+"x": -3.7,
+"y": -8.6,
+"z": 2.6
+}
+}
+},
+{
+    "id": "Mental_Health_Crisis_Impacting_Power_Grid_Grok",
+    "type": "base",
+    "metadata": {
+    "title": "Mental Health Crisis Impacting Power Grid",
+    "description": "A woman in a mental health crisis climbs a high-voltage transformer, leading to power outages and requiring emergency response.",
+    "category": "Public Behaviour",
+"llmSource": {
+"model": "Grok",
+"version": "3.0",
+"provider": "xAI"
+},
+"classification": {
+"type": "morally grey",
+"justification": "The action caused significant harm and disruption to over 800 homes, but the woman's impaired mental state during the crisis reduces her moral culpability, rendering the action neither wholly right nor wrong."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/1gs4rez/800_utah_homes_lose_power_after_woman_climbs/?share_id=DlYzil71nDfVMtB9RG5Tg&utm_content=1&utm_medium=android_app&utm_name=androidcss&utm_source=share&utm_term=5"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "The action disrupted societal infrastructure by causing power outages, showing no focus on fulfilling societal needs like justice, fairness, or the common good."
+},
+{
+"question": "Others Needs",
+"score": 0.0,
+"justification": "The action did not address others' essential needs such as safety or belonging; instead, it compromised public safety and caused widespread inconvenience."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "There is no evidence that the action aimed to fulfill others' non-essential wants like recognition or reward; it appears driven by her personal mental state."
+},
+{
+"question": "Personal Needs",
+"score": -1.0,
+"justification": "The action may have been slightly motivated by a distorted perception of personal needs, such as safety or belonging, arising from her mental health crisis."
+},
+{
+"question": "Personal Wants",
+"score": -2.0,
+"justification": "The action was moderately focused on personal wants, such as seeking attention or expressing distress, though influenced by her impaired mental condition."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -3.5,
+"justification": "Climbing a high-voltage transformer posed a severe risk of injury or death, representing a major sacrifice of her future health and well-being."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -2.5,
+"justification": "The power outage impacted over 800 homes, affecting a significant number of individuals, falling within the 50 to 5,000 range."
+},
+{
+"question": "Type of Sacrifice",
+"score": -1.5,
+"justification": "The affected individuals experienced moderate losses, such as temporary loss of power, inconvenience, and disruption of daily activities."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -1.0,
+"justification": "The power outage lasted for hours, constituting a short-term impact of less than a day on those affected."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "The action affected adult humans with average autonomy and health, as the outage impacted residential households."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.5,
+"justification": "Due to her mental health crisis, her awareness of the actions and their consequences was likely partially impaired, indicating partial consciousness."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 1.0,
+"justification": "Climbing the transformer required physical effort and immediate risk, reflecting a moderate sacrifice of her present comfort and safety."
+},
+{
+"question": "Habit vs Will Power",
+"score": 3.0,
+"justification": "The action was impulsive rather than habitual, requiring significant willpower to overcome natural safety instincts."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.7,
+"justification": "The act was likely intentional in the moment, but her mental health crisis suggests it was not fully deliberate or aligned with conscious intent."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Survive: Her life-threatening action suggests this will was overridden by her crisis. Will to Homeostasis: The mental health crisis likely disrupted her internal balance. Will to Status: Climbing the transformer may have been an unconscious attempt to gain attention. Will to Create: The act could reflect a drive to express her distress dramatically."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "wrong",
+"justification": "From a deontological perspective, the action is wrong because it violates intrinsic duties to not harm oneself or others and to respect public property, regardless of intent or mental state; climbing the transformer endangered her life and disrupted the community, breaching these obligations."
+},
+{
+"question": "Utilitarianism",
+"score": "wrong",
+"justification": "From a utilitarian perspective, the action is wrong because it resulted in greater overall harm than good; it caused power outages for over 800 homes, leading to inconvenience and potential safety risks, with no discernible benefit to outweigh the negative consequences. The woman's mental health crisis does not alter the outcome-focused assessment that the action disrupted the well-being of many without a positive contribution to happiness or utility.\n\nFrom a negative utilitarian perspective, which prioritizes minimizing suffering, the action is also wrong; it increased suffering by causing disruption and distress to a large number of people, while any potential reduction in the woman’s own suffering (e.g., through expression or attention) was negligible compared to the collective harm inflicted, making it morally unjustifiable even under this framework."
+},
+{
+"question": "Virtue Ethics",
+"score": "wrong",
+"justification": "From an Aristotelian virtue ethics perspective, the action reflects vices such as recklessness, due to the unnecessary risk to her life and others’ well-being, and lack of self-control, as it stemmed from an impulsive response to a mental health crisis rather than rational deliberation; no virtues like courage (which requires a noble purpose) or justice (which involves fairness to others) are evident, as the act disregarded the community’s needs and safety."
+}
+]
+}
+],
+"finalPosition": {
+"x": -3.0,
+"y": -8.5,
+"z": 5.2
+}
+}
+},
+{
+    "id": "Mental_Health_Crisis_Impacting_Power_Grid_Gemini",
+    "type": "base",
+    "metadata": {
+    "title": "Mental Health Crisis Impacting Power Grid",
+    "description": "A woman in a mental health crisis climbs a high-voltage transformer, leading to power outages and requiring emergency response.",
+    "category": "Public Behaviour",
+"llmSource": {
+"model": "Gemini",
+"version": "1.0",
+"provider": "Google"
+},
+"classification": {
+"type": "morally grey",
+"justification": "The woman's actions, while causing negative outcomes for others (power outage) and herself (danger, emergency response), are understood to be a manifestation of a mental health crisis. This implies a diminished capacity for rational moral agency. Therefore, it's not a clear-cut case of vice, sin, or evil, as the intent to cause harm is likely absent. It's a situation that requires compassion and intervention rather than moral condemnation, placing it in a 'morally grey' area."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/1gs4rez/800_utah_homes_lose_power_after_woman_climbs/?share_id=DlYzil71DDfVMtB9RG5Tg&utm_content=1&utm_medium=android_app&utm_name=androidcss&utm_source=share&utm_term=5"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "The action was not focused on fulfilling societal needs. Instead, it unintentionally created a public hazard, disrupted essential services, and required emergency resources, directly opposing societal well-being."
+},
+{
+"question": "Others' Needs",
+"score": 0.0,
+"justification": "The action was not aimed at fulfilling others' essential needs. The power outage directly compromised the safety and physiological needs (e.g., heating, cooling, medical device power) of the affected homes."
+},
+{
+"question": "Others' Wants",
+"score": 0.0,
+"justification": "The action was not focused on fulfilling others' non-essential wants. The disruption caused by the power outage would have negatively impacted convenience, communication, and other non-essential aspects of life for the affected individuals."
+},
+{
+"question": "Personal Needs",
+"score": -3.5,
+"justification": "The action was highly motivated by unmet personal essential needs, likely stemming from a severe mental health crisis impacting safety, psychological stability, or a desperate attempt to resolve intense internal discomfort."
+},
+{
+"question": "Personal Wants",
+"score": 0.0,
+"justification": "Given the context of a mental health crisis, the action was not focused on fulfilling non-essential personal wants like financial gain, social recognition, or power. It appears to be beyond a rational pursuit of 'wants'."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -3.8,
+"justification": "The action involved extreme risk to personal health and life, and potential legal consequences, which would fundamentally redefine the individual's life direction, identity, and future well-being, indicating a major to extreme sacrifice."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -2.0,
+"justification": "The scenario states '800 homes lose power,' indicating an impact on 800 to 5,000 individuals, assuming multiple people per household."
+},
+{
+"question": "Type of Sacrifice",
+"score": -1.0,
+"justification": "For those affected by the power outage, the primary sacrifice was moderate losses such as temporary discomfort, loss of time, and potential minor financial costs (e.g., spoiled food)."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -1.0,
+"justification": "The power outage was likely short-term, lasting hours to less than a day, resulting in a short-term impact for the affected individuals."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "The individuals primarily impacted were adult humans with average autonomy and health, experiencing inconvenience and temporary disruption rather than direct physical harm."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.5,
+"justification": "The individual was in a mental health crisis, suggesting partial consciousness. While the physical action was carried out, their rational awareness of the risks and consequences was likely impaired."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 1.8,
+"justification": "Climbing a high-voltage transformer is an extremely dangerous act, requiring significant physical effort and exposing the individual to severe harm or death, thus representing an extreme sacrifice of immediate comfort and safety."
+},
+{
+"question": "Habit vs Will Power",
+"score": 3.0,
+"justification": "Climbing a transformer is clearly not a habitual behavior. It required a strong, albeit crisis-driven, effort to perform such an unusual and dangerous action, indicating a highly willful act, not a habitual one."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.5,
+"justification": "The physical act of climbing was intentional, but the overarching intent to cause a power outage or harm herself (or others) is questionable due to the mental health crisis, making it partially intentional as influenced by internal distress rather than deliberate malice."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "wrong",
+"justification": "From a deontological perspective, the action is wrong because it violates duties regardless of the outcome. The woman's act of climbing a high-voltage transformer directly infringes upon the duty to maintain public safety and avoid causing undue disruption to essential services. While her mental state is a mitigating factor in terms of moral culpability, the action itself violates the categorical imperative that one should not act in a way that creates danger or deprives others of necessary resources, as it cannot be universalized without leading to chaos. The focus is on the inherent nature of the act, which is dangerous and disruptive."
+},
+{
+"question": "Utilitarianism",
+"score": "wrong",
+"justification": "From a utilitarian perspective, the action is wrong because it resulted in a net negative outcome for the greatest number of people. The power outage directly caused inconvenience, discomfort, and potential safety risks (e.g., loss of medical equipment, heating/cooling) for 800 homes, affecting thousands of individuals. Additionally, significant public resources were expended for emergency response, and the woman herself was in extreme danger. While the woman's suffering might have driven her actions, the overall sum of pain and disruption caused by her act far outweighs any potential, albeit misguided, positive outcome for her, or for the collective good. \n\nFrom a negative utilitarian perspective, the action is also wrong as it clearly increased the total amount of suffering and negative experiences. The loss of power, the disruption to daily life, the stress on emergency services, and the immediate danger to the woman herself all contribute to a significant increase in negative utility. The primary goal of negative utilitarianism is to minimize suffering, and this event unequivocally led to more suffering rather than less."
+},
+{
+"question": "Virtue Ethics",
+"score": "vice",
+"justification": "From an Aristotelian perspective, the woman's action, while tragic and stemming from a crisis, demonstrates a significant lack of practical wisdom (phronesis) and self-control. Her actions are not indicative of virtuous character traits such as prudence, responsibility, or social concern. Instead, they manifest vices related to recklessness and a breakdown of rational functioning. While the intent might not be malicious, the act itself is a clear departure from what a virtuous person, in a sound state of mind, would do to maintain their own well-being and contribute positively to their community. The scenario highlights a profound internal dis-integration rather than the flourishing (eudaimonia) that virtue ethics aims for."
+}
+]
+}
+],
+"finalPosition": {
+"x": -3.5,
+"y": -7.8,
+"z": 5.8
+}
+}
+},
+{
+    "id": "Mental_Health_Crisis_Impacting_Power_Grid_GPT",
+    "type": "base",
+    "metadata": {
+    "title": "Mental Health Crisis Impacting Power Grid",
+    "description": "A woman in a mental health crisis climbs a high-voltage transformer, leading to power outages and requiring emergency response.",
+    "category": "Public Behaviour",
+"llmSource": {
+"model": "Llama",
+"version": "1.0",
+"provider": "Meta AI"
+},
+"classification": {
+"type": "Morally Grey",
+"justification": "The action is a result of a mental health crisis, which complicates moral judgment and requires consideration of the individual's state and potential mitigating factors."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/1gs4rez/800_utah_homes_lose_power_after_woman_climbs/?share_id=DlYzil71nDfVMtB9RG5Tg&utm_content=1&utm_medium=android_app&utm_name=androidcss&utm_source=share&utm_term=5"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.5,
+"justification": "The action does not directly fulfill societal needs; instead, it creates a crisis that requires emergency response."
+},
+{
+"question": "Others Needs",
+"score": 0.5,
+"justification": "The action does not directly address others' needs; instead, it causes inconvenience and potential harm to those affected by the power outage."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "The action does not fulfill others' wants; instead, it disrupts their daily lives and causes distress."
+},
+{
+"question": "Personal Needs",
+"score": -3.0,
+"justification": "The action is heavily motivated by personal needs, likely related to the woman's mental health crisis and potential desperation for attention or help."
+},
+{
+"question": "Personal Wants",
+"score": -2.0,
+"justification": "The action is moderately motivated by personal wants, potentially including a desire for control or attention in a crisis situation."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -2.5,
+"justification": "The action may require moderate sacrifices for the future self, including potential legal consequences and impact on mental health treatment."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -2.0,
+"justification": "The action affects a moderate number of individuals, including those in the surrounding area who experience power outages."
+},
+{
+"question": "Type of Sacrifice",
+"score": -1.5,
+"justification": "The action results in moderate losses for those affected, including inconvenience and potential economic loss."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -2.0,
+"justification": "The sacrifice has a medium-term impact, potentially lasting days or weeks."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "The action impacts adult humans with average autonomy and health, as well as potentially vulnerable individuals who may be more severely affected by the power outage."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.5,
+"justification": "The woman's actions may be partially conscious, influenced by her mental health crisis and potential impulsivity."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 0.0,
+"justification": "The action does not require meaningful sacrifice from the present self; instead, it may provide temporary relief or attention."
+},
+{
+"question": "Habit vs Will Power",
+"score": 1.0,
+"justification": "The action is slightly wilful, requiring minimal effort to climb the transformer, but may be driven more by desperation or crisis than deliberate intent."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.5,
+"justification": "The action is partially intentional, as the woman may not fully understand the consequences of her actions due to her mental health crisis."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Possible Wills at play include the Will to Survive (driven by a desire for safety and security) and the Will to Attention (in seeking help or attention during a mental health crisis). Justification: The woman's actions suggest a strong desire for attention or help, potentially driven by her mental health crisis."
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Wrong",
+"justification": "From a deontological perspective, the action is wrong because it violates the moral rule of respecting the safety and well-being of others, as well as potentially putting herself at risk."
+},
+{
+"question": "Utilitarianism",
+"score": "Wrong",
+"justification": "From a utilitarian perspective, the action is wrong because it causes harm and inconvenience to others, outweighing any potential benefits. From a negative utilitarian perspective, the action is also wrong because it increases suffering for those affected by the power outage."
+},
+{
+"question": "Virtue Ethics",
+"score": "Vice",
+"justification": "From an Aristotelian perspective, the vices of recklessness and lack of self-control are at play. The woman's actions demonstrate a lack of virtue and character, prioritizing her immediate needs over the well-being and safety of others."
+}
+]
+}
+],
+"finalPosition": {
+"x": -4.0,
+"y": -8.0,
+"z": 2.0
+}
+}
+},
+{
+    "id": "Mental_Health_Crisis_Impacting_Power_Grid_Deepseek",
+    "type": "base",
+    "metadata": {
+    "title": "Mental Health Crisis Impacting Power Grid",
+    "description": "A woman in a mental health crisis climbs a high-voltage transformer, leading to power outages and requiring emergency response.",
+    "category": "Public Behaviour",
+"llmSource": {
+"model": "DeepSeek",
+"version": "1",
+"provider": "DeepSeek"
+},
+"classification": {
+"type": "morally grey",
+"justification": "The action stems from impaired mental capacity causing significant societal harm, creating tension between personal crisis responsibility and societal consequences."
+},
+"url": "https://www.reddit.com/r/PublicFreakout/comments/1gs4rez/800_utah_homes_lose_power_after_woman_climbs/?share_id=DlYzil71nDfVMtB9RG5Tg&utm_content=1&utm_medium=android_app&utm_name=androidcss&utm_source=share&utm_term=5"
+},
+"survey": {
+"dimensions": [
+{
+"id": "Ends",
+"axis": "x",
+"label": "Motivation",
+"questions": [
+{
+"question": "Societal Needs",
+"score": 0.0,
+"justification": "Action disrupted essential infrastructure, undermining societal safety and stability."
+},
+{
+"question": "Others Needs",
+"score": 0.0,
+"justification": "Caused harm through power loss without addressing others' essential needs."
+},
+{
+"question": "Others Wants",
+"score": 0.0,
+"justification": "Created inconvenience without fulfilling any community desires."
+},
+{
+"question": "Personal Needs",
+"score": -3.2,
+"justification": "Driven by acute psychological survival needs during mental health crisis."
+},
+{
+"question": "Personal Wants",
+"score": -0.5,
+"justification": "No evidence of non-essential personal desires motivating action."
+}
+]
+},
+{
+"id": "Means",
+"axis": "y",
+"label": "Sacrifice",
+"questions": [
+{
+"question": "Degree of Future Self-Sacrifice",
+"score": -3.5,
+"justification": "Severe legal/health consequences potentially altering life trajectory."
+},
+{
+"question": "Number of Individuals Affected",
+"score": -2.5,
+"justification": "800 households impacted (est. 2,000-3,000 people)."
+},
+{
+"question": "Type of Sacrifice",
+"score": -1.2,
+"justification": "Moderate losses: property damage, economic costs, and temporary service disruption."
+},
+{
+"question": "Duration of Sacrifice",
+"score": -1.0,
+"justification": "Short-term impact lasting days to weeks for most affected."
+},
+{
+"question": "Magnitude of Life Impacted",
+"score": 1.0,
+"justification": "Standard moral weight for adult humans affected."
+}
+]
+},
+{
+"id": "Character",
+"axis": "z",
+"label": "Habit > Will Power",
+"questions": [
+{
+"question": "Unconscious vs Conscious",
+"score": 0.4,
+"justification": "Likely impaired awareness due to mental health crisis."
+},
+{
+"question": "Degree of Present Self-Sacrifice",
+"score": 1.8,
+"justification": "Extreme physical risk and discomfort during climbing."
+},
+{
+"question": "Habit vs Will Power",
+"score": 0.5,
+"justification": "Impulsive action requiring minimal willpower."
+},
+{
+"question": "Unintentional vs Intentional",
+"score": 0.5,
+"justification": "Partially intentional but compromised by mental state."
+},
+{
+"question": "Wills at Play",
+"score": null,
+"justification": "Will to Escape Pain (fleeing psychological distress), Will to Self-Preservation (cry for help through extreme action), Will to Homeostasis (attempt to restore psychological equilibrium)"
+}
+]
+},
+{
+"id": "PhilosophicalAnalysis",
+"axis": null,
+"label": "Philosophical Perspectives",
+"questions": [
+{
+"question": "Deontology",
+"score": "Wrong",
+"justification": "Violates duties to preserve public safety and respect communal property, though diminished responsibility due to mental impairment complicates absolute judgment."
+},
+{
+"question": "Utilitarianism",
+"score": "Wrong",
+"justification": "Classical: Significant harm to community outweighs individual relief. Negative: Created preventable suffering through infrastructure damage without proportional benefit."
+},
+{
+"question": "Virtue Ethics",
+"score": "Vices mitigated",
+"justification": "Manifests recklessness and poor judgment (vices), but mental crisis context reduces culpability and reflects absence of virtues like prudence and civic responsibility."
+}
+]
+}
+],
+"finalPosition": {
+"x": -3.7,
+"y": -8.2,
+"z": 3.2
 }
 }
 }
