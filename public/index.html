@@ -1318,6 +1318,13 @@
                     processJsonData([]);
                 });
         
+
+
+
+
+
+
+
                 function processJsonData(data) {
                     console.log("API response data:", data);
                     console.log("Response type:", typeof data);
@@ -1327,31 +1334,19 @@
                     dataPoints = [];
                     let displayPoints = [];  // For parent scenarios
 
-                    // Handle the data structure correctly
+                    // Data is already the scenarios array, no need to flatten from nested structure
                     let flattenedScenarios = [];
+                    // Remove duplicates by using a Set of IDs
                     const processedIds = new Set();
 
-                    // Check if data is already an array of scenarios
+                    // Since data is already the scenarios array, process it directly
                     if (Array.isArray(data)) {
-                        // Data is already an array of scenarios
                         data.forEach(scenario => {
                             if (!processedIds.has(scenario.id)) {
                                 processedIds.add(scenario.id);
                                 flattenedScenarios.push(scenario);
                             }
                         });
-                    } else if (data && Array.isArray(data.scenarios)) {
-                        // Data has a scenarios property
-                        data.scenarios.forEach(scenario => {
-                            if (!processedIds.has(scenario.id)) {
-                                processedIds.add(scenario.id);
-                                flattenedScenarios.push(scenario);
-                            }
-                        });
-                    } else {
-                        // Handle other potential structures
-                        console.error("Unexpected data structure");
-                        return;
                     }
 
                     console.log("Flattened scenarios (unique):", flattenedScenarios);
@@ -1396,9 +1391,9 @@
                             parentId: scenario.parentId || null,
                             relationToBase: metadata.relationToBase || null,
                             // Add the ethics scores if available in your data structure:
-                            deontologyScore: survey.deontologyScore,
-                            utilitarianismScore: survey.utilitarianismScore,
-                            virtueEthicsScore: survey.virtueEthicsScore,
+                            deontologyScore: survey.deontologyScore,           // Adjust as needed
+                            utilitarianismScore: survey.utilitarianismScore,       // Adjust as needed
+                            virtueEthicsScore: survey.virtueEthicsScore,            // Adjust as needed
                             rawData: scenario  // Store the original scenario data for value extraction
                         };
 
@@ -1406,9 +1401,9 @@
                         console.log(`Created point object for: ${point.scenarioTitle}`);
                         console.log("Point has rawData:", !!point.rawData);
                         if (point.rawData) {
-                            console.log("Has survey:", !!point.rawData.survey);
+                            console.log("rawData has survey:", !!point.rawData.survey);
                             if (point.rawData.survey) {
-                                console.log("Has dimensions:", !!point.rawData.survey.dimensions);
+                                console.log("survey has dimensions:", !!point.rawData.survey.dimensions);
                                 if (point.rawData.survey.dimensions) {
                                     console.log("dimensions count:", point.rawData.survey.dimensions.length);
                                     // Check for Values questions
@@ -1457,24 +1452,20 @@
                     // Update filters using parent scenarios only
                     const uniqueScenarios = [...new Set(displayPoints.map(p => p.scenarioTitle))];
                     const uniqueModels = [...new Set(displayPoints.map(p => p.llmName))];
-                    
                     // Extract unique values from display points
                     const uniqueValuesSet = new Set();
                     displayPoints.forEach(point => {
-                        console.log(`\nExtracting values from: ${point.scenarioTitle}`);
                         if (point.rawData && point.rawData.survey && point.rawData.survey.dimensions) {
                             point.rawData.survey.dimensions.forEach(dimension => {
                                 if (dimension.questions) {
                                     const valuesQuestion = dimension.questions.find(q => q.question === 'Values');
                                     if (valuesQuestion && valuesQuestion.score) {
-                                        console.log("Found Values question with score:", valuesQuestion.score);
                                         let values = [];
                                         if (Array.isArray(valuesQuestion.score)) {
                                             values = valuesQuestion.score;
                                         } else if (typeof valuesQuestion.score === 'string') {
                                             values = valuesQuestion.score.split(',').map(v => v.trim());
                                         }
-                                        console.log("Extracted values:", values);
                                         values.forEach(value => uniqueValuesSet.add(value));
                                     }
                                 }
@@ -1487,7 +1478,6 @@
                     console.log("Unique scenarios:", uniqueScenarios);
                     console.log("Unique models:", uniqueModels);
                     console.log("Unique values:", uniqueValues);
-                    console.log("Total unique values found:", uniqueValues.length);
 
                     document.getElementById('modelFilter').innerHTML = uniqueModels.map(model =>
                         `<option value="${model}">${model}</option>`
