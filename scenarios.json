@@ -16600,7 +16600,7 @@
 },
 {
     "question": "Values",
-    "score": ["Ambition, Commitment, Excellence, Performance, Determination", "Fragility, Insecurity"],
+    "score": ["Ambition","Commitment","Excellence","Performance","Determination","Fragility","Insecurity"],
     "justification": "Positive values reflect athletic dedication (Ambition, Excellence) and competitive drive (Commitment, Determination). Negative values stem from visible emotional fragility and insecurity during the breakdown."
   }
 ]
@@ -16910,7 +16910,7 @@
 },
 {
     "question": "Values",
-    "score": ["Love, Thoughtfulness, Creativity, Inclusiveness, Family, Caring, Empathy, Generosity, Kindness, Adaptability, Innovation, Responsibility, Sensitivity", ""],
+    "score": ["Love","Thoughtfulness","Creativity","Inclusiveness","Family","Caring","Empathy","Generosity","Kindness","Adaptability","Innovation","Responsibility","Sensitivity"],
     "justification": "The cake maker demonstrates profound positive values including love and thoughtfulness in considering the child's allergies, creativity and adaptability in developing an alternative solution, empathy and sensitivity to ensure the child feels included, and generosity in the time and effort invested to bring joy to a family member."
   }
 ]
@@ -18762,7 +18762,7 @@
 },
 {
     "question": "Values",
-    "score": ["Persistence, Determination (misdirected)", "Dishonesty, Deceit, Greed, Corruption, Unethical behaviour, Exploitation, Selfishness, Untrustworthiness, Injustice, Fraud, Theft, Manipulation"],
+    "score": ["Persistence","Determination","Dishonesty","Deceit","Greed","Corruption","Unethical behaviour","Exploitation","Selfishness","Untrustworthiness","Injustice","Fraud","Theft","Manipulation"],
     "justification": "While the veteran may have shown persistence and determination in maintaining the deception, these were completely misdirected toward criminal ends. The action primarily demonstrates severe negative values including systematic dishonesty, greed in stealing $1.3 million, corruption of a system meant to help disabled veterans, and exploitation of public trust and resources intended for those with genuine need."
   }
 ]
@@ -18913,7 +18913,7 @@
 },
 {
     "question": "Values",
-    "score": ["Dishonesty (3.5)", "Greed (3.0)", "Selfishness (3.0)"],
+    "score": ["Dishonesty","Greed","Selfishness"],
     "justification": "Dishonesty: The veteran deliberately lied about blindness to defraud the VA. Greed: The action was driven by a desire for unearned financial gain. Selfishness: The fraud prioritized personal benefit over others' needs."
   }
 ]
@@ -20302,7 +20302,7 @@
 },
 {
     "question": "Values",
-    "score": ["Community, Spirituality, Joy, Playfulness, Health, Prosperity, Tradition"],
+    "score": ["Community","Spirituality","Joy","Playfulness","Health","Prosperity","Tradition"],
     "justification": "The festival centers on Community bonding through collective participation. Spirituality is evident in temple blessings. Joy and Playfulness define the dung-throwing as a celebratory act. Health and Prosperity are core beliefs driving the tradition, reflecting cultural values passed through Tradition."
   }
 ]
@@ -21233,7 +21233,7 @@
 },
 {
     "question": "Values",
-    "score": ["Love, Devotion, Patience, Generosity, Selflessness, Kindness, Commitment, Empathy"],
+    "score": ["Love","Devotion","Patience","Generosity","Selflessness","Kindness","Commitment","Empathy"],
     "justification": "The partner demonstrates Love through intimate care for their loved one; Devotion and Commitment in sustaining a multi-year effort; Patience through enduring hair growth; Generosity and Selflessness in donating a personal resource; Kindness and Empathy by addressing emotional distress caused by alopecia."
   }
 ]
@@ -21540,7 +21540,7 @@
 },
 {
     "question": "Values",
-    "score": ["Assertiveness, Self-respect, Dignity (defending personal honor)", "Impulsiveness, Recklessness, Lack of restraint, Poor judgment, Unprofessionalism, Escalation, Irresponsibility"],
+    "score": ["Assertiveness","Self-respect","Dignity","Impulsiveness","Recklessness","Lack of restraint","Poor judgment","Unprofessionalism","Escalation","Irresponsibility"],
     "justification": "While the employee may have been defending their dignity after being assaulted and humiliated, their response demonstrated significant negative values including impulsiveness rather than professional restraint, recklessness in escalating the situation, and irresponsibility toward other guests and workplace protocols. The reaction was understandably human but professionally inappropriate."
   }
 ]
@@ -23065,7 +23065,7 @@
 },
 {
     "question": "Values",
-    "score": ["Exploitation, Manipulation, Corruption, Lust, Dishonesty, Greed, Irresponsibility"],
+    "score": ["Exploitation","Manipulation","Corruption","Lust","Dishonesty","Greed","Irresponsibility"],
     "justification": "The teacher engages in Exploitation by abusing authority for sexual access; Manipulation through bribes (money/drugs) and social media grooming; Corruption of professional role; Lust-driven predation; Dishonesty in concealing intentions; Greed for power/control; and extreme Irresponsibility toward minors."
   }
 ]
@@ -23986,7 +23986,7 @@
 },
 {
     "question": "Values",
-    "score": ["Disrespect, Intolerance, Prejudice, Cruelty, Irresponsibility"],
+    "score": ["Disrespect","Intolerance","Prejudice","Cruelty","Irresponsibility"],
     "justification": "The teenagers exhibit Disrespect by violating sacred burial grounds; Intolerance toward religious minorities; Prejudice in targeting Christian sites; Cruelty through deliberate desecration causing community anguish; and Irresponsibility by ignoring ethical boundaries."
   }
 ]
@@ -24902,7 +24902,7 @@
 },
 {
     "question": "Values",
-    "score": ["Recklessness, Impulsiveness, Desperation"],
+    "score": ["Recklessness","Impulsiveness","Desperation"],
     "justification": "The woman demonstrates Recklessness through dangerous actions; Impulsiveness by acting without consideration of consequences; and implicit Desperation reflecting mental distress. These override potential positive values like Courage due to context—her mental state diminishes agency, making values ambiguous."
   }
 ]

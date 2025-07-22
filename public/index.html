@@ -1334,21 +1334,20 @@
                     dataPoints = [];
                     let displayPoints = [];  // For parent scenarios
 
-                    // In processJsonData function, modify the flattening step:
+                    // Data is already the scenarios array, no need to flatten from nested structure
                     let flattenedScenarios = [];
                     // Remove duplicates by using a Set of IDs
                     const processedIds = new Set();
 
-                    data.forEach(doc => {
-                        if (doc.scenarios && Array.isArray(doc.scenarios)) {
-                            doc.scenarios.forEach(scenario => {
-                                if (!processedIds.has(scenario.id)) {
-                                    processedIds.add(scenario.id);
-                                    flattenedScenarios.push(scenario);
-                                }
-                            });
-                        }
-                    });
+                    // Since data is already the scenarios array, process it directly
+                    if (Array.isArray(data)) {
+                        data.forEach(scenario => {
+                            if (!processedIds.has(scenario.id)) {
+                                processedIds.add(scenario.id);
+                                flattenedScenarios.push(scenario);
+                            }
+                        });
+                    }
 
                     console.log("Flattened scenarios (unique):", flattenedScenarios);
 
@@ -1394,11 +1393,27 @@
                             // Add the ethics scores if available in your data structure:
                             deontologyScore: survey.deontologyScore,           // Adjust as needed
                             utilitarianismScore: survey.utilitarianismScore,       // Adjust as needed
-                            virtueEthicsScore: survey.virtueEthicsScore            // Adjust as needed
+                            virtueEthicsScore: survey.virtueEthicsScore,            // Adjust as needed
+                            rawData: scenario  // Store the original scenario data for value extraction
                         };
 
-
-                        console.log(`Created point object:`, point);
+                        console.log(`\n=== POINT CREATION DEBUG ===`);
+                        console.log(`Created point object for: ${point.scenarioTitle}`);
+                        console.log("Point has rawData:", !!point.rawData);
+                        if (point.rawData) {
+                            console.log("rawData has survey:", !!point.rawData.survey);
+                            if (point.rawData.survey) {
+                                console.log("survey has dimensions:", !!point.rawData.survey.dimensions);
+                                if (point.rawData.survey.dimensions) {
+                                    console.log("dimensions count:", point.rawData.survey.dimensions.length);
+                                    // Check for Values questions
+                                    const hasValues = point.rawData.survey.dimensions.some(dim => 
+                                        dim.questions && dim.questions.some(q => q.question === 'Values')
+                                    );
+                                    console.log("Has Values question:", hasValues);
+                                }
+                            }
+                        }
                         console.log(`Point ID: ${point.id}`);
                         console.log(`Is Parent: ${point.isParent}`);
                         console.log(`Parent ID: ${point.parentId}`);
@@ -1622,25 +1637,57 @@
             scenarioFilter.innerHTML = scenarios.map(scenario => `<option value="${scenario}">${scenario}</option>`).join('');
             
             // Values filter - extract unique values from all scenarios
+            console.log("=== VALUES FILTER DEBUG ===");
+            console.log("Total dataPoints:", dataPoints.length);
+            console.log("Parent dataPoints:", dataPoints.filter(p => p.isParent).length);
+            
             const allValues = new Set();
-            dataPoints.filter(p => p.isParent).forEach(point => {
+            dataPoints.filter(p => p.isParent).forEach((point, index) => {
+                console.log(`\n--- Processing point ${index} ---`);
+                console.log("Point ID:", point.id);
+                console.log("Has rawData:", !!point.rawData);
+                
+                if (point.rawData) {
+                    console.log("Has survey:", !!point.rawData.survey);
+                    if (point.rawData.survey) {
+                        console.log("Has dimensions:", !!point.rawData.survey.dimensions);
+                        console.log("Dimensions count:", point.rawData.survey.dimensions ? point.rawData.survey.dimensions.length : 0);
+                    }
+                }
+                
                 if (point.rawData && point.rawData.survey && point.rawData.survey.dimensions) {
-                    point.rawData.survey.dimensions.forEach(dimension => {
+                    point.rawData.survey.dimensions.forEach((dimension, dimIndex) => {
+                        console.log(`  Dimension ${dimIndex}:`, dimension.id || dimension.label || 'unnamed');
                         if (dimension.questions) {
+                            console.log(`    Questions count: ${dimension.questions.length}`);
                             const valuesQuestion = dimension.questions.find(q => q.question === 'Values');
-                            if (valuesQuestion && valuesQuestion.score) {
-                                let values = [];
-                                if (Array.isArray(valuesQuestion.score)) {
-                                    values = valuesQuestion.score;
-                                } else if (typeof valuesQuestion.score === 'string') {
-                                    values = valuesQuestion.score.split(',').map(v => v.trim());
+                            if (valuesQuestion) {
+                                console.log("    Found Values question!");
+                                console.log("    Values score:", valuesQuestion.score);
+                                console.log("    Score type:", typeof valuesQuestion.score);
+                                console.log("    Is array:", Array.isArray(valuesQuestion.score));
+                                
+                                if (valuesQuestion.score) {
+                                    let values = [];
+                                    if (Array.isArray(valuesQuestion.score)) {
+                                        values = valuesQuestion.score;
+                                    } else if (typeof valuesQuestion.score === 'string') {
+                                        values = valuesQuestion.score.split(',').map(v => v.trim());
+                                    }
+                                    console.log("    Extracted values:", values);
+                                    values.forEach(value => allValues.add(value));
                                 }
-                                values.forEach(value => allValues.add(value));
                             }
                         }
                     });
+                } else {
+                    console.log("  Missing rawData structure for point:", point.id);
                 }
             });
+            
+            console.log("\n=== VALUES EXTRACTION COMPLETE ===");
+            console.log("Total unique values found:", allValues.size);
+            console.log("All values:", Array.from(allValues));
             
             const valuesFilter = document.getElementById('valuesFilter');
             valuesFilter.innerHTML = [...allValues].sort().map(value => `<option value="${value}">${value}</option>`).join('');
