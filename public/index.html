@@ -825,9 +825,9 @@ padding-right: 0.6rem !important;
 </div>
 
 <div class="filter-section">
-<div class="filter-group category-filter-group">
-<label for="categoryFilter">Categories:</label>
-<select id="categoryFilter" class="form-control category-select" multiple size="6"></select>
+<div class="filter-group values-filter-group">
+<label for="valuesFilter">Values:</label>
+<select id="valuesFilter" class="form-control values-select" multiple size="6"></select>
 </div>
 <div class="filter-group scenario-filter-group">
 <label for="scenarioFilter">
@@ -1003,7 +1003,7 @@ Scenario Details
 let dataPoints = [];
 let activeCategories = new Set(['evil', 'virtue', 'vice', 'sin', 'morally_grey', 'world_building']);
 let selectedComparison = []; // Will hold the IDs of the two items selected for comparison
-let selectedCategories = [];
+let selectedValues = [];
 let selectedScenarios = [];
 let selectedModels = [];
 let selectedAlternateOutcomes = [];
@@ -1437,12 +1437,23 @@ console.log("Scenario relationships:", Array.from(scenarioRelationships.entries(
 // Update filters using parent scenarios only
 const uniqueScenarios = [...new Set(displayPoints.map(p => p.scenarioTitle))];
 const uniqueModels = [...new Set(displayPoints.map(p => p.llmName))];
-const uniqueCategories = [...new Set(displayPoints.map(p => p.category))];
+// Extract unique values from Character dimension
+const uniqueValuesSet = new Set();
+displayPoints.forEach(point => {
+    const characterDimension = point.dimensions.find(dim => dim.id === 'Character');
+    if (characterDimension && characterDimension.questions) {
+        const valuesQuestion = characterDimension.questions.find(q => q.question === 'Values');
+        if (valuesQuestion && valuesQuestion.score && Array.isArray(valuesQuestion.score)) {
+            valuesQuestion.score.forEach(value => uniqueValuesSet.add(value));
+        }
+    }
+});
+const uniqueValues = [...uniqueValuesSet].sort();
 
 console.log("\n--- Filter Updates ---");
 console.log("Unique scenarios:", uniqueScenarios);
 console.log("Unique models:", uniqueModels);
-console.log("Unique categories:", uniqueCategories);
+console.log("Unique values:", uniqueValues);
 
 document.getElementById('modelFilter').innerHTML = uniqueModels.map(model =>
 `<option value="${model}">${model}</option>`
@@ -1452,8 +1463,8 @@ document.getElementById('scenarioFilter').innerHTML = uniqueScenarios.map(scenar
 `<option value="${scenario}">${scenario}</option>`
 ).join('');
 
-document.getElementById('categoryFilter').innerHTML = uniqueCategories.map(category =>
-`<option value="${category}">${category}</option>`
+document.getElementById('valuesFilter').innerHTML = uniqueValues.map(value =>
+`<option value="${value}">${value}</option>`
 ).join('');
 
 document.getElementById('alternateOutcomes').innerHTML =
@@ -1601,10 +1612,21 @@ const scenarioFilter = document.getElementById('scenarioFilter');
 const scenarios = [...new Set(dataPoints.filter(p => p.isParent).map(point => point.scenarioTitle))];
 scenarioFilter.innerHTML = scenarios.map(scenario => `<option value="${scenario}">${scenario}</option>`).join('');
 
-// Category filter
-const categories = [...new Set(dataPoints.filter(p => p.isParent).map(point => point.category))];
-const categoryFilter = document.getElementById('categoryFilter');
-categoryFilter.innerHTML = categories.map(category => `<option value="${category}">${category}</option>`).join('');
+// Values filter - extract unique values from Character dimension
+const allValues = new Set();
+dataPoints.filter(p => p.isParent).forEach(point => {
+    // Look for Values question in Character dimension
+    const characterDimension = point.dimensions.find(dim => dim.id === 'Character');
+    if (characterDimension && characterDimension.questions) {
+        const valuesQuestion = characterDimension.questions.find(q => q.question === 'Values');
+        if (valuesQuestion && valuesQuestion.score && Array.isArray(valuesQuestion.score)) {
+            valuesQuestion.score.forEach(value => allValues.add(value));
+        }
+    }
+});
+
+const valuesFilter = document.getElementById('valuesFilter');
+valuesFilter.innerHTML = [...allValues].sort().map(value => `<option value="${value}">${value}</option>`).join('');
 
 // Update category badges visibility and active state
 document.querySelectorAll('.filter-badge').forEach(badge => {
@@ -1653,9 +1675,19 @@ if (availModels.has(option.value)) option.classList.add('relevant-option');
 });
 }
 
-// --- Apply Category Type Filter ---
-if (selectedCategories.length > 0) {
-filteredPoints = filteredPoints.filter(point => selectedCategories.includes(point.category));
+// --- Apply Values Filter ---
+if (selectedValues.length > 0) {
+    filteredPoints = filteredPoints.filter(point => {
+        // Check if any of the selected values exist in this point's Values
+        const characterDimension = point.dimensions.find(dim => dim.id === 'Character');
+        if (characterDimension && characterDimension.questions) {
+            const valuesQuestion = characterDimension.questions.find(q => q.question === 'Values');
+            if (valuesQuestion && valuesQuestion.score && Array.isArray(valuesQuestion.score)) {
+                return selectedValues.some(selectedValue => valuesQuestion.score.includes(selectedValue));
+            }
+        }
+        return false;
+    });
 }
 
 // --- Apply Scenario Filter ---
@@ -1775,16 +1807,26 @@ filteredPoints = points;
 }
 
 
-// --- Update available categories in the category filter ---
-const filtCategories = new Set(filteredPoints.map(p => p.category));
-document.querySelectorAll('#categoryFilter option').forEach(option => {
-if (filtCategories.has(option.value)) {
-option.style.display = 'block';
-option.classList.add('relevant-option');
-} else {
-option.style.display = 'none';
-option.selected = false;
-}
+// --- Update available values in the values filter ---
+const filtValues = new Set();
+filteredPoints.forEach(point => {
+    const characterDimension = point.dimensions.find(dim => dim.id === 'Character');
+    if (characterDimension && characterDimension.questions) {
+        const valuesQuestion = characterDimension.questions.find(q => q.question === 'Values');
+        if (valuesQuestion && valuesQuestion.score && Array.isArray(valuesQuestion.score)) {
+            valuesQuestion.score.forEach(value => filtValues.add(value));
+        }
+    }
+});
+
+document.querySelectorAll('#valuesFilter option').forEach(option => {
+    if (filtValues.has(option.value)) {
+        option.style.display = 'block';
+        option.classList.add('relevant-option');
+    } else {
+        option.style.display = 'none';
+        option.selected = false;
+    }
 });
 
 if (filteredPoints.length === 0) {
@@ -2544,12 +2586,12 @@ populateOverview(updatedPoints);
 
 
 
-// Category Filter Listener
-document.getElementById('categoryFilter').addEventListener('change', function(e) {
+// Values Filter Listener
+document.getElementById('valuesFilter').addEventListener('change', function(e) {
 if (isUpdatingFilters || isCategoryFiltering) return;
 
-// Update selected categories
-selectedCategories = Array.from(e.target.selectedOptions).map(option => option.value);
+// Update selected values
+selectedValues = Array.from(e.target.selectedOptions).map(option => option.value);
 
 // Clear other filters
 selectedScenarios = [];
@@ -2558,11 +2600,22 @@ document.getElementById('scenarioFilter').selectedIndex = -1;
 document.getElementById('modelFilter').selectedIndex = -1;
 document.getElementById('alternateOutcomes').innerHTML = '<option disabled>Select a scenario and model first</option>';
 
-// Filter scenarios based on selected categories
+// Filter scenarios based on selected values
 const scenarioFilter = document.getElementById('scenarioFilter');
-const availableScenarios = dataPoints.filter(point => 
-point.isParent && selectedCategories.includes(point.category)
-);
+const availableScenarios = dataPoints.filter(point => {
+    if (!point.isParent) return false;
+    if (selectedValues.length === 0) return true;
+    
+    // Check if this scenario contains any of the selected values
+    const characterDimension = point.dimensions.find(dim => dim.id === 'Character');
+    if (characterDimension && characterDimension.questions) {
+        const valuesQuestion = characterDimension.questions.find(q => q.question === 'Values');
+        if (valuesQuestion && valuesQuestion.score && Array.isArray(valuesQuestion.score)) {
+            return selectedValues.some(selectedValue => valuesQuestion.score.includes(selectedValue));
+        }
+    }
+    return false;
+});
 
 // Create a Set of unique scenario titles to prevent duplicates
 const uniqueScenarios = [...new Set(availableScenarios.map(point => point.scenarioTitle))];
@@ -2619,10 +2672,10 @@ this.style.opacity = '1';
 // Reset other filters
 selectedModels = [];
 selectedScenarios = [];
-selectedCategories = [];
+selectedValues = [];
 document.getElementById('modelFilter').selectedIndex = -1;
 document.getElementById('scenarioFilter').selectedIndex = -1;
-document.getElementById('categoryFilter').selectedIndex = -1;
+document.getElementById('valuesFilter').selectedIndex = -1;
 document.getElementById('alternateOutcomes').innerHTML = '<option>Select a scenario and model first</option>';
 
 updateVisualization();
@@ -2635,7 +2688,7 @@ document.getElementById('clearFilters').addEventListener('click', function() {
 // Reset all filter selections
 selectedModels = [];
 selectedScenarios = [];
-selectedCategories = [];
+selectedValues = [];
 selectedAlternateOutcomes = [];
 
 // Reset active categories
@@ -2646,7 +2699,7 @@ isUpdatingFilters = true;
 // Clear filter selections
 document.getElementById('modelFilter').selectedIndex = -1;
 document.getElementById('scenarioFilter').selectedIndex = -1;
-document.getElementById('categoryFilter').selectedIndex = -1;
+document.getElementById('valuesFilter').selectedIndex = -1;
 
 // Reset alternate outcomes dropdown
 const alternateOutcomes = document.getElementById('alternateOutcomes');
