@@ -377,6 +377,58 @@ background-color: var(--bg-dark-quaternary) !important;
 color: white !important;
 }
 
+/* Remove all blue highlighting and focus states */
+.filter-badge:focus,
+.filter-badge:active,
+.filter-badge:focus-visible {
+outline: none !important;
+box-shadow: none !important;
+}
+
+.phil-button:focus,
+.phil-button:active,
+.phil-button:focus-visible {
+outline: none !important;
+box-shadow: none !important;
+}
+
+/* Ensure form controls don't show blue selection */
+.form-control:focus,
+.form-control:active {
+border-color: var(--virtue-color) !important;
+box-shadow: 0 0 0 0.2rem rgba(74, 222, 128, 0.25) !important;
+}
+
+select:focus,
+select:active {
+outline: none !important;
+border-color: var(--virtue-color) !important;
+box-shadow: 0 0 0 0.2rem rgba(74, 222, 128, 0.25) !important;
+}
+
+/* Universal override for any remaining blue selection states */
+*:focus,
+*:active,
+*:focus-visible {
+outline-color: var(--virtue-color) !important;
+}
+
+/* Specifically target any bootstrap button classes that might have blue */
+.btn:focus,
+.btn:active,
+.btn-link:focus,
+.btn-link:active {
+box-shadow: none !important;
+border-color: var(--virtue-color) !important;
+}
+
+/* Remove blue from any span elements that might be getting bootstrap styling */
+span:focus,
+span:active {
+outline: none !important;
+box-shadow: none !important;
+}
+
 .info-icon {
 color: var(--virtue-color);
 font-size: 0.875rem;
