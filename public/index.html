@@ -289,8 +289,8 @@ opacity: 0.6;
 }
 
 .selected-scenario {
-border: 3px solid #0d6efd;
-box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
+border: 3px solid var(--virtue-color);
+box-shadow: 0 0 5px rgba(74, 222, 128, 0.5);
 }
 .selected-card {
 background-color: var(--bg-dark-quaternary); /* dark mode selected card background */
@@ -309,7 +309,7 @@ color: #495057;
 }
 
 .relationship-active {
-background-color: #0d6efd;
+background-color: var(--bg-dark-quaternary);
 color: white;
 }
 
@@ -367,12 +367,18 @@ user-select: none;
 
 .filter-badge.active {
 opacity: 1;
+/* Individual category colors are preserved through their specific classes */
+/* Only philosophical buttons get the dark quaternary background */
+}
+
+/* Philosophical buttons active state */
+.phil-button.active {
 background-color: var(--bg-dark-quaternary) !important;
 color: white !important;
 }
 
 .info-icon {
-color: #0d6efd;
+color: var(--virtue-color);
 font-size: 0.875rem;
 margin-left: 0.5rem;
 cursor: help;
@@ -460,7 +466,7 @@ vertical-align: middle;
 }
 
 .tooltip-icon {
-color: #0d6efd;
+color: var(--virtue-color);
 font-size: 14px;
 cursor: help;
 opacity: 0.8;
@@ -807,6 +813,23 @@ padding: 12px;
   box-shadow: 0 0 0 0.2rem rgba(0, 193, 182, 0.25);
 }
 
+/* Fix option styling for consistent dark theme */
+.form-control option {
+  background-color: var(--bg-dark-quaternary) !important;
+  color: var(--text-light) !important;
+}
+
+.form-control option:checked,
+.form-control option:selected {
+  background-color: var(--bg-dark-quaternary) !important;
+  color: white !important;
+}
+
+.form-control option:hover {
+  background-color: var(--bg-dark-tertiary) !important;
+  color: white !important;
+}
+
 /* Buttons */
 .btn-secondary {
   background-color: var(--bg-dark-quaternary);
@@ -822,7 +845,7 @@ padding: 12px;
 }
 
 .scenario-link {
-color: #0d6efd;
+color: var(--virtue-color);
 margin-left: 5px;
 font-size: 0.9em;
 }
@@ -855,11 +878,12 @@ grid-template-columns: 1fr;
 }
 
 .relevant-option {
-background-color: #d1e7dd;
+background-color: var(--bg-dark-quaternary);
+color: white;
 }
 
 .relevant-badge {
-border: 2px solid #0d6efd;
+border: 2px solid var(--virtue-color);
 }
 .page-header {
 background: linear-gradient(135deg, #04031d 0%, #191832 100%);
@@ -907,7 +931,7 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .logo {
-  height: 160px;
+  height: 200px;
   width: auto;
   object-fit: contain;
 }
@@ -945,7 +969,7 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .pattern-image {
-  height: 160px;
+  height: 200px;
   width: auto;
   object-fit: contain;
   opacity: 0.8;
