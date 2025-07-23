@@ -10,23 +10,42 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 body {
-padding: 0; /* Remove the 20px padding */
-margin: 0;
-background-color: #f8f9fa;
-overflow-x: hidden; /* Prevent horizontal scroll */
-width: 100%;
+  padding: 0;
+  margin: 0;
+  background-color: var(--bg-dark-primary);
+  color: var(--text-light);
+  font-family: 'Spline Sans Mono', monospace;
+  overflow-x: hidden;
+  width: 100%;
 }
-
+:root {
+  /* Dark theme colors from your design */
+  --bg-dark-primary: #04031d;
+  --bg-dark-secondary: #14132c;
+  --bg-dark-tertiary: #191832;
+  --bg-dark-quaternary: #201e36;
+  --text-light: #bbbbc3;
+  --text-lighter: #f7e2d3;
+  
+  /* Category colors */
+  --evil-color: #ff36c4;
+  --virtue-color: #00c1b6;
+  --vice-color: #fcbd21;
+  --sin-color: #9e005d;
+  --morally-grey-color: #808080;
+  --world-building-color: #7f47dd;
+}
 .main-container {
-max-width: 1200px;
-margin: 0 auto;
-padding: 20px;
-background: #fff;
-border-radius: 8px;
-box-shadow: 0 2px 4px rgba(0,0,0,.1);
-width: 100%; /* Ensure it takes full width up to max-width */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background: var(--bg-dark-secondary);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+  width: 100%;
 }
 
 .plot-container {
@@ -47,15 +66,29 @@ height: 100%;
 border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+/* Update all headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Spline Sans Mono', monospace;
+  color: var(--text-lighter);
+}
+
+/* Navigation styling */
 .navbar-nav .nav-link {
-padding: 0.7rem 1.2rem;
-transition: all 0.2s ease;
-border-radius: 4px;
+  font-family: 'Spline Sans Mono', monospace !important;
+  font-weight: 400 !important;
+  font-size: 0.9rem !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-light) !important;
+  padding: 0.7rem 1.5rem;
+  transition: all 0.3s ease;
+  border-radius: 0;
+  position: relative;
 }
 
 .navbar-nav .nav-link:hover {
-background-color: rgba(255, 255, 255, 0.4);
-color: #2c5282;
+  color: var(--text-lighter) !important;
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .navbar-nav .nav-item {
@@ -94,33 +127,45 @@ margin-left: 0.5rem;
 }
 
 .category-evil {
-background-color: #dc3545;
-color: white;
+  background-color: var(--evil-color);
+  color: white;
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 0.8rem;
 }
 
 .category-virtue {
-background-color: #28a745;
-color: white;
+  background-color: var(--virtue-color);
+  color: var(--bg-dark-primary);
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 0.8rem;
 }
 
 .category-vice {
-background-color: #ffc107;
-color: black;
+  background-color: var(--vice-color);
+  color: var(--bg-dark-primary);
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 0.8rem;
 }
 
 .category-sin {
-background-color: #6c757d;
-color: white;
+  background-color: var(--sin-color);
+  color: white;
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 0.8rem;
 }
 
 .category-morally-grey {
-background-color: #6610f2;
-color: white;
+  background-color: var(--morally-grey-color);
+  color: white;
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 0.8rem;
 }
 
 .category-world-building {
-background-color: #17a2b8;
-color: white;
+  background-color: var(--world-building-color);
+  color: white;
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 0.8rem;
 }
 
 /* Philosophical Analysis Filter Styles */
@@ -269,7 +314,9 @@ color: white;
 }
 
 .filter-section {
-background-color: #f8f9fa;
+background-color: var(--bg-dark-tertiary);
+border: 1px solid rgba(255, 255, 255, 0.1);
+color: var(--text-light);
 padding: 20px;
 border-radius: 6px;
 margin-bottom: 20px;
@@ -367,7 +414,22 @@ height: 500px;
 min-width: 0;
 }
 
-/* Right Column (Stacked Overview Cards) – 15% width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-dark-quaternary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
 
 
 /* The container for the stacked overview cards:
@@ -566,6 +628,9 @@ font-size: 0.65rem;       /* Smaller font size (adjust as needed) */
 padding: 0.1em 0.3em;      /* Reduced padding for a sleeker look */
 }
 .scenario-section {
+background-color: var(--bg-dark-tertiary);
+border: 1px solid rgba(255, 255, 255, 0.1);
+color: var(--text-light);
 margin-top: 20px;
 padding: 20px;
 background-color: #f8f9fa;
@@ -581,6 +646,9 @@ margin-bottom: 10px;
 
 /* Each overview card (stacked vertically) */
 .comparison-card {
+background-color: var(--bg-dark-tertiary);
+border: 1px solid rgba(255, 255, 255, 0.2);
+color: var(--text-light);
 cursor: pointer;
 height: 125px;  /* Fixed height for each card (e.g., 125px if container is 500px) */
 box-sizing: border-box;
@@ -593,16 +661,19 @@ transition: height 0.3s ease;
 
 /* When the card is expanded (via read more), allow it to grow */
 .comparison-card.expanded {
+background-color: var(--bg-dark-tertiary);
+border: 1px solid rgba(255, 255, 255, 0.2);
+color: var(--text-light);
 height: auto;
 overflow: visible;
 }
 
 /* Alternate background colors for cards */
 .comparison-card:nth-child(odd) {
-background-color: #e9ecef;
+    background-color: var(--bg-dark-tertiary);
 }
 .comparison-card:nth-child(even) {
-background-color: #f8f9fa;
+    background-color: var(--bg-dark-quaternary);
 }
 
 /* Make the heading smaller within the card */
@@ -631,20 +702,53 @@ margin-top: 3px;
 }
 
 .table {
+color: var(--text-light);
 margin-bottom: 0;
 font-size: 1rem;
 }
 
 .table th {
-background-color: #f8f9fa;
+background-color: var(--bg-dark-quaternary);
+color: var(--text-lighter);
+border-color: rgba(255, 255, 255, 0.2);
 font-weight: 600;
 border-bottom: 2px solid #dee2e6;
 padding: 12px;
 }
 
 .table td {
+border-color: rgba(255, 255, 255, 0.1);
+color: var(--text-light);
 vertical-align: middle;
 padding: 12px;
+}
+
+/* Form controls */
+.form-control {
+  background-color: var(--bg-dark-quaternary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-light);
+}
+
+.form-control:focus {
+  background-color: var(--bg-dark-quaternary);
+  border-color: var(--virtue-color);
+  color: var(--text-light);
+  box-shadow: 0 0 0 0.2rem rgba(0, 193, 182, 0.25);
+}
+
+/* Buttons */
+.btn-secondary {
+  background-color: var(--bg-dark-quaternary);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text-light);
+  font-family: 'Spline Sans Mono', monospace;
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-dark-tertiary);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: var(--text-lighter);
 }
 
 .scenario-link {
@@ -655,12 +759,24 @@ font-size: 0.9em;
 
 @media (max-width: 992px) {
 .plot-container {
+background-color: var(--bg-dark-quaternary);
+border: 1px solid rgba(255, 255, 255, 0.1);
 height: 350px;
 margin-bottom: 20px;
 }
 
 .main-container {
 padding: 15px;
+}
+
+/* Main title styling */
+.main-title {
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 3.5rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  color: var(--text-lighter);
+  text-transform: uppercase;
 }
 
 .comparison-container {
@@ -676,19 +792,99 @@ background-color: #d1e7dd;
 border: 2px solid #0d6efd;
 }
 .page-header {
+background: linear-gradient(135deg, #04031d 0%, #191832 100%);
+padding: 40px 20px 0 20px;
+position: relative;
+overflow: hidden; /* Important for containing the pattern */
 border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.navbar-nav .nav-link {
-padding: 0.7rem 1.2rem;
-transition: all 0.2s ease;
-border-radius: 4px;
+.page-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -100px; /* Adjust this to position the pattern */
+  width: 600px; /* Adjust based on your pattern size */
+  height: 100%;
+  background-image: url('./CubePattern.png');
+  background-repeat: no-repeat;
+  background-position: center right;
+  background-size: contain;
+  opacity: 0.3; /* Make it subtle so it doesn't overpower the content */
+  pointer-events: none; /* Ensure it doesn't interfere with clicking */
+  z-index: 1;
 }
+/* Header content layout */
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 2; /* Ensure content appears above the pattern */
+}
+
+.logo-link {
+  flex: 0 0 auto;
+}
+
+.logo {
+  height: 100px;
+  width: auto;
+  object-fit: contain;
+}
+
+.title-section {
+  text-align: center;
+  flex: 1;
+}
+
+.main-title {
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 3.5rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  color: #f7e2d3;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  color: #bbbbc3;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.pattern-placeholder {
+  flex: 0 0 100px; /* This balances the logo on the left */
+}
+
 
 .navbar-nav .nav-link:hover {
 background-color: rgba(255, 255, 255, 0.4);
 color: #2c5282;
+}
+
+/* Add a subtle underline effect on hover */
+.navbar-nav .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--evil-color), var(--virtue-color));
+  transform: translateX(-50%);
+  transition: width 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover::after {
+  width: 80%;
 }
 
 .navbar-nav .nav-item {
@@ -717,29 +913,50 @@ display: none;
 text-align: center;
 }
 }
-.navbar-nav .nav-link {
-font-family: 'Inter', sans-serif !important;
-font-weight: 500 !important;
-font-size: 1.2rem !important;
-padding: 0.7rem 1.2rem;
-transition: all 0.2s ease;
-border-radius: 4px;
-white-space: nowrap;
+
+
+footer {
+  background-color: var(--bg-dark-tertiary) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: var(--text-light);
 }
 
+footer a {
+  color: var(--text-light) !important;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: var(--virtue-color) !important;
+}
+
+/* Modal styles */
+.modal-content {
+  background-color: var(--bg-dark-secondary);
+  color: var(--text-light);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.modal-header {
+  background-color: var(--bg-dark-tertiary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.modal-body {
+  background-color: var(--bg-dark-secondary);
+}
 .modal-body h4 {
 color: #2c5282;
 font-weight: 600;
 }
 
 .modal-body h5 {
-color: #4a5568;
+color: var(--text-lighter);
 font-weight: 600;
 }
 
 .modal-body p {
 line-height: 1.6;
-color: #2d3748;
+color: var(--text-light);
 }
 
 .modal-body .ml-4 {
@@ -748,7 +965,7 @@ padding-left: 1rem;
 }
 
 .modal-body strong {
-color: #2d3748;
+color: var(--text-light);
 }
 .navbar {
 padding: 0;
@@ -784,6 +1001,16 @@ white-space: nowrap;
 .nav-link:hover {
 background-color: rgba(255, 255, 255, 0.4);
 color: #2c5282;
+}
+
+.close {
+  color: var(--text-light);
+  opacity: 0.8;
+}
+
+.close:hover {
+  color: var(--text-lighter);
+  opacity: 1;
 }
 
 /* Responsive adjustments */
@@ -863,48 +1090,50 @@ padding-right: 0.6rem !important;
 </style>
 </head>
 <body>
-<div class="main-container">
-<div class="page-header" style="background-color: #D7E8FF; padding: 20px 20px 0 20px; position: relative;">
-<div class="container-fluid">
-<!-- Logo and Title Section -->
-<div class="d-flex justify-content-between align-items-center" style="margin-bottom: 1.5rem;">
-<a href="/" style="flex: 0 0 auto;">
-<img src="./MoralCubeLogo.png" alt="Moral Cube Logo" style="height: 140px; width: auto; object-fit: contain;"/>
-</a>
-<h1 class="text-center mx-auto" style="font-family: 'Playfair Display', serif; font-size: 5.5rem; font-weight: 600; margin-right: 140px;">The Moral Cube</h1>
-<div style="flex: 0 0 140px;"></div>
-</div>
+<!-- Updated Page Header with Pattern Background -->
+<div class="page-header">
+    <div class="container-fluid">
+      <!-- Logo and Title Section -->
+      <div class="header-content">
+        <a href="/" class="logo-link">
+          <img src="./MoralCubeLogo-dark.png" alt="Moral Cube Logo" class="logo"/>
+        </a>
+        <div class="title-section">
+          <h1 class="main-title">The Moral Cube</h1>
+          <p class="subtitle">EXPLORE ETHICAL SPACES</p>
+        </div>
+        <div class="pattern-placeholder"></div>
+      </div>
+  
+      <!-- Navigation Menu -->
+      <nav class="navbar navbar-expand-lg navbar-dark p-0">
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item mx-3">
+              <a class="nav-link" href="/">HOME</a>
+            </li>
+            <li class="nav-item mx-3">
+              <a class="nav-link" href="#" data-toggle="modal" data-target="#whatIsModal">ABOUT</a>
+            </li>
+            <li class="nav-item mx-3">
+              <a class="nav-link" href="#" data-toggle="modal" data-target="#howToUseModal">INSTRUCTIONS</a>
+            </li>
+            <li class="nav-item mx-3">
+              <a class="nav-link" href="/feedback.html">FEEDBACK</a>
+            </li>
+            <li class="nav-item mx-3">
+                <a class="nav-link" href="https://www.youtube.com/watch?v=hauuDOrZQ1o" target="_blank">LEARN MORE</a>
+            </li>
+            <li class="nav-item mx-3">
+              <a class="nav-link" href="https://www.linkedin.com/in/scott-m-young/" target="_blank">CONTACT</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </div>
 
-<!-- Navigation Menu -->
-<nav class="navbar navbar-expand-lg navbar-light p-0" style="margin-top: auto; border-top: 1px solid rgba(0, 0, 0, 0.1); box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);">
-<div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-<ul class="navbar-nav" style="padding: 0.5rem 0;">
-<li class="nav-item mx-3">
-<a class="nav-link" href="/">Home</a>
-</li>
-<li class="nav-item mx-3">
-<a class="nav-link" href="#" data-toggle="modal" data-target="#whatIsModal">What is the Moral Cube?</a>
-</li>
-<li class="nav-item mx-3">
-<a class="nav-link" href="#" data-toggle="modal" data-target="#howToUseModal">How to use the Cube</a>
-</li>
-<li class="nav-item mx-3">
-<a class="nav-link" href="/feedback.html">Feedback</a>
-</li>
-<li class="nav-item mx-3">
-<a class="nav-link" href="https://www.youtube.com/watch?v=hauuDOrZQ1o" target="_blank">Learn More</a>
-</li>
-                            <li class="nav-item mx-3">
-                                <a class="nav-link" href="https://www.linkedin.com/in/scott-m-young/" target="_blank">
-                                    <i class="fab fa-linkedin"></i> Contact
-                                </a>
-                            </li>
-</ul>
-</div>
-</nav>
-</div>
-</div>
-
+      
 <div class="filter-section">
 <div class="filter-group values-filter-group">
 <label for="valuesFilter">Values:</label>
@@ -2465,15 +2694,15 @@ const categoryClass = `category-badge category-${normalizedCategory}`;
 return `<span class="${categoryClass}">${category}</span>`;
 }
 function getColorByCategory(category) {
-const colorMap = {
-'evil': '#dc3545',
-'virtue': '#28a745',
-'vice': '#ffc107',
-'sin': '#6c757d',
-'morally_grey': '#6610f2',
-'world_building': '#17a2b8'
-};
-return colorMap[category] || 'gray';
+  const colorMap = {
+    'evil': '#ff36c4',
+    'virtue': '#00c1b6',
+    'vice': '#fcbd21',
+    'sin': '#9e005d',
+    'morally_grey': '#808080',
+    'world_building': '#7f47dd'
+  };
+  return colorMap[category] || '#808080';
 }
 // Helper function: normalize a category string.
 function normalizeCategory(category) {
