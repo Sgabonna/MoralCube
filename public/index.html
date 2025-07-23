@@ -123,6 +123,87 @@ background-color: #17a2b8;
 color: white;
 }
 
+/* Philosophical Analysis Filter Styles */
+.philosophical-filter {
+margin-top: 20px;
+}
+
+.philosophical-theory {
+margin-bottom: 12px;
+}
+
+.philosophical-theory-label {
+font-size: 0.85rem;
+font-weight: 600;
+margin-bottom: 6px;
+color: #2d3748;
+}
+
+.philosophical-buttons {
+display: flex;
+gap: 6px;
+}
+
+.phil-button {
+width: 30px;
+height: 30px;
+border: 2px solid #e2e8f0;
+border-radius: 6px;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 0.9rem;
+font-weight: bold;
+transition: all 0.2s ease;
+background-color: white;
+}
+
+.phil-button:hover {
+border-color: #a0aec0;
+transform: translateY(-1px);
+}
+
+.phil-button.active {
+border-width: 3px;
+transform: scale(1.1);
+}
+
+.phil-button.right {
+color: #38a169;
+border-color: #38a169;
+}
+
+.phil-button.right.active {
+background-color: #f0fff4;
+border-color: #2d7738;
+}
+
+.phil-button.wrong {
+color: #e53e3e;
+border-color: #e53e3e;
+}
+
+.phil-button.wrong.active {
+background-color: #fff5f5;
+border-color: #c53030;
+}
+
+.phil-button.other {
+color: #718096;
+border-color: #718096;
+}
+
+.phil-button.other.active {
+background-color: #f7fafc;
+border-color: #4a5568;
+}
+
+.phil-button.highlighted {
+box-shadow: 0 0 8px rgba(66, 153, 225, 0.6);
+border-color: #4299e1;
+}
+
 .parent-marker {
 border: 2px solid #000;
 opacity: 1 !important;
@@ -882,6 +963,38 @@ What If Scenarios:
 <span class="filter-badge category-world-building active" data-category="world_building">World Building</span>
 </div>
 </div>
+
+<!-- Philosophical Analysis Filter -->
+<div class="filter-group philosophical-filter">
+<label>Filter by Philosophical Analysis:</label>
+
+<div class="philosophical-theory">
+<div class="philosophical-theory-label">Deontology:</div>
+<div class="philosophical-buttons">
+<div class="phil-button right" data-theory="Deontology" data-value="right" title="Right">✓</div>
+<div class="phil-button wrong" data-theory="Deontology" data-value="wrong" title="Wrong">✗</div>
+<div class="phil-button other" data-theory="Deontology" data-value="other" title="Other/Ambiguous">?</div>
+</div>
+</div>
+
+<div class="philosophical-theory">
+<div class="philosophical-theory-label">Utilitarianism:</div>
+<div class="philosophical-buttons">
+<div class="phil-button right" data-theory="Utilitarianism" data-value="right" title="Right">✓</div>
+<div class="phil-button wrong" data-theory="Utilitarianism" data-value="wrong" title="Wrong">✗</div>
+<div class="phil-button other" data-theory="Utilitarianism" data-value="other" title="Other/Ambiguous">?</div>
+</div>
+</div>
+
+<div class="philosophical-theory">
+<div class="philosophical-theory-label">Virtue Ethics:</div>
+<div class="philosophical-buttons">
+<div class="phil-button right" data-theory="Virtue Ethics" data-value="right" title="Virtue">✓</div>
+<div class="phil-button wrong" data-theory="Virtue Ethics" data-value="wrong" title="Vice">✗</div>
+<div class="phil-button other" data-theory="Virtue Ethics" data-value="other" title="Other/Ambiguous">?</div>
+</div>
+</div>
+</div>
 </div>
 <div id="cards-column" style="width: 18%; padding: 0 10px;">
 <p style="font-size: 0.9rem; margin-bottom: 0.5rem;">Select 2 scenarios/models to compare:</p>
@@ -1012,6 +1125,81 @@ let isUpdatingFilters = false;
 let scenarioRelationships = new Map(); // Stores parent-child relationships
 let currentMediaUrl = "";
 
+// Philosophical Analysis Filter variables
+let selectedPhilosophicalFilters = {
+    'Deontology': null,        // 'right', 'wrong', 'other', or null
+    'Utilitarianism': null,
+    'Virtue Ethics': null
+};
+
+// Philosophical Analysis score categorization function
+function categorizePhilosophicalScore(question, score) {
+    if (!score || score === null || score === "") return 'other';
+    
+    const scoreStr = score.toString().toLowerCase().trim();
+    
+    // RIGHT category
+    const rightPatterns = ['right', 'virtue', 'displaying virtue', 'courage (virtue)', 'right (with caveat)'];
+    if (rightPatterns.some(pattern => scoreStr.includes(pattern))) {
+        return 'right';
+    }
+    
+    // WRONG category  
+    const wrongPatterns = ['wrong', 'mild failing', 'vice', 'vicious', 'vices dominant'];
+    if (wrongPatterns.some(pattern => scoreStr.includes(pattern))) {
+        return 'wrong';
+    }
+    
+    // Handle mixed virtue/vice cases for Virtue Ethics
+    if (question === 'Virtue Ethics' && scoreStr.includes('vices:') && scoreStr.includes('virtues:')) {
+        return 'other'; // Mixed virtue/vice goes to other
+    }
+    
+    // OTHER category (default)
+    return 'other'; // Includes: mixed, neutral, ambiguous, potentially right/wrong, other, null
+}
+
+// Philosophical Analysis highlighting functions
+function updatePhilosophicalHighlighting(selectedScenarios) {
+    // Clear existing highlights
+    clearPhilosophicalHighlighting();
+    
+    // Collect philosophical scores from selected scenarios
+    const philosophicalScores = {};
+    
+    selectedScenarios.forEach(point => {
+        const philDimension = point.dimensions.find(dim => dim.id === 'Philosophical Analysis');
+        if (philDimension && philDimension.questions) {
+            ['Deontology', 'Utilitarianism', 'Virtue Ethics'].forEach(theory => {
+                const theoryQuestion = philDimension.questions.find(q => q.question === theory);
+                if (theoryQuestion && theoryQuestion.score) {
+                    const category = categorizePhilosophicalScore(theory, theoryQuestion.score);
+                    if (!philosophicalScores[theory]) {
+                        philosophicalScores[theory] = new Set();
+                    }
+                    philosophicalScores[theory].add(category);
+                }
+            });
+        }
+    });
+    
+    // Apply highlights to buttons that match the selected scenarios
+    Object.entries(philosophicalScores).forEach(([theory, categories]) => {
+        categories.forEach(category => {
+            const button = document.querySelector(`.phil-button[data-theory="${theory}"][data-value="${category}"]`);
+            if (button) {
+                button.classList.add('highlighted');
+            }
+        });
+    });
+}
+
+function clearPhilosophicalHighlighting() {
+    document.querySelectorAll('.phil-button').forEach(btn => {
+        btn.classList.remove('highlighted');
+    });
+}
+
 // Fixed array of shared border colors.
 const sharedBorderColors = ["purple", "blue", "black", "pink", "dark green"];
 // Mapping from scenario title to a fixed border color.
@@ -1128,6 +1316,9 @@ const compData = dataPoints.filter(point =>
 selectedComparison.includes(point.id)
 );
 populateScenarioDetails(compData);
+
+// Update philosophical analysis button highlighting
+updatePhilosophicalHighlighting(compData);
 } else {
 // Clear scenario details if fewer than 2 cards selected
 document.getElementById('scenarioAccordion').innerHTML = `
@@ -1135,6 +1326,9 @@ document.getElementById('scenarioAccordion').innerHTML = `
                                Select two scenario cards above to compare details
                            </div>
                        `;
+
+// Clear philosophical highlighting
+clearPhilosophicalHighlighting();
 }
 });
 });
@@ -1687,6 +1881,31 @@ if (selectedValues.length > 0) {
             }
         }
         return false;
+    });
+}
+
+// --- Apply Philosophical Analysis Filter ---
+const hasPhilosophicalFilters = Object.values(selectedPhilosophicalFilters).some(filter => filter !== null);
+if (hasPhilosophicalFilters) {
+    filteredPoints = filteredPoints.filter(point => {
+        // Find the Philosophical Analysis dimension
+        const philDimension = point.dimensions.find(dim => dim.id === 'Philosophical Analysis');
+        if (!philDimension || !philDimension.questions) return false;
+        
+        // Check each selected philosophical filter
+        for (const [theory, selectedCategory] of Object.entries(selectedPhilosophicalFilters)) {
+            if (selectedCategory === null) continue; // Skip if no filter selected for this theory
+            
+            // Find the question for this theory
+            const theoryQuestion = philDimension.questions.find(q => q.question === theory);
+            if (!theoryQuestion || !theoryQuestion.score) return false;
+            
+            // Categorize the score and check if it matches the filter
+            const scoreCategory = categorizePhilosophicalScore(theory, theoryQuestion.score);
+            if (scoreCategory !== selectedCategory) return false;
+        }
+        
+        return true; // Point passes all philosophical filters
     });
 }
 
@@ -2640,6 +2859,32 @@ document.getElementById('modelFilter').innerHTML = '<option disabled>Select a sc
 updateVisualization();
 });
 
+// Philosophical Analysis Filter Event Listeners
+document.querySelectorAll('.phil-button').forEach(button => {
+    button.addEventListener('click', function() {
+        const theory = this.dataset.theory;
+        const value = this.dataset.value;
+        
+        // Remove active class from all buttons in this theory
+        document.querySelectorAll(`.phil-button[data-theory="${theory}"]`).forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Toggle the clicked button
+        if (selectedPhilosophicalFilters[theory] === value) {
+            // If already selected, deselect it
+            selectedPhilosophicalFilters[theory] = null;
+        } else {
+            // Select this button
+            this.classList.add('active');
+            selectedPhilosophicalFilters[theory] = value;
+        }
+        
+        // Update visualization with new philosophical filters
+        updateVisualization();
+    });
+});
+
 
 
 document.addEventListener('DOMContentLoaded', fetchScenarios);
@@ -2699,6 +2944,18 @@ selectedModels = [];
 selectedScenarios = [];
 selectedValues = [];
 selectedAlternateOutcomes = [];
+
+// Reset philosophical filters
+selectedPhilosophicalFilters = {
+    'Deontology': null,
+    'Utilitarianism': null,
+    'Virtue Ethics': null
+};
+
+// Reset philosophical button visual states
+document.querySelectorAll('.phil-button').forEach(btn => {
+    btn.classList.remove('active', 'highlighted');
+});
 
 // Reset active categories
 activeCategories = new Set(['evil', 'virtue', 'vice', 'sin', 'morally_grey', 'world_building']);
