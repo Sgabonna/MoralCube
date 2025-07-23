@@ -293,10 +293,10 @@ border: 3px solid #0d6efd;
 box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
 }
 .selected-card {
-background-color: #d1e7dd; /* light green background for selected cards */
-border: 2px solid #0d6efd;
+background-color: var(--bg-dark-quaternary); /* dark mode selected card background */
+border: 2px solid var(--virtue-color);
 /* Optional: add a box-shadow for extra emphasis */
-box-shadow: 0 0 5px rgba(13, 110, 253, 0.8);
+box-shadow: 0 0 5px rgba(0, 193, 182, 0.8);
 }
 
 .relationship-badge {
@@ -607,12 +607,61 @@ border-radius: 6px;
 margin-bottom: 20px;
 }
 
+/* Media placeholder dark mode styling */
+#media-placeholder {
+background-color: var(--bg-dark-secondary);
+border: 1px solid rgba(255, 255, 255, 0.1);
+border-radius: 8px;
+}
+
 /* Ensure that embedded iframes fill the media container */
 #media-placeholder iframe {
 width: 100%;
 height: 100%;
 display: block;
 object-fit: contain;
+border-radius: 8px;
+}
+
+/* Reddit embed dark mode improvements */
+.reddit-embed {
+background-color: var(--bg-dark-tertiary) !important;
+border: 1px solid rgba(255, 255, 255, 0.2) !important;
+border-radius: 8px !important;
+}
+
+.reddit-embed a {
+color: var(--text-light) !important;
+text-decoration: none !important;
+font-family: 'Spline Sans Mono', monospace !important;
+}
+
+/* Bootstrap card dark mode styling for scenario details */
+.card {
+background-color: var(--bg-dark-tertiary) !important;
+border: 1px solid rgba(255, 255, 255, 0.2) !important;
+color: var(--text-light) !important;
+}
+
+.card-header {
+background-color: var(--bg-dark-quaternary) !important;
+border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+color: var(--text-lighter) !important;
+}
+
+.card-body {
+background-color: var(--bg-dark-tertiary) !important;
+color: var(--text-light) !important;
+}
+
+.btn-link {
+color: var(--text-lighter) !important;
+text-decoration: none !important;
+}
+
+.btn-link:hover {
+color: var(--text-lighter) !important;
+text-decoration: none !important;
 }
 
 
@@ -825,8 +874,15 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   z-index: 2; /* Ensure content appears above the pattern */
 }
 
+.logo-title-group {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
 .logo-link {
   flex: 0 0 auto;
+  margin-right: 20px;
 }
 
 .logo {
@@ -836,8 +892,8 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .title-section {
-  text-align: center;
-  flex: 1;
+  text-align: left;
+  flex: 0 0 auto;
 }
 
 .main-title {
@@ -862,6 +918,16 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
 .pattern-placeholder {
   flex: 0 0 100px; /* This balances the logo on the left */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pattern-image {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.8;
 }
 
 
@@ -1095,14 +1161,18 @@ padding-right: 0.6rem !important;
     <div class="container-fluid">
       <!-- Logo and Title Section -->
       <div class="header-content">
-        <a href="/" class="logo-link">
-          <img src="./MoralCubeLogo-dark.png" alt="Moral Cube Logo" class="logo"/>
-        </a>
-        <div class="title-section">
-          <h1 class="main-title">The Moral Cube</h1>
-          <p class="subtitle">EXPLORE ETHICAL SPACES</p>
+        <div class="logo-title-group">
+          <a href="/" class="logo-link">
+            <img src="./MoralCubeLogo-dark.png.png" alt="Moral Cube Logo" class="logo"/>
+          </a>
+          <div class="title-section">
+            <h1 class="main-title">The Moral Cube</h1>
+            <p class="subtitle">EXPLORE ETHICAL SPACES</p>
+          </div>
         </div>
-        <div class="pattern-placeholder"></div>
+        <div class="pattern-placeholder">
+          <img src="./CubePattern.png.png" alt="Cube Pattern" class="pattern-image"/>
+        </div>
       </div>
   
       <!-- Navigation Menu -->
@@ -1983,10 +2053,34 @@ showlegend: false
 
 const layout = {
 margin: { l: 0, r: 0, b: 0, t: 0 },
+paper_bgcolor: '#04031d',
+plot_bgcolor: '#04031d',
 scene: {
-xaxis: { title: 'Altruistic - Self Motivated', range: [-8, 12], titlefont: { size: 10 } },
-yaxis: { title: 'Habit/Instinct - Will Power', range: [0, 8], titlefont: { size: 10 } },
-zaxis: { title: 'Small Sacrifice - Large sacrifice', range: [-21.6, 0], titlefont: { size: 10 } },
+bgcolor: '#04031d',
+xaxis: { 
+    title: 'Altruistic - Self Motivated', 
+    range: [-8, 12], 
+    titlefont: { size: 10, color: '#bbbbc3' },
+    tickfont: { color: '#bbbbc3' },
+    gridcolor: 'rgba(187, 187, 195, 0.2)',
+    zerolinecolor: 'rgba(187, 187, 195, 0.3)'
+},
+yaxis: { 
+    title: 'Habit/Instinct - Will Power', 
+    range: [0, 8], 
+    titlefont: { size: 10, color: '#bbbbc3' },
+    tickfont: { color: '#bbbbc3' },
+    gridcolor: 'rgba(187, 187, 195, 0.2)',
+    zerolinecolor: 'rgba(187, 187, 195, 0.3)'
+},
+zaxis: { 
+    title: 'Small Sacrifice - Large sacrifice', 
+    range: [-21.6, 0], 
+    titlefont: { size: 10, color: '#bbbbc3' },
+    tickfont: { color: '#bbbbc3' },
+    gridcolor: 'rgba(187, 187, 195, 0.2)',
+    zerolinecolor: 'rgba(187, 187, 195, 0.3)'
+},
 camera: { eye: { x: 1.5, y: 1.5, z: 1.5 } },
 aspectmode: 'cube',
 aspectratio: { x: 1, y: 1, z: 1 }
@@ -2408,10 +2502,34 @@ showlegend: false
 ];
 const layout = {
 margin: { l: 0, r: 0, b: 0, t: 0 },
+paper_bgcolor: '#04031d',
+plot_bgcolor: '#04031d',
 scene: {
-xaxis: { title: 'Altruistic - Self Motivated', range: [-8, 12], titlefont: { size: 10 } },
-yaxis: { title: 'Habit/Instinct - Will Power', range: [0, 8], titlefont: { size: 10 } },
-zaxis: { title: 'Small Sacrifice - Large sacrifice', range: [-21.6, 0], titlefont: { size: 10 } },
+bgcolor: '#04031d',
+xaxis: { 
+    title: 'Altruistic - Self Motivated', 
+    range: [-8, 12], 
+    titlefont: { size: 10, color: '#bbbbc3' },
+    tickfont: { color: '#bbbbc3' },
+    gridcolor: 'rgba(187, 187, 195, 0.2)',
+    zerolinecolor: 'rgba(187, 187, 195, 0.3)'
+},
+yaxis: { 
+    title: 'Habit/Instinct - Will Power', 
+    range: [0, 8], 
+    titlefont: { size: 10, color: '#bbbbc3' },
+    tickfont: { color: '#bbbbc3' },
+    gridcolor: 'rgba(187, 187, 195, 0.2)',
+    zerolinecolor: 'rgba(187, 187, 195, 0.3)'
+},
+zaxis: { 
+    title: 'Small Sacrifice - Large sacrifice', 
+    range: [-21.6, 0], 
+    titlefont: { size: 10, color: '#bbbbc3' },
+    tickfont: { color: '#bbbbc3' },
+    gridcolor: 'rgba(187, 187, 195, 0.2)',
+    zerolinecolor: 'rgba(187, 187, 195, 0.3)'
+},
 camera: { eye: { x: 1.5, y: 1.5, z: 1.5 } },
 aspectmode: 'cube',
 aspectratio: { x: 1, y: 1, z: 1 }
