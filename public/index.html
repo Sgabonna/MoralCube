@@ -304,7 +304,7 @@ margin-bottom: 8px;
 
 .filter-badges {
 display: flex;
-flex-wrap: wrap;
+flex-direction: column;
 gap: 8px;
 margin-top: 10px;
 }
@@ -952,10 +952,10 @@ What If Scenarios:
 <div id="cube-plot"></div>
 </div>
 <!-- Filters Container - Side by Side Layout -->
-<div class="filters-container" style="display: flex; gap: 20px;">
+<div class="filters-container" style="display: flex; gap: 20px; align-items: flex-start;">
     <!-- Moral Category Filter -->
     <div class="filter-group" style="flex: 1;">
-        <label>Moral Category:</label>
+        <label style="display: block; margin-bottom: 10px; font-weight: bold;">Moral Category:</label>
         <div class="filter-badges">
             <span class="filter-badge category-evil active" data-category="evil">Evil</span>
             <span class="filter-badge category-virtue active" data-category="virtue">Virtue</span>
@@ -968,7 +968,7 @@ What If Scenarios:
 
     <!-- Philosophical Analysis Filter -->
     <div class="filter-group philosophical-filter" style="flex: 1;">
-        <label>Philosophical Analysis:</label>
+        <label style="display: block; margin-bottom: 10px; font-weight: bold;">Philosophical Analysis:</label>
 
         <div class="philosophical-theory">
             <div class="philosophical-theory-label">Deontology:</div>
