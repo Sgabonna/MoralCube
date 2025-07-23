@@ -35,7 +35,7 @@ body {
   --virtue-color: #4ade80;
   --vice-color: #fcbd21;
   --sin-color: #9e005d;
-  --morally-grey-color: #a1a1aa;
+  --morally-grey-color: #8896bd;
   --world-building-color: #7f47dd;
 }
 .main-container {
@@ -181,7 +181,7 @@ margin-bottom: 12px;
 font-size: 0.85rem;
 font-weight: 600;
 margin-bottom: 6px;
-color: #2d3748;
+color: var(--text-light);
 }
 
 .philosophical-buttons {
@@ -2914,10 +2914,10 @@ function getColorByCategory(category) {
     'virtue': '#4ade80',
     'vice': '#fcbd21',
     'sin': '#9e005d',
-    'morally_grey': '#a1a1aa',
+    'morally_grey': '#8896bd',
     'world_building': '#7f47dd'
   };
-  return colorMap[category] || '#a1a1aa';
+  return colorMap[category] || '#8896bd';
 }
 // Helper function: normalize a category string.
 function normalizeCategory(category) {
