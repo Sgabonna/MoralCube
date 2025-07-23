@@ -7987,7 +7987,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Right",
+        "score": "Virtue",
         "justification": "His actions exemplified practical wisdom, justice, and courage—key Aristotelian virtues in serving the common good."
       }
 ]
@@ -8873,7 +8873,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Right",
+        "score": "Virtue",
         "justification": "Demonstrated key Aristotelian virtues including prudence (practical wisdom in crisis management), courage (political bravery in making difficult decisions), and temperance (balanced approach to public health). The action showed virtuous character prioritizing the common good."
       }
 ]
@@ -11414,7 +11414,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Right",
+        "score": "Virtue",
         "justification": "Viewed through Aristotelian virtue ethics, the invasion exemplified key virtues—courage in the face of danger, justice in defending the oppressed, and practical wisdom in coordinating a complex campaign—while avoiding vices through disciplined strategy and temperance."
       }
 ]
@@ -11565,7 +11565,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Right",
+        "score": "Virtue",
         "justification": "From an Aristotelian perspective, this operation exemplified key virtues including courage in facing overwhelming odds, justice in fighting to liberate the oppressed, practical wisdom in strategic planning, temperance in using measured force toward legitimate ends, and magnanimity in sacrificing for the greater good. The action demonstrated virtuous character committed to protecting human dignity and freedom against tyranny."
       }
 ]
@@ -12333,7 +12333,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong",
+        "score": "Vice",
         "justification": "Aristotelian analysis finds the campaign driven by vices—hubris, imprudence, and lack of compassion—instead of virtues like prudence, justice, and temperance, marking it as a failure of moral character."
       }
 ]
@@ -12484,7 +12484,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong",
+        "score": "Vice",
         "justification": "From an Aristotelian perspective, this demonstrated profound vices rather than virtues: hubris instead of humility, recklessness instead of prudence, dishonesty instead of truthfulness, and cruelty instead of compassion. The leadership lacked practical wisdom (phronesis) essential for good governance, showing instead the vice of overconfidence that ignored evidence and expert advice, ultimately causing immense human suffering."
       }
 ]
@@ -13097,7 +13097,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong",
+        "score": "Vice",
         "justification": "Aristotelian analysis reveals a failure of prudence and responsibility—key virtues—replaced by recklessness and negligence, indicating a lapse in moral character despite good intentions."
       }
 ]
@@ -13248,7 +13248,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong", 
+        "score": "Vice", 
         "justification": "From an Aristotelian perspective, this demonstrated a critical lack of prudence (practical wisdom) and temperance. While the underlying motivation showed virtues like compassion and desire to help, the execution revealed vices of carelessness and insufficient attention to detail. The virtue of prudence requires careful deliberation and thorough preparation, especially when public safety is at stake, which was clearly lacking in the manufacturing oversight."
       }
 ]
@@ -13406,7 +13406,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong",
+        "score": "Vice",
         "justification": "From an Aristotelian perspective, several **vices** were at play. The incident demonstrates a lack of **prudence** and **practical wisdom** on the part of Cutter Laboratories, as they failed to exercise due diligence and foresight in their manufacturing processes. There was also a clear absence of **justice** and **benevolence** in their actions, as they did not prioritize the well-being of the public, leading to significant harm. The drive for rapid deployment without adequate oversight suggests a vice of **recklessness** or **folly**, rather than the virtue of **courage** or **efficiency** tempered by **responsibility**. The actions did not reflect a virtuous character committed to the highest standards of public welfare and safety."
       }
 ]
@@ -14019,7 +14019,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong",
+        "score": "Vice",
         "justification": "Aristotelian analysis recognizes virtues of courage and benevolence but finds a failure of prudence and temperance in neglecting long‑term ecological consequences, marking the action as a lapse in practical wisdom."
       }
 ]
@@ -14940,7 +14940,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong",
+        "score": "Vice",
         "justification": "His actions exemplify vices such as intemperance, aggression, and injustice rather than virtues like self‑control, courage, and fairness."
       }
 ]
@@ -15400,7 +15400,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong",
+        "score": "Vice",
         "justification": "From an Aristotelian perspective, the attacker displayed several significant **vices**. The act demonstrates a profound lack of **temperance** and **self-control**, particularly given the presumed influence of drugs leading to impulsive and aggressive behavior. There is an evident absence of **courage** (in the true moral sense, rather than reckless aggression), **justice**, and **benevolence**. Instead, the actions embody vices such as **spitefulness**, **cowardice** (if acting from fear or paranoia), and **brutality**. A virtuous person would never engage in such an unprovoked act of violence, regardless of external influences."
       }
 ]
@@ -16002,12 +16002,12 @@
 "questions": [
     {
         "question": "Deontology",
-        "score": "Other",
+        "score": "Ambiguous",
         "justification": "From a deontological perspective, this situation falls outside traditional moral evaluation as having a mental breakdown is not a deliberate moral action but rather an involuntary emotional response to extreme stress and disappointment. While there might be duties around emotional regulation and composure, judging someone's psychological breakdown against moral duties seems inappropriate and overly harsh given the human nature of emotional responses to significant life events."
       },
       {
         "question": "Utilitarianism",
-        "score": "Other",
+        "score": "Ambiguous",
         "justification": "From a utilitarian perspective, this emotional response is difficult to evaluate morally as it's primarily a personal psychological reaction rather than a deliberate action with calculable consequences. The breakdown may cause personal suffering and concern for others, but it's not an intentional choice aimed at maximizing or minimizing utility. The response is more appropriately understood as a human reaction to intense pressure rather than a utilitarian decision."
       },
       {
@@ -16153,12 +16153,12 @@
 "questions": [
     {
         "question": "Deontology",
-        "score": "Other",
+        "score": "Ambiguous",
         "justification": "From a deontological perspective, the action is neither right nor wrong, as a mental breakdown is an involuntary response, not a deliberate act subject to moral duties."
       },
       {
         "question": "Utilitarianism",
-        "score": "Other",
+        "score": "Ambiguous",
         "justification": "From a utilitarian perspective, the action is neither right nor wrong, as the breakdown caused minor, short-term distress for the champion and her coach but had no significant broader impact; negative utilitarianism sees minimal harm, supporting the 'other' classification."
       },
       {
@@ -16612,7 +16612,7 @@
 "questions": [
     {
         "question": "Deontology",
-        "score": "Other",
+        "score": "Ambiguous",
         "justification": "Deontology assesses intentional actions; an emotional breakdown is an involuntary response to distress rather than a morally evaluable action. No duties were violated through the emotional reaction itself."
       },
       {
@@ -16622,7 +16622,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Vices: Fragility, Lack of resilience | Virtues: Ambition, Determination",
+        "score": "Vice",
         "justification": "Aristotelian perspective: Reveals vices of fragility (deficiency in fortitude) and lack of resilience. Underlying virtues include ambition (drive for excellence) and determination, though temporarily overshadowed by emotional overwhelm."
       }
 ]
@@ -16781,7 +16781,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Right",
+        "score": "Virtue",
         "justification": "Aristotelian analysis highlights virtues of compassion, practical wisdom, and generosity in the maker’s choice, exemplifying a mean between indifference and overindulgence to promote flourishing for all involved."
       }
 ]
@@ -16932,7 +16932,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Right",
+        "score": "Virtue",
         "justification": "From an Aristotelian perspective, this action exemplifies multiple key virtues: compassion and kindness toward a vulnerable family member, practical wisdom in finding creative solutions to include everyone, generosity in giving time and effort for others' wellbeing, and temperance in appropriately balancing celebration with health considerations. The action demonstrates excellent moral character and virtue in action."
       }
 ]
@@ -17083,7 +17083,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Right",
+        "score": "Virtue",
         "justification": "From an Aristotelian perspective, the action reflects virtues like thoughtfulness, empathy, and creativity, as the cake maker demonstrated care and ingenuity to ensure the child's inclusion, aligning with moral excellence."
       }
 ]
@@ -17245,7 +17245,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Right",
+        "score": "Virtue",
         "justification": "From an Aristotelian perspective, the cake maker's action demonstrates a flourishing of several key **virtues**. Foremost are **kindness**, **compassion**, and **generosity**, as they put effort into ensuring the child's happiness. The act also showcases **prudence** by being careful about the child's allergies, and **thoughtfulness** in anticipating the child's feelings of exclusion. This action reflects a virtuous character that consistently aims to promote the well-being and inclusion of others, particularly those in their care."
       }
 ]
@@ -17707,7 +17707,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Right",
+        "score": "Virtue",
         "justification": "This effort exemplifies Aristotelian virtues—compassion in feeling others’ pain, practical wisdom in coordinating relief, courage in facing difficult conditions, and generosity in giving freely."
       }
 ]
@@ -18009,7 +18009,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Right",
+        "score": "Virtue",
         "justification": "From an Aristotelian perspective, the action reflects virtues like altruism, empathy, and teamwork, as volunteers demonstrated selfless care and cooperation to support the community's recovery."
       }
 ]
@@ -18172,7 +18172,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Right",
+        "score": "Virtue",
         "justification": "From an Aristotelian perspective, the actions of the community members exemplify numerous **virtues**. Their response showcases **compassion**, **generosity**, and **benevolence** towards those suffering. The **courage** to face a devastating situation, **perseverance** in recovery efforts, and **justice** in ensuring aid reaches those in need are also evident. Furthermore, the collaborative nature highlights **friendship**, **loyalty** to the community, and a strong sense of **civic responsibility**. These actions reflect a flourishing collective character, demonstrating virtuous conduct in the face of adversity and contributing to the communal good."
       }
 ]
@@ -18633,7 +18633,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong",
+        "score": "Vice",
         "justification": "Aristotelian analysis highlights vices—greed, deceit, and lack of integrity—instead of virtues like honesty, justice, and generosity, indicating a profound failure of moral character."
       }
 ]
@@ -18784,7 +18784,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong",
+        "score": "Vice",
         "justification": "From an Aristotelian perspective, this action represents the complete absence of virtue and embodiment of vice. It demonstrates dishonesty instead of truthfulness, injustice instead of fairness, greed instead of temperance, and selfishness instead of consideration for others. The sustained deception over years shows a character fundamentally lacking in integrity, honor, and moral excellence. No virtuous person would exploit a system designed to help disabled veterans."
       }
 ]
@@ -19095,7 +19095,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong",
+        "score": "Vice",
         "justification": "From an Aristotelian perspective, the veteran's actions exemplify numerous **vices**. The central vices at play are **dishonesty** and **injustice**, as the individual deliberately misrepresented facts for personal gain at the expense of others. This act demonstrates a severe lack of **integrity**, **fairness**, and **responsibility**. Furthermore, it highlights **greed** and **selfishness**, completely antithetical to virtues like **generosity**, **altruism**, or **honesty**. Such conduct indicates a deeply flawed moral character, failing to embody the virtues expected of a member of society, especially one who has served their country."
       }
 ]
@@ -19707,7 +19707,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Right",
+        "score": "Virtue",
         "justification": "From an Aristotelian perspective, this action demonstrates several important virtues within its cultural context: faith and reverence toward spiritual traditions, courage in maintaining cultural practices despite potential outside judgment, temperance in following established ritual guidelines, and justice in preserving community heritage. The practice fosters communal virtue and cultural flourishing (eudaimonia) through shared meaning and celebration."
       }
 ]
@@ -20012,7 +20012,7 @@
 "questions": [
     {
         "question": "Deontology",
-        "score": "Other",
+        "score": "Ambiguous",
         "justification": "From a deontological perspective, the Gorehabba festival is a cultural and religious practice that doesn't inherently involve universal moral duties or violations. While it might seem unconventional to outsiders, within the community, it is a ritual performed out of tradition and belief for communal well-being. There is no clear moral imperative being violated or upheld in a universal sense; it is a context-specific act of cultural observance rather than a duty-bound moral action."
       },
       {
@@ -20022,7 +20022,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Right",
+        "score": "Virtue",
         "justification": "From an Aristotelian perspective, the participation in the Gorehabba festival demonstrates several **virtues** within the context of the community. It showcases **community spirit**, **cooperation**, and **unity** as individuals join together in a shared ritual. The act reflects **faith** and **devotion** to their traditions and beliefs about health and prosperity. Furthermore, the 'playful battle' aspect suggests **joy**, **amusement**, and **good humor**, contributing to the overall flourishing of the community through shared positive experiences and cultural identity. It embodies virtues of social cohesion and cultural preservation."
       }
 ]
@@ -20776,17 +20776,17 @@
 "questions": [
     {
         "question": "Deontology",
-        "score": "right",
+        "score": "Right",
         "justification": "From a deontological perspective, the action is right, as it fulfilled duties of care and support for a loved one, respecting their dignity and well-being without causing harm."
       },
       {
         "question": "Utilitarianism",
-        "score": "right",
+        "score": "Right",
         "justification": "From a utilitarian perspective, the action is right, as it maximized happiness for the loved one by boosting their confidence and emotional well-being, with no harm caused; negative utilitarianism supports this, as it prevented distress."
       },
       {
         "question": "Virtue Ethics",
-        "score": "right",
+        "score": "Virtue",
         "justification": "From an Aristotelian perspective, the action reflects virtues like love, selflessness, and dedication, as the partner demonstrated profound care and commitment to their loved one’s well-being."
       }
 ]
@@ -20953,7 +20953,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Right",
+        "score": "Virtue",
         "justification": "From an Aristotelian perspective, this action exemplifies several virtues. 'Love' (philia) is clearly at play, demonstrating a deep affection and care for another. 'Generosity' is evident in the sacrifice of time and personal comfort. 'Selflessness' and 'compassion' are also strong virtues demonstrated, showing a focus on the well-being of the loved one over one's own immediate desires. The act contributes to the partner's 'flourishing' (eudaimonia) by enabling them to act virtuously and fulfill their role as a caring partner."
       }
 ]
@@ -21411,7 +21411,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong",
+        "score": "Vice",
         "justification": "The retaliation exemplifies vices such as intemperance, aggression, and injustice rather than virtues like patience, self-control, and fairness, indicating a failure of moral character."
       }
 ]
@@ -21713,7 +21713,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong",
+        "score": "Vice",
         "justification": "From an Aristotelian perspective, the action reflects vices like impulsiveness and lack of temperance, as the employee failed to exercise self-control, though the desire to defend dignity shows a partial virtuous intent."
       }
 ]
@@ -22475,7 +22475,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong",
+        "score": "Vice",
         "justification": "From an Aristotelian perspective, this behavior represents the complete absence of virtue and the embodiment of the most serious vices: predatory exploitation instead of protective care, corruption instead of integrity, selfishness instead of service, and abuse of power instead of responsible stewardship. The teacher violated every virtue essential to their profession - wisdom, justice, temperance, and courage - while demonstrating criminal vice that causes profound harm to vulnerable children in their care."
       }
 ]
@@ -23547,7 +23547,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong",
+        "score": "Vice",
         "justification": "From an Aristotelian perspective, the action reflects vices such as disrespect and intolerance, as the teenagers showed a lack of regard for the sacredness of the cemetery and the feelings of the Christian community. Instead of embodying virtues like respect and empathy, their behavior indicates moral failings."
       }
 ]
@@ -24164,7 +24164,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong",
+        "score": "Vice",
         "justification": "Aristotelian virtue ethics highlights a lack of prudence, self‑control, and practical wisdom in her reckless behavior, marking it as a vice rather than an expression of virtuous character."
       }
 ]
@@ -24466,7 +24466,7 @@
       },
       {
         "question": "Virtue Ethics",
-        "score": "Wrong",
+        "score": "Vice",
         "justification": "From an Aristotelian perspective, the action displays vices such as recklessness, impulsiveness, and irresponsibility, as she endangered herself and others rather than seeking help prudently. It lacks virtues like prudence, respect, and responsibility, reflecting poor character in her decision-making."
       }
 ]

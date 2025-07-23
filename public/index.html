@@ -951,49 +951,52 @@ What If Scenarios:
 <div class="plot-container">
 <div id="cube-plot"></div>
 </div>
-<!-- Moral Category Filter with Clear Filters button underneath -->
-<div class="filter-group">
-<label>Filter by Moral Category:</label>
-<div class="filter-badges">
-<span class="filter-badge category-evil active" data-category="evil">Evil</span>
-<span class="filter-badge category-virtue active" data-category="virtue">Virtue</span>
-<span class="filter-badge category-vice active" data-category="vice">Vice</span>
-<span class="filter-badge category-sin active" data-category="sin">Sin</span>
-<span class="filter-badge category-morally-grey active" data-category="morally_grey">Morally Grey</span>
-<span class="filter-badge category-world-building active" data-category="world_building">World Building</span>
-</div>
-</div>
+<!-- Filters Container - Side by Side Layout -->
+<div class="filters-container" style="display: flex; gap: 20px;">
+    <!-- Moral Category Filter -->
+    <div class="filter-group" style="flex: 1;">
+        <label>Moral Category:</label>
+        <div class="filter-badges">
+            <span class="filter-badge category-evil active" data-category="evil">Evil</span>
+            <span class="filter-badge category-virtue active" data-category="virtue">Virtue</span>
+            <span class="filter-badge category-vice active" data-category="vice">Vice</span>
+            <span class="filter-badge category-sin active" data-category="sin">Sin</span>
+            <span class="filter-badge category-morally-grey active" data-category="morally_grey">Morally Grey</span>
+            <span class="filter-badge category-world-building active" data-category="world_building">World Building</span>
+        </div>
+    </div>
 
-<!-- Philosophical Analysis Filter -->
-<div class="filter-group philosophical-filter">
-<label>Filter by Philosophical Analysis:</label>
+    <!-- Philosophical Analysis Filter -->
+    <div class="filter-group philosophical-filter" style="flex: 1;">
+        <label>Philosophical Analysis:</label>
 
-<div class="philosophical-theory">
-<div class="philosophical-theory-label">Deontology:</div>
-<div class="philosophical-buttons">
-<div class="phil-button right" data-theory="Deontology" data-value="right" title="Right">✓</div>
-<div class="phil-button wrong" data-theory="Deontology" data-value="wrong" title="Wrong">✗</div>
-<div class="phil-button other" data-theory="Deontology" data-value="other" title="Other/Ambiguous">?</div>
-</div>
-</div>
+        <div class="philosophical-theory">
+            <div class="philosophical-theory-label">Deontology:</div>
+            <div class="philosophical-buttons">
+                <div class="phil-button right" data-theory="Deontology" data-value="right" title="Right">✓</div>
+                <div class="phil-button wrong" data-theory="Deontology" data-value="wrong" title="Wrong">✗</div>
+                <div class="phil-button other" data-theory="Deontology" data-value="other" title="Other/Ambiguous">?</div>
+            </div>
+        </div>
 
-<div class="philosophical-theory">
-<div class="philosophical-theory-label">Utilitarianism:</div>
-<div class="philosophical-buttons">
-<div class="phil-button right" data-theory="Utilitarianism" data-value="right" title="Right">✓</div>
-<div class="phil-button wrong" data-theory="Utilitarianism" data-value="wrong" title="Wrong">✗</div>
-<div class="phil-button other" data-theory="Utilitarianism" data-value="other" title="Other/Ambiguous">?</div>
-</div>
-</div>
+        <div class="philosophical-theory">
+            <div class="philosophical-theory-label">Utilitarianism:</div>
+            <div class="philosophical-buttons">
+                <div class="phil-button right" data-theory="Utilitarianism" data-value="right" title="Right">✓</div>
+                <div class="phil-button wrong" data-theory="Utilitarianism" data-value="wrong" title="Wrong">✗</div>
+                <div class="phil-button other" data-theory="Utilitarianism" data-value="other" title="Other/Ambiguous">?</div>
+            </div>
+        </div>
 
-<div class="philosophical-theory">
-<div class="philosophical-theory-label">Virtue Ethics:</div>
-<div class="philosophical-buttons">
-<div class="phil-button right" data-theory="Virtue Ethics" data-value="right" title="Virtue">✓</div>
-<div class="phil-button wrong" data-theory="Virtue Ethics" data-value="wrong" title="Vice">✗</div>
-<div class="phil-button other" data-theory="Virtue Ethics" data-value="other" title="Other/Ambiguous">?</div>
-</div>
-</div>
+        <div class="philosophical-theory">
+            <div class="philosophical-theory-label">Virtue Ethics:</div>
+            <div class="philosophical-buttons">
+                <div class="phil-button right" data-theory="Virtue Ethics" data-value="right" title="Virtue">✓</div>
+                <div class="phil-button wrong" data-theory="Virtue Ethics" data-value="wrong" title="Vice">✗</div>
+                <div class="phil-button other" data-theory="Virtue Ethics" data-value="other" title="Other/Ambiguous">?</div>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
 <div id="cards-column" style="width: 18%; padding: 0 10px;">
