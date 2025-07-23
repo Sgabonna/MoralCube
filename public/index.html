@@ -367,6 +367,8 @@ user-select: none;
 
 .filter-badge.active {
 opacity: 1;
+background-color: var(--bg-dark-quaternary) !important;
+color: white !important;
 }
 
 .info-icon {
@@ -905,7 +907,7 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .logo {
-  height: 140px;
+  height: 160px;
   width: auto;
   object-fit: contain;
 }
@@ -943,7 +945,7 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .pattern-image {
-  height: 120px;
+  height: 160px;
   width: auto;
   object-fit: contain;
   opacity: 0.8;
@@ -1186,7 +1188,7 @@ padding-right: 0.6rem !important;
           </a>
           <div class="title-section">
             <h1 class="main-title">The Moral Cube</h1>
-            <p class="subtitle">EXPLORE ETHICAL SPACES</p>
+            <p class="subtitle">EXPLORE ETHICAL SPACE</p>
           </div>
         </div>
         <div class="pattern-placeholder">
@@ -1270,7 +1272,7 @@ What If Scenarios:
 <div id="cube-plot"></div>
 </div>
 <!-- Filters Container - Side by Side Layout -->
-<div class="filters-container" style="display: flex; gap: 20px; align-items: flex-start;">
+<div class="filters-container" style="display: flex; gap: 20px; align-items: flex-start; margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
     <!-- Moral Category Filter -->
     <div class="filter-group" style="flex: 1;">
         <label style="display: block; margin-bottom: 10px; font-weight: bold;">Moral Category:</label>
@@ -2833,13 +2835,13 @@ return `<span class="${categoryClass}">${category}</span>`;
 function getColorByCategory(category) {
   const colorMap = {
     'evil': '#ff36c4',
-    'virtue': '#00c1b6',
+    'virtue': '#4ade80',
     'vice': '#fcbd21',
     'sin': '#9e005d',
-    'morally_grey': '#808080',
+    'morally_grey': '#a1a1aa',
     'world_building': '#7f47dd'
   };
-  return colorMap[category] || '#808080';
+  return colorMap[category] || '#a1a1aa';
 }
 // Helper function: normalize a category string.
 function normalizeCategory(category) {
