@@ -1907,6 +1907,44 @@ if (hasPhilosophicalFilters) {
         
         return true; // Point passes all philosophical filters
     });
+    
+    // Update scenario and model filter options based on philosophical filtering
+    const availableScenarios = new Set(filteredPoints.map(p => p.scenarioTitle));
+    const availableModels = new Set(filteredPoints.map(p => p.llmName));
+    
+    // Update scenario filter options
+    const scenarioFilter = document.getElementById('scenarioFilter');
+    Array.from(scenarioFilter.options).forEach(option => {
+        if (availableScenarios.has(option.value)) {
+            option.style.display = 'block';
+            option.classList.add('relevant-option');
+        } else {
+            option.style.display = 'none';
+            option.classList.remove('relevant-option');
+            // Deselect unavailable scenarios
+            if (option.selected) {
+                option.selected = false;
+                selectedScenarios = selectedScenarios.filter(scenario => scenario !== option.value);
+            }
+        }
+    });
+    
+    // Update model filter options
+    const modelFilter = document.getElementById('modelFilter');
+    Array.from(modelFilter.options).forEach(option => {
+        if (availableModels.has(option.value)) {
+            option.style.display = 'block';
+            option.classList.add('relevant-option');
+        } else {
+            option.style.display = 'none';
+            option.classList.remove('relevant-option');
+            // Deselect unavailable models
+            if (option.selected) {
+                option.selected = false;
+                selectedModels = selectedModels.filter(model => model !== option.value);
+            }
+        }
+    });
 }
 
 // --- Apply Scenario Filter ---
@@ -2050,6 +2088,8 @@ document.querySelectorAll('#valuesFilter option').forEach(option => {
 
 if (filteredPoints.length === 0) {
 alert('No data points match the current filters.');
+// Clear philosophical highlighting when no data matches filters
+clearPhilosophicalHighlighting();
 return;
 }
 
@@ -2066,17 +2106,29 @@ if (selectedScenarios.length > 0) {
 const compData = filteredPoints.filter(point => selectedScenarios.includes(point.scenarioTitle));
 populateOverview(compData);
 populateScenarioDetails(compData);
+// Update philosophical highlighting for scenario selection
+if (compData.length > 0) {
+    updatePhilosophicalHighlighting(compData);
+}
 } else if (selectedModels.length === 2) {
 const compData = selectedModels.map(model =>
 filteredPoints.find(point => point.llmName === model)
 ).filter(Boolean);
 populateOverview(compData);
 populateScenarioDetails(compData);
+// Update philosophical highlighting for model comparison
+if (compData.length > 0) {
+    updatePhilosophicalHighlighting(compData);
+}
 } else {
 // If only one scenario is selected, show a maximum of 4 models.
 let compData = Array.isArray(filteredPoints) ? filteredPoints.slice(0, 4) : filteredPoints;
 populateOverview(compData);
 populateScenarioDetails(compData);
+// Update philosophical highlighting for single scenario + model selection
+if (compData.length > 0) {
+    updatePhilosophicalHighlighting(compData);
+}
 }
 
 // --- Create the 3D plot ---
@@ -2226,10 +2278,14 @@ if (selectedComparison.length === 2) {
 // Filter dataPoints to only include those with IDs in selectedComparison.
 const compData = dataPoints.filter(point => selectedComparison.includes(point.id));
 populateScenarioDetails(compData);
+// Update philosophical highlighting for selected comparison
+updatePhilosophicalHighlighting(compData);
 } else {
 // Optionally, clear or update the scenario details if fewer than 2 are selected.
 // For example, you could clear the details:
 // document.getElementById('scenarioAccordion').innerHTML = '';
+// Clear philosophical highlighting when less than 2 scenarios selected
+clearPhilosophicalHighlighting();
 }
 });
 });
