@@ -116,7 +116,7 @@
 },
 {
 "question": "Values",
-"score": ["Affection", "Altruism", "Attentive", "Careful", "Compassion", "Kindness", "Empathy", "Generosity", "Gratitude", "Love", "Patience", "Responsibility", "Selflessness", "Service", "Thoughtfulness"],
+"score": ["Affection", "Altruism", "Attentive", "Carefulness", "Compassion", "Kindness", "Empathy", "Generosity", "Gratitude", "Love", "Patience", "Responsibility", "Selflessness", "Service", "Thoughtfulness"],
 "justification": "The child perceives the dog’s discomfort and voluntarily retrieves a pillow to enhance its comfort, demonstrating attentive empathy and altruistic care. This spontaneous, gentle assistance reflects love, kindness, and selfless service without any apparent expectation of reward."
 }
 ]
@@ -3204,7 +3204,7 @@
 },
 {
 "question": "Values",
-"score": ["Disrespect", "Unethical behaviour", "Irresponsibility", "Indifference", "Environmental neglect", "Impulsiveness"],
+"score": ["Disrespect", "Unethical behavior", "Irresponsibility", "Indifference", "Environmental neglect", "Impulsiveness"],
 "justification": "By urinating on rented property and the sand in view of others, she shows disregard for social norms, property rights, and environmental cleanliness, acting on a selfish impulse without accountability."
 }
 ]
@@ -3796,7 +3796,7 @@
 },
 {
 "question": "Values",
-"score": ["Disrespect", "Irresponsibility", "Carelessness", "Selfishness", "Unethical behaviour", "Neglect", "Recklessness", "Impulsiveness", "Indifference", "Wastefulness"],
+"score": ["Disrespect", "Irresponsibility", "Carelessness", "Selfishness", "Unethical behavior", "Neglect", "Recklessness", "Impulsiveness", "Indifference", "Wastefulness"],
 "justification": "The woman's action demonstrates multiple negative values: disrespect for others and property, irresponsibility in not using proper facilities, carelessness about hygiene and others' comfort, selfishness in prioritizing personal convenience over social norms, and unethical behavior that violates basic standards of public decency and cleanliness."
 }
 ]
@@ -4388,7 +4388,7 @@
 },
 {
 "question": "Values",
-"score": ["Disrespect", "Irresponsibility", "Carelessness", "Selfishness", "Unethical behaviour", "Environmental neglect"],
+"score": ["Disrespect", "Irresponsibility", "Carelessness", "Selfishness", "Unethical behavior", "Environmental neglect"],
 "justification": "The individual demonstrated a clear disrespect for public property and other beachgoers, irresponsibility in not seeking appropriate facilities, carelessness regarding sanitation, and selfishness by prioritizing their convenience over the well-being of others and the environment. This action also exhibits unethical behavior by violating common social norms and potentially laws regarding public hygiene."
 }
 ]
@@ -6312,7 +6312,7 @@
 "question": "Values",
 "score": ["Family","Responsibility","Cruelty",
 "Exploitation",
-"Unethical behaviour",
+"Unethical behavior",
 "Oppression",
 "Injustice"
 ],
@@ -7059,13 +7059,13 @@
 "question": "Wills at Play",
 "score": null,
 "justification": "Will to Survive: The father's actions are primarily driven by a Will to Survive for his family.  Will to Provide: A strong Will to Provide for his family, even at a terrible cost, influences his decision."
-}
-]
 },
 {
-"question": "Values",
-"score": ["Selflessness", "Sacrifice", "Desperation", "Fearfulness", "Neglect", "Exploitation"],
-"justification": "The father's actions are driven by an extreme form of selflessness and sacrifice for the survival of his remaining family, demonstrating immense desperation and fearfulness in the face of starvation. However, this comes at the cost of neglecting his daughters' rights and potentially exploiting them, even if from a place of extreme duress."
+    "question": "Values",
+    "score": ["Selflessness", "Sacrifice", "Desperation", "Fearfulness", "Neglect", "Exploitation"],
+    "justification": "The father's actions are driven by an extreme form of selflessness and sacrifice for the survival of his remaining family, demonstrating immense desperation and fearfulness in the face of starvation. However, this comes at the cost of neglecting his daughters' rights and potentially exploiting them, even if from a place of extreme duress."
+    }
+]
 },
 {
 "id": "Philosophical Analysis",
@@ -7361,7 +7361,7 @@
 },
 {
 "question": "Values",
-"score": "Responsibility, Desperation, Oppression, Exploitation, Injustice",
+"score": ["Responsibility","Desperation","Oppression","Exploitation","Injustice"],
 "justification": "The father demonstrates responsibility through concern for family survival, yet simultaneously engages in oppression by commodifying his daughters, exploitation by transactional treatment, and injustice by violating their rights. The act reflects desperation rather than malice."
 }
 ]
@@ -9628,7 +9628,7 @@
       {
         "question": "Virtue Ethics",
         "score": "Virtue",
-        "justification": "From an Aristotelian perspective, the Premier's action demonstrates several virtues, primarily **prudence**, **courage**, and **justice** (in the sense of acting for the common good). **Prudence** is evident in the careful consideration of the health crisis and the implementation of a strategy to mitigate it. **Courage** is shown in making a difficult and unpopular decision under immense pressure for the welfare of the community. The intent to uphold **justice** for the collective by ensuring public health, even at the cost of individual liberties, is also present. While the *outcome* might be debated, the *character* of the Premier in making such a decision appears to be guided by these virtues."
+        "justification": "From an Aristotelian perspective, the Premier's action demonstrates several virtues, primarily **prudence**, **courage**, and **justice** (in the sense of acting for the common good). Prudence is evident in the careful consideration of the health crisis and the implementation of a strategy to mitigate it. **Courage** is shown in making a difficult and unpopular decision under immense pressure for the welfare of the community. The intent to uphold **justice** for the collective by ensuring public health, even at the cost of individual liberties, is also present. While the *outcome* might be debated, the *character* of the Premier in making such a decision appears to be guided by these virtues."
       }
 ]
 }
@@ -11543,7 +11543,7 @@
 },
 {
     "question": "Values",
-    "score": ["Courage, Justice, Freedom, Liberation, Sacrifice, Duty, Honor, Leadership, Determination, Teamwork, Service, Responsibility, Perseverance, Unity, Vision", "Violence, Destruction"],
+    "score": ["Courage","Justice","Freedom","Liberation","Sacrifice","Duty","Honor","Leadership","Determination","Teamwork","Service","Responsibility","Perseverance","Unity","Vision","Violence","Destruction"],
     "justification": "The Allied operation embodied profound values of courage, justice, and liberation in fighting to end Nazi occupation and genocide. While inherently involving violence and destruction, these were directed toward stopping far greater evil and restoring freedom to occupied populations."
   }
 ]
@@ -12462,7 +12462,7 @@
 },
 {
     "question": "Values",
-    "score": ["Ambition","Vision","Determination","Growth","Arrogance","Recklessness","Authoritarianism","Carelessness","Irresponsibility","Dishonesty","Corruption","Callousness","Neglect","Rigid ideology","Blame-shifting"],
+    "score": ["Ambition","Vision","Determination","Growth","Arrogance","Recklessness","Authoritarianism","Carelessness","Irresponsibility","Dishonesty","Corruption","Callousness","Neglect","Rigidity","Blame-shifting"],
     "justification": "While the stated values included national development and prosperity, the actual implementation demonstrated profound negative values: reckless disregard for evidence, authoritarian suppression of dissent, dishonesty about failures, and callous indifference to mass suffering. The leadership's arrogance and ideological rigidity prevented course correction even as millions died."
   }
 ]
@@ -12613,7 +12613,7 @@
 },
 {
     "question": "Values",
-    "score": ["Ambition","Control","Rigidity","Disregard","Irresponsibility","Injustice","Unethical behaviour","Manipulation","Authoritarianism","Oppression","Vanity"],
+    "score": ["Ambition","Control","Rigidity","Disregard","Irresponsibility","Injustice","Unethical behavior","Manipulation","Authoritarianism","Oppression","Vanity"],
     "justification": "The Great Leap Forward, driven by an extreme and misguided **ambition** for rapid transformation and rigid **control**, ultimately displayed a profound **disregard** for human life and widespread **irresponsibility** in its planning and execution. The resulting policies led to extreme **injustice**, **unethical behavior** through false reporting and suppression, and represented an **authoritarian** system built on **manipulation** and **oppression**, likely fueled by the **vanity** of its leadership's ideological goals."
   }
 ]
@@ -12915,7 +12915,7 @@
 },
 {
     "question": "Values",
-    "score": ["Ambition", "Ideological Commitment", "Disregard for Human Life", "Irresponsibility"],
+    "score": ["Ambition", "Ideological Commitment", "Disregard", "Irresponsibility"],
     "justification": "Mao's vision for the Great Leap Forward was driven by ambition and ideological commitment, but it showed a blatant disregard for human life and irresponsible decision-making."
   }
 ]
@@ -14148,7 +14148,7 @@
 },
 {
     "question": "Values",
-    "score": ["Health","Altruism","Service","Life-saving","Dedication","Public Good","Achievement","Environmental neglect","Narrow-mindedness","Shortsightedness"],
+    "score": ["Health","Altruism","Service","Life","Dedication","Public Good","Achievement","Environmental neglect","Narrow-mindedness","Shortsightedness"],
     "justification": "The decision demonstrated strong positive values of protecting human life and public health service, with genuine altruistic motives to reduce malaria deaths. However, it also reflected unintentional environmental neglect and narrow focus on immediate benefits without considering broader ecological systems, though this was due to limited scientific understanding at the time rather than malicious intent."
   }
 ]
@@ -14917,7 +14917,7 @@
       "Impulsiveness",
       "Irresponsibility",
       "Disrespect",
-      "Unethical behaviour"
+      "Unethical behavior"
     ],
     "justification": "The attacker displayed a disregard for ethical norms, personal and public safety, and respect for others."
   }
@@ -15377,9 +15377,9 @@
       "Impulsiveness",
       "Recklessness",
       "Injustice",
-      "Unethical behaviour"
+      "Unethical behavior"
     ],
-    "justification": "The attacker displayed **cruelty** and **disrespect** through physical assault. Being under the influence and initiating an attack shows severe **impulsiveness** and **recklessness**. The act fundamentally represents **injustice** and **unethical behaviour**."
+    "justification": "The attacker displayed **cruelty** and **disrespect** through physical assault. Being under the influence and initiating an attack shows severe **impulsiveness** and **recklessness**. The act fundamentally represents **injustice** and **unethical behavior**."
   }
 ]
 },
@@ -16910,7 +16910,7 @@
 },
 {
     "question": "Values",
-    "score": ["Love","Thoughtfulness","Creativity","Inclusiveness","Family","Caring","Empathy","Generosity","Kindness","Adaptability","Innovation","Responsibility","Sensitivity"],
+    "score": ["Love","Thoughtfulness","Creativity","Inclusion","Family","Caring","Empathy","Generosity","Kindness","Adaptability","Innovation","Responsibility","Sensitivity"],
     "justification": "The cake maker demonstrates profound positive values including love and thoughtfulness in considering the child's allergies, creativity and adaptability in developing an alternative solution, empathy and sensitivity to ensure the child feels included, and generosity in the time and effort invested to bring joy to a family member."
   }
 ]
@@ -17215,7 +17215,7 @@
     "score": [
       "Affection",
       "Altruism",
-      "Careful",
+      "Carefulness",
       "Empathy",
       "Generosity",
       "Kindness",
@@ -17525,7 +17525,7 @@
 },
 {
     "question": "Values",
-    "score": ["Love","Altruism","Creativity","Thoughtfulness","Careful","Empathy","Family","Service"],
+    "score": ["Love","Altruism","Creativity","Thoughtfulness","Carefulness","Empathy","Family","Service"],
     "justification": "Positive values include Love (familial affection), Altruism (selfless concern for child's needs), Creativity (watermelon cake design), Thoughtfulness (allergy consideration), Careful (safety focus), Empathy (understanding exclusion), and Service (act of nurturing). No negative values observed."
   }
 ]
@@ -17836,7 +17836,7 @@
 },
 {
       "question": "Values",
-      "score": ["Altruism, Community, Cooperation, Empathy, Generosity, Kindness, Service, Solidarity, Unity, Teamwork, Support, Responsibility, Compassion, Dedication, Selflessness, Organization, Effectiveness, Resilience, Hope, Connection", ""],
+      "score": ["Altruism","Community","Cooperation","Empathy","Generosity","Kindness","Service","Solidarity","Unity","Teamwork","Support","Responsibility","Compassion","Dedication","Selflessness","Organization","Effectiveness","Resilience","Hope","Connection"],
       "justification": "The community response exemplifies the highest positive values of human cooperation and compassion. The collective effort demonstrates altruism and selflessness in helping strangers, strong community bonds and unity across different backgrounds, effective organization and teamwork to maximize impact, and deep empathy and generosity in providing essential aid to those in desperate need."
     }
 ]
@@ -18608,7 +18608,7 @@
       "Greed",
       "Selfishness",
       "Exploitation",
-      "Unethical behaviour",
+      "Unethical behavior",
       "Corruption",
       "Deceit"
     ],
@@ -18762,7 +18762,7 @@
 },
 {
     "question": "Values",
-    "score": ["Persistence","Determination","Dishonesty","Deceit","Greed","Corruption","Unethical behaviour","Exploitation","Selfishness","Untrustworthiness","Injustice","Fraud","Theft","Manipulation"],
+    "score": ["Persistence","Determination","Dishonesty","Deceit","Greed","Corruption","Unethical behavior","Exploitation","Selfishness","Untrustworthiness","Injustice","Fraud","Theft","Manipulation"],
     "justification": "While the veteran may have shown persistence and determination in maintaining the deception, these were completely misdirected toward criminal ends. The action primarily demonstrates severe negative values including systematic dishonesty, greed in stealing $1.3 million, corruption of a system meant to help disabled veterans, and exploitation of public trust and resources intended for those with genuine need."
   }
 ]
@@ -19685,7 +19685,7 @@
 },
 {
     "question": "Values",
-    "score": ["Community","Tradition","Spirituality","Faith","Unity","Joy","Playfulness","Cultural Heritage","Reverence","Participation","Celebration","Connection","Meaning","Purpose"],
+    "score": ["Community","Tradition","Spirituality","Faith","Unity","Joy","Playfulness","Culture","Reverence","Participation","Celebration","Connection","Meaning","Purpose"],
     "justification": "The festival demonstrates strong positive values of community bonding and cultural preservation, spiritual faith in traditional beliefs about health and prosperity, joyful celebration and playfulness that brings people together, and deep reverence for ancestral customs. The practice maintains cultural identity and creates meaningful shared experiences within the community."
   }
 ]
@@ -20151,7 +20151,7 @@
 },
 {
     "question": "Values",
-    "score": ["Community", "Tradition", "Cultural Sensitivity"],
+    "score": ["Community", "Tradition", "Culture"],
     "justification": "The festival demonstrates community and cultural sensitivity, as it is a unique tradition that brings people together."
   }
 ]
@@ -21540,7 +21540,7 @@
 },
 {
     "question": "Values",
-    "score": ["Assertiveness","Self-respect","Dignity","Impulsiveness","Recklessness","Lack of restraint","Poor judgment","Unprofessionalism","Escalation","Irresponsibility"],
+    "score": ["Assertiveness","Self-respect","Dignity","Impulsiveness","Recklessness","Lack of Self-Control","Poor judgment","Unprofessionalism","Escalation","Irresponsibility"],
     "justification": "While the employee may have been defending their dignity after being assaulted and humiliated, their response demonstrated significant negative values including impulsiveness rather than professional restraint, recklessness in escalating the situation, and irresponsibility toward other guests and workplace protocols. The reaction was understandably human but professionally inappropriate."
   }
 ]
@@ -22144,7 +22144,7 @@
 },
 {
     "question": "Values",
-    "score": ["Recklessness","Impulsiveness","Lack of restraint"],
+    "score": ["Recklessness","Impulsiveness","Lack of Self-Control"],
     "justification": "The employee exhibits Recklessness through uncontrolled physical escalation; Impulsiveness by immediate retaliation without pause; Lack of restraint by abandoning professional decorum. These override potential positive values like Self-defense or Justice due to disproportionate response."
   }
 ]
@@ -22298,7 +22298,7 @@
     "score": [
       "Exploitation",
       "Manipulation",
-      "Unethical behaviour",
+      "Unethical behavior",
       "Dishonesty",
       "Corruption",
       "Cruelty"
@@ -22453,7 +22453,7 @@
 },
 {
     "question": "Values",
-    "score": ["Exploitation","Corruption","Manipulation","Abuse of power","Predatory behavior","Criminal conduct","Betrayal of trust","Harm to children","Unethical behavior","Selfishness","Callousness","Irresponsibility"],
+    "score": ["Exploitation","Corruption","Manipulation","Abuse of Power","Predatory behavior","Criminal conduct","Betrayal of trust","Harm to children","Unethical behavior","Selfishness","Callousness","Irresponsibility"],
     "justification": "This behavior demonstrates exclusively negative values representing the most serious forms of exploitation and abuse. The teacher violated every principle of professional ethics, exploited vulnerable minors, engaged in criminal behavior, and caused severe psychological and physical harm to children under their care. No positive values are evident in this predatory conduct."
   }
 ]
@@ -22762,7 +22762,7 @@
               "Dishonesty",
               "Irresponsibility",
               "Manipulation",
-              "Unethical behaviour"
+              "Unethical behavior"
             ],
             "justification": "The teacher's actions clearly demonstrate a host of negative values including the manipulation and exploitation of minors for personal gratification, a gross abuse of power, and a complete disregard for ethical and moral responsibilities."
           }
@@ -23221,7 +23221,7 @@
       "Intolerance",
       "Cruelty",
       "Prejudice",
-      "Unethical behaviour",
+      "Unethical behavior",
       "Injustice"
     ],
     "justification": "By desecrating a sacred site, the teenagers exhibited blatant disrespect and intolerance toward another faith, committing an unjust and cruel act driven by prejudice."
@@ -23374,7 +23374,7 @@
 },
 {
     "question": "Values",
-    "score": ["Disrespect", "Intolerance", "Prejudice", "Cruelty", "Unethical behaviour", "Bias", "Vandalism"],
+    "score": ["Disrespect", "Intolerance", "Prejudice", "Cruelty", "Unethical behavior", "Bias", "Vandalism"],
     "justification": "The act of desecrating a cemetery demonstrates fundamental disrespect for the dead and sacred spaces of another religious community. It shows intolerance and prejudice toward Christians, involves cruel disregard for the emotional harm caused to grieving families, and represents unethical behavior that violates basic norms of human decency."
   }
 ]
@@ -23682,7 +23682,7 @@
               "Cruelty",
               "Prejudice",
               "Recklessness",
-              "Unethical behaviour",
+              "Unethical behavior",
               "Callousness"
             ],
             "justification": "The act is a clear demonstration of negative values, defined by intolerance for another religion, disrespect for the dead, prejudice against another community, and the cruel and reckless destruction of a sacred site."

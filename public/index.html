@@ -2245,9 +2245,10 @@ default: questionIndex < 3 ? "0 to 4" : "0 to -4"
 },
 'Character': {
 0: "0 to 1",
-1: "0 to 2",
+1: "0 to 2", 
 2: "0 to 4",
-3: "0 to 1"
+3: "0 to 1",
+4: "Array"  // Values question
 }
 };
 
@@ -2308,8 +2309,16 @@ const tooltipHTML = tooltip ? `
                        </div>
                    ` : '';
 
-const score = typeof question.score === 'number' ? 
-question.score.toFixed(1) : question.score;
+// Handle different score types: numbers, strings, and arrays (for Values)
+let score;
+if (typeof question.score === 'number') {
+    score = question.score.toFixed(1);
+} else if (Array.isArray(question.score)) {
+    // Format array as comma-separated list for Values questions
+    score = question.score.join(', ');
+} else {
+    score = question.score;
+}
 
 if (isPhilosophical) {
 return `
