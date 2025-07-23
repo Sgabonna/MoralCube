@@ -32,10 +32,10 @@ body {
   
   /* Category colors */
   --evil-color: #ff36c4;
-  --virtue-color: #00c1b6;
+  --virtue-color: #4ade80;
   --vice-color: #fcbd21;
   --sin-color: #9e005d;
-  --morally-grey-color: #808080;
+  --morally-grey-color: #a1a1aa;
   --world-building-color: #7f47dd;
 }
 .main-container {
@@ -682,13 +682,32 @@ border: 1px solid rgba(255, 255, 255, 0.1);
 color: var(--text-light);
 margin-top: 20px;
 padding: 20px;
-background-color: #f8f9fa;
 border-radius: 6px;
 font-size: 0.6rem;
 }
 .scenario-section .compact-table th {
 font-size: 0.8rem;
 }
+
+/* Ensure scenario details tables use dark theme colors */
+.scenario-section table,
+.scenario-section .table,
+.scenario-section .compact-table {
+color: var(--text-light) !important;
+background-color: var(--bg-dark-tertiary) !important;
+}
+
+.scenario-section th,
+.scenario-section td {
+color: var(--text-light) !important;
+border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.scenario-section th {
+background-color: var(--bg-dark-quaternary) !important;
+color: var(--text-lighter) !important;
+}
+
 .scenario-table-container {
 margin-bottom: 10px;
 }
@@ -886,7 +905,7 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .logo {
-  height: 100px;
+  height: 140px;
   width: auto;
   object-fit: contain;
 }
@@ -917,14 +936,14 @@ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .pattern-placeholder {
-  flex: 0 0 100px; /* This balances the logo on the left */
+  flex: 0 0 150px; /* Increased from 100px to accommodate larger pattern */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .pattern-image {
-  height: 80px;
+  height: 120px;
   width: auto;
   object-fit: contain;
   opacity: 0.8;
