@@ -27,6 +27,8 @@ exports.handler = async (event, context) => {
       };
     }
     
+    console.log("MONGODB_URI exists:", !!uri);
+    console.log("URI format check:", uri.startsWith('mongodb'));
     console.log("Attempting database connection...");
     const client = await connectToDatabase(uri);
     console.log("Connected to database");
