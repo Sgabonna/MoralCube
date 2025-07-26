@@ -429,6 +429,176 @@ outline: none !important;
 box-shadow: none !important;
 }
 
+/* Walkthrough Overlay Styles */
+.walkthrough-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(4, 3, 29, 0.85); /* Using your --bg-dark-primary with opacity */
+  z-index: 9998;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.walkthrough-overlay.active {
+  display: block;
+  opacity: 1;
+}
+
+.walkthrough-spotlight {
+  position: absolute;
+  border: 3px solid #4ade80; /* Using your --virtue-color */
+  border-radius: 8px;
+  box-shadow: 0 0 0 9999px rgba(4, 3, 29, 0.85);
+  z-index: 9999;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.walkthrough-tooltip {
+  position: absolute;
+  background: #191832; /* Using your --bg-dark-tertiary */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 400px;
+  color: #bbbbc3; /* Using your --text-light */
+  font-family: 'Spline Sans Mono', monospace;
+  z-index: 10000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.walkthrough-tooltip h3 {
+  color: #f7e2d3; /* Using your --text-lighter */
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.walkthrough-tooltip p {
+  margin: 0 0 15px 0;
+  line-height: 1.6;
+  font-size: 0.9rem;
+}
+
+.walkthrough-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.walkthrough-btn {
+  background: #201e36; /* Using your --bg-dark-quaternary */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #bbbbc3;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.walkthrough-btn:hover {
+  background: #4ade80;
+  color: #04031d;
+  border-color: #4ade80;
+}
+
+.walkthrough-btn.primary {
+  background: #4ade80;
+  color: #04031d;
+  border-color: #4ade80;
+}
+
+.walkthrough-btn.primary:hover {
+  background: #3bc96d;
+  border-color: #3bc96d;
+}
+
+.walkthrough-progress {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.walkthrough-step-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+}
+
+.walkthrough-step-indicator.active {
+  background: #4ade80;
+  width: 24px;
+  border-radius: 4px;
+}
+
+.walkthrough-skip {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: #bbbbc3;
+  cursor: pointer;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  z-index: 10001;
+}
+
+/* Arrow styles */
+.walkthrough-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+.walkthrough-arrow.top {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent #191832 transparent;
+}
+
+.walkthrough-arrow.bottom {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px 10px 0 10px;
+  border-color: #191832 transparent transparent transparent;
+}
+
+.walkthrough-arrow.left {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 10px 10px 10px 0;
+  border-color: transparent #191832 transparent transparent;
+}
+
+.walkthrough-arrow.right {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 10px 0 10px 10px;
+  border-color: transparent transparent transparent #191832;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .walkthrough-tooltip {
+    max-width: 90vw;
+    margin: 10px;
+  }
+}
+
 .info-icon {
 color: var(--virtue-color);
 font-size: 0.875rem;
@@ -1249,6 +1419,147 @@ margin-right: 0.3rem !important;
 padding-left: 0.6rem !important;
 padding-right: 0.6rem !important;
 }
+}
+
+/* Walkthrough Styles */
+.walkthrough-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  display: none;
+}
+
+.walkthrough-spotlight {
+  position: absolute;
+  border-radius: 8px;
+  box-shadow: 0 0 0 5000px rgba(0, 0, 0, 0.7);
+  z-index: 10000;
+}
+
+.walkthrough-tooltip {
+  position: absolute;
+  background: var(--bg-dark-secondary);
+  color: var(--text-light);
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 300px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: 'Spline Sans Mono', monospace;
+  z-index: 10001;
+}
+
+.walkthrough-tooltip h3 {
+  margin: 0 0 10px 0;
+  color: var(--text-lighter);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.walkthrough-tooltip p {
+  margin: 0 0 15px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.walkthrough-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.walkthrough-progress {
+  font-size: 12px;
+  color: var(--text-light);
+  opacity: 0.8;
+}
+
+.walkthrough-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.walkthrough-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Spline Sans Mono', monospace;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.walkthrough-btn-prev {
+  background: var(--bg-dark-tertiary);
+  color: var(--text-light);
+}
+
+.walkthrough-btn-next {
+  background: var(--virtue-color);
+  color: #000;
+}
+
+.walkthrough-btn-skip {
+  background: transparent;
+  color: var(--text-light);
+  text-decoration: underline;
+}
+
+.walkthrough-btn:hover {
+  opacity: 0.8;
+}
+
+.walkthrough-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.walkthrough-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  z-index: 10002;
+}
+
+.walkthrough-arrow.top {
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid var(--bg-dark-secondary);
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.walkthrough-arrow.bottom {
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid var(--bg-dark-secondary);
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.walkthrough-arrow.left {
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid var(--bg-dark-secondary);
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.walkthrough-arrow.right {
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 10px solid var(--bg-dark-secondary);
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 </style>
 </head>
@@ -3555,5 +3866,309 @@ navbarCollapse.classList.remove('show');
             </p>
         </div>
     </footer>
+
+<!-- Walkthrough Elements -->
+<div class="walkthrough-overlay" id="walkthroughOverlay"></div>
+<div class="walkthrough-spotlight" id="walkthroughSpotlight"></div>
+<div class="walkthrough-tooltip" id="walkthroughTooltip" style="display: none;">
+  <div class="walkthrough-arrow"></div>
+  <h3 id="walkthroughTitle"></h3>
+  <p id="walkthroughContent"></p>
+  <div class="walkthrough-buttons">
+    <div class="walkthrough-progress" id="walkthroughProgress"></div>
+    <div>
+      <button class="walkthrough-btn" id="walkthroughPrev">Previous</button>
+      <button class="walkthrough-btn primary" id="walkthroughNext">Next</button>
+    </div>
+  </div>
+</div>
+<div class="walkthrough-skip" id="walkthroughSkip" style="display: none;">Skip tour</div>
+
+<script>
+// Moral Cube Walkthrough System
+class MoralCubeWalkthrough {
+  constructor() {
+    this.currentStep = 0;
+    this.overlay = document.getElementById('walkthrough-overlay');
+    this.spotlight = document.getElementById('walkthrough-spotlight');
+    this.tooltip = document.getElementById('walkthrough-tooltip');
+    this.skipBtn = document.getElementById('walkthrough-skip');
+    
+    this.steps = [
+      {
+        title: "Welcome to The Moral Cube",
+        content: "Let's explore how to analyze ethical decisions through a unique 3D framework. This tour will guide you through the main features.",
+        target: null,
+        position: "center"
+      },
+      {
+        title: "Understanding the Three Dimensions",
+        content: "The cube maps ethical decisions across three axes: X (Ends/Goals), Y (Means/Sacrifice), and Z (Character/Awareness). Each point represents a unique moral position.",
+        target: "#cube-plot",
+        position: "right"
+      },
+      {
+        title: "Moral Categories",
+        content: "Filter scenarios by moral categories. Click these badges to focus on specific types of ethical situations like virtue, vice, or morally grey areas.",
+        target: ".filter-badges",
+        position: "top"
+      },
+      {
+        title: "Select Values",
+        content: "Choose from various moral values to find scenarios that align with specific ethical principles. This helps narrow down relevant examples.",
+        target: "#valuesFilter",
+        position: "bottom"
+      },
+      {
+        title: "Choose Scenarios",
+        content: "Select ethical scenarios to analyze. You can compare up to 4 scenarios simultaneously. Use Ctrl+Click (PC) or Cmd+Click (Mac) for multiple selections.",
+        target: "#scenarioFilter",
+        position: "bottom"
+      },
+      {
+        title: "Compare AI Models",
+        content: "See how different AI models analyze the same ethical scenarios. This unique feature reveals where human and AI perspectives align or diverge.",
+        target: "#modelFilter",
+        position: "bottom"
+      },
+      {
+        title: "Alternative Outcomes",
+        content: "Explore 'what-if' scenarios to see how small changes in actions affect moral positioning within the cube.",
+        target: "#alternateOutcomes",
+        position: "left"
+      },
+      {
+        title: "Scenario Cards",
+        content: "Click up to 2 cards to compare detailed ethical analyses. Each card shows the scenario with its moral classification and AI model.",
+        target: "#overview",
+        position: "left"
+      },
+      {
+        title: "Detailed Analysis",
+        content: "After selecting 2 scenarios, scroll down to see comprehensive breakdowns of Ends, Means, and Character dimensions with philosophical perspectives.",
+        target: "#scenarioSection",
+        position: "top"
+      },
+      {
+        title: "Ready to Explore!",
+        content: "You now understand the basics of The Moral Cube. Start by selecting a value or scenario to begin your ethical exploration. Remember, this is a tool for reflection, not prescription.",
+        target: null,
+        position: "center"
+      }
+    ];
+    
+    this.init();
+  }
+  
+  init() {
+    // Check if user has seen the tour
+    const hasSeenTour = localStorage.getItem('moralCubeWalkthroughSeen');
+    
+    // Bind event listeners
+    document.getElementById('walkthrough-next').addEventListener('click', () => this.nextStep());
+    document.getElementById('walkthrough-prev').addEventListener('click', () => this.prevStep());
+    this.skipBtn.addEventListener('click', () => this.endTour());
+    
+    // Add keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (this.overlay.style.display === 'block') {
+        if (e.key === 'Escape') this.endTour();
+        if (e.key === 'ArrowRight') this.nextStep();
+        if (e.key === 'ArrowLeft') this.prevStep();
+      }
+    });
+    
+    // Auto-start for first-time visitors (uncomment when ready)
+    // if (!hasSeenTour) {
+    //   setTimeout(() => this.startTour(), 1000);
+    // }
+  }
+  
+  startTour() {
+    this.currentStep = 0;
+    this.overlay.style.display = 'block';
+    this.updateStep();
+  }
+  
+  updateStep() {
+    const step = this.steps[this.currentStep];
+    
+    // Update content
+    document.getElementById('walkthrough-title').textContent = step.title;
+    document.getElementById('walkthrough-description').textContent = step.content;
+    
+    // Update progress indicators
+    this.updateProgress();
+    
+    // Update button states
+    document.getElementById('walkthrough-prev').style.display = 
+      this.currentStep === 0 ? 'none' : 'inline-block';
+    
+    const nextBtn = document.getElementById('walkthrough-next');
+    nextBtn.textContent = this.currentStep === this.steps.length - 1 ? 'Finish' : 'Next';
+    
+    // Position spotlight and tooltip
+    if (step.target) {
+      const element = document.querySelector(step.target);
+      if (element) {
+        // Scroll element into view with smooth animation
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+        this.positionSpotlight(element);
+        this.positionTooltip(element, step.position);
+      }
+    } else {
+      // Center position for intro/outro
+      this.spotlight.style.display = 'none';
+      this.centerTooltip();
+    }
+    
+    // Show tooltip with animation
+    this.tooltip.style.display = 'block';
+    setTimeout(() => {
+      this.tooltip.style.opacity = '1';
+    }, 50);
+  }
+  
+  positionSpotlight(element) {
+    const rect = element.getBoundingClientRect();
+    const padding = 10;
+    
+    this.spotlight.style.display = 'block';
+    this.spotlight.style.left = `${rect.left - padding}px`;
+    this.spotlight.style.top = `${rect.top - padding}px`;
+    this.spotlight.style.width = `${rect.width + (padding * 2)}px`;
+    this.spotlight.style.height = `${rect.height + (padding * 2)}px`;
+  }
+  
+  positionTooltip(element, position) {
+    const rect = element.getBoundingClientRect();
+    const tooltipRect = this.tooltip.getBoundingClientRect();
+    const arrow = document.getElementById('walkthrough-arrow');
+    const margin = 20;
+    
+    // Reset arrow classes
+    arrow.className = 'walkthrough-arrow';
+    
+    let top, left;
+    
+    switch(position) {
+      case 'top':
+        top = rect.top - tooltipRect.height - margin;
+        left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+        arrow.classList.add('bottom');
+        break;
+      case 'bottom':
+        top = rect.bottom + margin;
+        left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+        arrow.classList.add('top');
+        break;
+      case 'left':
+        top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+        left = rect.left - tooltipRect.width - margin;
+        arrow.classList.add('right');
+        break;
+      case 'right':
+        top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+        left = rect.right + margin;
+        arrow.classList.add('left');
+        break;
+    }
+    
+    // Ensure tooltip stays within viewport
+    top = Math.max(10, Math.min(top, window.innerHeight - tooltipRect.height - 10));
+    left = Math.max(10, Math.min(left, window.innerWidth - tooltipRect.width - 10));
+    
+    this.tooltip.style.top = `${top}px`;
+    this.tooltip.style.left = `${left}px`;
+  }
+  
+  centerTooltip() {
+    const tooltipRect = this.tooltip.getBoundingClientRect();
+    this.tooltip.style.top = `${(window.innerHeight - tooltipRect.height) / 2}px`;
+    this.tooltip.style.left = `${(window.innerWidth - tooltipRect.width) / 2}px`;
+    document.getElementById('walkthrough-arrow').style.display = 'none';
+  }
+  
+  updateProgress() {
+    const progressContainer = document.getElementById('walkthrough-progress');
+    progressContainer.textContent = `${this.currentStep + 1} of ${this.steps.length}`;
+  }
+  
+  nextStep() {
+    if (this.currentStep < this.steps.length - 1) {
+      this.tooltip.style.opacity = '0';
+      setTimeout(() => {
+        this.currentStep++;
+        this.updateStep();
+      }, 300);
+    } else {
+      this.endTour();
+    }
+  }
+  
+  prevStep() {
+    if (this.currentStep > 0) {
+      this.tooltip.style.opacity = '0';
+      setTimeout(() => {
+        this.currentStep--;
+        this.updateStep();
+      }, 300);
+    }
+  }
+  
+  endTour() {
+    this.overlay.style.display = 'none';
+    this.spotlight.style.display = 'none';
+    this.tooltip.style.display = 'none';
+    localStorage.setItem('moralCubeWalkthroughSeen', 'true');
+  }
+}
+
+// Initialize walkthrough when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  // Wait a bit for other scripts to load
+  setTimeout(() => {
+    window.moralCubeWalkthrough = new MoralCubeWalkthrough();
+    
+    // Add a help button to restart the tour
+    const helpButton = document.createElement('button');
+    helpButton.innerHTML = '<i class="fas fa-question-circle"></i> Help';
+    helpButton.className = 'btn btn-secondary btn-sm';
+    helpButton.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      background-color: var(--bg-dark-quaternary);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--text-light);
+      font-family: 'Spline Sans Mono', monospace;
+    `;
+    helpButton.onclick = () => window.moralCubeWalkthrough.startTour();
+    document.body.appendChild(helpButton);
+  }, 1000);
+});
+</script>
+
+<!-- Walkthrough Elements -->
+<div id="walkthrough-overlay" class="walkthrough-overlay">
+  <div id="walkthrough-spotlight" class="walkthrough-spotlight"></div>
+  <div id="walkthrough-tooltip" class="walkthrough-tooltip">
+    <h3 id="walkthrough-title"></h3>
+    <p id="walkthrough-description"></p>
+    <div class="walkthrough-controls">
+      <span id="walkthrough-progress" class="walkthrough-progress"></span>
+      <div class="walkthrough-buttons">
+        <button id="walkthrough-skip" class="walkthrough-btn walkthrough-btn-skip">Skip Tour</button>
+        <button id="walkthrough-prev" class="walkthrough-btn walkthrough-btn-prev">Previous</button>
+        <button id="walkthrough-next" class="walkthrough-btn walkthrough-btn-next">Next</button>
+      </div>
+    </div>
+    <div id="walkthrough-arrow" class="walkthrough-arrow"></div>
+  </div>
+</div>
+
 </body>
 </html>
