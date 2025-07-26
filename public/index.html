@@ -1428,7 +1428,7 @@ padding-right: 0.6rem !important;
   left: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
-  background: red !important;
+  background: rgba(0, 0, 0, 0.8) !important;
   z-index: 2147483647 !important;
   display: flex !important;
   align-items: center !important;
@@ -3850,9 +3850,7 @@ document.addEventListener('DOMContentLoaded', function() {
       font-family: 'Spline Sans Mono', monospace;
     `;
     helpButton.onclick = () => {
-      console.log('Help button clicked');
       if (window.moralCubeWalkthrough) {
-        console.log('Starting walkthrough...');
         window.moralCubeWalkthrough.startTour();
       } else {
         console.error('Walkthrough not initialized');
@@ -3921,7 +3919,6 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       
       showStep() {
-        console.log('showStep called, about to create overlay');
         // Remove existing overlay
         if (this.overlay) {
           this.overlay.remove();
@@ -3955,20 +3952,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         this.overlay.appendChild(tooltip);
         document.body.appendChild(this.overlay);
-        
-        // Debug: Check if element was actually added
-        console.log('Element added to DOM');
-        console.log('Overlay in DOM:', document.body.contains(this.overlay));
-        console.log('Overlay dimensions:', this.overlay.offsetWidth, 'x', this.overlay.offsetHeight);
-        console.log('Body style:', getComputedStyle(document.body).position);
-        
-        // Try to bring to very front
-        this.overlay.style.position = 'fixed';
-        this.overlay.style.zIndex = '2147483647';
-        this.overlay.style.top = '0px';
-        this.overlay.style.left = '0px';
-        
-        console.log('Overlay final position:', this.overlay.getBoundingClientRect());
         
         // Add event listeners after adding to DOM
         this.overlay.querySelector('#walkthrough-skip-btn').addEventListener('click', () => this.closeTour());
