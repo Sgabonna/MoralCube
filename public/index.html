@@ -1430,12 +1430,19 @@ padding-right: 0.6rem !important;
   height: 100vh !important;
   background: rgba(0, 0, 0, 0.8) !important;
   z-index: 2147483647 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  display: block !important;
+}
+
+.walkthrough-spotlight {
+  position: absolute !important;
+  border-radius: 8px !important;
+  box-shadow: 0 0 0 5000px rgba(0, 0, 0, 0.8) !important;
+  z-index: 2147483648 !important;
+  pointer-events: none !important;
 }
 
 .walkthrough-tooltip-active {
+  position: absolute !important;
   background: #14132c !important;
   color: #bbbbc3 !important;
   padding: 30px !important;
@@ -1444,6 +1451,14 @@ padding-right: 0.6rem !important;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   font-family: 'Spline Sans Mono', monospace !important;
+  z-index: 2147483649 !important;
+}
+
+.walkthrough-tooltip-centered {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
 }
 
 .walkthrough-tooltip-active h3 {
@@ -3930,6 +3945,11 @@ document.addEventListener('DOMContentLoaded', function() {
         this.overlay = document.createElement('div');
         this.overlay.className = 'walkthrough-overlay-active';
         
+        // Create spotlight for highlighting elements
+        const spotlight = document.createElement('div');
+        spotlight.className = 'walkthrough-spotlight';
+        spotlight.style.display = 'none';
+        
         // Create tooltip using CSS classes  
         const tooltip = document.createElement('div');
         tooltip.className = 'walkthrough-tooltip-active';
@@ -3950,8 +3970,39 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
         `;
         
+        this.overlay.appendChild(spotlight);
         this.overlay.appendChild(tooltip);
         document.body.appendChild(this.overlay);
+        
+        // Position spotlight and tooltip based on target
+        if (step.target) {
+          const targetElement = document.querySelector(step.target);
+          if (targetElement) {
+            // Scroll target into view
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Position spotlight
+            setTimeout(() => {
+              const rect = targetElement.getBoundingClientRect();
+              const padding = 10;
+              
+              spotlight.style.display = 'block';
+              spotlight.style.left = `${rect.left - padding}px`;
+              spotlight.style.top = `${rect.top - padding}px`;
+              spotlight.style.width = `${rect.width + (padding * 2)}px`;
+              spotlight.style.height = `${rect.height + (padding * 2)}px`;
+              
+              // Position tooltip near the target
+              this.positionTooltip(tooltip, targetElement, step.position);
+            }, 300);
+          } else {
+            // Center tooltip if target not found
+            tooltip.className += ' walkthrough-tooltip-centered';
+          }
+        } else {
+          // Center tooltip for intro/outro steps
+          tooltip.className += ' walkthrough-tooltip-centered';
+        }
         
         // Add event listeners after adding to DOM
         this.overlay.querySelector('#walkthrough-skip-btn').addEventListener('click', () => this.closeTour());
@@ -3975,6 +4026,45 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 100);
           }
         }
+      },
+      
+      positionTooltip(tooltip, targetElement, position) {
+        const rect = targetElement.getBoundingClientRect();
+        const tooltipRect = tooltip.getBoundingClientRect();
+        const margin = 20;
+        
+        let top, left;
+        
+        switch(position) {
+          case 'top':
+            top = rect.top - tooltipRect.height - margin;
+            left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+            break;
+          case 'bottom':
+            top = rect.bottom + margin;
+            left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+            break;
+          case 'left':
+            top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+            left = rect.left - tooltipRect.width - margin;
+            break;
+          case 'right':
+            top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+            left = rect.right + margin;
+            break;
+          default:
+            // Center on screen for fallback
+            top = (window.innerHeight - tooltipRect.height) / 2;
+            left = (window.innerWidth - tooltipRect.width) / 2;
+            break;
+        }
+        
+        // Ensure tooltip stays within viewport
+        top = Math.max(10, Math.min(top, window.innerHeight - tooltipRect.height - 10));
+        left = Math.max(10, Math.min(left, window.innerWidth - tooltipRect.width - 10));
+        
+        tooltip.style.top = `${top}px`;
+        tooltip.style.left = `${left}px`;
       },
       
       nextStep() {
