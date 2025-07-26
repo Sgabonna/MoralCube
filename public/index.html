@@ -3920,17 +3920,22 @@ document.addEventListener('DOMContentLoaded', function() {
       ],
       
       startTour() {
+        console.log('startTour() called');
         this.currentStep = 0;
         this.showStep();
       },
       
       showStep() {
+        console.log('showStep() called, currentStep:', this.currentStep);
+        
         // Remove existing overlay
         if (this.overlay) {
+          console.log('Removing existing overlay');
           this.overlay.remove();
         }
         
         const step = this.steps[this.currentStep];
+        console.log('Current step data:', step);
         
         // Create overlay
         this.overlay = document.createElement('div');
@@ -3941,12 +3946,14 @@ document.addEventListener('DOMContentLoaded', function() {
           left: 0;
           width: 100%;
           height: 100%;
-          background: rgba(0, 0, 0, 0.8);
+          background: rgba(255, 0, 0, 0.8);
           z-index: 999999;
           display: flex;
           align-items: center;
           justify-content: center;
         `;
+        
+        console.log('Created overlay element:', this.overlay);
         
         // Create tooltip
         const tooltip = document.createElement('div');
@@ -3978,7 +3985,9 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         
         this.overlay.appendChild(tooltip);
+        console.log('Appending overlay to body');
         document.body.appendChild(this.overlay);
+        console.log('Overlay appended. Body children count:', document.body.children.length);
         
         // Scroll target into view if specified
         if (step.target) {
