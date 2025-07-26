@@ -3853,7 +3853,9 @@ document.addEventListener('DOMContentLoaded', function() {
       font-family: 'Spline Sans Mono', monospace;
     `;
     helpButton.onclick = () => {
+      console.log('Help button clicked');
       if (window.moralCubeWalkthrough) {
+        console.log('Starting walkthrough...');
         window.moralCubeWalkthrough.startTour();
       } else {
         console.error('Walkthrough not initialized');
