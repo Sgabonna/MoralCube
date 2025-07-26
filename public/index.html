@@ -1451,6 +1451,9 @@ padding-right: 0.6rem !important;
   border: 1px solid rgba(255, 255, 255, 0.1);
   font-family: 'Spline Sans Mono', monospace;
   z-index: 10001;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .walkthrough-tooltip h3 {
@@ -3894,6 +3897,14 @@ class MoralCubeWalkthrough {
     this.tooltip = document.getElementById('walkthrough-tooltip');
     this.skipBtn = document.getElementById('walkthrough-skip');
     
+    // Debug: Check if elements exist
+    console.log('Walkthrough elements:', {
+      overlay: this.overlay,
+      spotlight: this.spotlight,
+      tooltip: this.tooltip,
+      skipBtn: this.skipBtn
+    });
+    
     this.steps = [
       {
         title: "Welcome to The Moral Cube",
@@ -3985,27 +3996,46 @@ class MoralCubeWalkthrough {
   }
   
   startTour() {
+    console.log('Starting walkthrough tour...');
     this.currentStep = 0;
-    this.overlay.style.display = 'block';
+    if (this.overlay) {
+      this.overlay.style.display = 'block';
+      console.log('Overlay display set to block');
+    } else {
+      console.error('Overlay element not found!');
+    }
     this.updateStep();
   }
   
   updateStep() {
+    console.log('Updating step:', this.currentStep);
     const step = this.steps[this.currentStep];
     
     // Update content
-    document.getElementById('walkthrough-title').textContent = step.title;
-    document.getElementById('walkthrough-description').textContent = step.content;
+    const titleEl = document.getElementById('walkthrough-title');
+    const descEl = document.getElementById('walkthrough-description');
+    
+    if (titleEl && descEl) {
+      titleEl.textContent = step.title;
+      descEl.textContent = step.content;
+    } else {
+      console.error('Title or description element not found');
+    }
     
     // Update progress indicators
     this.updateProgress();
     
     // Update button states
-    document.getElementById('walkthrough-prev').style.display = 
-      this.currentStep === 0 ? 'none' : 'inline-block';
-    
+    const prevBtn = document.getElementById('walkthrough-prev');
     const nextBtn = document.getElementById('walkthrough-next');
-    nextBtn.textContent = this.currentStep === this.steps.length - 1 ? 'Finish' : 'Next';
+    
+    if (prevBtn) {
+      prevBtn.style.display = this.currentStep === 0 ? 'none' : 'inline-block';
+    }
+    
+    if (nextBtn) {
+      nextBtn.textContent = this.currentStep === this.steps.length - 1 ? 'Finish' : 'Next';
+    }
     
     // Position spotlight and tooltip
     if (step.target) {
@@ -4017,18 +4047,27 @@ class MoralCubeWalkthrough {
         }, 100);
         this.positionSpotlight(element);
         this.positionTooltip(element, step.position);
+      } else {
+        console.warn('Target element not found:', step.target);
       }
     } else {
       // Center position for intro/outro
-      this.spotlight.style.display = 'none';
+      if (this.spotlight) {
+        this.spotlight.style.display = 'none';
+      }
       this.centerTooltip();
     }
     
     // Show tooltip with animation
-    this.tooltip.style.display = 'block';
-    setTimeout(() => {
-      this.tooltip.style.opacity = '1';
-    }, 50);
+    if (this.tooltip) {
+      this.tooltip.style.display = 'block';
+      this.tooltip.style.opacity = '0';
+      setTimeout(() => {
+        this.tooltip.style.opacity = '1';
+      }, 50);
+    } else {
+      console.error('Tooltip element not found');
+    }
   }
   
   positionSpotlight(element) {
@@ -4130,6 +4169,7 @@ class MoralCubeWalkthrough {
 document.addEventListener('DOMContentLoaded', function() {
   // Wait a bit for other scripts to load
   setTimeout(() => {
+    // Initialize walkthrough
     window.moralCubeWalkthrough = new MoralCubeWalkthrough();
     
     // Add a help button to restart the tour
@@ -4146,7 +4186,14 @@ document.addEventListener('DOMContentLoaded', function() {
       color: var(--text-light);
       font-family: 'Spline Sans Mono', monospace;
     `;
-    helpButton.onclick = () => window.moralCubeWalkthrough.startTour();
+    helpButton.onclick = () => {
+      console.log('Help button clicked');
+      if (window.moralCubeWalkthrough) {
+        window.moralCubeWalkthrough.startTour();
+      } else {
+        console.error('Walkthrough not initialized');
+      }
+    };
     document.body.appendChild(helpButton);
   }, 1000);
 });
