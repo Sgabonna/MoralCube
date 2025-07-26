@@ -3977,7 +3977,10 @@ document.addEventListener('DOMContentLoaded', function() {
           </div>
         `;
         
-        // Add event listeners after creating the HTML
+        this.overlay.appendChild(tooltip);
+        document.body.appendChild(this.overlay);
+        
+        // Add event listeners after adding to DOM
         this.overlay.querySelector('#walkthrough-skip-btn').addEventListener('click', () => this.closeTour());
         
         const nextBtn = this.overlay.querySelector('#walkthrough-next-btn');
@@ -3989,9 +3992,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (prevBtn) {
           prevBtn.addEventListener('click', () => this.previousStep());
         }
-        
-        this.overlay.appendChild(tooltip);
-        document.body.appendChild(this.overlay);
         
         // Scroll target into view if specified
         if (step.target) {
