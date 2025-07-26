@@ -1422,22 +1422,20 @@ padding-right: 0.6rem !important;
 }
 
 /* Simple Walkthrough Styles */
-#walkthrough-overlay {
+.walkthrough-overlay-active {
   position: fixed !important;
   top: 0 !important;
   left: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
-  background: rgba(0, 0, 0, 0.8) !important;
-  z-index: 999999 !important;
-  display: none !important;
+  background: red !important;
+  z-index: 2147483647 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-#walkthrough-tooltip {
-  position: fixed !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
+.walkthrough-tooltip-active {
   background: #14132c !important;
   color: #bbbbc3 !important;
   padding: 30px !important;
@@ -1446,17 +1444,16 @@ padding-right: 0.6rem !important;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
   font-family: 'Spline Sans Mono', monospace !important;
-  z-index: 1000000 !important;
 }
 
-#walkthrough-title {
+.walkthrough-tooltip-active h3 {
   margin: 0 0 15px 0 !important;
   color: #f7e2d3 !important;
   font-size: 18px !important;
   font-weight: 600 !important;
 }
 
-#walkthrough-description {
+.walkthrough-tooltip-active p {
   margin: 0 0 20px 0 !important;
   font-size: 14px !important;
   line-height: 1.5 !important;
@@ -1469,7 +1466,7 @@ padding-right: 0.6rem !important;
   margin-top: 20px !important;
 }
 
-#walkthrough-progress {
+.walkthrough-progress {
   font-size: 12px !important;
   color: #bbbbc3 !important;
   opacity: 0.8 !important;
@@ -1490,17 +1487,17 @@ padding-right: 0.6rem !important;
   transition: all 0.2s ease !important;
 }
 
-#walkthrough-prev {
+.walkthrough-btn-prev {
   background: #191832 !important;
   color: #bbbbc3 !important;
 }
 
-#walkthrough-next {
+.walkthrough-btn-next {
   background: #4ade80 !important;
   color: #000 !important;
 }
 
-#walkthrough-skip {
+.walkthrough-btn-skip {
   background: transparent !important;
   color: #bbbbc3 !important;
   text-decoration: underline !important;
@@ -3932,41 +3929,26 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const step = this.steps[this.currentStep];
         
-        // Create overlay with individual style properties
+        // Create overlay using CSS classes
         this.overlay = document.createElement('div');
-        this.overlay.id = 'walkthrough-overlay';
-        this.overlay.style.position = 'fixed';
-        this.overlay.style.top = '0';
-        this.overlay.style.left = '0';
-        this.overlay.style.width = '100%';
-        this.overlay.style.height = '100%';
-        this.overlay.style.backgroundColor = 'red';
-        this.overlay.style.zIndex = '999999';
-        this.overlay.style.display = 'flex';
-        this.overlay.style.alignItems = 'center';
-        this.overlay.style.justifyContent = 'center';
+        this.overlay.className = 'walkthrough-overlay-active';
         
-        // Create tooltip with individual style properties
+        // Create tooltip using CSS classes  
         const tooltip = document.createElement('div');
-        tooltip.style.backgroundColor = '#14132c';
-        tooltip.style.color = '#bbbbc3';
-        tooltip.style.padding = '30px';
-        tooltip.style.borderRadius = '12px';
-        tooltip.style.maxWidth = '450px';
-        tooltip.style.fontFamily = 'Spline Sans Mono, monospace';
+        tooltip.className = 'walkthrough-tooltip-active';
         
         const isLastStep = this.currentStep === this.steps.length - 1;
         const isFirstStep = this.currentStep === 0;
         
         tooltip.innerHTML = `
-          <h3 style="margin: 0 0 15px 0; color: #f7e2d3; font-size: 18px; font-weight: 600;">${step.title}</h3>
-          <p style="margin: 0 0 20px 0; font-size: 14px; line-height: 1.5;">${step.content}</p>
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 12px; opacity: 0.8;">${this.currentStep + 1} of ${this.steps.length}</span>
-            <div style="display: flex; gap: 10px;">
-              <button id="walkthrough-skip-btn" style="padding: 8px 16px; background: transparent; color: #bbbbc3; border: none; border-radius: 6px; font-family: 'Spline Sans Mono', monospace; cursor: pointer; text-decoration: underline;">Skip Tour</button>
-              ${!isFirstStep ? '<button id="walkthrough-prev-btn" style="padding: 8px 16px; background: #191832; color: #bbbbc3; border: none; border-radius: 6px; font-family: \'Spline Sans Mono\', monospace; cursor: pointer;">Previous</button>' : ''}
-              <button id="walkthrough-next-btn" style="padding: 8px 16px; background: #4ade80; color: #000; border: none; border-radius: 6px; font-family: 'Spline Sans Mono', monospace; cursor: pointer;">${isLastStep ? 'Finish' : 'Next'}</button>
+          <h3>${step.title}</h3>
+          <p>${step.content}</p>
+          <div class="walkthrough-controls">
+            <span class="walkthrough-progress">${this.currentStep + 1} of ${this.steps.length}</span>
+            <div class="walkthrough-buttons">
+              <button id="walkthrough-skip-btn" class="walkthrough-btn walkthrough-btn-skip">Skip Tour</button>
+              ${!isFirstStep ? '<button id="walkthrough-prev-btn" class="walkthrough-btn walkthrough-btn-prev">Previous</button>' : ''}
+              <button id="walkthrough-next-btn" class="walkthrough-btn walkthrough-btn-next">${isLastStep ? 'Finish' : 'Next'}</button>
             </div>
           </div>
         `;
