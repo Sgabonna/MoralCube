@@ -1428,7 +1428,7 @@ padding-right: 0.6rem !important;
   left: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
-  background: rgba(0, 0, 0, 0.8) !important;
+  background: rgba(0, 0, 0, 0.3) !important;
   z-index: 2147483647 !important;
   display: block !important;
 }
@@ -1436,7 +1436,7 @@ padding-right: 0.6rem !important;
 .walkthrough-spotlight {
   position: absolute !important;
   border-radius: 8px !important;
-  box-shadow: 0 0 0 5000px rgba(0, 0, 0, 0.8) !important;
+  box-shadow: 0 0 0 5000px rgba(0, 0, 0, 0.3) !important;
   z-index: 2147483648 !important;
   pointer-events: none !important;
 }
@@ -1554,7 +1554,7 @@ padding-right: 0.6rem !important;
               <a class="nav-link" href="#" data-toggle="modal" data-target="#whatIsModal">ABOUT</a>
             </li>
             <li class="nav-item mx-3">
-              <a class="nav-link" href="#" data-toggle="modal" data-target="#howToUseModal">INSTRUCTIONS</a>
+              <a class="nav-link" href="#" id="instructions-walkthrough-link">INSTRUCTIONS</a>
             </li>
             <li class="nav-item mx-3">
               <a class="nav-link" href="/feedback.html">FEEDBACK</a>
@@ -4092,6 +4092,17 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     };
     document.body.appendChild(helpButton);
+    
+    // Add click handler for Instructions menu item
+    const instructionsLink = document.getElementById('instructions-walkthrough-link');
+    if (instructionsLink) {
+      instructionsLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (window.moralCubeWalkthrough) {
+          window.moralCubeWalkthrough.startTour();
+        }
+      });
+    }
   }, 1000);
 });
 </script>
