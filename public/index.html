@@ -3970,12 +3970,25 @@ document.addEventListener('DOMContentLoaded', function() {
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <span style="font-size: 12px; opacity: 0.8;">${this.currentStep + 1} of ${this.steps.length}</span>
             <div style="display: flex; gap: 10px;">
-              <button onclick="window.moralCubeWalkthrough.closeTour()" style="padding: 8px 16px; background: transparent; color: #bbbbc3; border: none; border-radius: 6px; font-family: 'Spline Sans Mono', monospace; cursor: pointer; text-decoration: underline;">Skip Tour</button>
-              ${!isFirstStep ? '<button onclick="window.moralCubeWalkthrough.previousStep()" style="padding: 8px 16px; background: #191832; color: #bbbbc3; border: none; border-radius: 6px; font-family: \'Spline Sans Mono\', monospace; cursor: pointer;">Previous</button>' : ''}
-              <button onclick="window.moralCubeWalkthrough.nextStep()" style="padding: 8px 16px; background: #4ade80; color: #000; border: none; border-radius: 6px; font-family: 'Spline Sans Mono', monospace; cursor: pointer;">${isLastStep ? 'Finish' : 'Next'}</button>
+              <button id="walkthrough-skip-btn" style="padding: 8px 16px; background: transparent; color: #bbbbc3; border: none; border-radius: 6px; font-family: 'Spline Sans Mono', monospace; cursor: pointer; text-decoration: underline;">Skip Tour</button>
+              ${!isFirstStep ? '<button id="walkthrough-prev-btn" style="padding: 8px 16px; background: #191832; color: #bbbbc3; border: none; border-radius: 6px; font-family: \'Spline Sans Mono\', monospace; cursor: pointer;">Previous</button>' : ''}
+              <button id="walkthrough-next-btn" style="padding: 8px 16px; background: #4ade80; color: #000; border: none; border-radius: 6px; font-family: 'Spline Sans Mono', monospace; cursor: pointer;">${isLastStep ? 'Finish' : 'Next'}</button>
             </div>
           </div>
         `;
+        
+        // Add event listeners after creating the HTML
+        this.overlay.querySelector('#walkthrough-skip-btn').addEventListener('click', () => this.closeTour());
+        
+        const nextBtn = this.overlay.querySelector('#walkthrough-next-btn');
+        if (nextBtn) {
+          nextBtn.addEventListener('click', () => this.nextStep());
+        }
+        
+        const prevBtn = this.overlay.querySelector('#walkthrough-prev-btn');
+        if (prevBtn) {
+          prevBtn.addEventListener('click', () => this.previousStep());
+        }
         
         this.overlay.appendChild(tooltip);
         document.body.appendChild(this.overlay);
