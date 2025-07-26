@@ -4134,20 +4134,56 @@ document.addEventListener('DOMContentLoaded', function() {
       font-family: 'Spline Sans Mono', monospace;
     `;
     helpButton.onclick = () => {
-      console.log('Help button clicked - showing simple overlay');
-      const overlay = document.getElementById('walkthrough-overlay');
-      const tooltip = document.getElementById('walkthrough-tooltip');
-      const title = document.getElementById('walkthrough-title');
-      const desc = document.getElementById('walkthrough-description');
+      console.log('Help button clicked - creating dynamic overlay');
       
-      if (overlay && tooltip) {
-        overlay.style.display = 'block';
-        title.textContent = 'Welcome to The Moral Cube';
-        desc.textContent = 'This is a basic walkthrough test. If you can see this, the overlay is working!';
-        console.log('Overlay should now be visible');
-      } else {
-        console.error('Elements not found:', {overlay, tooltip});
+      // Remove any existing overlay
+      const existingOverlay = document.getElementById('dynamic-walkthrough-overlay');
+      if (existingOverlay) {
+        existingOverlay.remove();
       }
+      
+      // Create overlay dynamically with inline styles
+      const overlay = document.createElement('div');
+      overlay.id = 'dynamic-walkthrough-overlay';
+      overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 0, 0, 0.8);
+        z-index: 999999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      `;
+      
+      // Create tooltip
+      const tooltip = document.createElement('div');
+      tooltip.style.cssText = `
+        background: #14132c;
+        color: #bbbbc3;
+        padding: 30px;
+        border-radius: 12px;
+        max-width: 400px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-family: 'Spline Sans Mono', monospace;
+        text-align: center;
+      `;
+      
+      tooltip.innerHTML = `
+        <h3 style="margin: 0 0 15px 0; color: #f7e2d3; font-size: 18px;">Welcome to The Moral Cube</h3>
+        <p style="margin: 0 0 20px 0; font-size: 14px; line-height: 1.5;">This is a dynamic overlay test. If you can see this red background and this message, the walkthrough system works!</p>
+        <button onclick="document.getElementById('dynamic-walkthrough-overlay').remove()" style="padding: 10px 20px; background: #4ade80; color: #000; border: none; border-radius: 6px; font-family: 'Spline Sans Mono', monospace; cursor: pointer;">Close</button>
+      `;
+      
+      overlay.appendChild(tooltip);
+      document.body.appendChild(overlay);
+      
+      console.log('Dynamic overlay created and added to body');
+      console.log('Overlay element:', overlay);
+      console.log('Body children count:', document.body.children.length);
     };
     document.body.appendChild(helpButton);
   }, 1000);
