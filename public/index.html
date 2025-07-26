@@ -1421,148 +1421,93 @@ padding-right: 0.6rem !important;
 }
 }
 
-/* Walkthrough Styles */
-.walkthrough-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 0, 0, 0.3); /* Temporary red background for debugging */
-  z-index: 99999;
-  display: none;
+/* Simple Walkthrough Styles */
+#walkthrough-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  z-index: 999999 !important;
+  display: none !important;
 }
 
-.walkthrough-spotlight {
-  position: absolute;
-  border-radius: 8px;
-  box-shadow: 0 0 0 5000px rgba(0, 0, 0, 0.7);
-  z-index: 100000;
+#walkthrough-tooltip {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  background: #14132c !important;
+  color: #bbbbc3 !important;
+  padding: 30px !important;
+  border-radius: 12px !important;
+  max-width: 400px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  font-family: 'Spline Sans Mono', monospace !important;
+  z-index: 1000000 !important;
 }
 
-.walkthrough-tooltip {
-  position: absolute;
-  background: var(--bg-dark-secondary);
-  color: var(--text-light);
-  padding: 20px;
-  border-radius: 12px;
-  max-width: 300px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  font-family: 'Spline Sans Mono', monospace;
-  z-index: 100001;
-  display: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+#walkthrough-title {
+  margin: 0 0 15px 0 !important;
+  color: #f7e2d3 !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
 }
 
-.walkthrough-tooltip h3 {
-  margin: 0 0 10px 0;
-  color: var(--text-lighter);
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.walkthrough-tooltip p {
-  margin: 0 0 15px 0;
-  font-size: 14px;
-  line-height: 1.5;
+#walkthrough-description {
+  margin: 0 0 20px 0 !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
 }
 
 .walkthrough-controls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 15px;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-top: 20px !important;
 }
 
-.walkthrough-progress {
-  font-size: 12px;
-  color: var(--text-light);
-  opacity: 0.8;
+#walkthrough-progress {
+  font-size: 12px !important;
+  color: #bbbbc3 !important;
+  opacity: 0.8 !important;
 }
 
 .walkthrough-buttons {
-  display: flex;
-  gap: 10px;
+  display: flex !important;
+  gap: 10px !important;
 }
 
 .walkthrough-btn {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  font-family: 'Spline Sans Mono', monospace;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  padding: 8px 16px !important;
+  border: none !important;
+  border-radius: 6px !important;
+  font-family: 'Spline Sans Mono', monospace !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
 }
 
-.walkthrough-btn-prev {
-  background: var(--bg-dark-tertiary);
-  color: var(--text-light);
+#walkthrough-prev {
+  background: #191832 !important;
+  color: #bbbbc3 !important;
 }
 
-.walkthrough-btn-next {
-  background: var(--virtue-color);
-  color: #000;
+#walkthrough-next {
+  background: #4ade80 !important;
+  color: #000 !important;
 }
 
-.walkthrough-btn-skip {
-  background: transparent;
-  color: var(--text-light);
-  text-decoration: underline;
+#walkthrough-skip {
+  background: transparent !important;
+  color: #bbbbc3 !important;
+  text-decoration: underline !important;
 }
 
 .walkthrough-btn:hover {
-  opacity: 0.8;
-}
-
-.walkthrough-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.walkthrough-arrow {
-  position: absolute;
-  width: 0;
-  height: 0;
-  z-index: 100002;
-}
-
-.walkthrough-arrow.top {
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid var(--bg-dark-secondary);
-  top: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.walkthrough-arrow.bottom {
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 10px solid var(--bg-dark-secondary);
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.walkthrough-arrow.left {
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-right: 10px solid var(--bg-dark-secondary);
-  left: -10px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.walkthrough-arrow.right {
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-left: 10px solid var(--bg-dark-secondary);
-  right: -10px;
-  top: 50%;
-  transform: translateY(-50%);
+  opacity: 0.8 !important;
 }
 </style>
 </head>
@@ -4189,29 +4134,19 @@ document.addEventListener('DOMContentLoaded', function() {
       font-family: 'Spline Sans Mono', monospace;
     `;
     helpButton.onclick = () => {
-      console.log('Help button clicked');
-      
-      // Debug: Check if elements exist in DOM
+      console.log('Help button clicked - showing simple overlay');
       const overlay = document.getElementById('walkthrough-overlay');
       const tooltip = document.getElementById('walkthrough-tooltip');
-      console.log('DOM elements check:', {
-        overlay: overlay,
-        tooltip: tooltip,
-        overlayInDOM: !!overlay,
-        tooltipInDOM: !!tooltip
-      });
+      const title = document.getElementById('walkthrough-title');
+      const desc = document.getElementById('walkthrough-description');
       
-      if (overlay) {
-        console.log('Manually setting overlay display to block');
+      if (overlay && tooltip) {
         overlay.style.display = 'block';
-        overlay.style.background = 'rgba(255, 0, 0, 0.8)';
-        overlay.style.zIndex = '999999';
-      }
-      
-      if (window.moralCubeWalkthrough) {
-        window.moralCubeWalkthrough.startTour();
+        title.textContent = 'Welcome to The Moral Cube';
+        desc.textContent = 'This is a basic walkthrough test. If you can see this, the overlay is working!';
+        console.log('Overlay should now be visible');
       } else {
-        console.error('Walkthrough not initialized');
+        console.error('Elements not found:', {overlay, tooltip});
       }
     };
     document.body.appendChild(helpButton);
@@ -4219,21 +4154,19 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-<!-- Walkthrough Elements -->
-<div id="walkthrough-overlay" class="walkthrough-overlay">
-  <div id="walkthrough-spotlight" class="walkthrough-spotlight"></div>
-  <div id="walkthrough-tooltip" class="walkthrough-tooltip">
+<!-- Simple Walkthrough Elements -->
+<div id="walkthrough-overlay">
+  <div id="walkthrough-tooltip">
     <h3 id="walkthrough-title"></h3>
     <p id="walkthrough-description"></p>
     <div class="walkthrough-controls">
-      <span id="walkthrough-progress" class="walkthrough-progress"></span>
+      <span id="walkthrough-progress"></span>
       <div class="walkthrough-buttons">
-        <button id="walkthrough-skip" class="walkthrough-btn walkthrough-btn-skip">Skip Tour</button>
-        <button id="walkthrough-prev" class="walkthrough-btn walkthrough-btn-prev">Previous</button>
-        <button id="walkthrough-next" class="walkthrough-btn walkthrough-btn-next">Next</button>
+        <button id="walkthrough-skip" class="walkthrough-btn">Skip Tour</button>
+        <button id="walkthrough-prev" class="walkthrough-btn">Previous</button>
+        <button id="walkthrough-next" class="walkthrough-btn">Next</button>
       </div>
     </div>
-    <div id="walkthrough-arrow" class="walkthrough-arrow"></div>
   </div>
 </div>
 
