@@ -3853,7 +3853,10 @@ document.addEventListener('DOMContentLoaded', function() {
       font-family: 'Spline Sans Mono', monospace;
     `;
     helpButton.onclick = () => {
+      console.log('Help button clicked!');
+      console.log('Walkthrough object exists:', !!window.moralCubeWalkthrough);
       if (window.moralCubeWalkthrough) {
+        console.log('Starting tour...');
         window.moralCubeWalkthrough.startTour();
       } else {
         console.error('Walkthrough not initialized');
