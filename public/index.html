@@ -3924,6 +3924,7 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       
       showStep() {
+        console.log('showStep called, about to create overlay');
         // Remove existing overlay
         if (this.overlay) {
           this.overlay.remove();
