@@ -1150,6 +1150,37 @@ color: white;
 .relevant-badge {
 border: 2px solid var(--virtue-color);
 }
+
+/* First-time user highlight animation */
+.first-time-highlight {
+  animation: pulseGlow 2s ease-in-out infinite;
+  position: relative;
+  z-index: 1000;
+}
+
+.first-time-highlight::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(45deg, var(--virtue-color), var(--evil-color), var(--virtue-color));
+  border-radius: inherit;
+  z-index: -1;
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
 .page-header {
 background: linear-gradient(135deg, #04031d 0%, #191832 100%);
 padding: 40px 20px 0 20px;
@@ -3888,10 +3919,52 @@ navbarCollapse.classList.remove('show');
 <div class="walkthrough-skip" id="walkthroughSkip" style="display: none;">Skip tour</div>
 
 <script>
+// First-time user detection and highlighting
+function highlightFirstTimeButtons() {
+  // Check if user has visited before
+  const hasVisited = localStorage.getItem('moralCubeVisited');
+  
+  if (!hasVisited) {
+    // Mark as visited
+    localStorage.setItem('moralCubeVisited', 'true');
+    
+    // Find Instructions and Help buttons
+    const instructionsLink = document.querySelector('a[onclick*="startWalkthrough"]');
+    const helpButton = document.querySelector('button[onclick*="startWalkthrough"]');
+    
+    // Add highlight class
+    if (instructionsLink) {
+      instructionsLink.classList.add('first-time-highlight');
+    }
+    if (helpButton) {
+      helpButton.classList.add('first-time-highlight');
+    }
+    
+    // Remove highlighting after walkthrough starts or after 10 seconds
+    const removeHighlight = () => {
+      if (instructionsLink) instructionsLink.classList.remove('first-time-highlight');
+      if (helpButton) helpButton.classList.remove('first-time-highlight');
+    };
+    
+    // Remove highlight when either button is clicked
+    if (instructionsLink) {
+      instructionsLink.addEventListener('click', removeHighlight, { once: true });
+    }
+    if (helpButton) {
+      helpButton.addEventListener('click', removeHighlight, { once: true });
+    }
+    
+    // Auto-remove after 10 seconds if user doesn't click
+    setTimeout(removeHighlight, 10000);
+  }
+}
+
 // Initialize walkthrough when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
   // Wait a bit for other scripts to load
   setTimeout(() => {
+    // Highlight buttons for first-time users
+    highlightFirstTimeButtons();
     
     // Add a help button to restart the tour
     const helpButton = document.createElement('button');
