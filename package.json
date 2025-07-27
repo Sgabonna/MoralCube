@@ -7,9 +7,11 @@
     "build": "echo 'No build step needed'"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.24.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^4.1.0",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "openai": "^4.47.0"
   },
   "author": "Scott Young",
   "license": "MIT"
