@@ -1693,7 +1693,12 @@ What If Scenarios:
 <div class="filters-container" style="display: flex; gap: 20px; align-items: flex-start; margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
     <!-- Moral Category Filter -->
     <div class="filter-group" style="flex: 1;">
-        <label style="display: block; margin-bottom: 10px; font-weight: bold;">Moral Category:</label>
+        <label style="display: block; margin-bottom: 10px; font-weight: bold;">Moral Category Filter:
+            <span class="tooltip-container">
+                <i class="fas fa-info-circle tooltip-icon"></i>
+                <span class="tooltip-content">This classification is a separate classification by the respective AI.</span>
+            </span>
+        </label>
         <div class="filter-badges">
             <span class="filter-badge category-evil active" data-category="evil">Evil</span>
             <span class="filter-badge category-virtue active" data-category="virtue">Virtue</span>
@@ -1706,7 +1711,12 @@ What If Scenarios:
 
     <!-- Philosophical Analysis Filter -->
     <div class="filter-group philosophical-filter" style="flex: 1;">
-        <label style="display: block; margin-bottom: 10px; font-weight: bold;">Philosophical Analysis:</label>
+        <label style="display: block; margin-bottom: 10px; font-weight: bold;">Philosophical Analysis Filter:
+            <span class="tooltip-container">
+                <i class="fas fa-info-circle tooltip-icon"></i>
+                <span class="tooltip-content">This classification is a separate classification from the questions that assign a position.</span>
+            </span>
+        </label>
 
         <div class="philosophical-theory">
             <div class="philosophical-theory-label">Deontology:</div>
@@ -1778,12 +1788,12 @@ Scenario Details
 <div class="modal-body">
 <div class="introduction mb-4">
 <h4 class="mb-3">Understanding the Moral Cube</h4>
-<p>The Moral Cube is a tool designed to help people think more clearly about moral decisions. It provides a structured way to assess actions by considering three key dimensions: <strong>Ends (Goals & Intentions), Means (Sacrifice), and Character (Awareness & Self-Control).</strong></p>
+<p>The Moral Cube is a tool designed to help people think more clearly about moral decisions. It provides a structured way to assess actions by considering three key dimensions: <strong>Orientation (Beneficiary), Cost (Sacrifice), and Moral Authorship.</strong></p>
 </div>
 
 <div class="concept mb-4">
 <h5 class="mb-3">The Concept</h5>
-<p>Rather than prescribing what is right or wrong, the Cube offers a space for reflection. By answering questions about motivation, sacrifice, and character, each scenario is mapped onto three orthogonal (right-angle) axes—<strong>x, y, and z.</strong> This creates a unique position within the Cube that represents the moral complexity of each action.</p>
+<p>Rather than prescribing what is right or wrong, the Cube offers a space for reflection. By answering questions about orientation, sacrifice, and moral authorship, each scenario is mapped onto three orthogonal (right-angle) axes—<strong>x, y, and z.</strong> This creates a unique position within the Cube that represents the moral complexity of each action.</p>
 </div>
 
 <div class="purpose mb-4">
@@ -3405,11 +3415,19 @@ return `
 }
 
 // Create scenario table helper
+// Score label mapping
+const scoreDisplayNames = {
+'Ends': 'Orientation',
+'Means': 'Cost',
+'Character': 'Moral Authorship'
+};
+
 function createScenarioTable(scenario, dimension, isPhilosophical, dimensionId, tableStructure) {
 const dimensionScore = getDimensionScore(scenario, dimension.id);
-const scoreDisplay = dimensionScore !== null && 
+const scoreName = scoreDisplayNames[dimension.id] || dimension.id;
+const scoreDisplay = dimensionScore !== null &&
 ['Ends', 'Means', 'Character'].includes(dimension.id) ?
-` (${dimension.id} Score: ${dimensionScore})` : '';
+` (${scoreName} Score: ${dimensionScore})` : '';
 
 const questionRows = dimension.questions.map((question, index) => {
 const range = !isPhilosophical ? getRange(dimension.id, index) : "N/A";
@@ -3429,19 +3447,27 @@ return `
                    `;
 }
 
+// Dimension label mapping
+const dimensionDisplayNames = {
+'Ends': 'Orientation (Beneficiary)',
+'Means': 'Cost (Sacrifice)',
+'Character': 'Moral Authorship'
+};
+
 // Main content generation
 const dimensionContent = scenarioData[0].dimensions.map((dimension, index) => {
 const dimensionId = `dimension${index}`;
 const collapseId = `collapse${index}`;
 const isPhilosophical = dimension.id.trim().toLowerCase() === 'philosophical analysis';
 const tableStructure = getTableStructure(isPhilosophical);
+const displayName = dimensionDisplayNames[dimension.id] || `${dimension.id} (${dimension.label})`;
 
-const scenarioTables = scenarioData.map(scenario => 
+const scenarioTables = scenarioData.map(scenario =>
 createScenarioTable(
-scenario, 
-scenario.dimensions[index], 
-isPhilosophical, 
-dimensionId, 
+scenario,
+scenario.dimensions[index],
+isPhilosophical,
+dimensionId,
 tableStructure
 )
 ).join('');
@@ -3450,11 +3476,11 @@ return `
                        <div class="card">
                            <div class="card-header" id="${dimensionId}-header">
                                <h2 class="mb-0">
-                                   <button class="btn btn-link ${index === 0 ? '' : 'collapsed'}" 
-                                           type="button" 
-                                           data-toggle="collapse" 
+                                   <button class="btn btn-link ${index === 0 ? '' : 'collapsed'}"
+                                           type="button"
+                                           data-toggle="collapse"
                                            data-target="#${collapseId}">
-                                       <strong>${dimension.id} (${dimension.label})</strong>
+                                       <strong>${displayName}</strong>
                                    </button>
                                </h2>
                            </div>
@@ -3999,7 +4025,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         {
           title: "Understanding the Three Dimensions",
-          content: "The cube maps ethical decisions across three axes: X (Ends/Goals), Y (Means/Sacrifice), and Z (Character/Awareness). Each point represents a unique moral position.",
+          content: "The cube maps ethical decisions across three axes: X (Orientation/Beneficiary), Y (Cost/Sacrifice), and Z (Moral Authorship). Each point represents a unique moral position.",
           target: "#cube-plot",
           position: "right"
         },
