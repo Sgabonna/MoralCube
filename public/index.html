@@ -1788,12 +1788,12 @@ Scenario Details
 <div class="modal-body">
 <div class="introduction mb-4">
 <h4 class="mb-3">Understanding the Moral Cube</h4>
-<p>The Moral Cube is a tool designed to help people think more clearly about moral decisions. It provides a structured way to assess actions by considering three key dimensions: <strong>Orientation (Beneficiary), Cost (Sacrifice), and Moral Authorship.</strong></p>
+<p>The Moral Cube is a tool designed to help people think more clearly about moral decisions. It provides a structured way to assess actions by considering three key dimensions: <strong>Orientation (Beneficiary), Cost (Sacrifice), and Agency.</strong></p>
 </div>
 
 <div class="concept mb-4">
 <h5 class="mb-3">The Concept</h5>
-<p>Rather than prescribing what is right or wrong, the Cube offers a space for reflection. By answering questions about orientation, sacrifice, and moral authorship, each scenario is mapped onto three orthogonal (right-angle) axes—<strong>x, y, and z.</strong> This creates a unique position within the Cube that represents the moral complexity of each action.</p>
+<p>Rather than prescribing what is right or wrong, the Cube offers a space for reflection. By answering questions about orientation, sacrifice, and agency, each scenario is mapped onto three orthogonal (right-angle) axes—<strong>x, y, and z.</strong> This creates a unique position within the Cube that represents the moral complexity of each action.</p>
 </div>
 
 <div class="purpose mb-4">
@@ -3419,7 +3419,7 @@ return `
 const scoreDisplayNames = {
 'Ends': 'Orientation',
 'Means': 'Cost',
-'Character': 'Moral Authorship'
+'Character': 'Agency'
 };
 
 function createScenarioTable(scenario, dimension, isPhilosophical, dimensionId, tableStructure) {
@@ -3451,7 +3451,7 @@ return `
 const dimensionDisplayNames = {
 'Ends': 'Orientation (Beneficiary)',
 'Means': 'Cost (Sacrifice)',
-'Character': 'Moral Authorship'
+'Character': 'Agency'
 };
 
 // Main content generation
@@ -4025,7 +4025,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         {
           title: "Understanding the Three Dimensions",
-          content: "The cube maps ethical decisions across three axes: X (Orientation/Beneficiary), Y (Cost/Sacrifice), and Z (Moral Authorship). Each point represents a unique moral position.",
+          content: "The cube maps ethical decisions across three axes: X (Orientation/Beneficiary), Y (Cost/Sacrifice), and Z (Agency). Each point represents a unique moral position.",
           target: "#cube-plot",
           position: "right"
         },
